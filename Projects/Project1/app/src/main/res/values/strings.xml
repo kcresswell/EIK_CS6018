@@ -13,4 +13,6 @@
     <string name="etxt_age">Age</string>
     <string name="etxt_height">Height</string>
     <string name="etxt_weight">Weight</string>
+    <string name="etxt_city">City</string>
+    <string name="etxt_Country">Country</string>
 </resources>

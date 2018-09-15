@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--COLOR SCHEME: http://paletton.com/#uid=3331b0kqwnrh7GXm8tCuDfAD05v-->
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#168053</color>
+    <color name="colorPrimaryDark">#001E11</color>
+    <color name="colorAccent">#DDC54E</color>
 </resources>
