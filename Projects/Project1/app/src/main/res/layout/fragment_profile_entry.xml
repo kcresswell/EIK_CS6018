@@ -19,8 +19,7 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toStartOf="@+id/btn_img_takeImage"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/etxt_fname" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/etxt_lname"
@@ -33,8 +32,7 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toStartOf="@+id/btn_img_takeImage"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etxt_fname"
-        tools:text="@string/etxt_lname" />
+        app:layout_constraintTop_toBottomOf="@+id/etxt_fname" />
 
     <EditText
         android:id="@+id/etxt_age"
@@ -42,12 +40,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:hint="@string/etxt_age"
         android:inputType="number"
-        android:text="Age"
         app:layout_constraintEnd_toStartOf="@+id/etxt_sex"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etxt_lname"
-        tools:text="@string/etxt_age" />
+        app:layout_constraintTop_toBottomOf="@+id/etxt_lname" />
 
     <EditText
         android:id="@+id/etxt_sex"
@@ -57,12 +54,11 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:hint="@string/etxt_sex"
         android:inputType="textPersonName"
-        android:text="Sex"
         app:layout_constraintEnd_toStartOf="@+id/btn_img_takeImage"
         app:layout_constraintStart_toEndOf="@+id/etxt_age"
-        app:layout_constraintTop_toBottomOf="@+id/etxt_lname"
-        tools:text="@string/etxt_sex" />
+        app:layout_constraintTop_toBottomOf="@+id/etxt_lname" />
 
     <EditText
         android:id="@+id/etxt_height"
@@ -70,12 +66,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:hint="@string/etxt_height"
         android:inputType="number"
-        android:text="Height"
         app:layout_constraintEnd_toStartOf="@+id/etxt_weight"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etxt_age"
-        tools:text="@string/etxt_height" />
+        app:layout_constraintTop_toBottomOf="@+id/etxt_age" />
 
     <EditText
         android:id="@+id/etxt_weight"
@@ -85,11 +80,11 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:hint="@string/etxt_weight"
         android:inputType="number"
         app:layout_constraintEnd_toStartOf="@+id/btn_img_takeImage"
         app:layout_constraintStart_toEndOf="@+id/etxt_height"
-        app:layout_constraintTop_toBottomOf="@+id/etxt_sex"
-        tools:text="@string/etxt_weight" />
+        app:layout_constraintTop_toBottomOf="@+id/etxt_sex" />
 
     <EditText
         android:id="@+id/etxt_city"
@@ -97,11 +92,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:hint="@string/etxt_city"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="@+id/etxt_weight"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etxt_height"
-        tools:text="@string/etxt_city" />
+        app:layout_constraintTop_toBottomOf="@+id/etxt_height" />
 
     <EditText
         android:id="@+id/etxt_country"
@@ -109,18 +104,19 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:hint="@string/etxt_Country"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="@+id/etxt_city"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/btn_img_takeImage"
-        app:layout_constraintTop_toBottomOf="@+id/btn_img_takeImage"
-        tools:text="@string/etxt_Country" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_img_takeImage" />
 
     <ImageButton
         android:id="@+id/btn_img_takeImage"
         android:layout_width="200dp"
         android:layout_height="0dp"
         android:background="@android:color/transparent"
+        android:contentDescription="@string/btn_img_description_profile_image"
         android:src="@drawable/ic_profile_img_placeholder"
         app:layout_constraintBottom_toBottomOf="@+id/etxt_weight"
         app:layout_constraintEnd_toEndOf="parent"
@@ -132,10 +128,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@color/colorPrimary"
+        android:text="@string/btn_submit"
         android:textColor="@android:color/background_light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etxt_country"
-        tools:text="@string/btn_submit" />
+        app:layout_constraintTop_toBottomOf="@+id/etxt_country" />
 
 </android.support.constraint.ConstraintLayout>
