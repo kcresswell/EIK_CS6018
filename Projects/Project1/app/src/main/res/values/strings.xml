@@ -7,4 +7,10 @@
     <string name="password">password</string>
     <string name="btn_createAccount">Create Account</string>
     <string name="login">Login</string>
+    <string name="etxt_fname">First Name</string>
+    <string name="etxt_lname">Last Name</string>
+    <string name="etxt_sex">Sex</string>
+    <string name="etxt_age">Age</string>
+    <string name="etxt_height">Height</string>
+    <string name="etxt_weight">Weight</string>
 </resources>
