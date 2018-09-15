@@ -8,11 +8,15 @@
     android:orientation="vertical">
 
     <FrameLayout
+        android:id="@+id/fl_fragOut"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></FrameLayout>
+        android:layout_height="50dp"
+        android:background="#ff8833"></FrameLayout>
 
     <FrameLayout
+        android:id="@+id/fl_fragIn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></FrameLayout>
+        android:layout_height="50dp"
+        android:background="#3388ff"></FrameLayout>
 
 </LinearLayout>

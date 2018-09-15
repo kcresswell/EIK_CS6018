@@ -41,15 +41,15 @@ public class FragmentOut extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment FragmentOut.
      */
-    // TODO: Rename and change types and number of parameters
-    public static FragmentOut newInstance(String param1, String param2) {
-        FragmentOut fragment = new FragmentOut();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+//    // TODO: Rename and change types and number of parameters
+//    public static FragmentOut newInstance(String param1, String param2) {
+//        FragmentOut fragment = new FragmentOut();
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,23 +72,6 @@ public class FragmentOut extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     /**
