@@ -1,14 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ProfileSummaryFrag">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/etxt_fname"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:hint="@string/etxt_fname"
+        android:inputType="textPersonName"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/btn_img_takeImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/etxt_lname"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="@string/etxt_lname"
+        android:inputType="textPersonName"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/btn_img_takeImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etxt_fname" />
+
+    <TextView
+        android:id="@+id/etxt_dob"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="@string/etxt_age"
+        android:inputType="number"
+        app:layout_constraintEnd_toStartOf="@+id/etxt_sex"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etxt_lname" />
+
+    <TextView
+        android:id="@+id/etxt_sex"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="@string/etxt_sex"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toStartOf="@+id/btn_img_takeImage"
+        app:layout_constraintStart_toEndOf="@+id/etxt_dob"
+        app:layout_constraintTop_toBottomOf="@+id/etxt_lname" />
+
+    <TextView
+        android:id="@+id/etxt_feet"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="@string/etxt_feet"
+        android:inputType="number"
+        app:layout_constraintEnd_toStartOf="@+id/etxt_weight"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etxt_dob" />
+
+    <TextView
+        android:id="@+id/etxt_weight"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="@string/etxt_weight"
+        android:inputType="number"
+        app:layout_constraintEnd_toStartOf="@+id/btn_img_takeImage"
+        app:layout_constraintStart_toEndOf="@+id/etxt_feet"
+        app:layout_constraintTop_toBottomOf="@+id/etxt_sex" />
+
+    <TextView
+        android:id="@+id/etxt_city"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="@string/etxt_city"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/etxt_weight"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etxt_feet" />
+
+    <TextView
+        android:id="@+id/etxt_country"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="@string/etxt_Country"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/etxt_city"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etxt_city" />
+
+    <ImageView
+        android:id="@+id/btn_img_takeImage"
+        android:layout_width="200dp"
+        android:layout_height="0dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/btn_img_description_profile_image"
+        android:src="@drawable/ic_profile_img_placeholder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

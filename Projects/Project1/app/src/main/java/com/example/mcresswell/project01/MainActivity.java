@@ -1,10 +1,11 @@
 package com.example.mcresswell.project01;
 
+import android.graphics.Bitmap;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ProfileEntryFrag.OnDataChannel {
 
     //memeber variables
     private FragmentTransaction m_fTrans;
@@ -25,5 +26,10 @@ public class MainActivity extends AppCompatActivity {
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
+    }
+
+    @Override
+    public void onDataPass(String fname, String lname, int age, Bitmap image) {
+
     }
 }
