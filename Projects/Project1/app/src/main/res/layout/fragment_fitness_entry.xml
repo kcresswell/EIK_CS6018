@@ -67,21 +67,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="RadioButton" />
+            android:text="Gain Weight" />
 
         <RadioButton
             android:id="@+id/radioButton12"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="RadioButton" />
+            android:text="Maintain Weight" />
 
         <RadioButton
             android:id="@+id/radioButton13"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="RadioButton" />
+            android:text="Loose Weight" />
     </RadioGroup>
 
     <TextView
