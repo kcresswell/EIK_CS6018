@@ -33,7 +33,7 @@ Show: BMR (Basal Metabolic Rate, the basic number of calories I need to survive)
 3)BMI Calculation at "Tap of Button"
 4)Hikes Near me for Google Maps
 5)Date Entry Validation
-6)Split height into two fields: feet, inches
+6)Split height into two fields: feet, inches COMPLETE
 7)Update toast to only pop up if there is no name entered in the ProfileEntryFrag (this is one of his conditions in the write up)
 
 ///////----Features We'd Like To Have----///////
