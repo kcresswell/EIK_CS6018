@@ -20,4 +20,5 @@
     <string name="etxt_dob">DOB</string>
     <string name="txtv_ft_symbol">\'</string>
     <string name="txtv_in_symble">\"</string>
+    <string name="txtv_lbs_symbol">lbs</string>
 </resources>
