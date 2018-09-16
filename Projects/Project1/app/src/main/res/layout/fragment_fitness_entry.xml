@@ -38,15 +38,15 @@
         android:layout_height="wrap_content"
         android:text="Basal Metabolic Rate:"
         tools:layout_editor_absoluteX="36dp"
-        tools:layout_editor_absoluteY="315dp" />
+        tools:layout_editor_absoluteY="325dp" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Calories Per Day:"
+        android:layout_height="20dp"
+        android:text="Calories Per Day To Consume:"
         tools:layout_editor_absoluteX="36dp"
-        tools:layout_editor_absoluteY="347dp" />
+        tools:layout_editor_absoluteY="286dp" />
 
     <TextView
         android:id="@+id/textView5"
