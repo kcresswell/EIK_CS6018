@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity implements ProfileEntryFrag.OnDataChannel {
+public class DashboardActivity extends AppCompatActivity implements ProfileEntryFrag.OnDataChannel {
 
     //memeber variables
     private FragmentTransaction m_fTrans;
@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity implements ProfileEntryFrag.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_dashboard);
 
         //If not saved instance state, build initial fragment
         if(savedInstanceState == null){
