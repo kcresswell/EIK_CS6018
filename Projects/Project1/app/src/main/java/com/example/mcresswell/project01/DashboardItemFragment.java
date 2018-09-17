@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FitnessEntryFrag extends Fragment {
+public class DashboardItemFragment extends Fragment {
 
 
-    public FitnessEntryFrag() {
+    public DashboardItemFragment() {
         // Required empty public constructor
     }
 
@@ -23,7 +23,7 @@ public class FitnessEntryFrag extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fitness_details, container, false);
+        return inflater.inflate(R.layout.fragment_dashboard_item, container, false);
     }
 
 }
