@@ -51,12 +51,12 @@ public class ProfileEntryFrag extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_profile_entry, container, false);
 
         //get EditText fields
-        m_etxt_fname = (EditText) view.findViewById(R.id.etxt_fname);
-        m_etxt_lname = (EditText) view.findViewById(R.id.etxt_lname);
-        m_etxt_dob = (EditText) view.findViewById(R.id.etxt_dob);
-        m_etxt_sex = (EditText) view.findViewById(R.id.etxt_sex);
-        m_etxt_city = (EditText) view.findViewById(R.id.etxt_city);
-        m_etxt_country = (EditText) view.findViewById(R.id.etxt_country);
+        m_etxt_fname = (EditText) view.findViewById(R.id.txtv_fname);
+        m_etxt_lname = (EditText) view.findViewById(R.id.txtv_lname);
+        m_etxt_dob = (EditText) view.findViewById(R.id.txtv_dob);
+        m_etxt_sex = (EditText) view.findViewById(R.id.txtv_sex);
+        m_etxt_city = (EditText) view.findViewById(R.id.txtv_city);
+        m_etxt_country = (EditText) view.findViewById(R.id.txtv_country);
 
         //get buttons
         m_btn_submit = (Button) view.findViewById(R.id.btn_submit);
@@ -96,9 +96,9 @@ public class ProfileEntryFrag extends Fragment implements View.OnClickListener {
                 break;
             }
             case R.id.btn_submit: {
-                m_etxt_fname = (EditText) getActivity().findViewById(R.id.etxt_fname);
-                m_etxt_lname = (EditText) getActivity().findViewById(R.id.etxt_lname);
-                m_etxt_dob = (EditText) getActivity().findViewById(R.id.etxt_dob);
+                m_etxt_fname = (EditText) getActivity().findViewById(R.id.txtv_fname);
+                m_etxt_lname = (EditText) getActivity().findViewById(R.id.txtv_lname);
+                m_etxt_dob = (EditText) getActivity().findViewById(R.id.txtv_dob);
                 m_btn_img_image = (ImageButton) view.findViewById(R.id.btn_img_takeImage);
 
                 m_fname = m_etxt_fname.getText().toString();
