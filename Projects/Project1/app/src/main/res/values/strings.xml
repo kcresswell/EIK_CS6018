@@ -15,10 +15,19 @@
     <string name="etxt_weight">Weight</string>
     <string name="etxt_city">City</string>
     <string name="etxt_Country">Country</string>
-    <string name="btn_submit">Submit</string>
+    <string name="btn_done">Done</string>
     <string name="btn_img_description_profile_image">Take a profile picture</string>
     <string name="etxt_dob">DOB</string>
     <string name="txtv_ft_symbol">\'</string>
     <string name="txtv_in_symble">\"</string>
     <string name="txtv_lbs_symbol">lbs</string>
+    <string name="txtv_divider_location">Location</string>
+    <string name="txtv_divider_fitness">Fitness</string>
+    <string name="txtv_divider_lifestyle">Lifestyle</string>
+    <string name="txtv_divider_goal">Weight Goal</string>
+    <string name="btn_radio_sedentary">Sedentary</string>
+    <string name="btn_radio_active">Active</string>
+    <string name="btn_radio_maintain">Maintain</string>
+    <string name="btn_radio_loose">Loose</string>
+    <string name="btn_radio_gain">Gain</string>
 </resources>

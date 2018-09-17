@@ -9,189 +9,324 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <EditText
-        android:id="@+id/etxt_fname"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:hint="@string/etxt_fname"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toStartOf="@+id/btn_img_takeImage"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/txtv_lbs_symbol"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/txtv_lbs_symbol"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/etxt_weight"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <EditText
-        android:id="@+id/etxt_lname"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="@string/etxt_lname"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toStartOf="@+id/btn_img_takeImage"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etxt_fname" />
-
-    <EditText
-        android:id="@+id/etxt_dob"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:ems="10"
-        android:hint="@string/etxt_dob"
-        android:inputType="date"
-        android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/etxt_feet"
-        app:layout_constraintEnd_toEndOf="@+id/etxt_lname"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/etxt_sex" />
-
-    <EditText
-        android:id="@+id/etxt_sex"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/etxt_sex"
-        android:inputType="textPersonName"
-        android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/etxt_dob"
-        app:layout_constraintDimensionRatio="w,7:8"
-        app:layout_constraintEnd_toStartOf="@+id/etxt_dob"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/etxt_feet"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:ems="10"
-        android:hint="@string/etxt_feet"
-        android:inputType="number"
-        android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/etxt_inches"
-        app:layout_constraintDimensionRatio="w,9:10"
-        app:layout_constraintEnd_toStartOf="@+id/txtv_ft_symble"
-        app:layout_constraintStart_toEndOf="@+id/etxt_dob" />
-
-    <EditText
-        android:id="@+id/etxt_inches"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/etxt_inches"
-        android:inputType="number"
-        android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/etxt_weight"
-        app:layout_constraintDimensionRatio="w,11:8"
-        app:layout_constraintEnd_toStartOf="@+id/txtv_in_symbol"
-        app:layout_constraintStart_toEndOf="@+id/txtv_ft_symble" />
-
-    <EditText
-        android:id="@+id/etxt_weight"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="@string/etxt_weight"
-        android:inputType="number"
-        android:textSize="18sp"
-        app:layout_constraintDimensionRatio="w,4:3"
-        app:layout_constraintEnd_toStartOf="@+id/txtv_lbs_symbol"
-        app:layout_constraintStart_toEndOf="@+id/txtv_in_symbol"
-        app:layout_constraintTop_toBottomOf="@+id/etxt_country" />
-
-    <EditText
-        android:id="@+id/etxt_city"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="@string/etxt_city"
-        android:inputType="textPersonName"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@+id/etxt_dob"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etxt_lname" />
-
-    <EditText
-        android:id="@+id/etxt_country"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="@string/etxt_Country"
-        android:inputType="textPersonName"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@+id/etxt_city"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etxt_city" />
-
-    <ImageButton
-        android:id="@+id/btn_img_takeImage"
+    <ScrollView
+        android:id="@+id/scrollV_profile"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/btn_img_description_profile_image"
-        android:src="@drawable/ic_profile_img_placeholder"
-        app:layout_constraintBottom_toTopOf="@+id/etxt_inches"
-        app:layout_constraintDimensionRatio="w,1:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btn_submit"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@color/colorPrimary"
-        android:text="@string/btn_submit"
-        android:textColor="@android:color/background_light"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etxt_feet" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
-    <TextView
-        android:id="@+id/txtv_ft_symble"
-        android:layout_width="2dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/txtv_ft_symbol"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/etxt_feet"
-        app:layout_constraintEnd_toStartOf="@+id/etxt_inches"
-        app:layout_constraintStart_toEndOf="@+id/etxt_feet" />
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/txtv_in_symbol"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/txtv_in_symble"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/etxt_inches"
-        app:layout_constraintEnd_toStartOf="@+id/etxt_weight"
-        app:layout_constraintStart_toEndOf="@+id/etxt_inches" />
+            <TextView
+                android:id="@+id/txtv_divider_goal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/txtv_divider_goal"
+                android:textColor="@color/colorPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etxt_weight" />
 
+            <EditText
+                android:id="@+id/etxt_fname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:ems="10"
+                android:hint="@string/etxt_fname"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toStartOf="@+id/btn_img_takeImage"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etxt_lname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:hint="@string/etxt_lname"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="@+id/etxt_fname"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etxt_fname" />
+
+            <EditText
+                android:id="@+id/etxt_city"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:hint="@string/etxt_city"
+                android:inputType="textPersonName"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtv_divider_location" />
+
+            <EditText
+                android:id="@+id/etxt_country"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:hint="@string/etxt_Country"
+                android:inputType="textPersonName"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/etxt_city"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etxt_city" />
+
+            <ImageButton
+                android:id="@+id/btn_img_takeImage"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/btn_img_description_profile_image"
+                android:src="@drawable/ic_profile_img_placeholder"
+                app:layout_constraintBottom_toBottomOf="@+id/etxt_inches"
+                app:layout_constraintDimensionRatio="w,1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/btn_submit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@color/colorPrimary"
+                android:text="@string/btn_done"
+                android:textColor="@android:color/background_light"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/radiogp_weightGoal" />
+
+            <TextView
+                android:id="@+id/txtv_lbs_symbol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/txtv_lbs_symbol"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/etxt_weight"
+                app:layout_constraintStart_toEndOf="@+id/etxt_weight"
+                app:layout_constraintTop_toTopOf="@+id/etxt_weight"
+                app:layout_constraintVertical_bias="0.49" />
+
+            <EditText
+                android:id="@+id/etxt_dob"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:hint="@string/etxt_dob"
+                android:inputType="date"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/etxt_lname"
+                app:layout_constraintStart_toEndOf="@+id/etxt_sex"
+                app:layout_constraintTop_toBottomOf="@+id/etxt_lname" />
+
+            <EditText
+                android:id="@+id/etxt_sex"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/etxt_sex"
+                android:inputType="textPersonName"
+                android:textSize="18sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/etxt_dob"
+                app:layout_constraintDimensionRatio="w,1:1"
+                app:layout_constraintEnd_toStartOf="@+id/etxt_dob"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/etxt_feet"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:hint="@string/etxt_feet"
+                android:inputType="number"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toStartOf="@+id/txtv_ft_symble"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etxt_dob" />
+
+            <EditText
+                android:id="@+id/etxt_inches"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:ems="10"
+                android:hint="@string/etxt_inches"
+                android:inputType="number"
+                android:textSize="18sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/etxt_feet"
+                app:layout_constraintEnd_toStartOf="@+id/txtv_in_symbol"
+                app:layout_constraintStart_toEndOf="@+id/txtv_ft_symble" />
+
+            <EditText
+                android:id="@+id/etxt_weight"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:hint="@string/etxt_weight"
+                android:inputType="number"
+                android:textSize="18sp"
+                app:layout_constraintDimensionRatio="w,2:1"
+                app:layout_constraintEnd_toStartOf="@+id/txtv_lbs_symbol"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtv_divider_fitness" />
+
+            <TextView
+                android:id="@+id/txtv_ft_symble"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/txtv_ft_symbol"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/etxt_feet"
+                app:layout_constraintEnd_toStartOf="@+id/etxt_inches"
+                app:layout_constraintStart_toEndOf="@+id/etxt_feet"
+                app:layout_constraintTop_toTopOf="@+id/etxt_feet" />
+
+            <TextView
+                android:id="@+id/txtv_in_symbol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/txtv_in_symble"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/etxt_inches"
+                app:layout_constraintEnd_toEndOf="@+id/etxt_dob"
+                app:layout_constraintStart_toEndOf="@+id/etxt_inches"
+                app:layout_constraintTop_toTopOf="@+id/etxt_inches" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/txtv_divider_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/txtv_divider_location"
+                android:textColor="@color/colorPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etxt_feet" />
+
+            <TextView
+                android:id="@+id/txtv_divider_lifestyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/txtv_divider_lifestyle"
+                android:textColor="@color/colorPrimary"
+                app:layout_constraintStart_toStartOf="@+id/radiogp_lifestyle"
+                app:layout_constraintTop_toBottomOf="@+id/etxt_country" />
+
+            <TextView
+                android:id="@+id/txtv_divider_fitness"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/txtv_divider_fitness"
+                android:textColor="@color/colorPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etxt_country" />
+
+
+            <RadioGroup
+                android:id="@+id/radiogp_lifestyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="@+id/etxt_weight"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/txtv_lbs_symbol"
+                app:layout_constraintTop_toTopOf="@+id/etxt_weight">
+
+                <RadioButton
+                    android:id="@+id/btn_radio_active"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/btn_radio_active"
+                    android:textSize="18sp" />
+
+                <RadioButton
+                    android:id="@+id/btn_radio_sedentary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/btn_radio_sedentary"
+                    android:textSize="18sp" />
+
+            </RadioGroup>
+
+            <RadioGroup
+                android:id="@+id/radiogp_weightGoal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtv_divider_goal">
+
+                <RadioButton
+                    android:id="@+id/btn_radio_maintain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/btn_radio_maintain"
+                    android:textSize="18sp" />
+
+                <RadioButton
+                    android:id="@+id/btn_radio_loose"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/btn_radio_loose"
+                    android:textSize="18sp" />
+
+                <RadioButton
+                    android:id="@+id/btn_radio_gain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/btn_radio_gain"
+                    android:textSize="18sp" />
+            </RadioGroup>
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
 </android.support.constraint.ConstraintLayout>
