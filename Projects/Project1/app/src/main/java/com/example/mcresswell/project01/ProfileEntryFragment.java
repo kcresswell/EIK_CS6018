@@ -29,7 +29,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
     private String m_fname, m_lname, m_dob, m_sex, m_city, m_country;
     private int m_age;
-    private EditText m_etxt_fname, m_etxt_lname, m_etxt_dob, m_etxt_sex, m_etxt_city, m_etxt_country;
+    private EditText m_etxt_fname, m_etxt_lname, m_etxt_dob, m_etxt_sex, m_etxt_city, m_etxt_country, m_etxt_weight, m_etxt_feet, m_etxt_inches;
     private Button m_btn_submit;
     private ImageButton m_btn_img_image;
     private Bitmap m_bmap_imageFromCam;
@@ -57,6 +57,9 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         m_etxt_sex = (EditText) view.findViewById(R.id.txtv_sex);
         m_etxt_city = (EditText) view.findViewById(R.id.txtv_city);
         m_etxt_country = (EditText) view.findViewById(R.id.txtv_country);
+        m_etxt_weight = (EditText) view.findViewById(R.id.txtv_weight);
+        m_etxt_feet = (EditText) view.findViewById(R.id.txtv_feet);
+        m_etxt_inches = (EditText) view.findViewById(R.id.txtv_inches);
 
         //get buttons
         m_btn_submit = (Button) view.findViewById(R.id.btn_submit);
