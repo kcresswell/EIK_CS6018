@@ -25,7 +25,7 @@ import java.util.Locale;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ProfileEntryFrag extends Fragment implements View.OnClickListener {
+public class ProfileEntryFragment extends Fragment implements View.OnClickListener {
 
     private String m_fname, m_lname, m_dob, m_sex, m_city, m_country;
     private int m_age;
@@ -39,7 +39,7 @@ public class ProfileEntryFrag extends Fragment implements View.OnClickListener {
 
     private OnDataChannel mListener;
 
-    public ProfileEntryFrag() {
+    public ProfileEntryFragment() {
         // Required empty public constructor
     }
 

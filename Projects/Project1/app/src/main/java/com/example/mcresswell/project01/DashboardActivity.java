@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class DashboardActivity extends AppCompatActivity implements ProfileEntryFrag.OnDataChannel {
+public class DashboardActivity extends AppCompatActivity implements ProfileEntryFragment.OnDataChannel {
 
     //memeber variables
     private FragmentTransaction m_fTrans;
@@ -18,7 +18,7 @@ public class DashboardActivity extends AppCompatActivity implements ProfileEntry
         //If not saved instance state, build initial fragment
         if(savedInstanceState == null){
             //create fragment
-            ProfileEntryFrag frag_profileEntry = new ProfileEntryFrag();
+            ProfileEntryFragment frag_profileEntry = new ProfileEntryFragment();
 
             //present fragment to display
             m_fTrans = getSupportFragmentManager().beginTransaction();
