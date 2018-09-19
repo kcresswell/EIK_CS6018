@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,8 +14,9 @@ import android.view.ViewGroup;
 public class FitnessDetailsFragment extends Fragment {
 
 
-    private String mfName, mlName, mdob, msex, mcity, mcountry, mweight, mfeet, minches;
+    private String mfName, mlName, mdob, msex, mcity, mcountry, mweight, mfeet, minches, mlbsPerWeek, m_lifestyleSelection, m_weightGoal;
     private int mAge;
+    private TextView m_tvcalsToEat, m_tvBMR;
 
     public FitnessDetailsFragment() {
         // Required empty public constructor
@@ -26,6 +27,10 @@ public class FitnessDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        m_tvcalsToEat = (TextView) container.findViewById(R.id.tv_calPerDay);
+        m_tvBMR = (TextView) container.findViewById(R.id.tv_BMR);
+
         return inflater.inflate(R.layout.fragment_fitness_details, container, false);
     }
 
@@ -40,6 +45,9 @@ public class FitnessDetailsFragment extends Fragment {
         mfeet = userDataBundle.getString("feet");
         minches = userDataBundle.getString("inches");
         mAge = userDataBundle.getInt("age");
+        mlbsPerWeek = userDataBundle.getString("lbsPerWeek");
+        m_lifestyleSelection = userDataBundle.getString("lifestyle");
+        m_weightGoal = userDataBundle.getString("weightGoal");
     }
 
 ////    http://www.bmrcalculator.org
@@ -71,16 +79,44 @@ public class FitnessDetailsFragment extends Fragment {
             BMR = (9.99 * weight) + (6.25 * totalHeightInInches) - 4.92 * mAge + 5;
         }
 
+
+        String bmrString = "" + BMR;
+        m_tvcalsToEat.setText(bmrString);
+
         return BMR;
     }
 
+    //http://www.bmrcalculator.org
     //You exercise moderately (3-5 days per week)	Calories Burned a Day = BMR x 1.55
     //Low	You get little to no exercise	Calories Burned a Day = BMR x 1.2
-    private int calculateCalories(Bundle userDataBundle, int lbToGainOrLoose) {
-        int numOfCalories = 0;
+    //In order to lose 1 pound of fat each week, you must have a deficit of 3,500 calories over the course of a week.[5]
+    // https://www.wikihow.com/Calculate-How-Many-Calories-You-Need-to-Eat-to-Lose-Weight
+    private double calculateCalories(Bundle userDataBundle, int lbToGainOrLoose) {
+        double numOfCalories;
         double BMR = calculateBMR(userDataBundle);
 
+        if(m_lifestyleSelection.equals("Sedentary")){
+            numOfCalories = BMR * 1.2;
 
+            if(m_weightGoal.equals("Gain")) {
+                numOfCalories += lbToGainOrLoose + 3500;
+            } else if(m_weightGoal.equals("Loose")){
+                numOfCalories += lbToGainOrLoose - 3500;
+            }
+        }
+        else {
+            //active
+            numOfCalories = BMR * 1.55;
+
+            if(m_weightGoal.equals("Gain")) {
+                numOfCalories += BMR + lbToGainOrLoose + 3500;
+            } else if(m_weightGoal.equals("Loose")){
+                numOfCalories += BMR + lbToGainOrLoose - 3500;
+            }
+        }
+
+        String calString = "" + numOfCalories;
+        m_tvcalsToEat.setText(calString);
 
         return numOfCalories;
     }
@@ -100,7 +136,8 @@ public class FitnessDetailsFragment extends Fragment {
         double weight = Double.parseDouble(mweight);
 
         double BMI_step1 = (weight/heightInInches);
+        double BMI = (BMI_step1/heightInInches) * 703;
 
-        return (BMI_step1/heightInInches) * 703;
+        return BMI;
     }
 }
