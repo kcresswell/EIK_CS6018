@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import java.time.LocalDate;
@@ -33,6 +35,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     private Button m_btn_submit;
     private ImageButton m_btn_img_image;
     private Bitmap m_bmap_imageFromCam;
+    private RadioGroup m_lifestyleSelection;
 
     //request code for camera
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -42,6 +45,8 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     public ProfileEntryFragment() {
         // Required empty public constructor
     }
+
+    public Bundle userData = new Bundle();
 
 
     @Override
@@ -61,6 +66,9 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         m_etxt_feet = (EditText) view.findViewById(R.id.txtv_feet);
         m_etxt_inches = (EditText) view.findViewById(R.id.txtv_inches);
 
+        //get Radio Button selection
+        m_lifestyleSelection = (RadioGroup) view.findViewById(R.id.radiogp_weightGoal);
+
         //get buttons
         m_btn_submit = (Button) view.findViewById(R.id.btn_submit);
         m_btn_img_image = (ImageButton) view.findViewById(R.id.btn_img_takeImage);
@@ -68,6 +76,25 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         //set buttons to listen to this class
         m_btn_submit.setOnClickListener(this);
         m_btn_img_image.setOnClickListener(this);
+
+        int age = calculateAge();
+
+        //add user data to the bundle
+        userData.putString("fname", m_etxt_fname.getText().toString());
+        userData.putString("lname", m_etxt_lname.getText().toString());
+        userData.putString("dob", m_etxt_dob.getText().toString());
+        userData.putString("sex", m_etxt_sex.getText().toString());
+        userData.putString("city", m_etxt_city.getText().toString());
+        userData.putString("country", m_etxt_country.getText().toString());
+        userData.putString("weight", m_etxt_weight.getText().toString());
+        userData.putString("feet", m_etxt_feet.getText().toString());
+        userData.putString("inches", m_etxt_inches.getText().toString());
+        userData.putInt("age", age);
+//        userData.putString("lifestyle", m_lifestyleSelection.toString());
+
+        Intent i = new Intent(getContext(),FitnessDetailsFragment.class);
+        i.putExtras(userData);
+        startActivity(i);
 
         return view;
     }
