@@ -38,4 +38,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hint_wkly_goal">lbs/wk</string>
+    <string name="tv_bmr">BMR</string>
+    <string name="tv_calPerDay">Calories Per Day</string>
 </resources>
