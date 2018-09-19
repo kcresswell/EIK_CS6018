@@ -32,4 +32,8 @@ public class DashboardActivity extends AppCompatActivity implements ProfileEntry
     public void onDataPass(String fname, String lname, int age, Bitmap image) {
 
     }
+
+    boolean isWideDisplay(){
+        return getResources().getBoolean(R.bool.isWideDisplay);
+    }
 }
