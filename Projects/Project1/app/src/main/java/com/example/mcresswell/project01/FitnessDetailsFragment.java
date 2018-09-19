@@ -85,4 +85,22 @@ public class FitnessDetailsFragment extends Fragment {
         return numOfCalories;
     }
 
+    //http://bmi.emedtv.com/bmi/how-to-calculate-bmi.html
+//    Therefore, to calculate BMI, take the weight (lbs) and divide it by height (in).
+//     Take the result of that calculation and divide it by height again. Then, multiply that number by 703. Round to the second decimal place.
+//
+//    An example of calculating body mass index using the BMI formula: Weight = 150 lbs, Height = 5'5" (65 inches)
+//
+//    BMI Calculation: [150 ÷ (65)2] x 703 = 24.96
+    private double calculateBMI(){
+        double feet = Double.parseDouble(mfeet);
+        double inches = Double.parseDouble(minches);
+
+        double heightInInches = (feet * 12) + inches;
+        double weight = Double.parseDouble(mweight);
+
+        double BMI_step1 = (weight/heightInInches);
+
+        return (BMI_step1/heightInInches) * 703;
+    }
 }
