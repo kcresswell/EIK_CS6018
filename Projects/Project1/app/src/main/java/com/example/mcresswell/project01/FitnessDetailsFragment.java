@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 public class FitnessDetailsFragment extends Fragment {
 
 
+    private String mfName, mlName, mdob, msex, mcity, mcountry, mweight, mfeet, minches;
+    private int mAge;
+
     public FitnessDetailsFragment() {
         // Required empty public constructor
     }
@@ -26,36 +29,60 @@ public class FitnessDetailsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_fitness_details, container, false);
     }
 
+    public void getDataFromBundle(Bundle userDataBundle) {
+        mfName = userDataBundle.getString("fname");
+        mlName = userDataBundle.getString("lname");
+        mdob = userDataBundle.getString("dob");
+        msex = userDataBundle.getString("sex");
+        mcity = userDataBundle.getString("city");
+        mcountry = userDataBundle.getString("country");
+        mweight = userDataBundle.getString("weight");
+        mfeet = userDataBundle.getString("feet");
+        minches = userDataBundle.getString("inches");
+        mAge = userDataBundle.getInt("age");
+    }
+
 ////    http://www.bmrcalculator.org
 ////    BMR = (9.99 x weight + 6.25 x height – 4.92 x age + s ) kcal/day
 ////    Here, weight is in Kilograms, height is in centimeters and age is in years.
 ////    s is a factor to adjust for gender and adopts the value +5 for males and -161 for females.
-//    private double calculateBMR() {
-//        double BMR = 0.0;
-//
-//        //get weight value
-//        double weight = Double.parseDouble(m_etxt_weight.toString());
-//
-//        //get height values
-//        double heightFeet = Double.parseDouble(m_etxt_feet.toString());
-//        double heightInches = Double.parseDouble(m_etxt_inches.toString());
-//        double totalHeightInInches = (heightFeet * 12.0) + heightInches;
-//
-//        //get age value
-//        int age = calculateAge();
-//
-//        //calculate BMR based on sex of user
-//        String sex = m_etxt_sex.toString();
-//
-//        if(sex.equals("Female") || sex.equals("female") || sex.equals("F") || sex.equals("f")) {
-//            //user is female, s = -161
-//            BMR = (9.99 * weight) + (6.25 * totalHeightInInches) - 4.92 * age - 161;
-//        } else {
-//            //user is male, s = 5
-//            BMR = (9.99 * weight) + (6.25 * totalHeightInInches) - 4.92 * age + 5;
-//        }
-//
-//        return BMR;
-//    }
+    private double calculateBMR(Bundle userDataBundle) {
+        getDataFromBundle(userDataBundle);
+
+        double BMR = 0.0;
+
+        //get weight value
+        double weight = Double.parseDouble(mweight);
+
+        //get height values
+        double heightFeet = Double.parseDouble(mfeet);
+        double heightInches = Double.parseDouble(minches);
+        double totalHeightInInches = (heightFeet * 12.0) + heightInches;
+
+        //get age value
+
+        //calculate BMR based on sex of user
+
+        if(msex.equals("Female") || msex.equals("female") || msex.equals("F") || msex.equals("f")) {
+            //user is female, s = -161
+            BMR = (9.99 * weight) + (6.25 * totalHeightInInches) - 4.92 * mAge - 161;
+        } else {
+            //user is male, s = 5
+            BMR = (9.99 * weight) + (6.25 * totalHeightInInches) - 4.92 * mAge + 5;
+        }
+
+        return BMR;
+    }
+
+    //You exercise moderately (3-5 days per week)	Calories Burned a Day = BMR x 1.55
+    //Low	You get little to no exercise	Calories Burned a Day = BMR x 1.2
+    private int calculateCalories(Bundle userDataBundle, int lbToGainOrLoose) {
+        int numOfCalories = 0;
+        double BMR = calculateBMR(userDataBundle);
+
+
+
+        return numOfCalories;
+    }
 
 }
