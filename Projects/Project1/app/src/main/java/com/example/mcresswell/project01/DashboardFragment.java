@@ -45,7 +45,7 @@ public class DashboardFragment extends Fragment {
         mRecycleView.setLayoutManager(layoutManager);
 
         //needs to be implemented
-//        ArrayList<ImageButton> btns_dashboard = getArguments().getParcelableArrayList("BUTTONS_DASHBOARD_DATA");
+//        ArrayList<ImageButton> btns_dashboard = getArguments().getParcelable("BUTTONS_DASHBOARD_DATA");
 
         //just a place holder until it is corrected
         ArrayList<ImageButton> btns_dashboard = null;
