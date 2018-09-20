@@ -18,11 +18,13 @@ public class DashboardActivity extends AppCompatActivity implements ProfileEntry
         //If not saved instance state, build initial fragment
         if(savedInstanceState == null){
             //create fragment
-            ProfileEntryFragment frag_profileEntry = new ProfileEntryFragment();
+//            ProfileEntryFragment frag_profileEntry = new ProfileEntryFragment();
+            DashboardFragment frag_dashboard = new DashboardFragment();
 
             //present fragment to display
             m_fTrans = getSupportFragmentManager().beginTransaction();
-            m_fTrans.replace(R.id.fl_master_nd, frag_profileEntry, "v_frag_profile_entry");
+            m_fTrans.replace(R.id.fl_master_nd, frag_dashboard, "v_frag_dashboard");
+//            m_fTrans.replace(R.id.fl_master_nd, frag_profileEntry, "v_frag_profile_entry");
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
