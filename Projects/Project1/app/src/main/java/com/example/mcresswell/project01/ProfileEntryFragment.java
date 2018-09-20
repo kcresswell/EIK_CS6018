@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import java.time.LocalDate;
@@ -29,10 +31,11 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
     private String m_fname, m_lname, m_dob, m_sex, m_city, m_country;
     private int m_age;
-    private EditText m_etxt_fname, m_etxt_lname, m_etxt_dob, m_etxt_sex, m_etxt_city, m_etxt_country, m_etxt_weight, m_etxt_feet, m_etxt_inches;
+    private EditText m_etxt_fname, m_etxt_lname, m_etxt_dob, m_etxt_sex, m_etxt_city, m_etxt_country, m_etxt_weight, m_etxt_feet, m_etxt_inches, m_etxt_lbPerWeek;
     private Button m_btn_submit;
     private ImageButton m_btn_img_image;
     private Bitmap m_bmap_imageFromCam;
+    private RadioGroup m_lifestyleSelection, m_radiogp_weightGoal;
 
     //request code for camera
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -42,6 +45,8 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     public ProfileEntryFragment() {
         // Required empty public constructor
     }
+
+    public Bundle userData = new Bundle();
 
 
     @Override
@@ -60,6 +65,28 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         m_etxt_weight = (EditText) view.findViewById(R.id.txtv_weight);
         m_etxt_feet = (EditText) view.findViewById(R.id.txtv_feet);
         m_etxt_inches = (EditText) view.findViewById(R.id.txtv_inches);
+        m_etxt_lbPerWeek = (EditText) view.findViewById(R.id.txtv_weight2);
+
+        //get Radio Button selection
+        m_lifestyleSelection = (RadioGroup) view.findViewById(R.id.radiogp_lifestyle);
+
+//        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_group);
+
+        int radioButtonID = m_lifestyleSelection.getCheckedRadioButtonId();
+
+        RadioButton radioButton = (RadioButton) m_lifestyleSelection.findViewById(radioButtonID);
+
+        String selectedtext = (String) radioButton.getText();
+
+        m_radiogp_weightGoal = (RadioGroup) view.findViewById(R.id.radiogp_weightGoal);
+
+//        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_group);
+
+        int radioButtonID2 = m_lifestyleSelection.getCheckedRadioButtonId();
+
+        RadioButton radioButton2 = (RadioButton) m_lifestyleSelection.findViewById(radioButtonID2);
+
+        String selectedtext2 = (String) radioButton2.getText();
 
         //get buttons
         m_btn_submit = (Button) view.findViewById(R.id.btn_submit);
@@ -68,6 +95,27 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         //set buttons to listen to this class
         m_btn_submit.setOnClickListener(this);
         m_btn_img_image.setOnClickListener(this);
+
+        int age = calculateAge();
+
+        //add user data to the bundle
+        userData.putString("fname", m_etxt_fname.getText().toString());
+        userData.putString("lname", m_etxt_lname.getText().toString());
+        userData.putString("dob", m_etxt_dob.getText().toString());
+        userData.putString("sex", m_etxt_sex.getText().toString());
+        userData.putString("city", m_etxt_city.getText().toString());
+        userData.putString("country", m_etxt_country.getText().toString());
+        userData.putString("weight", m_etxt_weight.getText().toString());
+        userData.putString("feet", m_etxt_feet.getText().toString());
+        userData.putString("inches", m_etxt_inches.getText().toString());
+        userData.putInt("age", age);
+        userData.putString("lbsPerWeek", m_etxt_lbPerWeek.getText().toString());
+        userData.putString("lifestyle", selectedtext);
+        userData.putString("weightGoal", selectedtext2);
+
+        Intent i = new Intent(getContext(),FitnessDetailsFragment.class);
+        i.putExtras(userData);
+        startActivity(i);
 
         return view;
     }
