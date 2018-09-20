@@ -1,6 +1,7 @@
 package com.example.mcresswell.project01;
 
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -26,6 +26,15 @@ public class DashboardFragment extends Fragment {
     public DashboardFragment() {
         // Required empty public constructor
     }
+
+//    public static DashboardFragment newInstance (ImageButtonListParcelable imageButtonListParcelable){
+//        Bundle args = new Bundle();
+//        args.putParcelable("BUTTONS", imageButtonListParcelable);
+//
+//        DashboardFragment fragment = new DashboardFragment();
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
 
     @Override
@@ -45,12 +54,19 @@ public class DashboardFragment extends Fragment {
         mRecycleView.setLayoutManager(layoutManager);
 
         //needs to be implemented
-//        ArrayList<ImageButton> btns_dashboard = getArguments().getParcelable("BUTTONS_DASHBOARD_DATA");
+        ArrayList<DashButton> buttons = new ArrayList<>();
 
-        //just a place holder until it is corrected
-        ArrayList<ImageButton> btns_dashboard = null;
+        //build image for button
+        buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_profile_img_placeholder, null), "Fitness"));
+        buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_profile_img_placeholder, null), "Hikes"));
+        buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_profile_img_placeholder, null), "Profile"));
+        buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_profile_img_placeholder, null), "Weather"));
 
-        mAdaptor = new RV_Adapter(btns_dashboard);
+//        ImageButtonListParcelable imageButtonListParcelable = new ImageButtonListParcelable(buttons);
+//        ArrayList<DashButton> btns_dashboard = imageButtonListParcelable.getM_buttons();
+
+//        mAdaptor = new RV_Adapter(btns_dashboard);
+        mAdaptor = new RV_Adapter(buttons);
         mRecycleView.setAdapter(mAdaptor);
 
         return view;
