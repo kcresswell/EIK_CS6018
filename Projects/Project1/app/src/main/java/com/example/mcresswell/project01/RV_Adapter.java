@@ -11,20 +11,21 @@ import android.widget.ImageButton;
 import java.util.List;
 
 public class RV_Adapter extends RecyclerView.Adapter<RV_Adapter.ViewHolder> {
-    private List<ImageButton> m_btn_img_ListItems;
+    private List<DashButton> m_btn_img_ListItems;
     private Context m_Context;
 
-    public RV_Adapter(List<ImageButton> inputList) {
+    //constructor
+    public RV_Adapter(List<DashButton> inputList) {
         m_btn_img_ListItems = inputList;
     }
 
+    //viewholder that conncets to recyclerview
     public class ViewHolder extends RecyclerView.ViewHolder{
         protected View itemLayout;
         protected ImageButton btn_image_itemData;
 
         public ViewHolder(@NonNull View view) {
             super(view);
-
             itemLayout = view;
             btn_image_itemData = (ImageButton) view.findViewById(R.id.btn_img_dashboard_item);
         }
@@ -35,14 +36,16 @@ public class RV_Adapter extends RecyclerView.Adapter<RV_Adapter.ViewHolder> {
     public RV_Adapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         m_Context = viewGroup.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(m_Context);
-        View view = layoutInflater.inflate(R.layout.fragment_dashboard, viewGroup, false);
-
+        View view = layoutInflater.inflate(R.layout.dashboard_item, viewGroup, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RV_Adapter.ViewHolder viewHolder, final int position) {
-        viewHolder.btn_image_itemData = m_btn_img_ListItems.get(position);
+        //set values of the button.
+        viewHolder.btn_image_itemData.setImageDrawable(m_btn_img_ListItems.get(position).getImage());
+
+//        viewHolder.btn_image_itemData = m_btn_img_ListItems.get(position);
         viewHolder.itemLayout.setOnClickListener(new View.OnClickListener(){
 
             @Override
