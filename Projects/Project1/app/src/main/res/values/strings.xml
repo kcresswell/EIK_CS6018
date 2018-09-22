@@ -1,11 +1,17 @@
 <resources>
     <string name="app_name">In Style</string>
 
+    <!--Application Login-->
     <string name="greeting">Hello</string>
     <string name="email">email</string>
     <string name="password">password</string>
     <string name="btn_createAccount">Create Account</string>
     <string name="login">Login</string>
+
+    <!--Main Dashboard-->
+
+
+    <!--Profile entry-->
     <string name="hint_fname">First Name</string>
     <string name="hint_lname">Last Name</string>
     <string name="hint_sex">Sex</string>
@@ -18,6 +24,8 @@
     <string name="btn_done">Done</string>
     <string name="btn_img_description_profile_image">Take a profile picture</string>
     <string name="hint_dob">DOB</string>
+
+    <!--Fitness Details-->
     <string name="txtv_ft_symbol">\'</string>
     <string name="txtv_in_symble">\"</string>
     <string name="txtv_lbs_symbol">lbs</string>
@@ -33,11 +41,22 @@
     <string name="hint_lifestyle">Activity Level</string>
     <string name="hint_wGoal">Weight Goal</string>
     <string name="btn_edit">Edit</string>
-    <string name="txtv_location">Location</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--Profile Summary-->
     <string name="hint_wkly_goal">lbs/wk</string>
     <string name="tv_bmr">BMR</string>
     <string name="tv_calPerDay">Calories Per Day</string>
+
+    <!--Hiking-->
+    <string name="title_activity_hiking">HikingActivity</string>
+    <string name="hiking_current_location">Location</string>
+
+    <!--Weather-->
+    <string name="title_activity_weather">WeatherActivity</string>
+
+
+    <!-- TODO: Clean these up -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
 </resources>

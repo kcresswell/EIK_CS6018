@@ -12,7 +12,7 @@
         android:id="@+id/txtv_location"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/txtv_location"
+        android:text="@string/hiking_current_location"
         android:textAlignment="center"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
