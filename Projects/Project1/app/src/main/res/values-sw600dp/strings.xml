@@ -34,5 +34,5 @@
     <string name="hint_lifestyle">Activity Level</string>
     <string name="hint_wGoal">Weight Goal</string>
     <string name="btn_edit">Edit</string>
-    <string name="txtv_location">Location</string>
+    <string name="hiking_current_location">Location</string>
 </resources>
