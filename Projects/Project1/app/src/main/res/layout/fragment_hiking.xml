@@ -5,14 +5,16 @@
     android:id="@+id/cl_hikes"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HikingFragment">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".HikingFragment"
+    tools:showIn="@layout/activity_hiking">
 
-    <!-- TODO: Update blank fragment layout -->
+<!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/txtv_location"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/txtv_location"
+        android:text="@string/hiking_current_location"
         android:textAlignment="center"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"

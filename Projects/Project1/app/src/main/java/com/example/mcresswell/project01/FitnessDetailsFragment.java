@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.mcresswell.project01.util.BmiUtils;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -121,23 +123,14 @@ public class FitnessDetailsFragment extends Fragment {
         return numOfCalories;
     }
 
-    //http://bmi.emedtv.com/bmi/how-to-calculate-bmi.html
-//    Therefore, to calculate BMI, take the weight (lbs) and divide it by height (in).
-//     Take the result of that calculation and divide it by height again. Then, multiply that number by 703. Round to the second decimal place.
-//
-//    An example of calculating body mass index using the BMI formula: Weight = 150 lbs, Height = 5'5" (65 inches)
-//
-//    BMI Calculation: [150 ÷ (65)2] x 703 = 24.96
-    private double calculateBMI(){
-        double feet = Double.parseDouble(mfeet);
-        double inches = Double.parseDouble(minches);
+    private double calculateBMI() {
+        final int INCHES_TO_FT = 12;
 
-        double heightInInches = (feet * 12) + inches;
-        double weight = Double.parseDouble(mweight);
+        //TODO: Input validation needs to be done here to eliminate possibility of an exception being thrown
 
-        double BMI_step1 = (weight/heightInInches);
-        double BMI = (BMI_step1/heightInInches) * 703;
+        double heightInInches = (Double.parseDouble(mfeet) * INCHES_TO_FT) + Double.parseDouble(minches);
+        double weightInLbs = Double.parseDouble(mweight);
 
-        return BMI;
+        return BmiUtils.calculateBmi(heightInInches, weightInLbs);
     }
 }
