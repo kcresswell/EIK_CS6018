@@ -57,10 +57,10 @@ public class DashboardFragment extends Fragment {
         ArrayList<DashButton> buttons = new ArrayList<>();
 
         //build image for button
-        buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_profile_img_placeholder, null), "Fitness"));
-        buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_profile_img_placeholder, null), "Hikes"));
-        buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_profile_img_placeholder, null), "Profile"));
-        buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_profile_img_placeholder, null), "Weather"));
+        buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_img_fitness, null), "Fitness"));
+        buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_img_hike, null), "Hikes"));
+        buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_img_profile, null), "Profile"));
+        buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_img_weather, null), "Weather"));
 
 //        ImageButtonListParcelable imageButtonListParcelable = new ImageButtonListParcelable(buttons);
 //        ArrayList<DashButton> btns_dashboard = imageButtonListParcelable.getM_buttons();
