@@ -16,6 +16,9 @@ public class WeatherFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    private static final String API_KEY = "99ea8382701bd7481e5ea568772f739a";
+    private static final String WEATHER_API_URI = "http://api.openweathermap.org/data/2.5/weather?q=";
+
     private String mParam1;
     private String mParam2;
 

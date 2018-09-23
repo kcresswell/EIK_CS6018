@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="dimen_dashboard_button">125dp</dimen>
+    <dimen name="dimen_dashboard_button_text_size">15sp</dimen>
+    <dimen name="dashboard_button_text_padding">20dp</dimen>
+    <dimen name="dashboard_button_margin">20dp</dimen>
+
+</resources>

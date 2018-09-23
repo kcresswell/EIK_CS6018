@@ -15,4 +15,31 @@
         android:background="@android:color/transparent"
         android:scrollbars="vertical" />
 
+    <!--<GridLayout-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content">-->
+
+    <!--<Button-->
+        <!--android:layout_width="125dp"-->
+        <!--android:layout_height="125dp"-->
+        <!--android:text="Find Hikes"-->
+        <!--android:textSize="@dimen/dimen_dashboard_button_text_size"-->
+        <!--android:layout_margin="30dp"-->
+        <!--android:padding="@dimen/dashboard_button_text_padding"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:id="@+id/dashboard_button_hiking"-->
+        <!--/>-->
+
+    <!--<Button-->
+        <!--android:id="@+id/dashboard_button_weather"-->
+        <!--android:layout_width="125dp"-->
+        <!--android:layout_height="125dp"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_margin="30dp"-->
+        <!--android:padding="@dimen/dashboard_button_text_padding"-->
+        <!--android:text="Local Weather"-->
+        <!--android:textSize="@dimen/dimen_dashboard_button_text_size" />-->
+
+    <!--</GridLayout>-->
+
 </FrameLayout>
