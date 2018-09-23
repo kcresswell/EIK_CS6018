@@ -47,23 +47,13 @@ public class RV_Adapter extends RecyclerView.Adapter<RV_Adapter.ViewHolder> {
         viewHolder.btn_image_itemData.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-
+                getPosition(position);
             }
         });
-
-//        viewHolder.btn_image_itemData = m_btn_img_ListItems.get(position);
-//        viewHolder.itemLayout.setOnClickListener(new View.OnClickListener(){
-//
-//            @Override
-//            public void onClick(View v) {
-//                remove(position);
-//            }
-//        });
     }
 
-    public void remove(int position){
-        m_btn_img_ListItems.remove(position);
-        notifyItemRemoved(position);
+    public int getPosition(int position){
+        return position;
     }
 
     @Override
