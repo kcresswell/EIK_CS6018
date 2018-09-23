@@ -44,15 +44,21 @@ public class RV_Adapter extends RecyclerView.Adapter<RV_Adapter.ViewHolder> {
     public void onBindViewHolder(@NonNull RV_Adapter.ViewHolder viewHolder, final int position) {
         //set values of the button.
         viewHolder.btn_image_itemData.setImageDrawable(m_btn_img_ListItems.get(position).getImage());
-
-//        viewHolder.btn_image_itemData = m_btn_img_ListItems.get(position);
-        viewHolder.itemLayout.setOnClickListener(new View.OnClickListener(){
-
+        viewHolder.btn_image_itemData.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
-                remove(position);
+            public void onClick(View v){
+
             }
         });
+
+//        viewHolder.btn_image_itemData = m_btn_img_ListItems.get(position);
+//        viewHolder.itemLayout.setOnClickListener(new View.OnClickListener(){
+//
+//            @Override
+//            public void onClick(View v) {
+//                remove(position);
+//            }
+//        });
     }
 
     public void remove(int position){

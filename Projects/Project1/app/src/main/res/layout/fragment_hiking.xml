@@ -24,7 +24,7 @@
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="0dp"
-        android:layout_height="430dp"
+        android:layout_height="491dp"
         app:layout_constraintBottom_toTopOf="@+id/txtv_location"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

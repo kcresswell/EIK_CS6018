@@ -26,6 +26,7 @@
     <string name="hint_dob">DOB</string>
 
     <!--Fitness Details-->
+    <string name="title_activity_fitness">Fitness</string>
     <string name="txtv_ft_symbol">\'</string>
     <string name="txtv_in_symble">\"</string>
     <string name="txtv_lbs_symbol">lbs</string>
@@ -48,11 +49,11 @@
     <string name="tv_calPerDay">Calories Per Day</string>
 
     <!--Hiking-->
-    <string name="title_activity_hiking">HikingActivity</string>
+    <string name="title_activity_hiking">Hiking</string>
     <string name="hiking_current_location">Location</string>
 
     <!--Weather-->
-    <string name="title_activity_weather">WeatherActivity</string>
+    <string name="title_activity_weather">Weather</string>
 
 
     <!-- TODO: Clean these up -->
