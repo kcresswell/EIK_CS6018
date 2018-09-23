@@ -9,8 +9,8 @@ public class FitnessScoreListParcelable implements Parcelable {
 
     private ArrayList<FitnessScore> m_fitnessScores;
 
-    public FitnessScoreListParcelable(ArrayList<FitnessScore> m_fitnessScores) {
-        this.m_fitnessScores = m_fitnessScores;
+    public FitnessScoreListParcelable(ArrayList<FitnessScore> fitnessScores) {
+        this.m_fitnessScores = fitnessScores;
     }
 
     public ArrayList<FitnessScore> getm_fitnessScores() {

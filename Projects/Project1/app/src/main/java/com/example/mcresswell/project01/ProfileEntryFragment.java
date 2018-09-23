@@ -21,6 +21,7 @@ import android.widget.Toast;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Locale;
 
 
@@ -121,7 +122,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     }
 
     public interface OnDataChannel {
-        void onDataPass(String fname, String lname, int age, Bitmap image);
+        void onDataPass(String fname, String lname, int age, Bitmap image, FitnessScore fitnessScore);
     }
 
     @Override
@@ -171,8 +172,26 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
                         Toast.makeText(getActivity(), "Use mm/dd/yyyy format", Toast.LENGTH_SHORT).show();
                     } else {
                         m_age = calculateAge();
-                        mListener.onDataPass(m_fname, m_lname, m_age, m_bmap_imageFromCam);
+                        mListener.onDataPass(m_fname, m_lname, m_age, m_bmap_imageFromCam,
+                                new FitnessScore(m_fname, m_lname, m_dob, m_sex, m_city,m_country, m_etxt_weight.toString(),
+                                        m_etxt_feet.toString(), m_etxt_inches.toString(), m_etxt_lbPerWeek.toString(),
+                                        m_lifestyleSelection.toString(), m_radiogp_weightGoal.toString(), m_age));
                     }
+
+                    ArrayList<FitnessScore> fitnessScores = new ArrayList<FitnessScore>();
+                    fitnessScores.add(new FitnessScore(m_fname, m_lname, m_dob, m_sex, m_city,m_country, m_etxt_weight.toString(), m_etxt_feet.toString(), m_etxt_inches.toString(), m_etxt_lbPerWeek.toString(), m_lifestyleSelection.toString(), m_radiogp_weightGoal.toString(), m_age));
+
+                    FitnessScoreListParcelable fitnessScoresParcelable = new FitnessScoreListParcelable(fitnessScores);
+
+                    //Put this into a bundle
+                    Bundle fragmentBundle = new Bundle();
+                    fragmentBundle.putParcelable("item_list", fitnessScoresParcelable);
+
+                    //Create the fragment
+                    FitnessDetailsFragment fitnessDetailsFragment = new FitnessDetailsFragment();
+
+                    //Pass data to the fragment
+                    fitnessDetailsFragment.setArguments(fragmentBundle);
                 }
                 break;
             }
