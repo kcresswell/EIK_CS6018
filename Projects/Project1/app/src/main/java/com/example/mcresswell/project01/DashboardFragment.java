@@ -1,7 +1,6 @@
 package com.example.mcresswell.project01;
 
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 
 import java.util.ArrayList;
 
@@ -19,8 +17,8 @@ import java.util.ArrayList;
  */
 public class DashboardFragment extends Fragment {
 
-    private RecyclerView mRecycleView;
-    private RecyclerView.Adapter mAdaptor;
+    private RecyclerView m_RecycleView;
+    private RecyclerView.Adapter m_Adaptor;
     private RecyclerView.LayoutManager layoutManager;
 
     public DashboardFragment() {
@@ -44,14 +42,14 @@ public class DashboardFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         //get recycler view
-        mRecycleView = (RecyclerView) view.findViewById(R.id.rcycV_List);
+        m_RecycleView = (RecyclerView) view.findViewById(R.id.rcycV_List);
 
         //fix size of view
-        mRecycleView.setHasFixedSize(true);
+        m_RecycleView.setHasFixedSize(true);
 
         //set layout manager
         layoutManager = new LinearLayoutManager(getActivity());
-        mRecycleView.setLayoutManager(layoutManager);
+        m_RecycleView.setLayoutManager(layoutManager);
 
         //needs to be implemented
         ArrayList<DashButton> buttons = new ArrayList<>();
@@ -65,11 +63,15 @@ public class DashboardFragment extends Fragment {
 //        ImageButtonListParcelable imageButtonListParcelable = new ImageButtonListParcelable(buttons);
 //        ArrayList<DashButton> btns_dashboard = imageButtonListParcelable.getM_buttons();
 
-//        mAdaptor = new RV_Adapter(btns_dashboard);
-        mAdaptor = new RV_Adapter(buttons);
-        mRecycleView.setAdapter(mAdaptor);
-
+//        m_Adaptor = new RV_Adapter(btns_dashboard);
+        m_Adaptor = new RV_Adapter(buttons);
+        m_RecycleView.setAdapter(m_Adaptor);
         return view;
+    }
+
+    public void getButtonClickedPosition() {
+        notify();
+        m_RecycleView.getChildAdapterPosition(this.m_RecycleView);
     }
 
 }
