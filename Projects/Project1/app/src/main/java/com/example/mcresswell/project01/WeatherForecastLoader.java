@@ -44,7 +44,7 @@ public class WeatherForecastLoader
     @Override
     public String loadInBackground() {
         Log.d(LOG, "loadInBackground");
-        URL url = WeatherUtils.buildWeatherApiUrl(WeatherUtils.getCityFromCoordinates(COORDINATES), WeatherUtils.getCountryFromCoordinates(COORDINATES));
+        URL url =  null; //WeatherUtils.buildWeatherApiUrl(WeatherUtils.getCityFromCoordinates(COORDINATES), WeatherUtils.getCountryFromCoordinates(COORDINATES));
         try {
             return WeatherUtils.getJsonDataFromUrl(url);
         } catch (IOException e) {
