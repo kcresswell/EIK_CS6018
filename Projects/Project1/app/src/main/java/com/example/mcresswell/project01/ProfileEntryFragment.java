@@ -106,23 +106,6 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         m_userProfile = new UserProfile(m_fname, m_lname, m_dob, m_sex, m_city, m_country, str_lifestyle_selection,
                 str_weight_goal_selection, m_weight, m_feet,m_inches, m_lbsPerWeek);
 
-//        int age = calculateAge();
-//
-//        //add user data to the bundle
-//        m_userProfileBundle.putString("fname", m_etxt_fname.getText().toString());
-//        m_userProfileBundle.putString("lname", m_etxt_lname.getText().toString());
-//        m_userProfileBundle.putString("dob", m_etxt_dob.getText().toString());
-//        m_userProfileBundle.putString("sex", m_etxt_sex.getText().toString());
-//        m_userProfileBundle.putString("city", m_etxt_city.getText().toString());
-//        m_userProfileBundle.putString("country", m_etxt_country.getText().toString());
-//        m_userProfileBundle.putString("weight", m_etxt_weight.getText().toString());
-//        m_userProfileBundle.putString("feet", m_etxt_feet.getText().toString());
-//        m_userProfileBundle.putString("inches", m_etxt_inches.getText().toString());
-//        m_userProfileBundle.putInt("age", age);
-//        m_userProfileBundle.putString("lbsPerWeek", m_etxt_lbPerWeek.getText().toString());
-//        m_userProfileBundle.putString("lifestyle", str_lifestyle_selection);
-//        m_userProfileBundle.putString("weightGoal", selectedtext2);
-
         Intent i = new Intent(getContext(),FitnessDetailsFragment.class);
         i.putExtras(m_userProfileBundle);
         startActivity(i);
@@ -131,7 +114,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     }
 
     public interface OnDataChannel {
-        void onDataPass(String fname, String lname, int age, Bitmap image, FitnessActivity fitnessScore);
+        void onDataPass(Bundle userDataBundle);
     }
 
     @Override
@@ -180,8 +163,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
                         //inform user of expected dob input
                         Toast.makeText(getActivity(), "Use mm/dd/yyyy format", Toast.LENGTH_SHORT).show();
                     } else {
-                        m_dataListener.onDataPass(m_fname, m_lname, m_age, m_bmap_imageFromCam,
-                                new FitnessActivity());
+                        m_dataListener.onDataPass(m_userProfileBundle);
                     }
 
                     ArrayList<UserProfile> userProfiles = new ArrayList<UserProfile>();
