@@ -35,7 +35,7 @@ public class HikingActivity extends AppCompatActivity
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        fragmentTransaction.add(R.id.fragment_hiking, fragment);
+        fragmentTransaction.add(R.id.cl_hikes, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 
