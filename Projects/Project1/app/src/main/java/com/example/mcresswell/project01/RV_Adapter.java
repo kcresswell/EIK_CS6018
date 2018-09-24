@@ -47,7 +47,16 @@ public class RV_Adapter extends RecyclerView.Adapter<RV_Adapter.ViewHolder> {
         viewHolder.btn_image_itemData.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-
+                switch(position){
+                    case(0): //Fitness Profile
+                        break;
+                    case(1): //Hikes
+                        break;
+                    case(2): //User Profile
+                        break;
+                    case(3): //Weather
+                        break;
+                }
             }
         });
 

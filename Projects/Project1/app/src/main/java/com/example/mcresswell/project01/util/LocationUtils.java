@@ -10,11 +10,11 @@ public class LocationUtils {
         return locationData[1].trim();
     }
 
-    public static String getCity(String coordinates) {
+    public static String getCityFromCoords(String coordinates) {
         return null;
     }
 
-    public static String getCountry(String coordinates) {
+    public static String getCountryFromCoords(String coordinates) {
         return null;
     }
 }

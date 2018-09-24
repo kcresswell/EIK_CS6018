@@ -22,31 +22,4 @@
 
     </FrameLayout>
 
-    <GridLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/dashboard_button_hiking"
-            android:layout_width="125dp"
-            android:layout_height="125dp"
-            android:text="Find Hikes"
-            android:textSize="@dimen/dimen_dashboard_button_text_size"
-            android:layout_margin="30dp"
-            android:padding="@dimen/dashboard_button_text_padding"
-            android:layout_centerHorizontal="true"
-            />
-
-        <Button
-            android:id="@+id/dashboard_button_weather"
-            android:layout_width="125dp"
-            android:layout_height="125dp"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="30dp"
-            android:padding="@dimen/dashboard_button_text_padding"
-            android:text="Local Weather"
-            android:textSize="@dimen/dimen_dashboard_button_text_size" />
-
-    </GridLayout>
-
 </android.support.constraint.ConstraintLayout>
