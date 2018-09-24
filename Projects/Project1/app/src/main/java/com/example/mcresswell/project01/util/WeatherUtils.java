@@ -109,16 +109,4 @@ public class WeatherUtils {
             return tempInKelvin * (9/5.0) - 459.67;
         }
 
-
-        //TODO: implement these
-        public static String getCityFromCoordinates(String latLon) {
-            return null;
-        }
-
-        public static String getCountryFromCoordinates(String latLon) {
-            return null;
-        }
-
-
-
     }
