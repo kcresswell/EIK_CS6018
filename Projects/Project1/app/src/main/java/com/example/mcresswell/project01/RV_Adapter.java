@@ -14,6 +14,8 @@ public class RV_Adapter extends RecyclerView.Adapter<RV_Adapter.ViewHolder> {
     private List<DashButton> m_btn_img_ListItems;
     private Context m_Context;
 
+    private OnDataChannel m_dataListener;
+
     //constructor
     public RV_Adapter(List<DashButton> inputList) {
         m_btn_img_ListItems = inputList;
@@ -41,20 +43,27 @@ public class RV_Adapter extends RecyclerView.Adapter<RV_Adapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RV_Adapter.ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int position) {
+
+        try {
+            m_dataListener = (OnDataChannel) m_Context;
+        } catch (ClassCastException cce) {
+            throw new ClassCastException(m_Context.toString() + " must implement OnDataChannel");
+        }
+
         //set values of the button.
         viewHolder.btn_image_itemData.setImageDrawable(m_btn_img_ListItems.get(position).getImage());
         viewHolder.btn_image_itemData.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-
+                m_dataListener.onDataPass(position);
             }
         });
     }
 
-//    public interface OnDataChannel(){
-//
-//    }
+    public interface OnDataChannel {
+        void onDataPass (int position);
+    }
 
     @Override
     public int getItemCount() {
