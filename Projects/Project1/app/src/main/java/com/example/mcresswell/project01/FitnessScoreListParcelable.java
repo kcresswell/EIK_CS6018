@@ -7,23 +7,23 @@ import java.util.ArrayList;
 
 public class FitnessScoreListParcelable implements Parcelable {
 
-    private ArrayList<FitnessScore> m_fitnessScores;
+    private ArrayList<UserProfile> m_userProfiles;
 
-    public FitnessScoreListParcelable(ArrayList<FitnessScore> m_fitnessScores) {
-        this.m_fitnessScores = m_fitnessScores;
+    public FitnessScoreListParcelable(ArrayList<UserProfile> m_userProfiles) {
+        this.m_userProfiles = m_userProfiles;
     }
 
-    public ArrayList<FitnessScore> getm_fitnessScores() {
-        return m_fitnessScores;
+    public ArrayList<UserProfile> getm_fitnessScores() {
+        return m_userProfiles;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeList(m_fitnessScores);
+        dest.writeList(m_userProfiles);
     }
 
     protected FitnessScoreListParcelable(Parcel in) {
-        in.readList(getm_fitnessScores(), FitnessScore.class.getClassLoader());
+        in.readList(getm_fitnessScores(), UserProfile.class.getClassLoader());
     }
 
     public static final Creator<FitnessScoreListParcelable> CREATOR = new Creator<FitnessScoreListParcelable>() {

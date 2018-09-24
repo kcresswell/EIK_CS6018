@@ -40,7 +40,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     //request code for camera
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
-    private OnDataChannel mListener;
+    private OnDataChannel m_dataListener;
 
     public ProfileEntryFragment() {
         // Required empty public constructor
@@ -129,7 +129,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         super.onAttach(context);
 
         try {
-            mListener = (OnDataChannel) context;
+            m_dataListener = (OnDataChannel) context;
         } catch (ClassCastException cce) {
             throw new ClassCastException(context.toString() + " must implement OnDataChannel");
         }
@@ -171,7 +171,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
                         Toast.makeText(getActivity(), "Use mm/dd/yyyy format", Toast.LENGTH_SHORT).show();
                     } else {
                         m_age = calculateAge();
-                        mListener.onDataPass(m_fname, m_lname, m_age, m_bmap_imageFromCam);
+                        m_dataListener.onDataPass(m_fname, m_lname, m_age, m_bmap_imageFromCam);
                     }
                 }
                 break;
@@ -205,16 +205,4 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
             m_btn_img_image.setImageBitmap(m_bmap_imageFromCam);
         }
     }
-
-    //helper functions
-    private int calculateAge() {
-        DateTimeFormatter dob_format = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        dob_format = dob_format.withLocale(Locale.US);
-
-        LocalDate dob = LocalDate.parse(m_dob, dob_format);
-        LocalDate today = LocalDate.now();
-
-        return Period.between(dob, today).getYears();
-    }
-
 }

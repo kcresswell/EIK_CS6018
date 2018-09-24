@@ -4,11 +4,20 @@ import android.os.Bundle;
 
 import com.example.mcresswell.project01.util.BmiUtils;
 
-public class FitnessScore {
-    private String m_fName, m_lName, m_dob, m_sex, m_city, m_country, m_weight, m_feet, m_inches, m_lbsPerWeek, m_lifestyleSelection, m_weightGoal;
-    private int m_Age;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
-    public FitnessScore(String fName, String lName, String dob, String sex, String city, String country, String weight, String feet, String inches, String lbsPerWeek, String lifestyleSelection, String weightGoal, int age){
+public class UserProfile {
+    private String m_fName, m_lName, m_dob, m_sex, m_city, m_country, m_lifestyleSelection;
+    private int m_Age, m_weight, m_feet, m_inches, m_lbsPerWeek, m_weightGoal;
+
+    public UserProfile(String fName,
+                       String lName,
+                       String dob, String sex, String city, String country,
+
+                       String weight, String feet, String inches, String lbsPerWeek, String lifestyleSelection, String weightGoal){
         m_fName = fName;
         m_lName = lName;
         m_dob = dob;
@@ -21,7 +30,7 @@ public class FitnessScore {
         m_lbsPerWeek = lbsPerWeek;
         m_lifestyleSelection = lifestyleSelection;
         m_weightGoal = weightGoal;
-        m_Age = age;
+        m_Age = calculateAge();
     }
 
     //getters for member variables
@@ -132,5 +141,16 @@ public class FitnessScore {
         double weightInLbs = Double.parseDouble(m_weight);
 
         return BmiUtils.calculateBmi(heightInInches, weightInLbs);
+    }
+
+    //helper functions
+    private int calculateAge() {
+        DateTimeFormatter dob_format = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        dob_format = dob_format.withLocale(Locale.US);
+
+        LocalDate dob = LocalDate.parse(m_dob, dob_format);
+        LocalDate today = LocalDate.now();
+
+        return Period.between(dob, today).getYears();
     }
 }
