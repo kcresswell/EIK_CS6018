@@ -5,11 +5,11 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 
-public class FitnessScoreListParcelable implements Parcelable {
+public class UserProfileListParcelable implements Parcelable {
 
     private ArrayList<UserProfile> m_userProfiles;
 
-    public FitnessScoreListParcelable(ArrayList<UserProfile> m_userProfiles) {
+    public UserProfileListParcelable(ArrayList<UserProfile> m_userProfiles) {
         this.m_userProfiles = m_userProfiles;
     }
 
@@ -22,19 +22,19 @@ public class FitnessScoreListParcelable implements Parcelable {
         dest.writeList(m_userProfiles);
     }
 
-    protected FitnessScoreListParcelable(Parcel in) {
+    protected UserProfileListParcelable(Parcel in) {
         in.readList(getm_fitnessScores(), UserProfile.class.getClassLoader());
     }
 
-    public static final Creator<FitnessScoreListParcelable> CREATOR = new Creator<FitnessScoreListParcelable>() {
+    public static final Creator<UserProfileListParcelable> CREATOR = new Creator<UserProfileListParcelable>() {
         @Override
-        public FitnessScoreListParcelable createFromParcel(Parcel in) {
-            return new FitnessScoreListParcelable(in);
+        public UserProfileListParcelable createFromParcel(Parcel in) {
+            return new UserProfileListParcelable(in);
         }
 
         @Override
-        public FitnessScoreListParcelable[] newArray(int size) {
-            return new FitnessScoreListParcelable[size];
+        public UserProfileListParcelable[] newArray(int size) {
+            return new UserProfileListParcelable[size];
         }
     };
 

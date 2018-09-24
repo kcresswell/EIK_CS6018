@@ -17,12 +17,7 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Locale;
 
 
 /**
@@ -30,13 +25,17 @@ import java.util.Locale;
  */
 public class ProfileEntryFragment extends Fragment implements View.OnClickListener {
 
-    private String m_fname, m_lname, m_dob, m_sex, m_city, m_country;
-    private int m_age;
-    private EditText m_etxt_fname, m_etxt_lname, m_etxt_dob, m_etxt_sex, m_etxt_city, m_etxt_country, m_etxt_weight, m_etxt_feet, m_etxt_inches, m_etxt_lbPerWeek;
+    private String m_fname, m_lname, m_dob, m_sex, m_city, m_country, str_lifestyle_selection, str_weight_goal_selection;
+    private int m_age, m_weight, m_feet, m_inches, m_lbsPerWeek;
+    private EditText m_etxt_fname, m_etxt_lname, m_etxt_dob, m_etxt_sex, m_etxt_city, m_etxt_country,
+            m_etxt_weight, m_etxt_feet, m_etxt_inches, m_etxt_lbPerWeek;
     private Button m_btn_submit;
     private ImageButton m_btn_img_image;
     private Bitmap m_bmap_imageFromCam;
-    private RadioGroup m_lifestyleSelection, m_radiogp_weightGoal;
+    private RadioGroup m_radiogp_lifestyleSelection, m_radiogp_weightGoal;
+
+    private UserProfile m_userProfile;
+    private Bundle m_userProfileBundle = new Bundle();
 
     //request code for camera
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -47,49 +46,56 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         // Required empty public constructor
     }
 
-    public Bundle userData = new Bundle();
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile_entry, container, false);
 
-        //get EditText fields
+        //--get EditText fields, assign member variables appropriately--//
         m_etxt_fname = (EditText) view.findViewById(R.id.txtv_fname);
+        m_fname = m_etxt_fname.getText().toString();
+
         m_etxt_lname = (EditText) view.findViewById(R.id.txtv_lname);
+        m_lname = m_etxt_lname.getText().toString();
+
         m_etxt_dob = (EditText) view.findViewById(R.id.txtv_dob);
+        m_dob = m_etxt_dob.getText().toString();
+
         m_etxt_sex = (EditText) view.findViewById(R.id.txtv_sex);
+        m_sex = m_etxt_sex.getText().toString();
+
         m_etxt_city = (EditText) view.findViewById(R.id.txtv_city);
+        m_city = m_etxt_city.getText().toString();
+
         m_etxt_country = (EditText) view.findViewById(R.id.txtv_country);
+        m_country = m_etxt_country.getText().toString();
+
         m_etxt_weight = (EditText) view.findViewById(R.id.txtv_weight);
+        m_weight = (int) Double.parseDouble(m_etxt_weight.getText().toString());
+
         m_etxt_feet = (EditText) view.findViewById(R.id.txtv_feet);
+        m_feet = (int) Double.parseDouble(m_etxt_feet.getText().toString());
+
         m_etxt_inches = (EditText) view.findViewById(R.id.txtv_inches);
+        m_inches = (int) Double.parseDouble(m_etxt_inches.getText().toString());
+
         m_etxt_lbPerWeek = (EditText) view.findViewById(R.id.txtv_weight2);
+        m_lbsPerWeek = (int) Double.parseDouble(m_etxt_lbPerWeek.getText().toString());
 
-        //get Radio Button selection
-        m_lifestyleSelection = (RadioGroup) view.findViewById(R.id.radiogp_lifestyle);
+        //--get Radio Button selection and assign it to a string value--//
+        m_radiogp_lifestyleSelection = (RadioGroup) view.findViewById(R.id.radiogp_lifestyle);
+        int btn_radio_lifestyle_id= m_radiogp_lifestyleSelection.getCheckedRadioButtonId();
+        RadioButton btn_radio_lifestyle = (RadioButton) m_radiogp_lifestyleSelection.findViewById(btn_radio_lifestyle_id);
+        str_lifestyle_selection = (String) btn_radio_lifestyle.getText();
 
-//        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_group);
-
-        int radioButtonID = m_lifestyleSelection.getCheckedRadioButtonId();
-
-        RadioButton radioButton = (RadioButton) m_lifestyleSelection.findViewById(radioButtonID);
-
-        String selectedtext = (String) radioButton.getText();
-
+        //--get Radio Group Weight Goal--//
         m_radiogp_weightGoal = (RadioGroup) view.findViewById(R.id.radiogp_weightGoal);
+        int btn_radio_weightGoal_id = m_radiogp_weightGoal.getCheckedRadioButtonId();
+        RadioButton btn_radio_weight_goal = (RadioButton) m_radiogp_weightGoal.findViewById(btn_radio_weightGoal_id);
+        str_weight_goal_selection = (String) btn_radio_weight_goal.getText();
 
-//        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_group);
-
-        int radioButtonID2 = m_lifestyleSelection.getCheckedRadioButtonId();
-
-        RadioButton radioButton2 = (RadioButton) m_lifestyleSelection.findViewById(radioButtonID2);
-
-        String selectedtext2 = (String) radioButton2.getText();
-
-        //get buttons
+        //--get submit and image buttons--//
         m_btn_submit = (Button) view.findViewById(R.id.btn_submit);
         m_btn_img_image = (ImageButton) view.findViewById(R.id.btn_img_takeImage);
 
@@ -97,32 +103,18 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         m_btn_submit.setOnClickListener(this);
         m_btn_img_image.setOnClickListener(this);
 
-        int age = calculateAge();
-
-        //add user data to the bundle
-        userData.putString("fname", m_etxt_fname.getText().toString());
-        userData.putString("lname", m_etxt_lname.getText().toString());
-        userData.putString("dob", m_etxt_dob.getText().toString());
-        userData.putString("sex", m_etxt_sex.getText().toString());
-        userData.putString("city", m_etxt_city.getText().toString());
-        userData.putString("country", m_etxt_country.getText().toString());
-        userData.putString("weight", m_etxt_weight.getText().toString());
-        userData.putString("feet", m_etxt_feet.getText().toString());
-        userData.putString("inches", m_etxt_inches.getText().toString());
-        userData.putInt("age", age);
-        userData.putString("lbsPerWeek", m_etxt_lbPerWeek.getText().toString());
-        userData.putString("lifestyle", selectedtext);
-        userData.putString("weightGoal", selectedtext2);
+        m_userProfile = new UserProfile(m_fname, m_lname, m_dob, m_sex, m_city, m_country, str_lifestyle_selection,
+                str_weight_goal_selection, m_weight, m_feet,m_inches, m_lbsPerWeek);
 
         Intent i = new Intent(getContext(),FitnessDetailsFragment.class);
-        i.putExtras(userData);
+        i.putExtras(m_userProfileBundle);
         startActivity(i);
 
         return view;
     }
 
     public interface OnDataChannel {
-        void onDataPass(String fname, String lname, int age, Bitmap image, FitnessScore fitnessScore);
+        void onDataPass(Bundle userDataBundle);
     }
 
     @Override
@@ -171,27 +163,22 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
                         //inform user of expected dob input
                         Toast.makeText(getActivity(), "Use mm/dd/yyyy format", Toast.LENGTH_SHORT).show();
                     } else {
-                        m_age = calculateAge();
-                        mListener.onDataPass(m_fname, m_lname, m_age, m_bmap_imageFromCam,
-                                new FitnessScore(m_fname, m_lname, m_dob, m_sex, m_city,m_country, m_etxt_weight.toString(),
-                                        m_etxt_feet.toString(), m_etxt_inches.toString(), m_etxt_lbPerWeek.toString(),
-                                        m_lifestyleSelection.toString(), m_radiogp_weightGoal.toString(), m_age));
+                        m_dataListener.onDataPass(m_userProfileBundle);
                     }
 
-                    ArrayList<FitnessScore> fitnessScores = new ArrayList<FitnessScore>();
-                    fitnessScores.add(new FitnessScore(m_fname, m_lname, m_dob, m_sex, m_city,m_country, m_etxt_weight.toString(), m_etxt_feet.toString(), m_etxt_inches.toString(), m_etxt_lbPerWeek.toString(), m_lifestyleSelection.toString(), m_radiogp_weightGoal.toString(), m_age));
+                    ArrayList<UserProfile> userProfiles = new ArrayList<UserProfile>();
+                    userProfiles.add(m_userProfile);
 
-                    FitnessScoreListParcelable fitnessScoresParcelable = new FitnessScoreListParcelable(fitnessScores);
+                    UserProfileListParcelable UserProfilesParcelable = new UserProfileListParcelable(userProfiles);
 
                     //Put this into a bundle
-                    Bundle fragmentBundle = new Bundle();
-                    fragmentBundle.putParcelable("item_list", fitnessScoresParcelable);
+                    m_userProfileBundle.putParcelable("item_list", UserProfilesParcelable);
 
                     //Create the fragment
                     FitnessDetailsFragment fitnessDetailsFragment = new FitnessDetailsFragment();
 
                     //Pass data to the fragment
-                    fitnessDetailsFragment.setArguments(fragmentBundle);
+                    fitnessDetailsFragment.setArguments(m_userProfileBundle);
                 }
                 break;
             }
