@@ -4,10 +4,9 @@ import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import java.nio.BufferUnderflowException;
 import java.util.ArrayList;
 
-public class ProfileDetailsActivity extends AppCompatActivity implements ProfileEntryFragment.OnDataChannel{
+public class ProfileDetailsActivity extends AppCompatActivity implements ProfileEntryFragment.OnDataChannel {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,7 +15,7 @@ public class ProfileDetailsActivity extends AppCompatActivity implements Profile
     }
 
     @Override
-    public void onDataPass(String fname, String lname, int age, Bitmap image, FitnessScore fitnessScore) {
+    public void onDataPass(String fname, String lname, int age, Bitmap image, UserProfile userProfile) {
         //create a new fragment
         ProfileEntryFragment profileEntryFragment = new ProfileEntryFragment();
 
@@ -32,13 +31,13 @@ public class ProfileDetailsActivity extends AppCompatActivity implements Profile
 
         } else {
             //add fitness score in to bundle
-            ArrayList<FitnessScore> al_fitnessScore = new ArrayList<FitnessScore>();
-            al_fitnessScore.add(fitnessScore);
-            FitnessScoreListParcelable fitnessScores = new FitnessScoreListParcelable(al_fitnessScore);
-            bundle.putParcelable("fitnessScoreList", fitnessScores);
+            ArrayList<UserProfile> userProfiles = new ArrayList<UserProfile>();
+            userProfiles.add(userProfile);
+            UserProfileListParcelable userProfilesParcelable = new UserProfileListParcelable(userProfiles);
+            bundle.putParcelable("UserProfileList", userProfilesParcelable);
         }
         //intent to the dashboard, in dashboard pass intent to fitness
-        
+
 
     }
 }

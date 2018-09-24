@@ -4,24 +4,30 @@ import android.os.Bundle;
 
 import com.example.mcresswell.project01.util.BmiUtils;
 
-public class FitnessScore {
-    private String m_fName, m_lName, m_dob, m_sex, m_city, m_country, m_weight, m_feet, m_inches, m_lbsPerWeek, m_lifestyleSelection, m_weightGoal;
-    private int m_Age;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
-    public FitnessScore(String fName, String lName, String dob, String sex, String city, String country, String weight, String feet, String inches, String lbsPerWeek, String lifestyleSelection, String weightGoal, int age){
+public class UserProfile {
+    private String m_fName, m_lName, m_dob, m_sex, m_city, m_country, m_lifestyleSelection, m_weightGoal;
+    private int m_Age, m_weight, m_feet, m_inches, m_lbsPerWeek;
+
+    public UserProfile(String fName, String lName, String dob, String sex, String city, String country, String lifestyleSelection, String weightGoal,
+                       int weight, int feet, int inches, int lbsPerWeek){
         m_fName = fName;
         m_lName = lName;
         m_dob = dob;
         m_sex = sex;
         m_city = city;
         m_country = country;
+        m_lifestyleSelection = lifestyleSelection;
+        m_weightGoal = weightGoal;
         m_weight = weight;
         m_feet = feet;
         m_inches = inches;
         m_lbsPerWeek = lbsPerWeek;
-        m_lifestyleSelection = lifestyleSelection;
-        m_weightGoal = weightGoal;
-        m_Age = age;
+        m_Age = calculateAge();
     }
 
     //getters for member variables
@@ -31,12 +37,13 @@ public class FitnessScore {
     public String getM_sex(){return m_sex;}
     public String getM_city() {return m_city;}
     public String getM_country() {return m_country;}
-    public String getM_weight() {return m_weight;}
-    public String getM_feet() {return m_feet;}
-    public String getM_inches() {return m_inches;}
-    public String getM_lbsPerWeek() {return m_lbsPerWeek;}
     public String getM_lifestyleSelection() {return m_lifestyleSelection;}
     public String getM_weightGoal() {return m_weightGoal;}
+
+    public int getM_weight() {return m_weight;}
+    public int getM_feet() {return m_feet;}
+    public int getM_inches() {return m_inches;}
+    public int getM_lbsPerWeek() {return m_lbsPerWeek;}
     public int getM_Age() {return m_Age;}
 
 
@@ -67,23 +74,20 @@ public class FitnessScore {
         double BMR = 0.0;
 
         //get weight value
-        double weight = Double.parseDouble(m_weight);
-
-        //get height values
-        double heightFeet = Double.parseDouble(m_feet);
-        double heightInches = Double.parseDouble(m_inches);
-        double totalHeightInInches = (heightFeet * 12.0) + heightInches;
-
-        //get age value
+//        double weight = m_weight
+//
+//        //get height values
+//        double heightFeet = Double.parseDouble(m_feet);
+//        double heightInches = Double.parseDouble(m_inches);
+        double totalHeightInInches = (m_feet * 12.0) + m_inches;
 
         //calculate BMR based on sex of user
-
         if(m_sex.equals("Female") || m_sex.equals("female") || m_sex.equals("F") || m_sex.equals("f")) {
             //user is female, s = -161
-            BMR = (9.99 * weight) + (6.25 * totalHeightInInches) - 4.92 * m_Age - 161;
+            BMR = (9.99 * m_weight) + (6.25 * totalHeightInInches) - 4.92 * m_Age - 161;
         } else if (m_sex.equals("Male") || m_sex.equals("male") || m_sex.equals("M") || m_sex.equals("m")){
             //user is male, s = 5
-            BMR = (9.99 * weight) + (6.25 * totalHeightInInches) - 4.92 * m_Age + 5;
+            BMR = (9.99 * m_weight) + (6.25 * totalHeightInInches) - 4.92 * m_Age + 5;
         } else {
             //--TODO: throw an error here if not male or female--//
         }
@@ -128,9 +132,20 @@ public class FitnessScore {
 
         //TODO: Input validation needs to be done here to eliminate possibility of an exception being thrown
 
-        double heightInInches = (Double.parseDouble(m_feet) * INCHES_TO_FT) + Double.parseDouble(m_inches);
-        double weightInLbs = Double.parseDouble(m_weight);
+        double heightInInches = (m_feet * INCHES_TO_FT) + m_inches;
+        double weightInLbs = m_weight;
 
         return BmiUtils.calculateBmi(heightInInches, weightInLbs);
+    }
+
+    //helper functions
+    private int calculateAge() {
+        DateTimeFormatter dob_format = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        dob_format = dob_format.withLocale(Locale.US);
+
+        LocalDate dob = LocalDate.parse(m_dob, dob_format);
+        LocalDate today = LocalDate.now();
+
+        return Period.between(dob, today).getYears();
     }
 }
