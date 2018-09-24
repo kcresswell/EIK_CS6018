@@ -59,7 +59,7 @@ public class FitnessScore {
 //    }
 
 
-    ////    http://www.bmrcalculator.org
+////    http://www.bmrcalculator.org
 ////    BMR = (9.99 x weight + 6.25 x height – 4.92 x age + s ) kcal/day
 ////    Here, weight is in Kilograms, height is in centimeters and age is in years.
 ////    s is a factor to adjust for gender and adopts the value +5 for males and -161 for females.
