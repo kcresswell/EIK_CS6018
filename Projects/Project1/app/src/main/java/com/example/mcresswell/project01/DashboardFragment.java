@@ -66,6 +66,13 @@ public class DashboardFragment extends Fragment {
 //        m_Adaptor = new RV_Adapter(btns_dashboard);
         m_Adaptor = new RV_Adapter(buttons);
         m_RecycleView.setAdapter(m_Adaptor);
+
+//        int position = m_RecycleView.getChildAdapterPosition(view);
+
+
+
+
+
         return view;
     }
 
