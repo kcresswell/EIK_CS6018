@@ -3,6 +3,8 @@ package com.example.mcresswell.project01;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.mcresswell.project01.userProfile.UserProfile;
+
 import java.util.ArrayList;
 
 public class UserProfileListParcelable implements Parcelable {

@@ -1,6 +1,4 @@
-package com.example.mcresswell.project01;
-
-import android.os.Bundle;
+package com.example.mcresswell.project01.userProfile;
 
 import com.example.mcresswell.project01.util.BmiUtils;
 

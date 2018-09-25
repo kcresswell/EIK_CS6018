@@ -2,18 +2,17 @@ package com.example.mcresswell.project01;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.Toast;
 
-import com.example.mcresswell.project01.util.LocationUtils;
 import com.example.mcresswell.project01.util.ValidationUtils;
 
 public class DashboardActivity extends AppCompatActivity implements
         ProfileEntryFragment.OnProfileEntryDataChannel, RV_Adapter.OnAdapterDataChannel {
 
-    //memeber variables
+    //member variables
     private final String DEFAULT_COORDINATES = "40.7608,-111.8910";
     private final String DEFAULT_CITY = "PROVO";
     private final String DEFAULT_COUNTRY_CODE = "US";
