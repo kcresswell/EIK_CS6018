@@ -1,10 +1,13 @@
 package com.example.mcresswell.project01;
 
+
 import android.content.Intent;
 import android.net.Uri;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.mcresswell.project01.util.LocationUtils;
@@ -13,11 +16,31 @@ import com.example.mcresswell.project01.util.ValidationUtils;
 public class DashboardActivity extends AppCompatActivity implements
         ProfileEntryFragment.OnProfileEntryDataChannel, RV_Adapter.OnAdapterDataChannel {
 
+
     //memeber variables
     private final String DEFAULT_COORDINATES = "40.7608,-111.8910";
     private final String DEFAULT_CITY = "PROVO";
     private final String DEFAULT_COUNTRY_CODE = "US";
     private FragmentTransaction m_fTrans;
+//    Intent m_intent_profileDetailsActivity = new Intent(this, ProfileDetailsActivity.class);
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+//        m_intent_profileDetailsActivity = intent;
+//        super.startActivityForResult(m_intent_profileDetailsActivity, requestCode);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                String result = data.getStringExtra("userProfileBundle");
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +110,8 @@ public class DashboardActivity extends AppCompatActivity implements
 
         }
 
+    boolean isWideDisplay(){
+        return getResources().getBoolean(R.bool.isWideDisplay);
     }
 
     private void executeMobileDashboardButtonHandler(int buttonPosition) {
