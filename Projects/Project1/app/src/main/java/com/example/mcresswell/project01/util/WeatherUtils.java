@@ -2,6 +2,8 @@ package com.example.mcresswell.project01.util;
 
 import android.util.Log;
 
+import com.example.mcresswell.project01.weather.WeatherForecast;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.HttpURLConnection;

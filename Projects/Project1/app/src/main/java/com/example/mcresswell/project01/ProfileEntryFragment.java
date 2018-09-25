@@ -40,7 +40,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     //request code for camera
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
-    private OnDataChannel m_dataListener;
+    private OnProfileEntryDataChannel m_dataListener;
 
     public ProfileEntryFragment() {
         // Required empty public constructor
@@ -113,8 +113,8 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         return view;
     }
 
-    public interface OnDataChannel {
-        void onDataPass(Bundle userDataBundle);
+    public interface OnProfileEntryDataChannel {
+        void onProfileEntryDataPass (Bundle userDataBundle);
     }
 
     @Override
@@ -122,9 +122,9 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         super.onAttach(context);
 
         try {
-            m_dataListener = (OnDataChannel) context;
+            m_dataListener = (OnProfileEntryDataChannel) context;
         } catch (ClassCastException cce) {
-            throw new ClassCastException(context.toString() + " must implement OnDataChannel");
+            throw new ClassCastException(context.toString() + " must implement OnProfileEntryDataChannel");
         }
     }
 
@@ -163,7 +163,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
                         //inform user of expected dob input
                         Toast.makeText(getActivity(), "Use mm/dd/yyyy format", Toast.LENGTH_SHORT).show();
                     } else {
-                        m_dataListener.onDataPass(m_userProfileBundle);
+                        m_dataListener.onProfileEntryDataPass(m_userProfileBundle);
                     }
 
                     ArrayList<UserProfile> userProfiles = new ArrayList<UserProfile>();

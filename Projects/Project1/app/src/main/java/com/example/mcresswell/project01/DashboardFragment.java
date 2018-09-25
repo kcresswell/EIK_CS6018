@@ -22,6 +22,7 @@ public class DashboardFragment extends Fragment {
     private RecyclerView.Adapter m_Adaptor;
     private RecyclerView.LayoutManager layoutManager;
 
+
     public DashboardFragment() {
         // Required empty public constructor
     }
@@ -88,5 +89,10 @@ public class DashboardFragment extends Fragment {
         notify();
         m_RecycleView.getChildAdapterPosition(this.m_RecycleView);
     }
+
+//    public interface onDashboardFragmentInteractionListener {
+//        void onDashboardFragmentInteraction(int buttonPos);
+//
+//    }
 
 }

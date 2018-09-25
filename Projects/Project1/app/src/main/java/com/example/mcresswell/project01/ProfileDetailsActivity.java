@@ -3,7 +3,7 @@ package com.example.mcresswell.project01;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class ProfileDetailsActivity extends AppCompatActivity implements ProfileEntryFragment.OnDataChannel {
+public class ProfileDetailsActivity extends AppCompatActivity implements ProfileEntryFragment.OnProfileEntryDataChannel {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -12,7 +12,7 @@ public class ProfileDetailsActivity extends AppCompatActivity implements Profile
     }
 
     @Override
-    public void onDataPass(Bundle userProfileBundle) {
+    public void onProfileEntryDataPass(Bundle userProfileBundle) {
         //create a new fragment
         ProfileEntryFragment profileEntryFragment = new ProfileEntryFragment();
 
