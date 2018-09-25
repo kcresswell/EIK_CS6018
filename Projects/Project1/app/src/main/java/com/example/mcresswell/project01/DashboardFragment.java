@@ -3,6 +3,7 @@ package com.example.mcresswell.project01;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -65,7 +66,14 @@ public class DashboardFragment extends Fragment {
 
 //        m_Adaptor = new RV_Adapter(btns_dashboard);
         m_Adaptor = new RV_Adapter(buttons);
+
+        if(!getResources().getBoolean(R.bool.isWideDisplay)){
+            m_RecycleView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        }
+
         m_RecycleView.setAdapter(m_Adaptor);
+
+
 
 //        int position = m_RecycleView.getChildAdapterPosition(view);
 

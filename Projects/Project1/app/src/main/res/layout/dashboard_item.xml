@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_dashboard_item"
     android:layout_width="wrap_content"
@@ -12,5 +11,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:src="@drawable/ic_img_hike" />
+        android:contentDescription="@string/btn_generic"
+        android:src="@drawable/ic_img_profile" />
 </FrameLayout>
