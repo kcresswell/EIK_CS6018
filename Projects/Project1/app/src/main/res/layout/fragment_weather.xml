@@ -2,21 +2,91 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cl_weather"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/fragment_weather"
     tools:context=".WeatherFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/txtv_location"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/hiking_current_location"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/widget_margin">
 
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/widget_background_color"
+            android:padding="2dp">
+
+            <TextView
+                android:id="@+id/weatherTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/widget_text_padding"
+                android:layout_marginStart="@dimen/widget_text_padding"
+                android:layout_marginTop="@dimen/widget_text_padding"
+                android:paddingStart="@dimen/widget_text_padding"
+                android:paddingEnd="@dimen/widget_text_padding"
+                android:text="@string/title_activity_weather"
+                android:textAlignment="center"
+                android:textColor="@color/widget_text_color"
+                android:textIsSelectable="false"
+                android:textSize="@dimen/widget_title_text_size"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/currentForecast"/>
+
+            <TextView
+                android:id="@+id/currentForecast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="0dp"
+                android:text="@string/title_weather_widget"
+                android:textAlignment="center"
+                android:textIsSelectable="false"
+                android:textSize="@dimen/widget_subtitle_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/weatherTitle" />
+
+            <TextView
+                android:id="@+id/weatherLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/widget_text_margin"
+                android:layout_marginStart="@dimen/widget_text_margin"
+                android:text="YOUR CITY, YOUR COUNTRY"
+                android:textAlignment="center"
+                android:textIsSelectable="false"
+                android:textSize="@dimen/widget_location_text_size"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textColor="@color/widget_text_color"
+                app:layout_constraintTop_toBottomOf="@+id/currentForecast" />
+
+            <LinearLayout
+                android:id="@+id/weather_widget_data_fields"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.961"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/weatherLocation">
+
+                <ListView
+                    android:id="@android:id/list"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/widget_margin"
+                    android:drawSelectorOnTop="false" />
+            </LinearLayout>
+
+        </android.support.constraint.ConstraintLayout>
+    </FrameLayout>
 </android.support.constraint.ConstraintLayout>

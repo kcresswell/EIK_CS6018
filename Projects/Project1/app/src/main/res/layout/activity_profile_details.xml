@@ -7,7 +7,7 @@
     tools:context=".ProfileDetailsActivity">
 
     <FrameLayout
-        android:id="@+id/fl_master_nd"
+        android:id="@+id/fl_activity_profile_details"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="16dp"
