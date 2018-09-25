@@ -9,20 +9,13 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.example.mcresswell.project01.util.WeatherUtils;
-import com.example.mcresswell.project01.weather.WeatherForecast;
-
-import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 
 public class UserProfileViewModel extends AndroidViewModel {
 
-    //need to update this, but left the weatherViewModel code in here as a reference - kaylau
-
     private static final String LOG = UserProfileViewModel.class.getSimpleName();
 
-    private MutableLiveData<List<UserProfile>> userProfiles;
+    private MutableLiveData<List<UserProfile>> userProfiles = new MutableLiveData<>();
 
     private String m_fName, m_lName, m_dob, m_sex, m_city, m_country, m_lifestyleSelection, m_weightGoal;
     private int m_Age, m_weight, m_feet, m_inches, m_lbsPerWeek;
@@ -44,33 +37,49 @@ public class UserProfileViewModel extends AndroidViewModel {
 
     @SuppressLint("StaticFieldLeak")
     private void loadData(){
-        new AsyncTask<String,Void,String>(){
+        new AsyncTask<String,Void,String>() {
             @Override
             protected String doInBackground(String... strings) {
-                URL weatherDataURL = null;
                 String retrievedJsonData = null;
                 if (strings != null) {
-                    String city = strings[0];
-                    String country = strings[1];
-                    Log.d(LOG, city + ", " + country);
-                    weatherDataURL = WeatherUtils.buildWeatherApiUrl(city, country);
+                    String fName = strings[0];
+                    String lName = strings[1];
+                    String dob = strings[2];
+                    String sex = strings[3];
+                    String city = strings[4];
+                    String country = strings[5];
+                    String lifestyleSel = strings[6];
+                    String weightGoal = strings[7];
+                    String age = strings[8];
+                    String weight = strings[9];
+                    String feet = strings[10];
+                    String inches = strings[11];
+                    String lbsPerWeek = strings[12];
+                    String bmr = strings[13];
+                    String bmi = strings[14];
+                    String calsPerDay = strings[15];
+                    Log.d(LOG, fName + ", " + lName + ", " + dob + ", " + sex + ", " + city + ", " + country
+                            + ", " + lifestyleSel + ", " + weightGoal + ", " + age + ", " + weight + ", " + feet
+                            + ", " + inches + ", " + lbsPerWeek + ", " + bmr + ", " + bmi + ", " + calsPerDay);
                 }
-                try {
-                    retrievedJsonData = WeatherUtils.getJsonDataFromUrl(weatherDataURL);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    retrievedJsonData = UserProfile.class.getUserData();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+
                 return retrievedJsonData;
 
             }
 
             @Override
             protected void onPostExecute(String s) {
-                    userProfiles.setValue(UserProfile.class.getUserProfile());
-
+//                    userProfiles.setValue(UserProfile.class.getUserData(s));
+//
             }
-        }.execute(m_fName, m_lName, m_dob, m_sex, m_city, m_country, m_lifestyleSelection, m_weightGoal,
-                m_Age, m_weight, m_feet, m_inches, m_lbsPerWeek, m_BMR, m_BMI, m_calsPerDay);
+        };
+//        }.execute(m_fName, m_lName, m_dob, m_sex, m_city, m_country, m_lifestyleSelection, m_weightGoal,
+//                m_Age, m_weight, m_feet, m_inches, m_lbsPerWeek, m_BMR, m_BMI, m_calsPerDay);
     }
 
     public void setUserProfiles(String fName, String lName, String dob, String sex, String city, String country, String lifestyleSelection,
@@ -91,12 +100,12 @@ public class UserProfileViewModel extends AndroidViewModel {
         m_BMI = bmi;
         m_calsPerDay = calsPerDay;
         m_Age = age;
-        
+
         loadData();
     }
 
 
-    public MutableLiveData<UserProfile> getUserProfileData() {
-        return userProfiles;
-    }
+//    public MutableLiveData<UserProfile> getUserProfileData() {
+//        return userProfiles;
+//    }
 }

@@ -107,7 +107,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         m_btn_img_image.setOnClickListener(this);
 
         m_userProfile = new UserProfile(m_fname, m_lname, m_dob, m_sex, m_city, m_country, str_lifestyle_selection,
-                str_weight_goal_selection, m_weight, m_feet,m_inches, m_lbsPerWeek);
+                str_weight_goal_selection, m_weight, m_feet,m_inches, m_lbsPerWeek, 0, 0, 0, 0);
 
         Intent i = new Intent(getContext(),FitnessDetailsFragment.class);
         i.putExtras(m_userProfileBundle);
