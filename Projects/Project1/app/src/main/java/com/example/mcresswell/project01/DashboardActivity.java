@@ -11,12 +11,12 @@ public class DashboardActivity extends AppCompatActivity implements ProfileEntry
 
     //member variables
     private FragmentTransaction m_fTrans;
-    Intent m_intent_profileDetailsActivity = new Intent(this, ProfileDetailsActivity.class);
+//    Intent m_intent_profileDetailsActivity = new Intent(this, ProfileDetailsActivity.class);
 
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
-        m_intent_profileDetailsActivity = intent;
-        super.startActivityForResult(m_intent_profileDetailsActivity, requestCode);
+//        m_intent_profileDetailsActivity = intent;
+//        super.startActivityForResult(m_intent_profileDetailsActivity, requestCode);
     }
 
     @Override

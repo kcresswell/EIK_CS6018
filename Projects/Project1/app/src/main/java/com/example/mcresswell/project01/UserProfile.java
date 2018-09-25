@@ -1,7 +1,5 @@
 package com.example.mcresswell.project01;
 
-import android.os.Bundle;
-
 import com.example.mcresswell.project01.util.BmiUtils;
 
 import java.time.LocalDate;
