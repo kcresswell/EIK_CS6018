@@ -46,7 +46,7 @@ public class WeatherFragment extends ListFragment {
     //UI elements
 //    private TextView forecastTitle;
     private TextView location;
-//    private TextView mainForecast, description, temp, tempMin, tempMax;
+    //    private TextView mainForecast, description, temp, tempMin, tempMax;
 //    private Image weatherIcon;
 //    private TextView pressure, humidity, wind; //optional extra forecast details
     Map<String, String> mapper;
