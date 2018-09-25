@@ -7,7 +7,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.example.mcresswell.project01.userProfile.UserProfileViewModel;
 import com.example.mcresswell.project01.util.ValidationUtils;
+import com.example.mcresswell.project01.weather.WeatherActivity;
 
 public class DashboardActivity extends AppCompatActivity implements
         ProfileEntryFragment.OnProfileEntryDataChannel, RV_Adapter.OnAdapterDataChannel {
@@ -17,6 +19,7 @@ public class DashboardActivity extends AppCompatActivity implements
     private final String DEFAULT_CITY = "PROVO";
     private final String DEFAULT_COUNTRY_CODE = "US";
     private FragmentTransaction m_fTrans;
+    private UserProfileViewModel userProfileViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,9 @@ public class DashboardActivity extends AppCompatActivity implements
             }
 
         }
+         //Dummy ViewModel for testing
+        userProfileViewModel = new UserProfileViewModel(getApplication());
+        userProfileViewModel.setLocation("Provo", "US");
     }
 
     @Override
@@ -92,6 +98,9 @@ public class DashboardActivity extends AppCompatActivity implements
         Toast.makeText(this, "Position: " + buttonPosition, Toast.LENGTH_SHORT).show();
         switch (buttonPosition) {
             case 0: //FitnessDetails
+                fitnessDetailsButtonHandler(
+                        FitnessDetailsActivity.DEFAULT_CALORIES,
+                        FitnessDetailsActivity.DEFAULT_BASAL_METABOLIC_RATE);
                 break;
             case 1: //Hiking
                 hikingButtonHandler(DEFAULT_COORDINATES);
@@ -103,6 +112,15 @@ public class DashboardActivity extends AppCompatActivity implements
                 break;
         }
 
+    }
+
+    private void fitnessDetailsButtonHandler(double calories, double bmr) {
+        if (!isWideDisplay()) {
+            Intent intent = new Intent(this, FitnessDetailsActivity.class);
+            intent.putExtra("calories", calories);
+            intent.putExtra("bmr", bmr);
+            startActivity(intent);
+        }
     }
 
     private void hikingButtonHandler(String coordinates) {
