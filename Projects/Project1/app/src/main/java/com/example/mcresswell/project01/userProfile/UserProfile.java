@@ -84,15 +84,16 @@ public class UserProfile {
     private double calculateBMR() {
         double BMR = 0.0;
         double totalHeightInInches = (m_feet * 12.0) + m_inches;
+        double totalHeightInCm = totalHeightInInches * 2.54;
         double weightInKilos = m_weight / 2.204623;
 
         //calculate BMR based on sex of user
         if(m_sex.equals("Female") || m_sex.equals("female") || m_sex.equals("F") || m_sex.equals("f")) {
             //user is female, s = -161
-            BMR = (9.99 * weightInKilos) + (6.25 * totalHeightInInches) - 4.92 * m_Age - 161;
+            BMR = (9.99 * weightInKilos) + (6.25 * totalHeightInCm) - 4.92 * m_Age - 161;
         } else if (m_sex.equals("Male") || m_sex.equals("male") || m_sex.equals("M") || m_sex.equals("m")){
             //user is male, s = 5
-            BMR = (9.99 * weightInKilos) + (6.25 * totalHeightInInches) - 4.92 * m_Age + 5;
+            BMR = (9.99 * weightInKilos) + (6.25 * totalHeightInCm) - 4.92 * m_Age + 5;
         } else {
             //--TODO: throw an error here if not male or female--//
         }
