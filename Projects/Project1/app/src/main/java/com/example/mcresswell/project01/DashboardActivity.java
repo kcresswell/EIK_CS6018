@@ -62,12 +62,9 @@ public class DashboardActivity extends AppCompatActivity implements ProfileEntry
     }
 
     @Override
-    public void onDataPass(Bundle userProfileBundle) {
+    public void onDataPass(Bundle userDataBundle) {
 
     }
-
-
-
     boolean isWideDisplay(){
         return getResources().getBoolean(R.bool.isWideDisplay);
     }
@@ -109,6 +106,7 @@ public class DashboardActivity extends AppCompatActivity implements ProfileEntry
 
             switch (position) {
                 case 0:
+
                     Toast.makeText(this, "Position: " + position, Toast.LENGTH_SHORT).show();
                     break;
                 case 1:
@@ -125,4 +123,6 @@ public class DashboardActivity extends AppCompatActivity implements ProfileEntry
             }
         }
     }
+
+
 }
