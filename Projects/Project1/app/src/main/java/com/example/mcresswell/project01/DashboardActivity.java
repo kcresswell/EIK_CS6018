@@ -1,15 +1,35 @@
 package com.example.mcresswell.project01;
 
-import android.graphics.Bitmap;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.Toast;
 
 public class DashboardActivity extends AppCompatActivity implements ProfileEntryFragment.OnDataChannel, RV_Adapter.OnDataChannel {
 
-    //memeber variables
+    //member variables
     private FragmentTransaction m_fTrans;
+    Intent m_intent_profileDetailsActivity = new Intent(this, ProfileDetailsActivity.class);
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        m_intent_profileDetailsActivity = intent;
+        super.startActivityForResult(m_intent_profileDetailsActivity, requestCode);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                String result = data.getStringExtra("userProfileBundle");
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +62,11 @@ public class DashboardActivity extends AppCompatActivity implements ProfileEntry
     }
 
     @Override
-    public void onDataPass(String fname, String lname, int age, Bitmap image) {
+    public void onDataPass(Bundle userProfileBundle) {
 
     }
+
+
 
     boolean isWideDisplay(){
         return getResources().getBoolean(R.bool.isWideDisplay);
