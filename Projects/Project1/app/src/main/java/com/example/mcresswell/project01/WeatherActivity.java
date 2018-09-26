@@ -16,12 +16,10 @@ import com.example.mcresswell.project01.weather.WeatherViewModel;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class WeatherActivity extends AppCompatActivity
-        implements WeatherFragment.OnWeatherFragmentInteractionListener {
+        implements WeatherFragment.OnWeatherDataLoadedListener {
 
     private static final String LOG = WeatherActivity.class.getSimpleName();
-
-    private WeatherViewModel weatherViewModel;
-    private AtomicBoolean fragmentExists = new AtomicBoolean(false);
+//    private AtomicBoolean fragmentExists = new AtomicBoolean(false);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,49 +28,32 @@ public class WeatherActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
 
-        weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
-        weatherViewModel.getForecastData().observe(this, nameObserver);
-
-        if (!fragmentExists.get() && savedInstanceState != null) {
-            fragmentExists.set(true);
-        }
+//        if (!fragmentExists.get() && savedInstanceState != null) {
+//            fragmentExists.set(true);
+//        }
 
         String city = getIntent().getStringExtra("city");
         String country = getIntent().getStringExtra("country");
-        loadWeatherData(city, country);
-    }
 
-    final Observer<WeatherForecast> nameObserver  = new Observer<WeatherForecast>() {
-        @Override
-        public void onChanged(@Nullable final WeatherForecast weatherData) {
-            if (weatherData != null) { //Weather data has finished being retrieved
-                Log.d(LOG,"weatherData onChanged, weatherData no longer null");
-                weatherData.printWeatherForecast();
-                displayWeatherWidget(weatherData); //Wait til data loads to display fragment
-            }
-        }
-    };
-
-    void loadWeatherData(String city, String country){
-        Log.d(LOG, "loadWeatherData");
-
-        //pass the location in to the view model
-        weatherViewModel.setLocation(city, country);
-    }
-
-    public void displayWeatherWidget(WeatherForecast weatherForecast) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        WeatherFragment fragment = !fragmentExists.get() ?
-                WeatherFragment.newInstance(weatherForecast) :
-                (WeatherFragment) fragmentManager.findFragmentById(R.id.fl_activity_weather);
-        fragmentTransaction.replace(R.id.fl_activity_weather, fragment);
+        WeatherFragment weatherFragment = WeatherFragment.newInstance(city, country);
+//        WeatherFragment weatherFragment = (WeatherFragment) fragmentManager.findFragmentById(R.id.fragment_weather);
+        fragmentTransaction.add(R.id.fl_activity_weather, weatherFragment);
+//        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
     @Override
-    public void onWeatherFragmentInteraction(WeatherForecast forecast) {
+    public void onWeatherDataLoaded(WeatherForecast forecast) {
+        if (!getResources().getBoolean(R.bool.isWideDisplay)) {
+            Log.d(LOG, "onWeatherDataLoaded, mobile");
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            WeatherFragment fragment = (WeatherFragment) fragmentManager.findFragmentById(R.id.fl_activity_weather);
+            fragmentTransaction.replace(R.id.fl_activity_weather, fragment);
+            fragmentTransaction.commit();
 
+        }
     }
 }

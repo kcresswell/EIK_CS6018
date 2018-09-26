@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/widget_text_margin"
         android:layout_marginEnd="@dimen/widget_text_margin"
-        android:text="CITY NAME, COUNTRY CODE"
+        android:text="fetching data . . ."
         android:textAlignment="center"
         android:textColor="@color/widget_text_color"
         android:textIsSelectable="false"
@@ -75,5 +75,4 @@
             android:layout_margin="@dimen/widget_margin"
             android:drawSelectorOnTop="false" />
     </LinearLayout>
-
 </android.support.constraint.ConstraintLayout>

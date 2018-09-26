@@ -16,6 +16,8 @@ public class UserProfile {
     private double m_BMR, m_BMI;
     private int m_calsPerDay;
 
+    UserProfile(){}
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     public UserProfile(String fName, String lName, String dob, String sex, String city, String country, String lifestyleSelection, String weightGoal,
                        int weight, int feet, int inches, int lbsPerWeek, double bmr, double bmi, int calsPerDay, int age){

@@ -1,11 +1,8 @@
 package com.example.mcresswell.project01;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-
-import com.example.mcresswell.project01.userProfile.UserProfileViewModel;
 
 public class ProfileDetailsActivity extends AppCompatActivity implements ProfileEntryFragment.OnProfileEntryDataChannel {
     private FragmentTransaction m_fTrans;
@@ -20,7 +17,7 @@ public class ProfileDetailsActivity extends AppCompatActivity implements Profile
         m_fTrans.commit();
 
 //        UserProfileViewModel model = ViewModelProviders.of(this).get(UserProfileViewModel.class);
-//        model.getUserProfile().observe(this, users -> {
+//        model.getUserProfiles().observe(this, users -> {
 //            // update UI
 //
 //

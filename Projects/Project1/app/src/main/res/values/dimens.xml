@@ -3,7 +3,12 @@
     <dimen name="dimen_dashboard_button">125dp</dimen>
     <dimen name="dimen_dashboard_button_text_size">15sp</dimen>
     <dimen name="dashboard_button_text_padding">20dp</dimen>
-    <dimen name="dashboard_button_margin">20dp</dimen>
+    <dimen name="dashboard_button_horizontal_margin">20dp</dimen>
+    <dimen name="dashboard_button_padding">10dp</dimen>
+    <dimen name="dashboard_fitness_details_heading">22sp</dimen>
+    <dimen name="dashboard_fitness_details_data">36sp</dimen>
+
+
 
     <dimen name="widget_margin">25dp</dimen>
     <dimen name="widget_text_padding">4dp</dimen>
