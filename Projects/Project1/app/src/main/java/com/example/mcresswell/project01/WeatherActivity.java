@@ -80,29 +80,8 @@ public class WeatherActivity extends AppCompatActivity
         WeatherFragment fragment = !fragmentExists.get() ?
                 WeatherFragment.newInstance(weatherForecast) :
                 (WeatherFragment) fragmentManager.findFragmentById(R.id.fl_activity_weather);
-        fragmentTransaction.add(R.id.fl_activity_weather, fragment);
+        fragmentTransaction.replace(R.id.fl_activity_weather, fragment);
         fragmentTransaction.commit();
-
-//        WeatherFragment fragment = null;
-//        if (!fragmentExists.get()){
-//            fragment = WeatherFragment.newInstance(weatherForecast);
-//        } else {
-//            if (getResources().getBoolean(R.bool.isWideDisplay)) {
-//                fragment = (WeatherFragment) fragmentManager.findFragmentById(R.id.fl_detail_wd);
-//            } else {
-//                fragment = (WeatherFragment) fragmentManager.findFragmentById(R.id.fl_master_nd);
-//            }
-//        }
-//
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        if (getResources().getBoolean(R.bool.isWideDisplay)) {
-//            fragmentTransaction.add(R.id.fl_detail_wd, fragment);
-//        } else {
-//            fragmentTransaction.add(R.id.fl_master_nd, fragment);
-//        }
-//        fragmentTransaction.addToBackStack(null);
-//        fragmentTransaction.commit();
-//    }
     }
 
 //    public Map<String, String> createObjectMapper(WeatherForecast data) {
@@ -122,11 +101,6 @@ public class WeatherActivity extends AppCompatActivity
 
     @Override
     public void onWeatherFragmentInteraction(WeatherForecast forecast) {
-//        FragmentManager manager = getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = manager.beginTransaction();
-//        fragmentTransaction.show(manager.findFragmentById(R.id.fl_activity_weather));
-//        fragmentTransaction.addToBackStack(null);
-//        fragmentTransaction.commit();
 
 
     }
