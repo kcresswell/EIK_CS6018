@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.mcresswell.project01.util.BmiUtils;
 import com.example.mcresswell.project01.util.Constants;
 
 /**

@@ -1,5 +1,6 @@
 package com.example.mcresswell.project01;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,10 +27,15 @@ public class DashboardActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+        userProfileViewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
+
         //If not saved instance state, build initial fragment
         if(savedInstanceState == null){
             //create fragment
 //            ProfileEntryFragment frag_profileEntry = new ProfileEntryFragment();
+
+//            userProfileViewModel.
+
             DashboardFragment frag_dashboard = new DashboardFragment();
             FitnessDetailsFragment frag_fitness = new FitnessDetailsFragment();
 
@@ -50,9 +56,7 @@ public class DashboardActivity extends AppCompatActivity implements
             }
 
         }
-         //Dummy ViewModel for testing
-        userProfileViewModel = new UserProfileViewModel(getApplication());
-        userProfileViewModel.setLocation("Provo", "US");
+
     }
 
     @Override
@@ -80,7 +84,7 @@ public class DashboardActivity extends AppCompatActivity implements
             case 1: //Hiking
                 hikingButtonHandler(DEFAULT_COORDINATES);
                 break;
-            case 2: //User Profile
+            case 2: //FitnessProfile Profile
                 m_fTrans.replace(R.id.fl_detail_wd, new ProfileSummaryFragment());
                 m_fTrans.addToBackStack(null);
                 m_fTrans.commit();
@@ -105,7 +109,7 @@ public class DashboardActivity extends AppCompatActivity implements
             case 1: //Hiking
                 hikingButtonHandler(DEFAULT_COORDINATES);
                 break;
-            case 2: //User Profile
+            case 2: //FitnessProfile Profile
                 break;
             case 3: //Weather
                 weatherButtonHandler(null, null);
