@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.mcresswell.project01.userProfile.UserProfile;
 import com.example.mcresswell.project01.userProfile.UserProfileViewModel;
@@ -49,38 +48,13 @@ public class DashboardActivity extends AppCompatActivity implements
 
     @Override
     public void onAdapterDataPass(int position) {
-        if (isWideDisplay()) {
-            executeTabletDashboardButtonHandler(position);
-            return;
-        }
-        executeMobileDashboardButtonHandler(position);
+        executeDashboardButtonHandler(position);
     }
 
-    private void executeTabletDashboardButtonHandler(int buttonPosition) {
-        m_fTrans = getSupportFragmentManager().beginTransaction();
-        switch (buttonPosition) {
-            case 0: //FitnessDetails
-                m_fTrans.replace(R.id.fl_detail_wd, new FitnessDetailsFragment());
-                m_fTrans.addToBackStack(null);
-                m_fTrans.commit();
-                break;
-            case 1: //Hiking
-                hikingButtonHandler();
-                break;
-            case 2: //User Profile
-                m_fTrans.replace(R.id.fl_detail_wd, new ProfileSummaryFragment());
-                m_fTrans.addToBackStack(null);
-                m_fTrans.commit();
-                break;
-            case 3: //Weather
-                weatherButtonHandler(DEFAULT_CITY, DEFAULT_COUNTRY_CODE);
-                break;
-            default:
+    private void executeDashboardButtonHandler(int buttonPosition) {
+        if (isWideDisplay()){
+            m_fTrans = getSupportFragmentManager().beginTransaction();
         }
-    }
-
-    private void executeMobileDashboardButtonHandler(int buttonPosition) {
-//        Toast.makeText(this, "Position: " + buttonPosition, Toast.LENGTH_SHORT).show();
         switch (buttonPosition) {
             case 0: //FitnessDetails
                 fitnessButtonHandler();
@@ -97,47 +71,23 @@ public class DashboardActivity extends AppCompatActivity implements
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
-            restoreDefaultDashboardView();
-        } else {
-            super.onBackPressed();
-        }
-    }
+    //button behaviors //////////////////////////////////////////////////
 
-    /**
-     * Helper method to restore the default app view to
-     * make sure user doesn't end up with a blank app screen.
-     * from pressing back repeatedly in the app.
-     */
-    private void restoreDefaultDashboardView() {
-        m_fTrans = getSupportFragmentManager().beginTransaction();
-        DashboardFragment frag_dashboard = new DashboardFragment();
-
-        if(isWideDisplay()){ //Tablet default: master fragment left, detail fragment right
-            m_fTrans.replace(R.id.fl_master_wd, frag_dashboard, "v_frag_dashboard");
-            m_fTrans.replace(R.id.fl_detail_wd, new FitnessDetailsFragment(), "v_frag_fitness");
-            m_fTrans.addToBackStack(null);
-            m_fTrans.commit();
-        } else { //Mobile default
-            m_fTrans.replace(R.id.fl_master_nd, frag_dashboard, "v_frag_dashboard");
-            m_fTrans.addToBackStack(null);
-            m_fTrans.commit();
-        }
-    }
-
+    //fitness button behavior
     private void fitnessButtonHandler() {
-        Intent intent = new Intent(this, FitnessDetailsActivity.class);
-        startActivity(intent);
+        if(!isWideDisplay()) { //mobile
+            Intent intent = new Intent(this, FitnessDetailsActivity.class);
+            startActivity(intent);
+        } else { //Tablet
+            m_fTrans.replace(R.id.fl_detail_wd, new FitnessDetailsFragment());
+            m_fTrans.addToBackStack(null);
+            m_fTrans.commit();
+        }
     }
 
-    private void profileButtonHandler() {
-        Intent intent = new Intent(this, ProfileDetailsActivity.class);
-        startActivity(intent);
-    }
-
+    //hiking button behavior
     private void hikingButtonHandler() {
+        //Both display sizes switch to google maps no behavioral change
         String coords = null;
         if (userProfileViewModel == null) {
             coords = DEFAULT_COORDINATES;
@@ -157,6 +107,19 @@ public class DashboardActivity extends AppCompatActivity implements
         }
     }
 
+    //profile button behavior
+    private void profileButtonHandler() {
+        if(!isWideDisplay()) { //mobile
+            Intent intent = new Intent(this, ProfileDetailsActivity.class);
+            startActivity(intent);
+        } else { //Tablet
+            m_fTrans.replace(R.id.fl_detail_wd, new ProfileSummaryFragment());
+            m_fTrans.addToBackStack(null);
+            m_fTrans.commit();
+        }
+    }
+
+    //weather button behavior
     private void weatherButtonHandler(String city, String country) {
         if (!isWideDisplay()) { //Load WeatherActivity in mobile
             Log.d(LOG, "weatherButtonHanlder mobileView");
@@ -180,6 +143,7 @@ public class DashboardActivity extends AppCompatActivity implements
         }
     }
 
+    //helper functions //////////////////////////////////////////////////
     @Override
     public void onWeatherDataLoaded(WeatherForecast forecast) {
         Log.d(LOG, "onWeatherDataLoaded");
@@ -189,6 +153,36 @@ public class DashboardActivity extends AppCompatActivity implements
             WeatherFragment fragment = (WeatherFragment) manager.findFragmentById(R.id.fl_detail_wd);
             m_fTrans.replace(R.id.fl_detail_wd, fragment).setTransition(10);
             m_fTrans.commit();
+        }
+    }
+
+    /**
+     * Helper method to restore the default app view to
+     * make sure user doesn't end up with a blank app screen.
+     * from pressing back repeatedly in the app.
+     */
+    private void restoreDefaultDashboardView() {
+        m_fTrans = getSupportFragmentManager().beginTransaction();
+        DashboardFragment frag_dashboard = new DashboardFragment();
+
+        if(!isWideDisplay()){ //Mobile default
+            m_fTrans.replace(R.id.fl_master_nd, frag_dashboard, "v_frag_dashboard");
+            m_fTrans.addToBackStack(null);
+            m_fTrans.commit();
+        } else { //Tablet default: master fragment left, detail fragment right
+            m_fTrans.replace(R.id.fl_master_wd, frag_dashboard, "v_frag_dashboard");
+            m_fTrans.replace(R.id.fl_detail_wd, new FitnessDetailsFragment(), "v_frag_fitness");
+            m_fTrans.addToBackStack(null);
+            m_fTrans.commit();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
+            restoreDefaultDashboardView();
+        } else {
+            super.onBackPressed();
         }
     }
 
