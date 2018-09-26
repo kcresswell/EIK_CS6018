@@ -73,14 +73,14 @@ public class DashboardActivity extends AppCompatActivity implements
                 m_fTrans.commit();
                 break;
             case 3: //Weather
-                weatherButtonHandler(null, null);
+                weatherButtonHandler(DEFAULT_CITY, DEFAULT_COUNTRY_CODE);
                 break;
             default:
         }
     }
 
     private void executeMobileDashboardButtonHandler(int buttonPosition) {
-        Toast.makeText(this, "Position: " + buttonPosition, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Position: " + buttonPosition, Toast.LENGTH_SHORT).show();
         switch (buttonPosition) {
             case 0: //FitnessDetails
                 fitnessButtonHandler();
@@ -92,7 +92,7 @@ public class DashboardActivity extends AppCompatActivity implements
                 profileButtonHandler();
                 break;
             case 3: //Weather
-                weatherButtonHandler(null, null);
+                weatherButtonHandler(DEFAULT_CITY, DEFAULT_COUNTRY_CODE);
                 break;
         }
     }
