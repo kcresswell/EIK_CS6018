@@ -45,7 +45,6 @@ public class DashboardActivity extends AppCompatActivity implements
                 m_fTrans.addToBackStack(null);
                 m_fTrans.commit();
             }
-
         }
     }
 
@@ -83,26 +82,35 @@ public class DashboardActivity extends AppCompatActivity implements
                 weatherButtonHandler(null, null);
                 break;
             default:
-
         }
-
     }
 
     private void executeMobileDashboardButtonHandler(int buttonPosition) {
         Toast.makeText(this, "Position: " + buttonPosition, Toast.LENGTH_SHORT).show();
         switch (buttonPosition) {
             case 0: //FitnessDetails
+                fitnesButtonHandler();
                 break;
             case 1: //Hiking
                 hikingButtonHandler(DEFAULT_COORDINATES);
                 break;
             case 2: //User Profile
+                profileButtonHandler();
                 break;
             case 3: //Weather
                 weatherButtonHandler(null, null);
                 break;
         }
+    }
 
+    private void fitnesButtonHandler() {
+        Intent intent = new Intent(this, FitnessActivity.class);
+        startActivity(intent);
+    }
+
+    private void profileButtonHandler() {
+        Intent intent = new Intent(this, ProfileDetailsActivity.class);
+        startActivity(intent);
     }
 
     private void hikingButtonHandler(String coordinates) {

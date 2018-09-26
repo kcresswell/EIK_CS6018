@@ -81,7 +81,6 @@ public class WeatherActivity extends AppCompatActivity
                 WeatherFragment.newInstance(weatherForecast) :
                 (WeatherFragment) fragmentManager.findFragmentById(R.id.fl_activity_weather);
         fragmentTransaction.add(R.id.fl_activity_weather, fragment);
-        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 
 //        WeatherFragment fragment = null;
