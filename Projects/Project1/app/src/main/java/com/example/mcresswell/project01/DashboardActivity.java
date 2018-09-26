@@ -79,14 +79,14 @@ public class DashboardActivity extends AppCompatActivity implements
                 m_fTrans.commit();
                 break;
             case 3: //Weather
-                weatherButtonHandler(null, null);
+                weatherButtonHandler();
                 break;
             default:
         }
     }
 
     private void executeMobileDashboardButtonHandler(int buttonPosition) {
-        Toast.makeText(this, "Position: " + buttonPosition, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Position: " + buttonPosition, Toast.LENGTH_SHORT).show();
         switch (buttonPosition) {
             case 0: //FitnessDetails
                 fitnesButtonHandler();
@@ -98,7 +98,7 @@ public class DashboardActivity extends AppCompatActivity implements
                 profileButtonHandler();
                 break;
             case 3: //Weather
-                weatherButtonHandler(null, null);
+                weatherButtonHandler(DEFAULT_CITY, DEFAULT_COUNTRY_CODE);
                 break;
         }
     }
@@ -133,7 +133,10 @@ public class DashboardActivity extends AppCompatActivity implements
             getIntent().putExtra("city", city);
             getIntent().putExtra("country", country);
             //TODO: Handle tablet logic
-//            WeatherFragment fragment = new WeatherFragment();
+
+            m_fTrans.replace(R.id.fl_detail_wd, new WeatherFragment());
+            m_fTrans.addToBackStack(null);
+            m_fTrans.commit();
         }
     }
 

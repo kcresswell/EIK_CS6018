@@ -8,10 +8,6 @@
     android:id="@+id/fragment_weather"
     tools:context=".WeatherFragment">
 
-    <!--<FrameLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:padding="@dimen/widget_margin">-->
     <TextView
         android:id="@+id/weatherTitle"
         android:layout_width="wrap_content"
@@ -80,14 +76,4 @@
             android:drawSelectorOnTop="false" />
     </LinearLayout>
 
-        <!--<android.support.constraint.ConstraintLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:background="@color/widget_background_color"-->
-            <!--android:padding="2dp">-->
-
-            <!---->
-
-        <!--</android.support.constraint.ConstraintLayout>-->
-    <!--</FrameLayout>-->
 </android.support.constraint.ConstraintLayout>

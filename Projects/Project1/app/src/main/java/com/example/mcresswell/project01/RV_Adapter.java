@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -25,11 +26,13 @@ public class RV_Adapter extends RecyclerView.Adapter<RV_Adapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder{
         protected View itemLayout;
         protected ImageButton btn_image_itemData;
+        protected TextView txtv_btn_lbl;
 
         public ViewHolder(@NonNull View view) {
             super(view);
             itemLayout = view;
             btn_image_itemData = (ImageButton) view.findViewById(R.id.btn_img_dashboard_item);
+            txtv_btn_lbl = (TextView) view.findViewById(R.id.txtv_btn_label);
         }
     }
 
@@ -53,6 +56,7 @@ public class RV_Adapter extends RecyclerView.Adapter<RV_Adapter.ViewHolder> {
 
         //set values of the button.
         viewHolder.btn_image_itemData.setImageDrawable(m_btn_img_ListItems.get(position).getImage());
+        viewHolder.txtv_btn_lbl.setText(m_btn_img_ListItems.get(position).getText());
         viewHolder.btn_image_itemData.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){

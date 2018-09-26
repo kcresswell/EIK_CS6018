@@ -14,16 +14,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DashboardActivity">
+        <activity android:name=".DashboardActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".WeatherActivity" />
-        <activity android:name=".ProfileDetailsActivity" />
-        <activity android:name=".FitnessActivity"/>
+        <activity android:name=".WeatherActivity"
+            android:label="Weather"
+            android:parentActivityName=".DashboardActivity"/>
+        <activity android:name=".ProfileDetailsActivity"
+            android:label="Profile"
+            android:parentActivityName=".DashboardActivity"/>
+        <activity android:name=".FitnessActivity"
+            android:label="Fitness"
+            android:parentActivityName=".DashboardActivity"/>
 
     </application>
 
