@@ -25,4 +25,10 @@ public class ProfileSummaryFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_profile_summary, container, false);
     }
 
+    //edit button on click fragment replace with edit fragment
+    //id = btn_edit
+    public void onClick(View v) {
+        
+    }
+
 }
