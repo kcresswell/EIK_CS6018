@@ -6,7 +6,9 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import java.util.List;
@@ -21,14 +23,8 @@ public class UserProfileViewModel extends AndroidViewModel {
     private int m_Age, m_weight, m_feet, m_inches, m_lbsPerWeek;
     private double m_BMR, m_BMI;
     private int m_calsPerDay;
+    private UserProfile userProfile;
 
-    public LiveData<List<UserProfile>> getUserProfile() {
-        if (userProfiles == null) {
-            userProfiles = new MutableLiveData<>();
-            loadData();
-        }
-        return userProfiles;
-    }
 
     public UserProfileViewModel(@NonNull Application application) {
         super(application);
@@ -37,9 +33,9 @@ public class UserProfileViewModel extends AndroidViewModel {
     @SuppressLint("StaticFieldLeak")
     private void loadData(){
         new AsyncTask<String,Void,String>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             protected String doInBackground(String... strings) {
-                String retrievedJsonData = null;
                 if (strings != null) {
                     String fName = strings[0];
                     String lName = strings[1];
@@ -60,14 +56,9 @@ public class UserProfileViewModel extends AndroidViewModel {
                     Log.d(LOG, fName + ", " + lName + ", " + dob + ", " + sex + ", " + city + ", " + country
                             + ", " + lifestyleSel + ", " + weightGoal + ", " + age + ", " + weight + ", " + feet
                             + ", " + inches + ", " + lbsPerWeek + ", " + bmr + ", " + bmi + ", " + calsPerDay);
+                    userProfile = new UserProfile();
                 }
-//                try {
-//                    retrievedJsonData = UserProfile.class.getUserData();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-
-                return retrievedJsonData;
+                return null;
 
             }
 
@@ -79,6 +70,16 @@ public class UserProfileViewModel extends AndroidViewModel {
         };
 //        }.execute(m_fName, m_lName, m_dob, m_sex, m_city, m_country, m_lifestyleSelection, m_weightGoal,
 //                m_Age, m_weight, m_feet, m_inches, m_lbsPerWeek, m_BMR, m_BMI, m_calsPerDay);
+    }
+
+    public LiveData<List<UserProfile>> getUserProfiles() {
+        loadData();
+        return userProfiles;
+    }
+
+    public UserProfile getUserProfile() {
+        loadData();
+        return userProfile;
     }
 
     public void setUserProfiles(String fName, String lName, String dob, String sex, String city, String country, String lifestyleSelection,
@@ -102,9 +103,4 @@ public class UserProfileViewModel extends AndroidViewModel {
 
         loadData();
     }
-
-
-//    public MutableLiveData<UserProfile> getUserProfileData() {
-//        return userProfiles;
-//    }
 }

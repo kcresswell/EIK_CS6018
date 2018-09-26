@@ -1,8 +1,8 @@
 package com.example.mcresswell.project01;
 
+import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 public class FitnessDetailsActivity extends AppCompatActivity {
     private FragmentTransaction m_fTrans;
@@ -14,7 +14,7 @@ public class FitnessDetailsActivity extends AppCompatActivity {
 
         //present fragment to display
         m_fTrans = getSupportFragmentManager().beginTransaction();
-        m_fTrans.replace(R.id.fl_master_nd, new FitnessDetailsFragment(), "v_frag_dashboard");
+        m_fTrans.replace(R.id.fl_master_nd_activity_fitness, new FitnessDetailsFragment(), "v_frag_dashboard");
         m_fTrans.commit();
     }
 }
