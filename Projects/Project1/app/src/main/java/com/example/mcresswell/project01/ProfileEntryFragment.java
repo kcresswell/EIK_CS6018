@@ -37,7 +37,6 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     private Bitmap m_bmap_imageFromCam;
     private RadioGroup m_radiogp_lifestyleSelection, m_radiogp_weightGoal;
 
-    private UserProfile m_userProfile;
     private Bundle m_userProfileBundle = new Bundle();
 
     //request code for camera
@@ -106,9 +105,6 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         m_btn_submit.setOnClickListener(this);
         m_btn_img_image.setOnClickListener(this);
 
-        m_userProfile = new UserProfile(m_fname, m_lname, m_dob, m_sex, m_city, m_country, str_lifestyle_selection,
-                str_weight_goal_selection, m_weight, m_feet,m_inches, m_lbsPerWeek, 0, 0, 0, 0);
-
         Intent i = new Intent(getContext(),FitnessDetailsFragment.class);
         i.putExtras(m_userProfileBundle);
         startActivity(i);
@@ -169,13 +165,13 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
                         m_dataListener.onProfileEntryDataPass(m_userProfileBundle);
                     }
 
-                    ArrayList<UserProfile> userProfiles = new ArrayList<UserProfile>();
-                    userProfiles.add(m_userProfile);
-
-                    UserProfileListParcelable UserProfilesParcelable = new UserProfileListParcelable(userProfiles);
-
-                    //Put this into a bundle
-                    m_userProfileBundle.putParcelable("item_list", UserProfilesParcelable);
+//                    ArrayList<UserProfile> userProfiles = new ArrayList<UserProfile>();
+//                    userProfiles.add(m_userProfile);
+//
+//                    UserProfileListParcelable UserProfilesParcelable = new UserProfileListParcelable(userProfiles);
+//
+//                    //Put this into a bundle
+//                    m_userProfileBundle.putParcelable("item_list", UserProfilesParcelable);
 
                     //Create the fragment
                     FitnessDetailsFragment fitnessDetailsFragment = new FitnessDetailsFragment();
