@@ -5,4 +5,16 @@
     <dimen name="dashboard_button_text_padding">20dp</dimen>
     <dimen name="dashboard_button_margin">20dp</dimen>
 
+    <dimen name="widget_margin">25dp</dimen>
+    <dimen name="widget_text_padding">4dp</dimen>
+    <dimen name="widget_text_margin">6dp</dimen>
+
+    <dimen name="widget_title_text_size">36sp</dimen>
+    <dimen name="widget_subtitle_text_size">20sp</dimen>
+    <dimen name="widget_location_text_size">25sp</dimen>
+    <dimen name="widget_data_text_size">18sp</dimen>
+
+
+
+
 </resources>

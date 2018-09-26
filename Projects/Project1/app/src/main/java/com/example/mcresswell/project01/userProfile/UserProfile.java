@@ -1,6 +1,4 @@
-package com.example.mcresswell.project01;
-
-import android.os.Bundle;
+package com.example.mcresswell.project01.userProfile;
 
 import com.example.mcresswell.project01.util.BmiUtils;
 
@@ -12,9 +10,11 @@ import java.util.Locale;
 public class UserProfile {
     private String m_fName, m_lName, m_dob, m_sex, m_city, m_country, m_lifestyleSelection, m_weightGoal;
     private int m_Age, m_weight, m_feet, m_inches, m_lbsPerWeek;
+    private double m_BMR, m_BMI;
+    private int m_calsPerDay;
 
     public UserProfile(String fName, String lName, String dob, String sex, String city, String country, String lifestyleSelection, String weightGoal,
-                       int weight, int feet, int inches, int lbsPerWeek){
+                       int weight, int feet, int inches, int lbsPerWeek, double bmr, double bmi, int calsPerDay, int age){
         m_fName = fName;
         m_lName = lName;
         m_dob = dob;
@@ -28,6 +28,10 @@ public class UserProfile {
         m_inches = inches;
         m_lbsPerWeek = lbsPerWeek;
         m_Age = calculateAge();
+        m_BMR = calculateBMR();
+        m_BMI = calculateBMI();
+        m_calsPerDay = (int) calculateCalories(lbsPerWeek);
+
     }
 
     //getters for member variables
@@ -45,11 +49,18 @@ public class UserProfile {
     public int getM_inches() {return m_inches;}
     public int getM_lbsPerWeek() {return m_lbsPerWeek;}
     public int getM_Age() {return m_Age;}
+    public int getM_calsPerDay() {return m_calsPerDay;}
 
+    public double getM_BMR() {return m_BMR;}
+    public double getM_BMI() { return m_BMI;}
 
+    public UserProfile getUserProfile() {
+        return new UserProfile(m_fName, m_lName, m_dob, m_sex, m_city, m_country,
+                               m_lifestyleSelection, m_weightGoal, m_weight, m_feet,
+                               m_inches, m_lbsPerWeek, m_BMR, m_BMI, m_calsPerDay, m_Age);
+    }
 
-
-//    public void getDataFromBundle(Bundle userDataBundle) {
+    //    public void getDataFromBundle(Bundle userDataBundle) {
 //        m_fName = userDataBundle.getString("fname");
 //        m_lName = userDataBundle.getString("lname");
 //        m_dob = userDataBundle.getString("dob");
@@ -72,22 +83,17 @@ public class UserProfile {
 ////    s is a factor to adjust for gender and adopts the value +5 for males and -161 for females.
     private double calculateBMR() {
         double BMR = 0.0;
-
-        //get weight value
-//        double weight = m_weight
-//
-//        //get height values
-//        double heightFeet = Double.parseDouble(m_feet);
-//        double heightInches = Double.parseDouble(m_inches);
         double totalHeightInInches = (m_feet * 12.0) + m_inches;
+        double totalHeightInCm = totalHeightInInches * 2.54;
+        double weightInKilos = m_weight / 2.204623;
 
         //calculate BMR based on sex of user
         if(m_sex.equals("Female") || m_sex.equals("female") || m_sex.equals("F") || m_sex.equals("f")) {
             //user is female, s = -161
-            BMR = (9.99 * m_weight) + (6.25 * totalHeightInInches) - 4.92 * m_Age - 161;
+            BMR = (9.99 * weightInKilos) + (6.25 * totalHeightInCm) - 4.92 * m_Age - 161;
         } else if (m_sex.equals("Male") || m_sex.equals("male") || m_sex.equals("M") || m_sex.equals("m")){
             //user is male, s = 5
-            BMR = (9.99 * m_weight) + (6.25 * totalHeightInInches) - 4.92 * m_Age + 5;
+            BMR = (9.99 * weightInKilos) + (6.25 * totalHeightInCm) - 4.92 * m_Age + 5;
         } else {
             //--TODO: throw an error here if not male or female--//
         }

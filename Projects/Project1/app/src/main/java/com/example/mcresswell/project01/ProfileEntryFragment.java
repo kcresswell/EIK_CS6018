@@ -17,6 +17,9 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import com.example.mcresswell.project01.userProfile.UserProfile;
+
 import java.util.ArrayList;
 
 
@@ -40,7 +43,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     //request code for camera
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
-    private OnDataChannel m_dataListener;
+    private OnProfileEntryDataChannel m_dataListener;
 
     public ProfileEntryFragment() {
         // Required empty public constructor
@@ -104,7 +107,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         m_btn_img_image.setOnClickListener(this);
 
         m_userProfile = new UserProfile(m_fname, m_lname, m_dob, m_sex, m_city, m_country, str_lifestyle_selection,
-                str_weight_goal_selection, m_weight, m_feet,m_inches, m_lbsPerWeek);
+                str_weight_goal_selection, m_weight, m_feet,m_inches, m_lbsPerWeek, 0, 0, 0, 0);
 
         Intent i = new Intent(getContext(),FitnessDetailsFragment.class);
         i.putExtras(m_userProfileBundle);
@@ -113,8 +116,8 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         return view;
     }
 
-    public interface OnDataChannel {
-        void onDataPass(Bundle userDataBundle);
+    public interface OnProfileEntryDataChannel {
+        void onProfileEntryDataPass (Bundle userDataBundle);
     }
 
     @Override
@@ -122,9 +125,9 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         super.onAttach(context);
 
         try {
-            m_dataListener = (OnDataChannel) context;
+            m_dataListener = (OnProfileEntryDataChannel) context;
         } catch (ClassCastException cce) {
-            throw new ClassCastException(context.toString() + " must implement OnDataChannel");
+            throw new ClassCastException(context.toString() + " must implement OnProfileEntryDataChannel");
         }
     }
 
@@ -163,7 +166,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
                         //inform user of expected dob input
                         Toast.makeText(getActivity(), "Use mm/dd/yyyy format", Toast.LENGTH_SHORT).show();
                     } else {
-                        m_dataListener.onDataPass(m_userProfileBundle);
+                        m_dataListener.onProfileEntryDataPass(m_userProfileBundle);
                     }
 
                     ArrayList<UserProfile> userProfiles = new ArrayList<UserProfile>();

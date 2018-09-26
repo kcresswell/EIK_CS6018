@@ -1,14 +1,21 @@
 package com.example.mcresswell.project01;
 
-import android.graphics.Bitmap;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.Toast;
 
-public class DashboardActivity extends AppCompatActivity implements ProfileEntryFragment.OnDataChannel, RV_Adapter.OnDataChannel {
+import com.example.mcresswell.project01.util.ValidationUtils;
 
-    //memeber variables
+public class DashboardActivity extends AppCompatActivity implements
+        ProfileEntryFragment.OnProfileEntryDataChannel, RV_Adapter.OnAdapterDataChannel {
+
+    //member variables
+    private final String DEFAULT_COORDINATES = "40.7608,-111.8910";
+    private final String DEFAULT_CITY = "PROVO";
+    private final String DEFAULT_COUNTRY_CODE = "US";
     private FragmentTransaction m_fTrans;
 
     @Override
@@ -23,10 +30,10 @@ public class DashboardActivity extends AppCompatActivity implements ProfileEntry
             DashboardFragment frag_dashboard = new DashboardFragment();
             FitnessDetailsFragment frag_fitness = new FitnessDetailsFragment();
 
+            m_fTrans = getSupportFragmentManager().beginTransaction();
 
             if(isWideDisplay()){
                 //present fragment to display
-                m_fTrans = getSupportFragmentManager().beginTransaction();
                 m_fTrans.replace(R.id.fl_master_wd, frag_dashboard, "v_frag_dashboard"); //master fragment left
                 m_fTrans.replace(R.id.fl_detail_wd, frag_fitness, "v_frag_fitness"); //detail fragment right default is fitness
                 m_fTrans.addToBackStack(null);
@@ -38,73 +45,92 @@ public class DashboardActivity extends AppCompatActivity implements ProfileEntry
                 m_fTrans.addToBackStack(null);
                 m_fTrans.commit();
             }
+
         }
     }
 
     @Override
-    public void onDataPass(Bundle userDataBundle) {
+    public void onProfileEntryDataPass(Bundle userDataBundle) {
 
     }
 
+    @Override
+    public void onAdapterDataPass(int position) {
+        if (isWideDisplay()) {
+            executeTabletDashboardButtonHandler(position);
+            return;
+        }
+        executeMobileDashboardButtonHandler(position);
+    }
 
-    boolean isWideDisplay(){
+    private void executeTabletDashboardButtonHandler(int buttonPosition) {
+        m_fTrans = getSupportFragmentManager().beginTransaction();
+        switch (buttonPosition) {
+            case 0: //FitnessDetails
+                m_fTrans.replace(R.id.fl_detail_wd, new FitnessDetailsFragment());
+                m_fTrans.addToBackStack(null);
+                m_fTrans.commit();
+                break;
+            case 1: //Hiking
+                hikingButtonHandler(DEFAULT_COORDINATES);
+                break;
+            case 2: //User Profile
+                m_fTrans.replace(R.id.fl_detail_wd, new ProfileSummaryFragment());
+                m_fTrans.addToBackStack(null);
+                m_fTrans.commit();
+                break;
+            case 3: //Weather
+                weatherButtonHandler(null, null);
+                break;
+            default:
+
+        }
+
+    }
+
+    private void executeMobileDashboardButtonHandler(int buttonPosition) {
+        Toast.makeText(this, "Position: " + buttonPosition, Toast.LENGTH_SHORT).show();
+        switch (buttonPosition) {
+            case 0: //FitnessDetails
+                break;
+            case 1: //Hiking
+                hikingButtonHandler(DEFAULT_COORDINATES);
+                break;
+            case 2: //User Profile
+                break;
+            case 3: //Weather
+                weatherButtonHandler(null, null);
+                break;
+        }
+
+    }
+
+    private void hikingButtonHandler(String coordinates) {
+        Uri searchUri = Uri.parse("geo:" + coordinates + "?q=hikes");
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, searchUri);
+        if (mapIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(mapIntent);
+        }
+    }
+
+    private void weatherButtonHandler(String city, String country) {
+        if (!isWideDisplay()) {
+            Intent intent = new Intent(this, WeatherActivity.class);
+            intent.putExtra("city",
+                    !ValidationUtils.isNotNullOrEmpty(city) ? DEFAULT_CITY : city);
+            intent.putExtra("country",
+                    !ValidationUtils.isNotNullOrEmpty(country) ? DEFAULT_COUNTRY_CODE : country);
+            startActivity(intent);
+        } else {
+            getIntent().putExtra("city", city);
+            getIntent().putExtra("country", country);
+            //TODO: Handle tablet logic
+//            WeatherFragment fragment = new WeatherFragment();
+        }
+    }
+
+    private boolean isWideDisplay(){
         return getResources().getBoolean(R.bool.isWideDisplay);
     }
-
-    @Override
-    public void onDataPass(int position) {
-        if(isWideDisplay()){
-            //begin fragment transaction
-            m_fTrans = getSupportFragmentManager().beginTransaction();
-
-            switch (position) {
-                case 0:
-                    FitnessDetailsFragment frag_fitness = new FitnessDetailsFragment();
-                    m_fTrans.replace(R.id.fl_detail_wd, frag_fitness, "v_frag_fitness");
-                    m_fTrans.addToBackStack(null);
-                    break;
-                case 1:
-                    HikingFragment frag_hike = new HikingFragment();
-                    m_fTrans.replace(R.id.fl_detail_wd, frag_hike, "v_frag_hike");
-                    m_fTrans.addToBackStack(null);
-                    break;
-                case 2:
-                    ProfileSummaryFragment frag_profileDetails = new ProfileSummaryFragment();
-                    m_fTrans.replace(R.id.fl_detail_wd, frag_profileDetails, "v_frag_profile_details");
-                    m_fTrans.addToBackStack(null);
-                    break;
-                case 3:
-                    WeatherFragment frag_weather = new WeatherFragment();
-                    m_fTrans.replace(R.id.fl_detail_wd, frag_weather, "v_frag_weather");
-                    m_fTrans.addToBackStack(null);
-                    break;
-                default:
-
-            }
-
-            //commit to fragment transaction
-            m_fTrans.commit();
-        } else {
-
-            switch (position) {
-                case 0:
-
-                    Toast.makeText(this, "Position: " + position, Toast.LENGTH_SHORT).show();
-                    break;
-                case 1:
-                    Toast.makeText(this, "Position: " + position, Toast.LENGTH_SHORT).show();
-                    break;
-                case 2:
-                    Toast.makeText(this, "Position: " + position, Toast.LENGTH_SHORT).show();
-                    break;
-                case 3:
-                    Toast.makeText(this, "Position: " + position, Toast.LENGTH_SHORT).show();
-                    break;
-                default:
-                    Toast.makeText(this, "Unused Position: " + position, Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
 
 }

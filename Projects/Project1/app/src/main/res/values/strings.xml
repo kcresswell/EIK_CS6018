@@ -53,7 +53,17 @@
     <string name="hiking_current_location">Location</string>
 
     <!--Weather-->
-    <string name="title_activity_weather">Weather</string>
+    <string name="title_activity_weather">Local Weather</string>
+    <string name="title_weather_widget">Current Forecast</string>
+    <string name="current_conditions_weather_widget">Current Conditions:</string>
+    <string name="forecast_detail_weather_widget">Forecast: </string>
+
+    <string name="temp_weather_widget">Temperature: </string>
+    <string name="temp_min_weather_widget">Min Temp: </string>
+    <string name="temp_max_weather_widget">Max Temp: </string>
+    <string name="humidity_weather_widget">Humidity: </string>
+    <string name="pressure_weather_widget">Pressure: </string>
+    <string name="wind_weather_widget">Wind Speed: </string>
 
 
     <!-- TODO: Clean these up -->
