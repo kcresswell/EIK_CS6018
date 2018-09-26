@@ -92,12 +92,12 @@ public class DashboardActivity extends AppCompatActivity implements
         if (userProfileViewModel == null) {
             coords = DEFAULT_COORDINATES;
         } else {
-            UserProfile user = userProfileViewModel.getUserProfile().getValue();
-            try {
-                coords = GeocoderLocationUtils.getCoordinatesFromCityCountry(user.getM_city(), user.getM_country());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            UserProfile user = userProfileViewModel.getUserProfile().getValue();
+//            try {
+//                coords = GeocoderLocationUtils.getCoordinatesFromCityCountry(user.getM_city(), user.getM_country());
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
         }
 
         Uri searchUri = Uri.parse("geo:" + coords + "?q=hikes");

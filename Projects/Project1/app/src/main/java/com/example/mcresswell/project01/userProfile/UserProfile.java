@@ -1,16 +1,14 @@
 package com.example.mcresswell.project01.userProfile;
 
+import android.arch.persistence.room.Entity;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
 import com.example.mcresswell.project01.util.UserProfileUtils;
 
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-
+@Entity()
 public class UserProfile {
+    private int userID;
     private String m_fName;
     private String m_lName;
     private String m_dob;
@@ -22,7 +20,7 @@ public class UserProfile {
     private int m_lbsPerWeek;
     private PhysicalStats bodyData;
 
-    UserProfile() {
+    public UserProfile() {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
