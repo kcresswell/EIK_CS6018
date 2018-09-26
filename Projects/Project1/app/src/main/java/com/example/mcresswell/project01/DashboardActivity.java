@@ -142,7 +142,7 @@ public class DashboardActivity extends AppCompatActivity implements
         if (userProfileViewModel == null) {
             coords = DEFAULT_COORDINATES;
         } else {
-            UserProfile user = userProfileViewModel.getUserProfile();
+            UserProfile user = userProfileViewModel.getUserProfile().getValue();
             try {
                 coords = GeocoderLocationUtils.getCoordinatesFromCityCountry(user.getM_city(), user.getM_country());
             } catch (IOException e) {
