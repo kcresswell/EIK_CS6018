@@ -8,13 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.mcresswell.project01.util.BmiUtils;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class FitnessDetailsFragment extends Fragment {
 
+    private static final String LOG = FitnessDetailsFragment.class.getSimpleName();
+
+    private static final String DEFAULT_CALORIES = "2000 calories";
+    private static final String DEFAULT_BMR = "1500 calories";
     private TextView m_tvcalsToEat, m_tvBMR;
 
     public FitnessDetailsFragment() {
@@ -26,9 +29,16 @@ public class FitnessDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        m_tvcalsToEat = (TextView) container.findViewById(R.id.tv_calPerDay);
-        m_tvBMR = (TextView) container.findViewById(R.id.tv_BMR);
+        View view = inflater.inflate(R.layout.fragment_fitness_details, container, false);
+        m_tvcalsToEat =  view.findViewById(R.id.tv_calPerDay);
+        m_tvBMR = view.findViewById(R.id.tv_BMR);
 
-        return inflater.inflate(R.layout.fragment_fitness_details, container, false);
+        String calories = String.valueOf(getArguments() == null ? DEFAULT_CALORIES :
+                getArguments().getDouble("calories"));
+        String bmr = String.valueOf(getArguments() == null ? DEFAULT_BMR : getArguments().getDouble("bmr"));
+        m_tvcalsToEat.setText(calories);
+        m_tvBMR.setText(bmr);
+        return view;
     }
+
 }

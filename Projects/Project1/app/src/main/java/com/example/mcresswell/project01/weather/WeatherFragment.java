@@ -1,17 +1,10 @@
-package com.example.mcresswell.project01;
+package com.example.mcresswell.project01.weather;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,9 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.util.Constants;
-import com.example.mcresswell.project01.weather.WeatherForecast;
-import com.example.mcresswell.project01.weather.WeatherViewModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -223,7 +215,7 @@ public class WeatherFragment extends ListFragment {
 
     public Map<String, String> createObjectMapper(WeatherForecast data) {
         Map<String, String> mapper = new HashMap<String, String>();
-        mapper.put("", data.getCity() + "," + data.getCountryCode());
+        mapper.put("", data.getCity() + ", " + data.getCountryCode());
         mapper.put(getResources().getString(R.string.current_conditions_weather_widget), data.getForecastMain());
         mapper.put(getResources().getString(R.string.forecast_detail_weather_widget), data.getForecastDescription());
         mapper.put(getResources().getString(R.string.temp_weather_widget), data.getTemp());

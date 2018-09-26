@@ -5,12 +5,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.mcresswell.project01.util.ValidationUtils;
 
 public class DashboardActivity extends AppCompatActivity implements
         ProfileEntryFragment.OnProfileEntryDataChannel, RV_Adapter.OnAdapterDataChannel {
+
+        private final String LOG = getClass().getSimpleName();
+
 
     //member variables
     private final String DEFAULT_COORDINATES = "40.7608,-111.8910";
@@ -104,7 +108,7 @@ public class DashboardActivity extends AppCompatActivity implements
     }
 
     private void fitnesButtonHandler() {
-        Intent intent = new Intent(this, FitnessActivity.class);
+        Intent intent = new Intent(this, FitnessDetailsActivity.class);
         startActivity(intent);
     }
 
@@ -122,21 +126,24 @@ public class DashboardActivity extends AppCompatActivity implements
     }
 
     private void weatherButtonHandler(String city, String country) {
-        if (!isWideDisplay()) {
+//        if (!isWideDisplay()) {
+            Log.d(LOG, "weatherButtonHanlder mobileView");
+
             Intent intent = new Intent(this, WeatherActivity.class);
             intent.putExtra("city",
                     !ValidationUtils.isNotNullOrEmpty(city) ? DEFAULT_CITY : city);
             intent.putExtra("country",
                     !ValidationUtils.isNotNullOrEmpty(country) ? DEFAULT_COUNTRY_CODE : country);
             startActivity(intent);
-        } else {
-            getIntent().putExtra("city", city);
-            getIntent().putExtra("country", country);
-            //TODO: Handle tablet logic
+      
+//         } else {
+//             getIntent().putExtra("city", city);
+//             getIntent().putExtra("country", country);
+//             //TODO: Handle tablet logic
 
-            m_fTrans.replace(R.id.fl_detail_wd, new WeatherFragment());
-            m_fTrans.addToBackStack(null);
-            m_fTrans.commit();
+//             m_fTrans.replace(R.id.fl_detail_wd, new WeatherFragment());
+//             m_fTrans.addToBackStack(null);
+//             m_fTrans.commit();
         }
     }
 

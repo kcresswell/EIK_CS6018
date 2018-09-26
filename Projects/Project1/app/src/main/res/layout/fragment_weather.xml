@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/fragment_weather"
-    tools:context=".WeatherFragment">
+    tools:context=".weather.WeatherFragment">
 
     <TextView
         android:id="@+id/weatherTitle"
@@ -46,8 +46,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/widget_text_margin"
-        android:layout_marginEnd="44dp"
-        android:text="YOUR CITY, YOUR COUNTRY"
+        android:layout_marginEnd="@dimen/widget_text_margin"
+        android:text="CITY NAME, COUNTRY CODE"
         android:textAlignment="center"
         android:textColor="@color/widget_text_color"
         android:textIsSelectable="false"

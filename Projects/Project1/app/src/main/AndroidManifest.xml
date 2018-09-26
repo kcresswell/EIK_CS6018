@@ -32,6 +32,7 @@
             android:label="Fitness"
             android:parentActivityName=".DashboardActivity"/>
 
+
     </application>
 
 </manifest>
