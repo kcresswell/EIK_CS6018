@@ -1,6 +1,5 @@
 package com.example.mcresswell.project01;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.widget.Toast;
 
 import com.example.mcresswell.project01.userProfile.UserProfileViewModel;
 import com.example.mcresswell.project01.util.ValidationUtils;
-import com.example.mcresswell.project01.weather.WeatherActivity;
 
 public class DashboardActivity extends AppCompatActivity implements
         ProfileEntryFragment.OnProfileEntryDataChannel, RV_Adapter.OnAdapterDataChannel {
@@ -27,15 +25,10 @@ public class DashboardActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        userProfileViewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
-
         //If not saved instance state, build initial fragment
         if(savedInstanceState == null){
             //create fragment
 //            ProfileEntryFragment frag_profileEntry = new ProfileEntryFragment();
-
-//            userProfileViewModel.
-
             DashboardFragment frag_dashboard = new DashboardFragment();
             FitnessDetailsFragment frag_fitness = new FitnessDetailsFragment();
 
@@ -56,7 +49,6 @@ public class DashboardActivity extends AppCompatActivity implements
             }
 
         }
-
     }
 
     @Override
@@ -84,7 +76,7 @@ public class DashboardActivity extends AppCompatActivity implements
             case 1: //Hiking
                 hikingButtonHandler(DEFAULT_COORDINATES);
                 break;
-            case 2: //FitnessProfile Profile
+            case 2: //User Profile
                 m_fTrans.replace(R.id.fl_detail_wd, new ProfileSummaryFragment());
                 m_fTrans.addToBackStack(null);
                 m_fTrans.commit();
@@ -102,29 +94,28 @@ public class DashboardActivity extends AppCompatActivity implements
         Toast.makeText(this, "Position: " + buttonPosition, Toast.LENGTH_SHORT).show();
         switch (buttonPosition) {
             case 0: //FitnessDetails
-                fitnessDetailsButtonHandler(
-                        FitnessDetailsActivity.DEFAULT_CALORIES,
-                        FitnessDetailsActivity.DEFAULT_BASAL_METABOLIC_RATE);
+                fitnesButtonHandler();
                 break;
             case 1: //Hiking
                 hikingButtonHandler(DEFAULT_COORDINATES);
                 break;
-            case 2: //FitnessProfile Profile
+            case 2: //User Profile
+                profileButtonHandler();
                 break;
             case 3: //Weather
                 weatherButtonHandler(null, null);
                 break;
         }
-
     }
 
-    private void fitnessDetailsButtonHandler(double calories, double bmr) {
-        if (!isWideDisplay()) {
-            Intent intent = new Intent(this, FitnessDetailsActivity.class);
-            intent.putExtra("calories", calories);
-            intent.putExtra("bmr", bmr);
-            startActivity(intent);
-        }
+    private void fitnesButtonHandler() {
+        Intent intent = new Intent(this, FitnessDetailsActivity.class);
+        startActivity(intent);
+    }
+
+    private void profileButtonHandler() {
+        Intent intent = new Intent(this, ProfileDetailsActivity.class);
+        startActivity(intent);
     }
 
     private void hikingButtonHandler(String coordinates) {
@@ -136,19 +127,19 @@ public class DashboardActivity extends AppCompatActivity implements
     }
 
     private void weatherButtonHandler(String city, String country) {
-        if (!isWideDisplay()) {
+//        if (!isWideDisplay()) {
             Intent intent = new Intent(this, WeatherActivity.class);
             intent.putExtra("city",
                     !ValidationUtils.isNotNullOrEmpty(city) ? DEFAULT_CITY : city);
             intent.putExtra("country",
                     !ValidationUtils.isNotNullOrEmpty(country) ? DEFAULT_COUNTRY_CODE : country);
             startActivity(intent);
-        } else {
-            getIntent().putExtra("city", city);
-            getIntent().putExtra("country", country);
-            //TODO: Handle tablet logic
-//            WeatherFragment fragment = new WeatherFragment();
-        }
+//        } else {
+//            getIntent().putExtra("city", city);
+//            getIntent().putExtra("country", country);
+//            //TODO: Handle tablet logic
+////            WeatherFragment fragment = new WeatherFragment();
+//        }
     }
 
     private boolean isWideDisplay(){

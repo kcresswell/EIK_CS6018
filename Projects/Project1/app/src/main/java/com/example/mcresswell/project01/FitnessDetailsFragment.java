@@ -18,7 +18,9 @@ public class FitnessDetailsFragment extends Fragment {
 
     private static final String LOG = FitnessDetailsFragment.class.getSimpleName();
 
-    private TextView m_tvcalsToEat, m_tvBMR; //Calculated calorie and bmr data
+    private static final String DEFAULT_CALORIES = "2000 calories";
+    private static final String DEFAULT_BMR = "1500 calories";
+    private TextView m_tvcalsToEat, m_tvBMR;
     private onFitnessDetailsInteractionListener listener;
 
     public FitnessDetailsFragment() {
@@ -44,8 +46,9 @@ public class FitnessDetailsFragment extends Fragment {
         m_tvcalsToEat =  view.findViewById(R.id.tv_calPerDay);
         m_tvBMR = view.findViewById(R.id.tv_BMR);
 
-        String calories = String.valueOf(getArguments().getDouble("calories"));
-        String bmr = String.valueOf(getArguments().getDouble("bmr"));
+        String calories = String.valueOf(getArguments() == null ? DEFAULT_CALORIES :
+                getArguments().getDouble("calories"));
+        String bmr = String.valueOf(getArguments() == null ? DEFAULT_BMR : getArguments().getDouble("bmr"));
         m_tvcalsToEat.setText(calories);
         m_tvBMR.setText(bmr);
         return view;

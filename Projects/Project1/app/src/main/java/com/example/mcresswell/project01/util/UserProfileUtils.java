@@ -75,7 +75,8 @@ public class UserProfileUtils {
     public static double calculateCalories(UserProfile profile) {
         double numOfCalories;
 
-        double BMR = calculateBMR(profile.getBodyData());
+//        double BMR = calculateBMR(profile.getBodyData());
+        double BMR = 1500;
 
         if (profile.getM_lifestyleSelection().equalsIgnoreCase("Sedentary")) {
             numOfCalories = BMR * 1.2;
