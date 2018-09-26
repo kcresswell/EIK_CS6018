@@ -28,10 +28,9 @@
         <activity android:name=".ProfileDetailsActivity"
             android:label="Profile"
             android:parentActivityName=".DashboardActivity"/>
-        <activity android:name=".FitnessActivity"
+        <activity android:name=".FitnessDetailsActivity"
             android:label="Fitness"
             android:parentActivityName=".DashboardActivity"/>
-
 
     </application>
 
