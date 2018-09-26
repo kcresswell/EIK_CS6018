@@ -1,6 +1,9 @@
 package com.example.mcresswell.project01.userProfile;
 
-import com.example.mcresswell.project01.util.BmiUtils;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+
+import com.example.mcresswell.project01.util.UserProfileUtils;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -13,6 +16,7 @@ public class UserProfile {
     private double m_BMR, m_BMI;
     private int m_calsPerDay;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public UserProfile(String fName, String lName, String dob, String sex, String city, String country, String lifestyleSelection, String weightGoal,
                        int weight, int feet, int inches, int lbsPerWeek, double bmr, double bmi, int calsPerDay, int age){
         m_fName = fName;
@@ -54,27 +58,12 @@ public class UserProfile {
     public double getM_BMR() {return m_BMR;}
     public double getM_BMI() { return m_BMI;}
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public UserProfile getUserProfile() {
         return new UserProfile(m_fName, m_lName, m_dob, m_sex, m_city, m_country,
                                m_lifestyleSelection, m_weightGoal, m_weight, m_feet,
                                m_inches, m_lbsPerWeek, m_BMR, m_BMI, m_calsPerDay, m_Age);
     }
-
-    //    public void getDataFromBundle(Bundle userDataBundle) {
-//        m_fName = userDataBundle.getString("fname");
-//        m_lName = userDataBundle.getString("lname");
-//        m_dob = userDataBundle.getString("dob");
-//        m_sex = userDataBundle.getString("sex");
-//        m_city = userDataBundle.getString("city");
-//        m_country = userDataBundle.getString("country");
-//        m_weight = userDataBundle.getString("weight");
-//        m_feet = userDataBundle.getString("feet");
-//        m_inches = userDataBundle.getString("inches");
-//        m_Age = userDataBundle.getInt("age");
-//        m_lbsPerWeek = userDataBundle.getString("lbsPerWeek");
-//        m_lifestyleSelection = userDataBundle.getString("lifestyle");
-//        m_weightGoal = userDataBundle.getString("weightGoal");
-//    }
 
 
 ////    http://www.bmrcalculator.org
@@ -141,10 +130,11 @@ public class UserProfile {
         double heightInInches = (m_feet * INCHES_TO_FT) + m_inches;
         double weightInLbs = m_weight;
 
-        return BmiUtils.calculateBmi(heightInInches, weightInLbs);
+        return UserProfileUtils.calculateBmi(heightInInches, weightInLbs);
     }
 
     //helper functions
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private int calculateAge() {
         DateTimeFormatter dob_format = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         dob_format = dob_format.withLocale(Locale.US);

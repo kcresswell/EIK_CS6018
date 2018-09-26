@@ -12,6 +12,8 @@ import java.net.URI;
 import java.net.URL;
 import java.util.Scanner;
 
+import static com.example.mcresswell.project01.util.ValidationUtils.*;
+
 public class WeatherUtils {
 
     private static final String LOG = WeatherUtils.class.getSimpleName();
@@ -86,15 +88,6 @@ public class WeatherUtils {
             }
 
             return null;
-        }
-
-        private static boolean isValidCity(String city, String countryCode) {
-            return ValidationUtils.isNotNullOrEmpty(city);
-        }
-
-        private static boolean isValidCountryCode(String countryCode) {
-            return ValidationUtils.isNotNullOrEmpty(countryCode) &&
-                    countryCode.trim().length() == 2;
         }
 
         public static URL buildDefaultWeatherApiUrl() {

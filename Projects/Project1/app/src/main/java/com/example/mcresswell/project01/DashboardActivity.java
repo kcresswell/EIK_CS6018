@@ -108,7 +108,7 @@ public class DashboardActivity extends AppCompatActivity implements
     }
 
     private void fitnesButtonHandler() {
-        Intent intent = new Intent(this, FitnessActivity.class);
+        Intent intent = new Intent(this, FitnessDetailsActivity.class);
         startActivity(intent);
     }
 

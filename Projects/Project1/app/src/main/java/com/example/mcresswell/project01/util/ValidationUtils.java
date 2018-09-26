@@ -3,6 +3,15 @@ package com.example.mcresswell.project01.util;
 //TODO: needs tests
 public class ValidationUtils {
 
+    public static boolean isValidCity(String city, String countryCode) {
+        return ValidationUtils.isNotNullOrEmpty(city);
+    }
+
+    public static boolean isValidCountryCode(String countryCode) {
+        return ValidationUtils.isNotNullOrEmpty(countryCode) &&
+                countryCode.trim().length() == 2;
+    }
+
     public static boolean isValidEmail(String input) {
         return isNotNullOrEmpty(input) &&
                 input.trim().matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");

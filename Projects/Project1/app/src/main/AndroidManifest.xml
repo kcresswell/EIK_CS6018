@@ -23,7 +23,7 @@
         </activity>
         <activity android:name=".WeatherActivity" />
         <activity android:name=".ProfileDetailsActivity" />
-        <activity android:name=".FitnessActivity"/>
+        <activity android:name=".FitnessDetailsActivity"/>
 
     </application>
 
