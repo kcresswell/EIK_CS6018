@@ -30,7 +30,6 @@ public class UserProfileViewModel extends AndroidViewModel {
         return userProfiles;
     }
 
-
     public UserProfileViewModel(@NonNull Application application) {
         super(application);
     }
