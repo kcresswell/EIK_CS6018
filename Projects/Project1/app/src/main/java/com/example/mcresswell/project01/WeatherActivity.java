@@ -13,8 +13,6 @@ import com.example.mcresswell.project01.weather.WeatherForecast;
 import com.example.mcresswell.project01.weather.WeatherFragment;
 import com.example.mcresswell.project01.weather.WeatherViewModel;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class WeatherActivity extends AppCompatActivity
@@ -31,18 +29,6 @@ public class WeatherActivity extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
-
-//        FragmentManager manager = getSupportFragmentManager();
-//
-//        WeatherFragment fragment = savedInstanceState == null ?
-//                WeatherFragment.newInstance(null) :
-//                (WeatherFragment) manager.findFragmentById(R.id.fl_activity_weather);
-//        FragmentTransaction fragmentTransaction = manager.beginTransaction();
-////
-//        fragmentTransaction.add(R.id.fl_activity_weather, fragment);
-//        fragmentTransaction.hide(fragment);
-//        fragmentTransaction.addToBackStack(null);
-//        fragmentTransaction.commit();
 
         weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
         weatherViewModel.getForecastData().observe(this, nameObserver);
@@ -83,23 +69,10 @@ public class WeatherActivity extends AppCompatActivity
                 (WeatherFragment) fragmentManager.findFragmentById(R.id.fl_activity_weather);
         fragmentTransaction.replace(R.id.fl_activity_weather, fragment);
         fragmentTransaction.commit();
-
-//        WeatherFragment fragment = null;
-//        if (!fragmentExists.get()){
-//            fragment = WeatherFragment.newInstance(weatherForecast);
-//        } else {
-//            if (getResources().getBoolean(R.bool.isWideDisplay)) {
-//                fragment = (WeatherFragment) fragmentManager.findFragmentById(R.id.fl_detail_wd);
-//            } else {
-//                fragment = (WeatherFragment) fragmentManager.findFragmentById(R.id.fl_master_nd);
-//            }
-//        }
-
     }
 
     @Override
     public void onWeatherFragmentInteraction(WeatherForecast forecast) {
-
 
     }
 }

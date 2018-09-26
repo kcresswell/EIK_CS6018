@@ -215,7 +215,7 @@ public class WeatherFragment extends ListFragment {
 
     public Map<String, String> createObjectMapper(WeatherForecast data) {
         Map<String, String> mapper = new HashMap<String, String>();
-        mapper.put("", data.getCity() + "," + data.getCountryCode());
+        mapper.put("", data.getCity() + ", " + data.getCountryCode());
         mapper.put(getResources().getString(R.string.current_conditions_weather_widget), data.getForecastMain());
         mapper.put(getResources().getString(R.string.forecast_detail_weather_widget), data.getForecastDescription());
         mapper.put(getResources().getString(R.string.temp_weather_widget), data.getTemp());

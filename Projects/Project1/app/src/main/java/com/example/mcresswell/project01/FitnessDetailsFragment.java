@@ -3,13 +3,11 @@ package com.example.mcresswell.project01;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.mcresswell.project01.util.Constants;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,20 +19,9 @@ public class FitnessDetailsFragment extends Fragment {
     private static final String DEFAULT_CALORIES = "2000 calories";
     private static final String DEFAULT_BMR = "1500 calories";
     private TextView m_tvcalsToEat, m_tvBMR;
-    private onFitnessDetailsInteractionListener listener;
 
     public FitnessDetailsFragment() {
         // Required empty public constructor
-    }
-
-    public static FitnessDetailsFragment newInstance(double numCalories, double bmr) {
-        Log.d(LOG, Constants.NEW);
-        FitnessDetailsFragment fragment = new FitnessDetailsFragment();
-        Bundle args = new Bundle();
-        args.putDouble("calories", numCalories);
-        args.putDouble("bmr", bmr);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -54,7 +41,4 @@ public class FitnessDetailsFragment extends Fragment {
         return view;
     }
 
-    public interface onFitnessDetailsInteractionListener {
-        void onFitnessDetailsFragmentInteraction();
-    }
 }

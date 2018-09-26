@@ -5,20 +5,22 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
-import com.example.mcresswell.project01.userProfile.UserProfileViewModel;
 import com.example.mcresswell.project01.util.ValidationUtils;
 
 public class DashboardActivity extends AppCompatActivity implements
         ProfileEntryFragment.OnProfileEntryDataChannel, RV_Adapter.OnAdapterDataChannel {
+
+        private final String LOG = getClass().getSimpleName();
+
 
     //member variables
     private final String DEFAULT_COORDINATES = "40.7608,-111.8910";
     private final String DEFAULT_CITY = "PROVO";
     private final String DEFAULT_COUNTRY_CODE = "US";
     private FragmentTransaction m_fTrans;
-    private UserProfileViewModel userProfileViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,6 @@ public class DashboardActivity extends AppCompatActivity implements
                 m_fTrans.addToBackStack(null);
                 m_fTrans.commit();
             }
-
         }
     }
 
@@ -85,9 +86,7 @@ public class DashboardActivity extends AppCompatActivity implements
                 weatherButtonHandler(null, null);
                 break;
             default:
-
         }
-
     }
 
     private void executeMobileDashboardButtonHandler(int buttonPosition) {
@@ -128,6 +127,8 @@ public class DashboardActivity extends AppCompatActivity implements
 
     private void weatherButtonHandler(String city, String country) {
 //        if (!isWideDisplay()) {
+            Log.d(LOG, "weatherButtonHanlder mobileView");
+
             Intent intent = new Intent(this, WeatherActivity.class);
             intent.putExtra("city",
                     !ValidationUtils.isNotNullOrEmpty(city) ? DEFAULT_CITY : city);
@@ -135,9 +136,11 @@ public class DashboardActivity extends AppCompatActivity implements
                     !ValidationUtils.isNotNullOrEmpty(country) ? DEFAULT_COUNTRY_CODE : country);
             startActivity(intent);
 //        } else {
+//            Log.d(LOG, "weatherButtonHanlder tabletView");
 //            getIntent().putExtra("city", city);
 //            getIntent().putExtra("country", country);
 //            //TODO: Handle tablet logic
+//
 ////            WeatherFragment fragment = new WeatherFragment();
 //        }
     }

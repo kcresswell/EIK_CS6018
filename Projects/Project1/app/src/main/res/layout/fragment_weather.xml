@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/widget_text_margin"
         android:layout_marginEnd="@dimen/widget_text_margin"
-        android:text="YOUR CITY, YOUR COUNTRY"
+        android:text="CITY NAME, COUNTRY CODE"
         android:textAlignment="center"
         android:textColor="@color/widget_text_color"
         android:textIsSelectable="false"
