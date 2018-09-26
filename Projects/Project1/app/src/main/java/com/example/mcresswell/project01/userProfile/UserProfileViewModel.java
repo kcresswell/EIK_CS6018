@@ -11,19 +11,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
-import java.util.List;
-
 public class UserProfileViewModel extends AndroidViewModel {
 
     private static final String LOG = UserProfileViewModel.class.getSimpleName();
 
-    private MutableLiveData<List<UserProfile>> userProfiles = new MutableLiveData<>();
+    private MutableLiveData<UserProfile> userProfile = new MutableLiveData<>();
 
     private String m_fName, m_lName, m_dob, m_sex, m_city, m_country, m_lifestyleSelection, m_weightGoal;
     private int m_Age, m_weight, m_feet, m_inches, m_lbsPerWeek;
     private double m_BMR, m_BMI;
     private int m_calsPerDay;
-    private UserProfile userProfile;
+    private String userProfileString;
 
 
     public UserProfileViewModel(@NonNull Application application) {
@@ -31,8 +29,8 @@ public class UserProfileViewModel extends AndroidViewModel {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private void loadData(){
-        new AsyncTask<String,Void,String>() {
+    private void loadData() {
+        new AsyncTask<String, Void, String>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             protected String doInBackground(String... strings) {
@@ -56,7 +54,7 @@ public class UserProfileViewModel extends AndroidViewModel {
                     Log.d(LOG, fName + ", " + lName + ", " + dob + ", " + sex + ", " + city + ", " + country
                             + ", " + lifestyleSel + ", " + weightGoal + ", " + age + ", " + weight + ", " + feet
                             + ", " + inches + ", " + lbsPerWeek + ", " + bmr + ", " + bmi + ", " + calsPerDay);
-                    userProfile = new UserProfile();
+//                    userProfile = new UserProfile();
                 }
                 return null;
 
@@ -64,43 +62,42 @@ public class UserProfileViewModel extends AndroidViewModel {
 
             @Override
             protected void onPostExecute(String s) {
-//                    userProfiles.setValue(UserProfile.class.getUserData(s));
+//                userProfile.setValue(UserProfileUtils.generateUserProfile(s));
 //
             }
-        };
+        }.execute(userProfileString);
 //        }.execute(m_fName, m_lName, m_dob, m_sex, m_city, m_country, m_lifestyleSelection, m_weightGoal,
 //                m_Age, m_weight, m_feet, m_inches, m_lbsPerWeek, m_BMR, m_BMI, m_calsPerDay);
     }
 
-    public LiveData<List<UserProfile>> getUserProfiles() {
+    public void setUserProfile(String userString) {
+        userProfileString = userString;
         loadData();
-        return userProfiles;
     }
 
-    public UserProfile getUserProfile() {
-        loadData();
+    public LiveData<UserProfile> getUserProfile() {
         return userProfile;
     }
 
-    public void setUserProfiles(String fName, String lName, String dob, String sex, String city, String country, String lifestyleSelection,
-                                String weightGoal, int weight, int feet, int inches, int lbsPerWeek, double bmr, double bmi, int calsPerDay, int age){
-        m_fName = fName;
-        m_lName = lName;
-        m_dob = dob;
-        m_sex = sex;
-        m_city = city;
-        m_country = country;
-        m_lifestyleSelection = lifestyleSelection;
-        m_weightGoal = weightGoal;
-        m_weight = weight;
-        m_feet = feet;
-        m_inches = inches;
-        m_lbsPerWeek = lbsPerWeek;
-        m_BMR = bmr;
-        m_BMI = bmi;
-        m_calsPerDay = calsPerDay;
-        m_Age = age;
-
-        loadData();
-    }
+//    public void setUserProfiles(String fName, String lName, String dob, String sex, String city, String country, String lifestyleSelection,
+//                                String weightGoal, int weight, int feet, int inches, int lbsPerWeek, double bmr, double bmi, int calsPerDay, int age){
+//        m_fName = fName;
+//        m_lName = lName;
+//        m_dob = dob;
+//        m_sex = sex;
+//        m_city = city;
+//        m_country = country;
+//        m_lifestyleSelection = lifestyleSelection;
+//        m_weightGoal = weightGoal;
+//        m_weight = weight;
+//        m_feet = feet;
+//        m_inches = inches;
+//        m_lbsPerWeek = lbsPerWeek;
+//        m_BMR = bmr;
+//        m_BMI = bmi;
+//        m_calsPerDay = calsPerDay;
+//        m_Age = age;
+//
+//        loadData();
+//    }
 }

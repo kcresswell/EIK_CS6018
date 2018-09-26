@@ -47,7 +47,4 @@ public class ValidationUtilsTest {
         assertFalse(ValidationUtils.isValidEmail("hello#email@test.com"));
 
     }
-
-    //TODO: finish ValidatonUtils tests
-
 }
