@@ -11,6 +11,7 @@
         android:id="@+id/btn_img_dashboard_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="@dimen/dashboard_button_padding"
         android:background="@android:color/transparent"
         android:contentDescription="@string/btn_generic"
         android:src="@drawable/ic_img_profile"

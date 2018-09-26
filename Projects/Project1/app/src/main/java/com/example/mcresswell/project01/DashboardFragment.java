@@ -74,14 +74,6 @@ public class DashboardFragment extends Fragment {
 
         m_RecycleView.setAdapter(m_Adaptor);
 
-
-
-//        int position = m_RecycleView.getChildAdapterPosition(view);
-
-
-
-
-
         return view;
     }
 
@@ -89,10 +81,5 @@ public class DashboardFragment extends Fragment {
         notify();
         m_RecycleView.getChildAdapterPosition(this.m_RecycleView);
     }
-
-//    public interface onDashboardFragmentInteractionListener {
-//        void onDashboardFragmentInteraction(int buttonPos);
-//
-//    }
 
 }

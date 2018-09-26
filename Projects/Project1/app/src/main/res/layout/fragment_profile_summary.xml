@@ -5,6 +5,7 @@
     android:id="@+id/cl_profile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_centerInParent="true"
     tools:context=".ProfileSummaryFragment">
 
     <ScrollView
@@ -91,6 +92,7 @@
                 android:id="@+id/btn_img_takeImage"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
+                android:padding="@dimen/dashboard_button_padding"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/btn_img_description_profile_image"
                 android:src="@drawable/ic_profile_img_placeholder"
