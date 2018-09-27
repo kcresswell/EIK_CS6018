@@ -8,6 +8,12 @@ import android.util.Log;
 
 import com.example.mcresswell.project01.util.UserProfileUtils;
 
+/**
+ *  A POJO class representing all of the data associated with a given user.
+ *  This is NOT the entity/DAO class, the corresponding entity class for UserProfile
+ *  is the FitnessProfile class.
+ *
+ */
 public class UserProfile implements Parcelable {
 
     private static final String LOG = UserProfile.class.getSimpleName();

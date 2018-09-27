@@ -1,6 +1,5 @@
 package com.example.mcresswell.project01;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,8 +8,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.example.mcresswell.project01.userProfile.UserProfile;
-import com.example.mcresswell.project01.userProfile.UserProfileViewModel;
 import com.example.mcresswell.project01.util.Constants;
 
 public class ProfileSummaryActivity extends AppCompatActivity
@@ -25,7 +22,7 @@ public class ProfileSummaryActivity extends AppCompatActivity
         Log.d(LOG, Constants.CREATE);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_details);
+        setContentView(R.layout.activity_profile_summary);
 
         m_fTrans = getSupportFragmentManager().beginTransaction();
         m_fTrans.replace(R.id.fl_activity_profile_details, new ProfileSummaryFragment(), "v_frag_profile");

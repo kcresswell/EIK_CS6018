@@ -11,8 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
-import com.example.mcresswell.project01.database.AppRepository;
-import com.example.mcresswell.project01.util.UserProfileUtils;
+import com.example.mcresswell.project01.dao.FitnessProfileRepository;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -28,7 +27,7 @@ public class UserProfileViewModel extends AndroidViewModel {
     private double m_BMR, m_BMI;
     private int m_calsPerDay;
 
-    private AppRepository userProfileRepository;
+    private FitnessProfileRepository userProfileRepository;
 
     public UserProfileViewModel(@NonNull Application application) {
         super(application);
@@ -46,7 +45,7 @@ public class UserProfileViewModel extends AndroidViewModel {
                     Log.d(TAG, String.format("Retrieving %d userProfiles from userProfile database", userProfiles.length));
                     for (UserProfile user: userProfiles){
                         //TODO:  KEEP THIS LINE OF CODE IN; WE'LL CALL THIS METHOD LATER TO LOOKUP A USER PROFILE IN DATABASE BY PROFILE ID
-//                       profile = userProfileRepository.getUserProfile(user.getId());
+//                       profile = userProfileRepository.userProfileFromFitnessProfile(user.getId());
                         user.printUserProfileData();
                     }
                 }

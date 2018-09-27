@@ -94,7 +94,7 @@ public class ProfileSummaryFragment extends Fragment
         if (v.getId() == R.id.btn_edit) {
             Log.d(LOG, "Edit button onClick");
             listener.onProfileSummaryEditButton();
-//            listener.onProfileSummaryEditButton(userProfileViewModel.getUserProfile().getValue());
+//            listener.onProfileSummaryEditButton(userProfileViewModel.userProfileFromFitnessProfile().getValue());
         }
     }
 
