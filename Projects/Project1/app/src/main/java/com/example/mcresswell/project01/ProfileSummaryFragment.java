@@ -33,7 +33,7 @@ public class ProfileSummaryFragment extends Fragment implements View.OnClickList
         m_btn_edit.setOnClickListener(this);
 
         //initialize the dataListener to context of activity as a concrete implementation of the interface
-        m_dataListener = (OnProfileSummaryDataChannel) view.getContext();
+        m_dataListener = (OnProfileSummaryDataChannel) getActivity();
         return view;
     }
 

@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.example.mcresswell.project01.userProfile.UserProfileViewModel;
 
-public class ProfileDetailsActivity extends AppCompatActivity implements ProfileSummaryFragment.OnProfileSummaryDataChannel {
+public class ProfileDetailsActivity extends AppCompatActivity implements ProfileSummaryFragment.OnProfileSummaryDataChannel, ProfileEntryFragment.OnProfileEntryDataChannel {
     private FragmentTransaction m_fTrans;
     private UserProfileViewModel m_userProfileViewModel;
 
@@ -34,9 +34,23 @@ public class ProfileDetailsActivity extends AppCompatActivity implements Profile
     @Override
     public void onProfileSummaryDataPass(boolean isClicked) {
         if(isClicked){
-            ProfileEntryFragment frag_profileEntry = new ProfileEntryFragment();
             m_fTrans = getSupportFragmentManager().beginTransaction();
-            m_fTrans.replace(R.id.fl_activity_profile_details, frag_profileEntry, "v_frag_profile_entry");
+            m_fTrans.replace(R.id.fl_activity_profile_details, new ProfileEntryFragment(), "v_frag_profile_entry");
+            m_fTrans.addToBackStack(null);
+            m_fTrans.commit();
+        }
+    }
+
+    @Override
+    public void onProfileEntryDataPass(Bundle userDataBundle) {
+
+    }
+
+    @Override
+    public void onProfileEntryDataPass_DoneButtonClicked(boolean isClicked) {
+        if(isClicked){
+            m_fTrans = getSupportFragmentManager().beginTransaction();
+            m_fTrans.replace(R.id.fl_activity_profile_details, new ProfileSummaryFragment(), "v_frag_profile_entry");
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
