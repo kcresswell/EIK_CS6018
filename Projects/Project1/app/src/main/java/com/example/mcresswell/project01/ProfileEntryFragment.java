@@ -74,28 +74,28 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         m_country = m_etxt_country.getText().toString();
 
         m_etxt_weight = (EditText) view.findViewById(R.id.txtv_weight);
-        m_weight = (int) Double.parseDouble(m_etxt_weight.getText().toString());
+//        m_weight = (int) Double.parseDouble(m_etxt_weight.getText().toString());
 
         m_etxt_feet = (EditText) view.findViewById(R.id.txtv_feet);
-        m_feet = (int) Double.parseDouble(m_etxt_feet.getText().toString());
+//        m_feet = (int) Double.parseDouble(m_etxt_feet.getText().toString());
 
         m_etxt_inches = (EditText) view.findViewById(R.id.txtv_inches);
-        m_inches = (int) Double.parseDouble(m_etxt_inches.getText().toString());
+//        m_inches = (int) Double.parseDouble(m_etxt_inches.getText().toString());
 
         m_etxt_lbPerWeek = (EditText) view.findViewById(R.id.txtv_weight2);
-        m_lbsPerWeek = (int) Double.parseDouble(m_etxt_lbPerWeek.getText().toString());
+//        m_lbsPerWeek = (int) Double.parseDouble(m_etxt_lbPerWeek.getText().toString());
 
         //--get Radio Button selection and assign it to a string value--//
         m_radiogp_lifestyleSelection = (RadioGroup) view.findViewById(R.id.radiogp_lifestyle);
         int btn_radio_lifestyle_id= m_radiogp_lifestyleSelection.getCheckedRadioButtonId();
         RadioButton btn_radio_lifestyle = (RadioButton) m_radiogp_lifestyleSelection.findViewById(btn_radio_lifestyle_id);
-        str_lifestyle_selection = (String) btn_radio_lifestyle.getText();
+//        str_lifestyle_selection = (String) btn_radio_lifestyle.getText().toString();
 
         //--get Radio Group Weight Goal--//
         m_radiogp_weightGoal = (RadioGroup) view.findViewById(R.id.radiogp_weightGoal);
         int btn_radio_weightGoal_id = m_radiogp_weightGoal.getCheckedRadioButtonId();
         RadioButton btn_radio_weight_goal = (RadioButton) m_radiogp_weightGoal.findViewById(btn_radio_weightGoal_id);
-        str_weight_goal_selection = (String) btn_radio_weight_goal.getText();
+//       str_weight_goal_selection = (String) btn_radio_weight_goal.getText().toString();
 
         //--get submit and image buttons--//
         m_btn_submit = (Button) view.findViewById(R.id.btn_submit);
@@ -105,27 +105,28 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         m_btn_submit.setOnClickListener(this);
         m_btn_img_image.setOnClickListener(this);
 
-        Intent i = new Intent(getContext(),FitnessDetailsFragment.class);
-        i.putExtras(m_userProfileBundle);
-        startActivity(i);
+//        Intent i = new Intent(getContext(),FitnessDetailsFragment.class);
+//        i.putExtras(m_userProfileBundle);
+//        startActivity(i);
 
         return view;
     }
 
     public interface OnProfileEntryDataChannel {
         void onProfileEntryDataPass (Bundle userDataBundle);
+        void onProfileEntryDataPass_DoneButtonClicked (boolean isClicked);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        try {
-            m_dataListener = (OnProfileEntryDataChannel) context;
-        } catch (ClassCastException cce) {
-            throw new ClassCastException(context.toString() + " must implement OnProfileEntryDataChannel");
-        }
-    }
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//
+//        try {
+//            m_dataListener = (OnProfileEntryDataChannel) context;
+//        } catch (ClassCastException cce) {
+//            throw new ClassCastException(context.toString() + " must implement OnProfileEntryDataChannel");
+//        }
+//    }
 
     @Override
     public void onClick(View view) {
@@ -162,7 +163,9 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
                         //inform user of expected dob input
                         Toast.makeText(getActivity(), "Use mm/dd/yyyy format", Toast.LENGTH_SHORT).show();
                     } else {
-                        m_dataListener.onProfileEntryDataPass(m_userProfileBundle);
+                        m_dataListener = (OnProfileEntryDataChannel) getActivity();
+                        m_dataListener.onProfileEntryDataPass_DoneButtonClicked(true);
+//                        m_dataListener.onProfileEntryDataPass(m_userProfileBundle);
                     }
 
 //                    ArrayList<UserProfile> userProfiles = new ArrayList<UserProfile>();
@@ -174,10 +177,10 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 //                    m_userProfileBundle.putParcelable("item_list", UserProfilesParcelable);
 
                     //Create the fragment
-                    FitnessDetailsFragment fitnessDetailsFragment = new FitnessDetailsFragment();
-
-                    //Pass data to the fragment
-                    fitnessDetailsFragment.setArguments(m_userProfileBundle);
+//                    FitnessDetailsFragment fitnessDetailsFragment = new FitnessDetailsFragment();
+//
+//                    //Pass data to the fragment
+//                    fitnessDetailsFragment.setArguments(m_userProfileBundle);
                 }
                 break;
             }

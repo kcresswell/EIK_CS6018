@@ -18,7 +18,6 @@ import com.example.mcresswell.project01.weather.WeatherFragment;
 import java.io.IOException;
 
 public class DashboardActivity extends AppCompatActivity implements
-        ProfileEntryFragment.OnProfileEntryDataChannel,
         RV_Adapter.OnAdapterDataChannel,
         WeatherFragment.OnWeatherDataLoadedListener {
 
@@ -39,11 +38,6 @@ public class DashboardActivity extends AppCompatActivity implements
         if(savedInstanceState == null){
             restoreDefaultDashboardView();
         }
-    }
-
-    @Override
-    public void onProfileEntryDataPass(Bundle userDataBundle) {
-
     }
 
     @Override
