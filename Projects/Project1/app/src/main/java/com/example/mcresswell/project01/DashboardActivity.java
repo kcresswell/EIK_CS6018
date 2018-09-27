@@ -18,7 +18,7 @@ import com.example.mcresswell.project01.weather.WeatherFragment;
 import java.io.IOException;
 
 public class DashboardActivity extends AppCompatActivity implements
-        ProfileEntryFragment.OnProfileEntryDataChannel,
+        ProfileEntryFragment.OnProfileEntryFragmentListener,
         RV_Adapter.OnAdapterDataChannel,
         WeatherFragment.OnWeatherDataLoadedListener {
 
@@ -39,11 +39,6 @@ public class DashboardActivity extends AppCompatActivity implements
         if(savedInstanceState == null){
             restoreDefaultDashboardView();
         }
-    }
-
-    @Override
-    public void onProfileEntryDataPass(Bundle userDataBundle) {
-
     }
 
     @Override
@@ -71,9 +66,6 @@ public class DashboardActivity extends AppCompatActivity implements
         }
     }
 
-    //button behaviors //////////////////////////////////////////////////
-
-    //fitness button behavior
     private void fitnessButtonHandler() {
         if(!isWideDisplay()) { //mobile
             Intent intent = new Intent(this, FitnessDetailsActivity.class);
@@ -85,19 +77,17 @@ public class DashboardActivity extends AppCompatActivity implements
         }
     }
 
-    //hiking button behavior
     private void hikingButtonHandler() {
-        //Both display sizes switch to google maps no behavioral change
         String coords = null;
         if (userProfileViewModel == null) {
             coords = DEFAULT_COORDINATES;
         } else {
-//            UserProfile user = userProfileViewModel.getUserProfile().getValue();
-//            try {
-//                coords = GeocoderLocationUtils.getCoordinatesFromCityCountry(user.getM_city(), user.getM_country());
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
+            UserProfile user = userProfileViewModel.getUserProfile().getValue();
+            try {
+                coords = GeocoderLocationUtils.getCoordinatesFromCityCountry(user.getM_city(), user.getM_country());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         Uri searchUri = Uri.parse("geo:" + coords + "?q=hikes");
@@ -107,10 +97,9 @@ public class DashboardActivity extends AppCompatActivity implements
         }
     }
 
-    //profile button behavior
     private void profileButtonHandler() {
         if(!isWideDisplay()) { //mobile
-            Intent intent = new Intent(this, ProfileDetailsActivity.class);
+            Intent intent = new Intent(this, ProfileSummaryActivity.class);
             startActivity(intent);
         } else { //Tablet
             m_fTrans.replace(R.id.fl_detail_wd, new ProfileSummaryFragment());
@@ -125,9 +114,9 @@ public class DashboardActivity extends AppCompatActivity implements
             Log.d(LOG, "weatherButtonHanlder mobileView");
             Intent intent = new Intent(this, WeatherActivity.class);
             intent.putExtra("city",
-                    !ValidationUtils.isNotNullOrEmpty(city) ? DEFAULT_CITY : city);
+                    !ValidationUtils.isValidCity(city) ? DEFAULT_CITY : city);
             intent.putExtra("country",
-                    !ValidationUtils.isNotNullOrEmpty(country) ? DEFAULT_COUNTRY_CODE : country);
+                    !ValidationUtils.isValidCountryCode(country) ? DEFAULT_COUNTRY_CODE : country);
             startActivity(intent);
         } else { //Tablet
             Log.d(LOG, "weatherButtonHanlder tabletView");
@@ -188,5 +177,10 @@ public class DashboardActivity extends AppCompatActivity implements
 
     private boolean isWideDisplay(){
         return getResources().getBoolean(R.bool.isWideDisplay);
+    }
+
+    @Override
+    public void onProfileEntryDataEntered(UserProfile profile) {
+
     }
 }

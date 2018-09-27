@@ -1,14 +1,18 @@
 package com.example.mcresswell.project01.userProfile;
 
-import android.arch.persistence.room.Entity;
 import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 
 import com.example.mcresswell.project01.util.UserProfileUtils;
 
-@Entity()
-public class UserProfile {
-    private int userID;
+public class UserProfile implements Parcelable {
+
+    private static final String LOG = UserProfile.class.getSimpleName();
+
+    private int id; // Profile ID in database
     private String m_fName;
     private String m_lName;
     private String m_dob;
@@ -27,7 +31,7 @@ public class UserProfile {
     public UserProfile(String fName, String lName, String dob, String sex,
                        String city, String country, String lifestyleSelection,
                        String weightGoal, int lbsPerWeek, double weightInPounds,
-                       int heightFeet, double heightInches) {
+                       int heightFeet, int heightInches) {
         m_fName = fName;
         m_lName = lName;
         m_dob = dob;
@@ -42,8 +46,41 @@ public class UserProfile {
                 UserProfileUtils.calculateAge(dob),
                 weightInPounds, heightFeet, heightInches);
 
-        double height = UserProfileUtils.calculateHeightInInches(heightFeet, heightInches);
+        int height = UserProfileUtils.calculateHeightInInches(heightFeet, heightInches);
         bodyData.setBmi(UserProfileUtils.calculateBmi(height, weightInPounds));
+    }
+
+    protected UserProfile(Parcel in) {
+        id = in.readInt();
+        m_fName = in.readString();
+        m_lName = in.readString();
+        m_dob = in.readString();
+        m_sex = in.readString();
+        m_city = in.readString();
+        m_country = in.readString();
+        m_lifestyleSelection = in.readString();
+        m_weightGoal = in.readString();
+        m_lbsPerWeek = in.readInt();
+    }
+
+    public static final Creator<UserProfile> CREATOR = new Creator<UserProfile>() {
+        @Override
+        public UserProfile createFromParcel(Parcel in) {
+            return new UserProfile(in);
+        }
+
+        @Override
+        public UserProfile[] newArray(int size) {
+            return new UserProfile[size];
+        }
+    };
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getM_fName() {
@@ -124,5 +161,53 @@ public class UserProfile {
 
     public void setBodyData(PhysicalStats bodyData) {
         this.bodyData = bodyData;
+    }
+
+    public void printUserProfileData(){
+        Log.d(LOG, "printUserProfileData");
+        Log.d(LOG, "First Name: " + this.getM_fName());
+        Log.d(LOG, "Last Name: " + this.getM_lName());
+
+        //TODO: Finish this later once confirmed data is getting passed
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static UserProfile newTestUserProfileInstance() {
+        UserProfile testUser = new UserProfile();
+        testUser.setId(1);
+        testUser.setM_fName("TEST");
+        testUser.setM_lName("LASTNAME");
+        testUser.setM_dob("01/01/1900");
+        testUser.setM_city("SACRAMENTO");
+        testUser.setM_country("US");
+        testUser.setM_sex("FEMALE");
+        testUser.setM_lbsPerWeek(3);
+        PhysicalStats stats =
+                new PhysicalStats(testUser.getM_sex(),
+                UserProfileUtils.calculateAge(testUser.getM_dob()),
+                        120.0, 5,5);
+        testUser.setBodyData(stats);
+
+        return testUser;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(m_fName);
+        dest.writeString(m_lName);
+        dest.writeString(m_dob);
+        dest.writeString(m_sex);
+        dest.writeString(m_city);
+        dest.writeString(m_country);
+        dest.writeString(m_lifestyleSelection);
+        dest.writeString(m_weightGoal);
+        dest.writeInt(m_lbsPerWeek);
     }
 }

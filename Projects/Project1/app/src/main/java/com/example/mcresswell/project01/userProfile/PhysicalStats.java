@@ -6,12 +6,12 @@ public class PhysicalStats {
     private int age;
     private double weightInPounds;
     private int heightFeet;
-    private double heightInches;
+    private int heightInches;
 
     private double bmi;
 
     public PhysicalStats(String sex, int age, double weightInPounds,
-                         int heightFeet, double heightInches) {
+                         int heightFeet, int heightInches) {
         this.sex = sex;
         this.age = age;
         this.weightInPounds = weightInPounds;
@@ -44,11 +44,11 @@ public class PhysicalStats {
         this.heightFeet = heightFeet;
     }
 
-    public double getHeightInches() {
+    public int getHeightInches() {
         return heightInches;
     }
 
-    public void setHeightInches(double heightInches) {
+    public void setHeightInches(int heightInches) {
         this.heightInches = heightInches;
     }
 

@@ -102,8 +102,13 @@ public class UserProfileUtils {
         return numOfCalories;
     }
 
-    public static double calculateHeightInInches(double feet, double inches) {
-        return feet * 12.0 + inches;
+    public static int calculateHeightInInches(int feet, int inches) {
+        return feet * 12 + inches;
+    }
+
+    public static boolean isWeightChangeWithinAcceptableRange(String lbsPerWeek){
+        return !ValidationUtils.isValidWeight(lbsPerWeek) &&
+                Integer.parseInt(lbsPerWeek) >= -5 && Integer.parseInt(lbsPerWeek) <= 5;
     }
 
 

@@ -23,4 +23,10 @@ public class AppRepository {
         return m_userProfile;
     }
 
+
+    //TODO: KEEP THIS METHOD. WE'LL CALL THIS METHOD LATER TO LOOKUP A USER PROFILE IN UserProfile DATABASE BY THEIR PROFILE ID
+    public UserProfile getUserProfile(int userPofileId) {
+        return null;
+    }
+
 }
