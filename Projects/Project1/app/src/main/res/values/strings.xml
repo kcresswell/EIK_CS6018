@@ -33,13 +33,15 @@
     <string name="txtv_in_symble">\"</string>
     <string name="txtv_lbs_symbol">lbs</string>
     <string name="txtv_label_location">Location</string>
-    <string name="txtv_label_fitness">Fitness</string>
+    <string name="txtv_label_fitness">Current Weight</string>
     <string name="txtv_label_lifestyle">Lifestyle</string>
     <string name="txtv_label_goal">Weight Goal</string>
     <string name="btn_radio_sedentary">Sedentary</string>
     <string name="btn_radio_active">Active</string>
+    <string name="btn_radio_moderate">Moderate</string>
+
     <string name="btn_radio_maintain">Maintain</string>
-    <string name="btn_radio_loose">Loose</string>
+    <string name="btn_radio_loose">Lose</string>
     <string name="btn_radio_gain">Gain</string>
     <string name="hint_lifestyle">Activity Level</string>
     <string name="hint_wGoal">Weight Goal</string>

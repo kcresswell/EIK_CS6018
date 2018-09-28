@@ -44,14 +44,15 @@ public class GeocoderLocationUtils {
     }
 
     public static URL buildGeocoderApiUrl(String city, String countryCode) {
+        String cityName = city.trim().replace("\\s+", "+"); //Replace spaces in multi-word cities with '+'
         URI uri = null;
-        if (!isValidCity(city, countryCode)) {
+        if (!isValidCity(city)) {
             return buildDefaultGeocoderApiUrl();
         }
         else if (!isValidCountryCode(countryCode)) { //Country code is not required
-            uri = URI.create(GEOCODER_API_BASE_URL + city + API_KEY_QUERY);
+            uri = URI.create(GEOCODER_API_BASE_URL + cityName + API_KEY_QUERY);
         } else { // City and country are valid
-            uri = URI.create(GEOCODER_API_BASE_URL + city + "," + countryCode + API_KEY_QUERY);
+            uri = URI.create(GEOCODER_API_BASE_URL + cityName + "," + countryCode + API_KEY_QUERY);
         }
         Log.d(LOG, "Google maps Geocoder API url: " + uri.toString());
         try {
