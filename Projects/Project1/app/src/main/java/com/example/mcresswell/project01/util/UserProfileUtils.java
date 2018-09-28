@@ -24,13 +24,13 @@ public class UserProfileUtils {
         CLINICALLY_OBESE
     }
 
-    public static double calculateBmi(double heightInInches, double weightInPounds) {
+    public static double calculateBmi(int heightInInches, int weightInPounds) {
 
         final double BMI_METRIC_TO_IMPERIAL_SCALE_FACTOR = 703;
         return weightInPounds/Math.pow(heightInInches, 2) * BMI_METRIC_TO_IMPERIAL_SCALE_FACTOR;
     }
 
-    public static BodyMassIndex getBmi(double bmiValue) {
+    public static BodyMassIndex getBmiClassification(double bmiValue) {
         final double UNDERWEIGHT_THRESHOLD = 18.5;
         final double AVERAGE_THRESHOLD = 25.0;
         final double OVERWEIGHT_THRESHOLD = 30.0;
@@ -94,7 +94,7 @@ public class UserProfileUtils {
 
             if(profile.getM_weightGoal().equalsIgnoreCase("Gain")) {
                 numOfCalories += BMR + profile.getM_lbsPerWeek() + 3500;
-            } else if(profile.getM_weightGoal().equalsIgnoreCase("Loose")){
+            } else if(profile.getM_weightGoal().equalsIgnoreCase("Lose")){
                 numOfCalories += BMR + profile.getM_lbsPerWeek() - 3500;
             }
         }

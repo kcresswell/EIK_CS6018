@@ -1,5 +1,6 @@
 package com.example.mcresswell.project01;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -11,10 +12,11 @@ import com.example.mcresswell.project01.userProfile.UserProfile;
 import com.example.mcresswell.project01.util.Constants;
 
 public class ProfileEntryActivity extends AppCompatActivity
-        implements ProfileEntryFragment.OnProfileEntryFragmentListener{
+        implements ProfileEntryFragment.OnProfileEntryFragmentListener {
     private final String LOG = getClass().getSimpleName();
 
     private FragmentTransaction m_fTrans;
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -26,8 +28,11 @@ public class ProfileEntryActivity extends AppCompatActivity
 
 
         m_fTrans = getSupportFragmentManager().beginTransaction();
+//        if (savedInstanceState != null) {
+            UserProfile profile = getIntent().getParcelableExtra("profile");
+//        }
         ProfileEntryFragment profileEntryFragment =
-                ProfileEntryFragment.newInstance(UserProfile.newTestUserProfileInstance());
+                ProfileEntryFragment.newInstance(profile);
 //        ProfileEntryFragment profileEntryFragment = new ProfileEntryFragment();
 
         m_fTrans.replace(R.id.fl_activity_profile_entry, profileEntryFragment);
@@ -38,7 +43,13 @@ public class ProfileEntryActivity extends AppCompatActivity
     public void onProfileEntryDataEntered(UserProfile profile) {
         //TODO: pass data from ProfileEntry to ProfileSummary
         Log.d(LOG, "onProfileEntryDataEntered");
-        profile.printUserProfileData();
+        Intent intent = new Intent(this, ProfileSummaryActivity.class);
+
+        if (profile != null) {
+            profile.printUserProfileData();
+            intent.putExtra("profile", profile);
+        }
+        startActivity(intent);
 
     }
 }
