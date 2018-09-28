@@ -6,9 +6,12 @@ import android.support.annotation.RequiresApi;
 
 import com.example.mcresswell.project01.util.UserProfileUtils;
 
+import java.util.Date;
+
 @Entity()
 public class UserProfile {
-    private int userID;
+    private int m_userID;
+    private Date m_dateCreated;
     private String m_fName;
     private String m_lName;
     private String m_dob;
@@ -24,10 +27,23 @@ public class UserProfile {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public UserProfile(String fName, String lName, String dob, String sex,
-                       String city, String country, String lifestyleSelection,
-                       String weightGoal, int lbsPerWeek, double weightInPounds,
-                       int heightFeet, double heightInches) {
+    public UserProfile(int userId,
+                       Date dateCreated,
+                       String fName,
+                       String lName,
+                       String dob,
+                       String sex,
+                       String city,
+                       String country,
+                       String lifestyleSelection,
+                       String weightGoal,
+                       int lbsPerWeek,
+                       double weightInPounds,
+                       int heightFeet,
+                       double heightInches) {
+
+        m_userID = userId;
+        m_dateCreated = dateCreated;
         m_fName = fName;
         m_lName = lName;
         m_dob = dob;
