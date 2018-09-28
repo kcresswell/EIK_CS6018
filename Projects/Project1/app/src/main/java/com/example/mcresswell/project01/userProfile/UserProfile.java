@@ -26,7 +26,7 @@ public class UserProfile implements Parcelable {
     private String m_city;
     private String m_country;
     private String m_lifestyleSelection;
-    private String m_weightGoal;
+    private String m_weightGoal;  //TODO: CHANGE THIS TO AN INT
     private int m_lbsPerWeek;
     private PhysicalStats bodyData;
 
@@ -36,7 +36,7 @@ public class UserProfile implements Parcelable {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public UserProfile(String fName, String lName, String dob, String sex,
                        String city, String country, String lifestyleSelection,
-                       String weightGoal, int lbsPerWeek, double weightInPounds,
+                       String weightGoal, int lbsPerWeek, int weightInPounds,
                        int heightFeet, int heightInches) {
         m_fName = fName;
         m_lName = lName;

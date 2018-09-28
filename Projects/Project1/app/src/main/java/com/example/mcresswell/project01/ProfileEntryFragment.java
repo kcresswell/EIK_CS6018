@@ -1,6 +1,8 @@
 package com.example.mcresswell.project01;
 
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -19,8 +21,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.example.mcresswell.project01.userProfile.PhysicalStats;
 import com.example.mcresswell.project01.userProfile.UserProfile;
 import com.example.mcresswell.project01.userProfile.UserProfileViewModel;
 import com.example.mcresswell.project01.util.Constants;
@@ -50,9 +55,13 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     private Button profileEntryButton;
     private ImageButton takeProfileImageButton;
     private Bitmap profileImage;
-//
-//    private EditText lifestyleSelectorText;
-//    private EditText weightGoal;
+    private RadioGroup lifestyleSelector;
+    private RadioButton activeLifestyle, sedentaryLifestyle;
+    private RadioGroup weightGoal;
+    private RadioButton gain, maintain, lose;
+
+    //
+    private String lifestyleSelectorString, weightGoalString;
 
     //Data fields
 
@@ -88,9 +97,10 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         final Observer<UserProfile> nameObserver = new Observer<UserProfile>() {
             @Override
             public void onChanged(@Nullable final UserProfile userProfile) {
+                Log.d(LOG, "view model onChanged");
                 // Update the UI, in this case, a TextView.
-                firstName.setText(userProfile.getM_fName());
-                lastName.setText(userProfile.getM_lName());
+//                firstName.setText(userProfile.getM_fName());
+//                lastName.setText(userProfile.getM_lName());
             }
         };
 
@@ -111,6 +121,11 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         //set buttons to listen to this class
         profileEntryButton.setOnClickListener(this);
         takeProfileImageButton.setOnClickListener(this);
+        activeLifestyle.setOnClickListener(this);
+        sedentaryLifestyle.setOnClickListener(this);
+        gain.setOnClickListener(this);
+        maintain.setOnClickListener(this);
+        lose.setOnClickListener(this);
 
         if (savedInstanceState != null) {
             UserProfile userProfile = getArguments().getParcelable("profile");
@@ -128,15 +143,35 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         switch (view.getId()){
             case R.id.btn_img_takeImage: {
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if(cameraIntent.resolveActivity(getActivity().getPackageManager())!=null){
+                if(cameraIntent.resolveActivity(getActivity().getPackageManager()) != null){
                     startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
                 }
                 break;
             }
             case R.id.btn_submit: {
                 userProfileSubmitButtonHandler();
+                break;
             }
-            break;
+            case R.id.btn_radio_active: {
+                lifestyleSelectorString = "ACTIVE";
+                break;
+            }
+            case R.id.btn_radio_sedentary: {
+                lifestyleSelectorString = "SEDENTARY";
+                break;
+            }
+            case R.id.btn_radio_gain: {
+                weightGoalString = "GAIN";
+                break;
+            }
+            case R.id.btn_radio_maintain: {
+                weightGoalString = "MAINTAIN";
+                break;
+            }
+            case R.id.btn_radio_lose: {
+                weightGoalString = "LOSE";
+                break;
+            }
         }
     }
 
@@ -193,6 +228,16 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         heightInches = (EditText) view.findViewById(R.id.txtv_inches);
         lbsPerWeek = (EditText) view.findViewById(R.id.txtv_weight2);
 
+        //Radio Buttons
+        lifestyleSelector = view.findViewById(R.id.radiogp_lifestyle);
+        weightGoal = view.findViewById(R.id.radiogp_weightGoal);
+
+        activeLifestyle = view.findViewById(R.id.btn_radio_active);
+        sedentaryLifestyle = view.findViewById(R.id.btn_radio_sedentary);
+        gain = view.findViewById(R.id.btn_radio_gain);
+        maintain = view.findViewById(R.id.btn_radio_maintain);
+        lose = view.findViewById(R.id.btn_radio_lose);
+
         //TODO: Need to add back lifestyle handler and weight loss goal fields back later
 //
 //        //--get submit and image buttons--//
@@ -200,14 +245,19 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         takeProfileImageButton = (ImageButton) view.findViewById(R.id.btn_img_takeImage);
     }
 
+    @TargetApi(Build.VERSION_CODES.O)
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void userProfileSubmitButtonHandler() {
+        Log.d(LOG, "User Profile Entry Done Button clicked");
         //Validate input fields before adding to hashmap
+
         if (!isUserInputDataValid()) {
+            Log.d(LOG, "invalid user data input");
             Toast.makeText(getContext(), "Invalid input was entered", Toast.LENGTH_SHORT);
             return;
         }
-        //
+
+        //TODO: CLEAN THIS UP FOR PART TWO OF PROJECT
         userEnteredData.put("firstName", firstName.getText().toString());
         userEnteredData.put("lastName", lastName.getText().toString());
         userEnteredData.put("dob", dob.getText().toString());
@@ -217,26 +267,68 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         userEnteredData.put("weight", weight.getText().toString());
         userEnteredData.put("heightFeet", heightFeet.getText().toString());
         userEnteredData.put("heightInches", heightInches.getText().toString());
+        Log.d(LOG, lbsPerWeek.getText().toString());
         userEnteredData.put("lbsPerWeek", lbsPerWeek.getText().toString());
+        userEnteredData.put("lifestyle", lifestyleSelectorString);
+        userEnteredData.put("goal", weightGoalString);
 
         userEnteredData.forEach((k,v)-> {
             Log.d(LOG, "Key: '" + k + "' Value: '" + v + "'");
         });
 
+        UserProfile userProfile = new UserProfile();
+        userProfile.setM_fName(userEnteredData.get("firstName"));
+        userProfile.setM_lName(userEnteredData.get("lastName"));
+        userProfile.setM_sex(userEnteredData.get("sex"));
+        userProfile.setM_dob(userEnteredData.get("dob"));
+        userProfile.setM_city(userEnteredData.get("city"));
+        userProfile.setM_country(userEnteredData.get("country"));
+//        userProfile.setM_lbsPerWeek(Integer.parseInt(userEnteredData.get("llbsPerWeek")));
+        userProfile.setM_lbsPerWeek(2);
+        userProfile.setM_lifestyleSelection(userEnteredData.get("lifestyle"));
+        userProfile.setM_weightGoal(userEnteredData.get("goal"));
+
+        String userSex = userEnteredData.get("sex");
+        int userAge = UserProfileUtils.calculateAge(userEnteredData.get("dob"));
+        double userWeight = Double.parseDouble(userEnteredData.get("weight"));
+        int heightFt = Integer.parseInt(userEnteredData.get("heightFeet"));
+        int heightIn = Integer.parseInt(userEnteredData.get("heightInches"));
+
+        PhysicalStats physicalStats = new PhysicalStats(userSex, userAge, userWeight, heightFt, heightIn);
+        userProfile.setBodyData(physicalStats);
+
+        if (viewModel.getUserProfile().getValue() != null){
+            Log.d(LOG, "submit button handler, view model has data");
+            UserProfile p = viewModel.getUserProfile().getValue();
+            p.printUserProfileData();
+            m_dataListener.onProfileEntryDataEntered(p);
+        } else {
+            Log.d(LOG, "view model null");
+            m_dataListener.onProfileEntryDataEntered(userProfile);
+        }
+
+
         //TODO: Need to add back lifestyle handler and weight loss goal fields back later
 
     }
     private boolean isUserInputDataValid() {
-        return ValidationUtils.isValidAlphaChars(firstName.getText().toString()) &&
-                ValidationUtils.isValidAlphaChars(lastName.getText().toString()) &&
-                ValidationUtils.isValidDobFormat(dob.getText().toString()) &&
-                ValidationUtils.isValidSex(sex.getText().toString()) &&
-                ValidationUtils.isValidCity(city.getText().toString()) &&
-                ValidationUtils.isValidCountryCode(country.getText().toString()) &&
-                ValidationUtils.isValidWeight(weight.getText().toString()) &&
-                ValidationUtils.isValidHeight(
-                        heightFeet.getText().toString(), heightInches.getText().toString()) &&
-                UserProfileUtils.isWeightChangeWithinAcceptableRange(lbsPerWeek.getText().toString());
+        if (!ValidationUtils.isValidAlphaChars(firstName.getText().toString())
+                || !ValidationUtils.isValidAlphaChars(lastName.getText().toString())  ||
+                !ValidationUtils.isValidDobFormat(dob.getText().toString()) ||
+                !ValidationUtils.isValidSex(sex.getText().toString())) {
+            return false;
+        }
+               if (!ValidationUtils.isValidCity(city.getText().toString()) || !
+                ValidationUtils.isValidCountryCode(country.getText().toString()) ||
+                !ValidationUtils.isValidWeight(weight.getText().toString())) {
+                return false;
+               }
+               return true;
+//               if (!(ValidationUtils.isValidHeight(
+//                        heightFeet.getText().toString(), heightInches.getText().toString()) &&
+//                UserProfileUtils.isWeightChangeWithinAcceptableRange(lbsPerWeek.getText().toString()))){
+//
+//               };
     }
 
     @Override
@@ -252,11 +344,11 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     public void loadUserProfileData(UserProfile profile) {
         Log.d(LOG, "loadUserProfileData");
 
-       viewModel.setUserProfile(profile);
+        viewModel.setUserProfile(profile);
     }
 
 
-public interface OnProfileEntryFragmentListener {
-    void onProfileEntryDataEntered(UserProfile profile);
-}
+    public interface OnProfileEntryFragmentListener {
+        void onProfileEntryDataEntered(UserProfile profile);
+    }
 }
