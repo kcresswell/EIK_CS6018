@@ -72,7 +72,7 @@ public class WeatherUtils {
 
         public static URL buildWeatherApiUrl(String city, String countryCode) {
             URI uri = null;
-            if (!isValidCity(city, countryCode)) {
+            if (!isValidCity(city)) {
                 return buildDefaultWeatherApiUrl();
             }
             else if (!isValidCountryCode(countryCode)) { //Country code is not required

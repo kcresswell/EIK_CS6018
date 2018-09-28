@@ -1,9 +1,12 @@
 package com.example.mcresswell.project01.util;
 
+<<<<<<< HEAD
 import com.example.mcresswell.project01.userProfile.UserProfile;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+=======
+>>>>>>> 19ba103901122b25ce82e8ecb6e593c6564ad321
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;

@@ -3,7 +3,7 @@ package com.example.mcresswell.project01.util;
 //TODO: needs tests
 public class ValidationUtils {
 
-    public static boolean isValidCity(String city, String countryCode) {
+    public static boolean isValidCity(String city) {
         return ValidationUtils.isNotNullOrEmpty(city);
     }
 
@@ -44,7 +44,19 @@ public class ValidationUtils {
                 input.trim().matches("[A-Za-z0-9]+");
     }
 
+    public static boolean isValidNumericChars(String input) {
+        return isNotNullOrEmpty(input) &&
+                input.trim().matches("[0-9]+");
+    }
+
     public static boolean isNotNullOrEmpty(String input) {
         return input != null && !input.isEmpty() && !input.matches("^\\s+$");
+    }
+
+    public static boolean isValidSex(String input) {
+        return input.equalsIgnoreCase("male") ||
+                input.equalsIgnoreCase("M") ||
+                input.equalsIgnoreCase("female") ||
+                input.equalsIgnoreCase("F");
     }
 }
