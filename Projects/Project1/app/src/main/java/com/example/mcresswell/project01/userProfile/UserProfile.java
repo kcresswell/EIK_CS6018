@@ -7,7 +7,6 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.example.mcresswell.project01.util.UserProfileUtils;
-
 import java.util.Date;
 
 

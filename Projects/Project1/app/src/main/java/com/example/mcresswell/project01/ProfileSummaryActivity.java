@@ -12,7 +12,7 @@ import com.example.mcresswell.project01.userProfile.UserProfile;
 import com.example.mcresswell.project01.util.Constants;
 
 public class ProfileSummaryActivity extends AppCompatActivity
-    implements ProfileSummaryFragment.onProfileSummaryInteractionListener,
+    implements ProfileSummaryFragment.OnProfileSummaryInteractionListener,
         ProfileEntryFragment.OnProfileEntryFragmentListener {
 
     private final String LOG = getClass().getSimpleName();
