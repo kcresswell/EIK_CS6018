@@ -150,6 +150,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
             }
             case R.id.btn_submit: {
                 userProfileSubmitButtonHandler();
+                loadProfileSummaryFragment();
                 break;
             }
             case R.id.btn_radio_active: {
@@ -255,6 +256,8 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
             Log.d(LOG, "invalid user data input");
             Toast.makeText(getContext(), "Invalid input was entered", Toast.LENGTH_SHORT);
             return;
+        } else {
+            Toast.makeText(getContext(), "Data is being logged", Toast.LENGTH_SHORT);
         }
 
         //TODO: CLEAN THIS UP FOR PART TWO OF PROJECT
@@ -306,11 +309,11 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
             Log.d(LOG, "view model null");
             m_dataListener.onProfileEntryDataEntered(userProfile);
         }
-
-
         //TODO: Need to add back lifestyle handler and weight loss goal fields back later
-
     }
+
+
+
     private boolean isUserInputDataValid() {
         if (!ValidationUtils.isValidAlphaChars(firstName.getText().toString())
                 || !ValidationUtils.isValidAlphaChars(lastName.getText().toString())  ||
@@ -347,8 +350,13 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         viewModel.setUserProfile(profile);
     }
 
+    private void loadProfileSummaryFragment(){
+//        m_dataListener = (OnProfileEntryFragmentListener) getActivity();
+        m_dataListener.onProfileEntryDataPass_DoneButtonClicked(true);
+    }
 
     public interface OnProfileEntryFragmentListener {
         void onProfileEntryDataEntered(UserProfile profile);
+        void onProfileEntryDataPass_DoneButtonClicked (boolean isClicked);
     }
 }
