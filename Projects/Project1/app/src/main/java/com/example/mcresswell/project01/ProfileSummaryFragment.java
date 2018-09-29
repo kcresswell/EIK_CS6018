@@ -29,13 +29,13 @@ public class ProfileSummaryFragment extends Fragment
 
     private static final String LOG = ProfileSummaryFragment.class.getSimpleName();
 
-    private Button editButton;
-    private OnProfileSummaryInteractionListener listener;
-    private UserProfileViewModel userProfileViewModel;
-    private UserProfile userProfile;
+    private Button m_editButton;
+    private OnProfileSummaryInteractionListener m_listener;
+    private UserProfileViewModel m_userProfileViewModel;
+    private UserProfile m_userProfile;
 
     //UI Elements
-    private TextView firstName, lastName, sex, dob, heightFeet, heightInches, lbsperweek, city, country, weight, activity, weightGoal;
+    private TextView m_firstName, m_lastName, m_sex, m_dob, m_heightFeet, m_heightInches, m_lbsperweek, m_city, m_country, m_weight, m_activity, m_weightGoal;
 
     public ProfileSummaryFragment() {
         // Required empty public constructor
@@ -57,15 +57,14 @@ public class ProfileSummaryFragment extends Fragment
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
 //            weatherForecast = getArguments().getParcelable("data");
-//            Log.d(LOG, "City: " + getArguments().getString("city"));
-//            Log.d(LOG, "Country: " + getArguments().getString("country"));
-
+//            Log.d(LOG, "City: " + getArguments().getString("m_city"));
+//            Log.d(LOG, "Country: " + getArguments().getString("m_country"));
         }
-        userProfileViewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
-        userProfileViewModel.getUserProfile().observe(this, nameObserver);
-        userProfile = getActivity().getIntent().getParcelableExtra("profile");
-        if (userProfile != null) {
-            loadUserData(userProfile);
+        m_userProfileViewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
+        m_userProfileViewModel.getUserProfile().observe(this, nameObserver);
+        m_userProfile = getActivity().getIntent().getParcelableExtra("profile");
+        if (m_userProfile != null) {
+            loadUserData(m_userProfile);
         } else {
             Log.d(LOG, "no data in bundle, loadUserData using test profile");
 //            loadUserData(UserProfile.newTestUserProfileInstance());
@@ -80,35 +79,31 @@ public class ProfileSummaryFragment extends Fragment
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_profile_summary, container, false);
 
-        firstName = v.findViewById(R.id.txtv_fname);
-        lastName = v.findViewById(R.id.txtv_lname);
-        sex = v.findViewById(R.id.txtv_sex);
-        dob = v.findViewById(R.id.txtv_dob);
-        heightFeet = v.findViewById(R.id.txtv_feet);
-        heightInches = v.findViewById(R.id.txtv_inches);
-        editButton = v.findViewById(R.id.btn_edit);
-        weight = v.findViewById(R.id.txtv_weight);
+        m_firstName = v.findViewById(R.id.txtv_fname);
+        m_lastName = v.findViewById(R.id.txtv_lname);
+        m_sex = v.findViewById(R.id.txtv_sex);
+        m_dob = v.findViewById(R.id.txtv_dob);
+        m_heightFeet = v.findViewById(R.id.txtv_feet);
+        m_heightInches = v.findViewById(R.id.txtv_inches);
+        m_editButton = v.findViewById(R.id.btn_edit);
+        m_weight = v.findViewById(R.id.txtv_weight);
+//        m_weightGoal = v.findViewById(R.id);
+        m_editButton.setOnClickListener(this);
 
-//        weightGoal = v.findViewById(R.id);
-
-        editButton.setOnClickListener(this);
-
-        if (userProfile != null) {
-            firstName.setText(userProfile.getM_fName());
-            lastName.setText(userProfile.getM_lName());
-            sex.setText(userProfile.getM_sex());
-            dob.setText(userProfile.getM_dob());
-//            heightFeet.setText(userProfile.getBodyData().getHeightFeet());
-//            heightInches.setText(userProfile.getBodyData().getHeightInches());
-//            weight.setText((int) userProfile.getBodyData().getWeightInPounds());
-//            city.setText(userProfile.getM_city());
-//            country.setText(userProfile.getM_country());
-//            weight.setText((int) userProfile.getBodyData().getWeightInPounds());
-//            weightGoal.setText(userProfile.getM_weightGoal());
-//            lbsperweek.setText(us);
-
+        if (m_userProfile != null) {
+            m_firstName.setText(m_userProfile.getM_fName());
+            m_lastName.setText(m_userProfile.getM_lName());
+            m_sex.setText(m_userProfile.getM_sex());
+            m_dob.setText(m_userProfile.getM_dob());
+//            m_heightFeet.setText(m_userProfile.getBodyData().getHeightFeet());
+//            m_heightInches.setText(m_userProfile.getBodyData().getHeightInches());
+//            m_weight.setText((int) m_userProfile.getBodyData().getWeightInPounds());
+//            m_city.setText(m_userProfile.getM_city());
+//            m_country.setText(m_userProfile.getM_country());
+//            m_weight.setText((int) m_userProfile.getBodyData().getWeightInPounds());
+//            m_weightGoal.setText(m_userProfile.getM_weightGoal());
+//            m_lbsperweek.setText(us);
         }
-
         return v;
     }
 
@@ -123,14 +118,11 @@ public class ProfileSummaryFragment extends Fragment
                 userProfile.printUserProfileData();
                 Log.d(LOG, "onChanged, updating data fields");
                 //Data now exists for user, update ui fields with data
-//                firstName.setText(userProfile.getM_fName());
-//                lastName.setText(userProfile.getM_lName());
-//                sex.setText(userProfile.getM_sex());
-//                dob.setText(userProfile.getM_dob());
-
+//                m_firstName.setText(m_userProfile.getM_fName());
+//                m_lastName.setText(m_userProfile.getM_lName());
+//                m_sex.setText(m_userProfile.getM_sex());
+//                m_dob.setText(m_userProfile.getM_dob());
             }
-
-
         }
     };
 
@@ -150,7 +142,7 @@ public class ProfileSummaryFragment extends Fragment
 
         super.onAttach(context);
         if (context instanceof OnProfileSummaryInteractionListener) {
-            listener = (OnProfileSummaryInteractionListener) context;
+            m_listener = (OnProfileSummaryInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnProfileSummaryInteractionListener");
@@ -161,12 +153,12 @@ public class ProfileSummaryFragment extends Fragment
     public void onDetach() {
         Log.d(LOG, Constants.DETACH);
         super.onDetach();
-        listener = null;
+        m_listener = null;
     }
 
     private void loadUserData(UserProfile profile) {
         Log.d(LOG, "loadWeatherData");
-        userProfileViewModel.setUserProfile(profile);
+        m_userProfileViewModel.setUserProfile(profile);
     }
 
     public interface OnProfileSummaryInteractionListener {
@@ -174,19 +166,19 @@ public class ProfileSummaryFragment extends Fragment
     }
 
     private void passExistingDataOnEditButtonClick() {
-        if (userProfileViewModel != null) {
-            Log.d(LOG, "userProfileViewModel NOT NULL!");
-            listener.onProfileSummaryEditButton(userProfileViewModel.getUserProfile().getValue());
+        if (m_userProfileViewModel != null) {
+            Log.d(LOG, "m_userProfileViewModel NOT NULL!");
+            m_listener.onProfileSummaryEditButton(m_userProfileViewModel.getUserProfile().getValue());
         } else {
-            Log.d(LOG, "userProfileViewModel is still null, passing data manually");
+            Log.d(LOG, "m_userProfileViewModel is still null, passing data manually");
             UserProfile userProfile = new UserProfile();
-            userProfile.setM_fName(firstName.getText().toString());
-            userProfile.setM_lName(lastName.getText().toString());
-            userProfile.setM_sex(sex.getText().toString());
-            userProfile.setM_dob(dob.getText().toString());
+            userProfile.setM_fName(m_firstName.getText().toString());
+            userProfile.setM_lName(m_lastName.getText().toString());
+            userProfile.setM_sex(m_sex.getText().toString());
+            userProfile.setM_dob(m_dob.getText().toString());
 
             //TODO: FINISH THIS LATER
-            listener.onProfileSummaryEditButton(userProfile);
+            m_listener.onProfileSummaryEditButton(userProfile);
         }
     }
 
