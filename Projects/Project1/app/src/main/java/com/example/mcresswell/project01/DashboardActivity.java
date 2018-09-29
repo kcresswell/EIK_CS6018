@@ -18,6 +18,7 @@ import com.example.mcresswell.project01.weather.WeatherFragment;
 import java.io.IOException;
 
 public class DashboardActivity extends AppCompatActivity implements
+        ProfileSummaryFragment.OnProfileSummaryInteractionListener,
         ProfileEntryFragment.OnProfileEntryFragmentListener,
         RV_Adapter.OnAdapterDataChannel,
         WeatherFragment.OnWeatherDataLoadedListener {
@@ -187,5 +188,11 @@ public class DashboardActivity extends AppCompatActivity implements
     @Override
     public void onProfileEntryDataPass_DoneButtonClicked(boolean isClicked) {
         //nothing to implement for this class. This indicates we need to clean up the code structure
+    }
+
+    @Override
+    public void onProfileSummaryEditButton(UserProfile profile) {
+        //Do stuff with the user profile. This seems to be something that we will need to remove
+        //once the view model and repository are fully working. As we should not have interfaces anymore.
     }
 }

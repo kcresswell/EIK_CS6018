@@ -19,8 +19,6 @@ import android.widget.TextView;
 import com.example.mcresswell.project01.userProfile.UserProfile;
 import com.example.mcresswell.project01.userProfile.UserProfileViewModel;
 import com.example.mcresswell.project01.util.Constants;
-import com.example.mcresswell.project01.util.UserProfileUtils;
-import com.example.mcresswell.project01.weather.WeatherViewModel;
 
 
 /**
@@ -32,7 +30,7 @@ public class ProfileSummaryFragment extends Fragment
     private static final String LOG = ProfileSummaryFragment.class.getSimpleName();
 
     private Button editButton;
-    private onProfileSummaryInteractionListener listener;
+    private OnProfileSummaryInteractionListener listener;
     private UserProfileViewModel userProfileViewModel;
     private UserProfile userProfile;
 
@@ -151,8 +149,8 @@ public class ProfileSummaryFragment extends Fragment
         Log.d(LOG, Constants.ATTACH);
 
         super.onAttach(context);
-        if (context instanceof onProfileSummaryInteractionListener) {
-            listener = (onProfileSummaryInteractionListener) context;
+        if (context instanceof OnProfileSummaryInteractionListener) {
+            listener = (OnProfileSummaryInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnProfileSummaryInteractionListener");
@@ -171,7 +169,7 @@ public class ProfileSummaryFragment extends Fragment
         userProfileViewModel.setUserProfile(profile);
     }
 
-    public interface onProfileSummaryInteractionListener {
+    public interface OnProfileSummaryInteractionListener {
         void onProfileSummaryEditButton(UserProfile profile);
     }
 
