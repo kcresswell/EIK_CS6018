@@ -10,7 +10,9 @@
 
     <!--Main Dashboard-->
     <string name="calories">Daily Calories Goal</string>
-    <string name="bmr">Basal Metabolic Rate</string>
+    <string name="bmr">Basal Metabolic Rate (BMR)</string>
+    <string name="bmi">Body Mass Index (BMI)</string>
+
 
 
     <!--Profile entry-->
@@ -51,6 +53,8 @@
     <string name="hint_wkly_goal">lbs/wk</string>
     <string name="tv_bmr">BMR</string>
     <string name="tv_calPerDay">Calories Per Day</string>
+    <string name="tv_bmi">BMI placeholder</string>
+
 
     <!--Hiking-->
     <string name="title_activity_hiking">Hiking</string>

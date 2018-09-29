@@ -68,7 +68,6 @@ public class UserProfileViewModel extends AndroidViewModel {
     }
 
     public LiveData<UserProfile> getUserProfile() {
-        return userProfile == null ?
-                new MutableLiveData<>() : userProfile;
+        return userProfile;
     }
 }

@@ -31,7 +31,7 @@ public class UserProfile implements Parcelable {
     private String m_city;
     private String m_country;
     private String m_lifestyleSelection;
-    private String m_weightGoal;
+    private String m_weightGoal;  //TODO: CHANGE THIS TO AN INT
     private int m_lbsPerWeek;
     private PhysicalStats bodyData;
 
