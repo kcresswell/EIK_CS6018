@@ -50,7 +50,7 @@ public class UserProfile implements Parcelable {
                        String lifestyleSelection,
                        String weightGoal,
                        int lbsPerWeek,
-                       double weightInPounds,
+                       int weightInPounds,
                        int heightFeet,
                        int heightInches) {
 

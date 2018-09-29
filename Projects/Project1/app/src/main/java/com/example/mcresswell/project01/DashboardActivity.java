@@ -183,4 +183,9 @@ public class DashboardActivity extends AppCompatActivity implements
     public void onProfileEntryDataEntered(UserProfile profile) {
 
     }
+
+    @Override
+    public void onProfileEntryDataPass_DoneButtonClicked(boolean isClicked) {
+        //nothing to implement for this class. This indicates we need to clean up the code structure
+    }
 }

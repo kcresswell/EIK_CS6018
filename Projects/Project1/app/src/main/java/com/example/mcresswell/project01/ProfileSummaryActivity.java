@@ -64,6 +64,11 @@ public class ProfileSummaryActivity extends AppCompatActivity
         m_fTrans.commit();
     }
 
+    @Override
+    public void onProfileEntryDataPass_DoneButtonClicked(boolean isClicked) {
+        //nothing to implement for this class. This indicates we need to clean up the code structure
+    }
+
 //    @Override
 //    public void onProfileEntryDataEntered(UserProfile profile) {
 ////            Log.d(LOG, "onProfileEntryDataEntered");

@@ -52,4 +52,14 @@ public class ProfileEntryActivity extends AppCompatActivity
         startActivity(intent);
 
     }
+
+    @Override
+    public void onProfileEntryDataPass_DoneButtonClicked(boolean isClicked) {
+        if(isClicked){
+            m_fTrans = getSupportFragmentManager().beginTransaction();
+            m_fTrans.replace(R.id.fl_activity_profile_details, new ProfileSummaryFragment(), "v_frag_profile_entry");
+            m_fTrans.addToBackStack(null);
+            m_fTrans.commit();
+        }
+    }
 }
