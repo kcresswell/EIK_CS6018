@@ -8,6 +8,10 @@ import android.util.Log;
 
 import com.example.mcresswell.project01.util.UserProfileUtils;
 
+import java.util.Date;
+
+
+
 /**
  *  A POJO class representing all of the data associated with a given user.
  *  This is NOT the entity/DAO class, the corresponding entity class for UserProfile
@@ -18,7 +22,8 @@ public class UserProfile implements Parcelable {
 
     private static final String LOG = UserProfile.class.getSimpleName();
 
-    private int id; // Profile ID in database
+    private int m_userID; // Profile ID in database
+    private Date m_dateCreated;
     private String m_fName;
     private String m_lName;
     private String m_dob;
@@ -34,10 +39,23 @@ public class UserProfile implements Parcelable {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public UserProfile(String fName, String lName, String dob, String sex,
-                       String city, String country, String lifestyleSelection,
-                       String weightGoal, int lbsPerWeek, int weightInPounds,
-                       int heightFeet, int heightInches) {
+    public UserProfile(int userId,
+                       Date dateCreated,
+                       String fName,
+                       String lName,
+                       String dob,
+                       String sex,
+                       String city,
+                       String country,
+                       String lifestyleSelection,
+                       String weightGoal,
+                       int lbsPerWeek,
+                       double weightInPounds,
+                       int heightFeet,
+                       int heightInches) {
+
+        m_userID = userId;
+        m_dateCreated = dateCreated;
         m_fName = fName;
         m_lName = lName;
         m_dob = dob;
@@ -57,7 +75,7 @@ public class UserProfile implements Parcelable {
     }
 
     protected UserProfile(Parcel in) {
-        id = in.readInt();
+        m_userID = in.readInt();
         m_fName = in.readString();
         m_lName = in.readString();
         m_dob = in.readString();
@@ -82,11 +100,11 @@ public class UserProfile implements Parcelable {
     };
 
     public int getId() {
-        return id;
+        return m_userID;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.m_userID = id;
     }
 
     public String getM_fName() {
@@ -205,7 +223,7 @@ public class UserProfile implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
+        dest.writeInt(m_userID);
         dest.writeString(m_fName);
         dest.writeString(m_lName);
         dest.writeString(m_dob);
