@@ -24,8 +24,7 @@ public class UserProfileUtils {
         CLINICALLY_OBESE
     }
 
-    public static double calculateBmi(int heightInInches, int weightInPounds) {
-
+    public static double calculateBmi(int heightInInches, double weightInPounds) {
         final double BMI_METRIC_TO_IMPERIAL_SCALE_FACTOR = 703;
         return weightInPounds/Math.pow(heightInInches, 2) * BMI_METRIC_TO_IMPERIAL_SCALE_FACTOR;
     }
@@ -43,22 +42,23 @@ public class UserProfileUtils {
                                         BodyMassIndex.CLINICALLY_OBESE;
     }
 
-    public static double calculateBMR(PhysicalStats stats) {
+    public static double calculateBMR(int heightFeet, int heightInches,
+                                      String sex, double weightInPounds, int age) {
         double BMR = 0.0;
-        double totalHeightInInches = (stats.getHeightFeet() * 12.0) + stats.getHeightInches();
+        double totalHeightInInches = (heightFeet * 12.0) + heightInches;
 
         //calculate BMR based on sex of user
-        if(stats.getSex().equalsIgnoreCase("F")||
-                stats.getSex().equalsIgnoreCase("Female")) {
+        if(sex.equalsIgnoreCase("F")||
+                sex.equalsIgnoreCase("Female")) {
             //user is female, s = -161
-            BMR = (9.99 * stats.getWeightInPounds()) +
-                    (6.25 * totalHeightInInches) - 4.92 * stats.getAge() - 161;
+            BMR = (9.99 * weightInPounds) +
+                    (6.25 * totalHeightInInches) - 4.92 * age - 161;
         }
-        else if (stats.getSex().equalsIgnoreCase("M") ||
-                stats.getSex().equalsIgnoreCase("Male")) {
+        else if (sex.equalsIgnoreCase("M") ||
+                sex.equalsIgnoreCase("Male")) {
             //user is male, s = 5
-            BMR = (9.99 * stats.getWeightInPounds()) +
-                    (6.25 * totalHeightInInches) - 4.92 * stats.getAge() + 5;
+            BMR = (9.99 * weightInPounds) +
+                    (6.25 * totalHeightInInches) - 4.92 * age + 5;
         } else {
             Log.d(LOG, "Cannot calculate BMR; invalid gender.");
             //--TODO: throw an error here if not male or female--//
@@ -74,8 +74,6 @@ public class UserProfileUtils {
     // https://www.wikihow.com/Calculate-How-Many-Calories-You-Need-to-Eat-to-Lose-Weight
     public static double calculateCalories(UserProfile profile) {
         double numOfCalories;
-
-//        double BMR = calculateBMR(profile.getBodyData());
         double BMR = 1500;
 
         if (profile.getM_lifestyleSelection().equalsIgnoreCase("Sedentary")) {

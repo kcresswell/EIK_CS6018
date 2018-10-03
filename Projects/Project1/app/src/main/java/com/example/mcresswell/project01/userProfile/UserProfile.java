@@ -9,6 +9,10 @@ import android.util.Log;
 import com.example.mcresswell.project01.util.UserProfileUtils;
 import java.util.Date;
 
+import static com.example.mcresswell.project01.util.UserProfileUtils.calculateAge;
+import static com.example.mcresswell.project01.util.UserProfileUtils.calculateBMR;
+import static com.example.mcresswell.project01.util.UserProfileUtils.calculateBmi;
+import static com.example.mcresswell.project01.util.UserProfileUtils.calculateHeightInInches;
 
 
 /**
@@ -30,12 +34,16 @@ public class UserProfile implements Parcelable {
     private String m_city;
     private String m_country;
     private String m_lifestyleSelection;
-    private String m_weightGoal;  //TODO: CHANGE THIS TO AN INT
+    private String m_weightGoal;  //GAIN/MAINTAIN/LOSE
     private int m_lbsPerWeek;
-    private PhysicalStats bodyData;
+    private double m_weightInPounds;
+    private int m_heightFeet;
+    private int m_heightInches;
+    private double m_bmi;
+    private double m_bmr;
 
-    public UserProfile() {
-    }
+
+    public UserProfile() { }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public UserProfile(int userId,
@@ -49,7 +57,7 @@ public class UserProfile implements Parcelable {
                        String lifestyleSelection,
                        String weightGoal,
                        int lbsPerWeek,
-                       int weightInPounds,
+                       double weightInPounds,
                        int heightFeet,
                        int heightInches) {
 
@@ -62,15 +70,13 @@ public class UserProfile implements Parcelable {
         m_city = city;
         m_country = country;
         m_lifestyleSelection = lifestyleSelection;
-        m_lbsPerWeek = lbsPerWeek;
         m_weightGoal = weightGoal;
-
-        bodyData = new PhysicalStats(sex,
-                UserProfileUtils.calculateAge(dob),
-                weightInPounds, heightFeet, heightInches);
-
-        int height = UserProfileUtils.calculateHeightInInches(heightFeet, heightInches);
-        bodyData.setBmi(UserProfileUtils.calculateBmi(height, weightInPounds));
+        m_lbsPerWeek = lbsPerWeek;
+        m_weightInPounds = weightInPounds;
+        m_heightFeet = heightFeet;
+        m_heightInches = heightInches;
+        m_bmi = calculateBmi(calculateHeightInInches(heightFeet, heightInches), weightInPounds);
+        m_bmr = calculateBMR(heightFeet, heightInches, sex, weightInPounds, calculateAge(dob));
     }
 
     protected UserProfile(Parcel in) {
@@ -84,6 +90,11 @@ public class UserProfile implements Parcelable {
         m_lifestyleSelection = in.readString();
         m_weightGoal = in.readString();
         m_lbsPerWeek = in.readInt();
+        m_weightInPounds = in.readDouble();
+        m_heightFeet = in.readInt();
+        m_heightInches = in.readInt();
+        m_bmi = calculateBmi(calculateHeightInInches(m_heightFeet, m_heightInches), m_weightInPounds);
+
     }
 
     public static final Creator<UserProfile> CREATOR = new Creator<UserProfile>() {
@@ -98,13 +109,15 @@ public class UserProfile implements Parcelable {
         }
     };
 
-    public int getId() {
-        return m_userID;
-    }
+    public int getM_userID() { return m_userID; }
 
-    public void setId(int id) {
+    public void setM_userID(int id) {
         this.m_userID = id;
     }
+
+    public Date getM_dateCreated() { return m_dateCreated; }
+
+    public void setM_dateCreated(Date m_dateCreated) { this.m_dateCreated = m_dateCreated; }
 
     public String getM_fName() {
         return m_fName;
@@ -178,27 +191,47 @@ public class UserProfile implements Parcelable {
         this.m_lbsPerWeek = m_lbsPerWeek;
     }
 
-    public PhysicalStats getBodyData() {
-        return bodyData;
-    }
+    public double getM_weightInPounds() { return m_weightInPounds; }
 
-    public void setBodyData(PhysicalStats bodyData) {
-        this.bodyData = bodyData;
-    }
+    public void setM_weightInPounds(double m_weightInPounds) { this.m_weightInPounds = m_weightInPounds; }
+
+    public int getM_heightFeet() { return m_heightFeet; }
+
+    public void setM_heightFeet(int m_heightFeet) { this.m_heightFeet = m_heightFeet; }
+
+    public int getM_heightInches() { return m_heightInches; }
+
+    public void setM_heightInches(int m_heightInches) { this.m_heightInches = m_heightInches; }
+
+    public double getM_bmi() { return m_bmi; }
+
+    public void setM_bmi(double m_bmi) { this.m_bmi = m_bmi; }
+
+    public double getM_bmr() { return m_bmr; }
+
+    public void setM_bmr(double m_bmr) { this.m_bmr = m_bmr; }
 
     public void printUserProfileData(){
         Log.d(LOG, "printUserProfileData");
+        Log.d(LOG, "userID: " + this.getM_userID());
         Log.d(LOG, "First Name: " + this.getM_fName());
         Log.d(LOG, "Last Name: " + this.getM_lName());
-
-        //TODO: Finish this later once confirmed data is getting passed
+        Log.d(LOG, "DOB: " + this.getM_dob());
+        Log.d(LOG, "Sex: " + this.getM_sex());
+        Log.d(LOG, "Location: " + this.getM_city() + ", " + this.getM_country());
+        Log.d(LOG, "Lifestyle Selection (ACTIVE/SEDENTERY): " + this.getM_lifestyleSelection());
+        Log.d(LOG, "Weight Goal/Objectives (GAIN/MAINTAIN/LOSE): " + this.getM_weightGoal() + " " + this.getM_lbsPerWeek() + " lbs/week");
+        Log.d(LOG, "Current Weight (lbs): " + this.getM_weightInPounds());
+        Log.d(LOG, "Current Height: " + this.getM_heightFeet() + " Feet and " + this.getM_heightInches() + " Inches");
+        Log.d(LOG, "Current Basal Metabolic Weight (BMR): " + this.getM_bmr() + " calories/day");
+        Log.d(LOG, "Current BMI: " + this.getM_bmi());
 
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static UserProfile newTestUserProfileInstance() {
         UserProfile testUser = new UserProfile();
-        testUser.setId(1);
+        testUser.setM_userID(1);
         testUser.setM_fName("TEST");
         testUser.setM_lName("LASTNAME");
         testUser.setM_dob("01/01/1900");
@@ -206,11 +239,19 @@ public class UserProfile implements Parcelable {
         testUser.setM_country("US");
         testUser.setM_sex("FEMALE");
         testUser.setM_lbsPerWeek(3);
-        PhysicalStats stats =
-                new PhysicalStats(testUser.getM_sex(),
-                UserProfileUtils.calculateAge(testUser.getM_dob()),
-                        120.0, 5,5);
-        testUser.setBodyData(stats);
+        testUser.setM_lifestyleSelection("ACTIVE");
+        testUser.setM_weightGoal("LOSE");
+        testUser.setM_lbsPerWeek(2);
+        testUser.setM_weightInPounds(150);
+        testUser.setM_heightFeet(5);
+        testUser.setM_heightInches(9);
+        testUser.setM_bmi(calculateBmi(calculateHeightInInches(testUser.getM_heightFeet(),
+                testUser.getM_heightInches()), testUser.getM_weightInPounds()));
+        int age = calculateAge(testUser.getM_dob());
+        double bmr = calculateBMR(testUser.getM_heightFeet(),
+                testUser.getM_heightInches(), testUser.getM_sex(),
+                testUser.getM_weightInPounds(), age);
+        testUser.setM_bmr(bmr);
 
         return testUser;
     }
