@@ -1,7 +1,6 @@
 package com.example.mcresswell.project01;
 
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -25,15 +24,26 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.example.mcresswell.project01.userProfile.PhysicalStats;
 import com.example.mcresswell.project01.userProfile.UserProfile;
 import com.example.mcresswell.project01.userProfile.UserProfileViewModel;
 import com.example.mcresswell.project01.util.Constants;
-import com.example.mcresswell.project01.util.UserProfileUtils;
-import com.example.mcresswell.project01.util.ValidationUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.example.mcresswell.project01.util.UserProfileUtils.calculateAge;
+import static com.example.mcresswell.project01.util.UserProfileUtils.calculateBMR;
+import static com.example.mcresswell.project01.util.UserProfileUtils.calculateBmi;
+import static com.example.mcresswell.project01.util.UserProfileUtils.calculateHeightInInches;
+import static com.example.mcresswell.project01.util.ValidationUtils.isNotNullOrEmpty;
+import static com.example.mcresswell.project01.util.ValidationUtils.isValidAlphaChars;
+import static com.example.mcresswell.project01.util.ValidationUtils.isValidCity;
+import static com.example.mcresswell.project01.util.ValidationUtils.isValidCountryCode;
+import static com.example.mcresswell.project01.util.ValidationUtils.isValidDobFormat;
+import static com.example.mcresswell.project01.util.ValidationUtils.isValidHeight;
+import static com.example.mcresswell.project01.util.ValidationUtils.isValidSex;
+import static com.example.mcresswell.project01.util.ValidationUtils.isValidWeight;
+import static com.example.mcresswell.project01.util.ValidationUtils.isValidWeightPlan;
 
 
 /**
@@ -61,15 +71,12 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     private RadioButton gain, maintain, lose;
 
     //
-    private String lifestyleSelectorString, weightGoalString;
+    private String lifestyleSelectorString = "Active"; //Default lifestyle selector of 'Active' if no radio button selected
+    private String weightGoalString = "Lose"; //Default weight goal of 'Lose' if no radio button is selected
 
     //Data fields
 
     private Map<String, String> userEnteredData = new HashMap<>();
-    //    private String m_fname, m_lname, m_dob, m_sex, m_city, m_country, str_lifestyle_selection, str_weight_goal_selection;
-    private int age, weightLbs, feet, inches, lbsPerWeekGoal;
-
-    private Bundle m_userProfileBundle = new Bundle();
 
     public ProfileEntryFragment() {
         // Required empty public constructor
@@ -94,14 +101,11 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
         viewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
 
-        final Observer<UserProfile> nameObserver = new Observer<UserProfile>() {
-            @Override
-            public void onChanged(@Nullable final UserProfile userProfile) {
-                Log.d(LOG, "view model onChanged");
-                // Update the UI, in this case, a TextView.
+        final Observer<UserProfile> nameObserver = userProfile -> {
+            Log.d(LOG, "nameObserver userProfile view model onChanged");
+            // Update the UI, in this case, a TextView.
 //                firstName.setText(userProfile.getM_fName());
 //                lastName.setText(userProfile.getM_lName());
-            }
         };
 
         viewModel.getUserProfile().observe(this, nameObserver);
@@ -150,27 +154,31 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
             }
             case R.id.btn_submit: {
                 userProfileSubmitButtonHandler();
-                loadProfileSummaryFragment();
+
+                //TODO: ERIC: I MOVED THIS METHOD CALL INSIDE OF userProfileSubmitButtonHandler,
+                // TODO: because having it as a separate method call will cause the application to crash if any of the input data is invalid.
+                //TODO: Validation logic for the user profile input fields is performed inside of userProfileSubmitButtonHandler().
+//                loadProfileSummaryFragment();
                 break;
             }
             case R.id.btn_radio_active: {
-                lifestyleSelectorString = "ACTIVE";
+                lifestyleSelectorString = "Active";
                 break;
             }
             case R.id.btn_radio_sedentary: {
-                lifestyleSelectorString = "SEDENTARY";
+                lifestyleSelectorString = "Sedentary";
                 break;
             }
             case R.id.btn_radio_gain: {
-                weightGoalString = "GAIN";
+                weightGoalString = "Gain";
                 break;
             }
             case R.id.btn_radio_maintain: {
-                weightGoalString = "MAINTAIN";
+                weightGoalString = "Maintain";
                 break;
             }
             case R.id.btn_radio_lose: {
-                weightGoalString = "LOSE";
+                weightGoalString = "Lose";
                 break;
             }
         }
@@ -250,17 +258,16 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void userProfileSubmitButtonHandler() {
         Log.d(LOG, "User Profile Entry Done Button clicked");
-        //Validate input fields before adding to hashmap
 
         if (!isUserInputDataValid()) {
             Log.d(LOG, "invalid user data input");
-            Toast.makeText(getContext(), "Invalid input was entered", Toast.LENGTH_SHORT);
             return;
-        } else {
-            Toast.makeText(getContext(), "Data is being logged", Toast.LENGTH_SHORT);
         }
+        //Handle height measurements where inches field is left empty but feet is valid
+        String heightInchesValue =
+                isNotNullOrEmpty(heightInches.getText().toString()) ? heightInches.getText().toString() :
+                        String.valueOf(0);
 
-        //TODO: CLEAN THIS UP FOR PART TWO OF PROJECT
         userEnteredData.put("firstName", firstName.getText().toString());
         userEnteredData.put("lastName", lastName.getText().toString());
         userEnteredData.put("dob", dob.getText().toString());
@@ -269,8 +276,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         userEnteredData.put("country", country.getText().toString());
         userEnteredData.put("weight", weight.getText().toString());
         userEnteredData.put("heightFeet", heightFeet.getText().toString());
-        userEnteredData.put("heightInches", heightInches.getText().toString());
-        Log.d(LOG, lbsPerWeek.getText().toString());
+        userEnteredData.put("heightInches", heightInchesValue);
         userEnteredData.put("lbsPerWeek", lbsPerWeek.getText().toString());
         userEnteredData.put("lifestyle", lifestyleSelectorString);
         userEnteredData.put("goal", weightGoalString);
@@ -279,59 +285,99 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
             Log.d(LOG, "Key: '" + k + "' Value: '" + v + "'");
         });
 
-        UserProfile userProfile = new UserProfile();
-        userProfile.setM_fName(userEnteredData.get("firstName"));
-        userProfile.setM_lName(userEnteredData.get("lastName"));
-        userProfile.setM_sex(userEnteredData.get("sex"));
-        userProfile.setM_dob(userEnteredData.get("dob"));
-        userProfile.setM_city(userEnteredData.get("city"));
-        userProfile.setM_country(userEnteredData.get("country"));
+//        UserProfile userProfile = new UserProfile();
+//        userProfile.setM_fName(userEnteredData.get("firstName"));
+//        userProfile.setM_lName(userEnteredData.get("lastName"));
+//        userProfile.setM_sex(userEnteredData.get("sex"));
+//        userProfile.setM_dob(userEnteredData.get("dob"));
+//        userProfile.setM_city(userEnteredData.get("city"));
+//        userProfile.setM_country(userEnteredData.get("country"));
 //        userProfile.setM_lbsPerWeek(Integer.parseInt(userEnteredData.get("llbsPerWeek")));
-        userProfile.setM_lbsPerWeek(2);
-        userProfile.setM_lifestyleSelection(userEnteredData.get("lifestyle"));
-        userProfile.setM_weightGoal(userEnteredData.get("goal"));
+////        userProfile.setM_lbsPerWeek(2);
+//        userProfile.setM_lifestyleSelection(userEnteredData.get("lifestyle"));
+//        userProfile.setM_weightGoal(userEnteredData.get("goal"));
+//
+//        String userSex = userEnteredData.get("sex");
+//        int userAge = UserProfileUtils.calculateAge(userEnteredData.get("dob"));
+//        double userWeight = Double.parseDouble(userEnteredData.get("weight"));
+//        int heightFt = Integer.parseInt(userEnteredData.get("heightFeet"));
+//        int heightIn = Integer.parseInt(userEnteredData.get("heightInches"));
 
-        String userSex = userEnteredData.get("sex");
-        int userAge = UserProfileUtils.calculateAge(userEnteredData.get("dob"));
-        double userWeight = Double.parseDouble(userEnteredData.get("weight"));
-        int heightFt = Integer.parseInt(userEnteredData.get("heightFeet"));
-        int heightIn = Integer.parseInt(userEnteredData.get("heightInches"));
+        UserProfile userProfile = new UserProfile();
+        userProfile.setM_fName(firstName.getText().toString());
+        userProfile.setM_lName(lastName.getText().toString());
+        userProfile.setM_sex(sex.getText().toString());
+        userProfile.setM_dob(dob.getText().toString());
+        userProfile.setM_city(city.getText().toString());
+        userProfile.setM_country(country.getText().toString());
+        userProfile.setM_lbsPerWeek(Integer.parseInt(lbsPerWeek.getText().toString()));
+        userProfile.setM_lifestyleSelection(lifestyleSelectorString);
+        userProfile.setM_weightGoal(weightGoalString);
 
-        PhysicalStats physicalStats = new PhysicalStats(userSex, userAge, userWeight, heightFt, heightIn);
-        userProfile.setBodyData(physicalStats);
+        int userWeight = Integer.parseInt(weight.getText().toString());
+        int heightFt = Integer.parseInt(heightFeet.getText().toString());
+        int heightIn = Integer.parseInt(heightInchesValue);
+        int totalHeightInches = calculateHeightInInches(heightFt, heightIn);
+        int userAge = calculateAge(userProfile.getM_dob());
+
+        userProfile.setM_weightInPounds(userWeight);
+        userProfile.setM_heightFeet(heightFt);
+        userProfile.setM_heightInches(heightIn);
+        userProfile.setM_bmi(calculateBmi(totalHeightInches, userWeight));
+        userProfile.setM_bmr(calculateBMR(heightFt, heightIn, userProfile.getM_sex(), userWeight, userAge));
+
+
+        loadProfileSummaryFragment();
 
         if (viewModel.getUserProfile().getValue() != null){
             Log.d(LOG, "submit button handler, view model has data");
             UserProfile p = viewModel.getUserProfile().getValue();
             p.printUserProfileData();
-            m_dataListener.onProfileEntryDataEntered(p);
+            m_dataListener.onProfileEntryDataEntered_DoneButtonOnClick(p);
         } else {
             Log.d(LOG, "view model null");
-            m_dataListener.onProfileEntryDataEntered(userProfile);
+            m_dataListener.onProfileEntryDataEntered_DoneButtonOnClick(userProfile);
         }
-        //TODO: Need to add back lifestyle handler and weight loss goal fields back later
     }
 
-
-
     private boolean isUserInputDataValid() {
-        if (!ValidationUtils.isValidAlphaChars(firstName.getText().toString())
-                || !ValidationUtils.isValidAlphaChars(lastName.getText().toString())  ||
-                !ValidationUtils.isValidDobFormat(dob.getText().toString()) ||
-                !ValidationUtils.isValidSex(sex.getText().toString())) {
+        if (!isValidAlphaChars(firstName.getText().toString())) {
+            Toast.makeText(getContext(), "Invalid first name.", Toast.LENGTH_SHORT).show();
             return false;
         }
-               if (!ValidationUtils.isValidCity(city.getText().toString()) || !
-                ValidationUtils.isValidCountryCode(country.getText().toString()) ||
-                !ValidationUtils.isValidWeight(weight.getText().toString())) {
-                return false;
-               }
-               return true;
-//               if (!(ValidationUtils.isValidHeight(
-//                        heightFeet.getText().toString(), heightInches.getText().toString()) &&
-//                UserProfileUtils.isWeightChangeWithinAcceptableRange(lbsPerWeek.getText().toString()))){
-//
-//               };
+        else if (!isValidAlphaChars(lastName.getText().toString())) {
+            Toast.makeText(getContext(), "Invalid last name.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (!isValidDobFormat(dob.getText().toString())) {
+            Toast.makeText(getContext(), "Invalid date of birth.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (!isValidSex(sex.getText().toString())) {
+            Toast.makeText(getContext(), "Invalid sex.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (!isValidCity(city.getText().toString())) {
+            Toast.makeText(getContext(), "Invalid city.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (!isValidCountryCode(country.getText().toString())) {
+            Toast.makeText(getContext(), "Please enter a valid 2-character country code.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (!isValidWeight(weight.getText().toString())) {
+            Toast.makeText(getContext(), "Invalid weight.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (!isValidHeight(heightFeet.getText().toString(), heightInches.getText().toString())) {
+            Toast.makeText(getContext(), "Please enter a valid height in feet/inches.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (!isValidWeightPlan(lbsPerWeek.getText().toString())) {
+            Toast.makeText(getContext(), "Please enter", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -351,12 +397,11 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     }
 
     private void loadProfileSummaryFragment(){
-//        m_dataListener = (OnProfileEntryFragmentListener) getActivity();
-        m_dataListener.onProfileEntryDataPass_DoneButtonClicked(true);
+        m_dataListener = (OnProfileEntryFragmentListener) getActivity();
     }
 
     public interface OnProfileEntryFragmentListener {
-        void onProfileEntryDataEntered(UserProfile profile);
+        void onProfileEntryDataEntered_DoneButtonOnClick(UserProfile profile);
         void onProfileEntryDataPass_DoneButtonClicked (boolean isClicked);
     }
 }

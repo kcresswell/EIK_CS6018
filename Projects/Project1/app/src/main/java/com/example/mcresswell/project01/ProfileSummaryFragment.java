@@ -20,6 +20,8 @@ import com.example.mcresswell.project01.userProfile.UserProfile;
 import com.example.mcresswell.project01.userProfile.UserProfileViewModel;
 import com.example.mcresswell.project01.util.Constants;
 
+import static com.example.mcresswell.project01.util.UserProfileUtils.calculateAge;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,7 +37,7 @@ public class ProfileSummaryFragment extends Fragment
     private UserProfile m_userProfile;
 
     //UI Elements
-    private TextView m_firstName, m_lastName, m_sex, m_dob, m_heightFeet, m_heightInches, m_lbsperweek, m_city, m_country, m_weight, m_activity, m_weightGoal;
+    private TextView m_firstName, m_lastName, m_sex, m_age, m_heightFeet, m_heightInches, m_city, m_country, m_weight, m_activity, m_weightGoal;
 
     public ProfileSummaryFragment() {
         // Required empty public constructor
@@ -45,7 +47,9 @@ public class ProfileSummaryFragment extends Fragment
         Log.d(LOG, Constants.NEW);
         ProfileSummaryFragment fragment = new ProfileSummaryFragment();
         Bundle args = new Bundle();
-        args.putParcelable("profile", profile);
+        if (profile != null) {
+            args.putParcelable("profile", profile);
+        }
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,44 +69,51 @@ public class ProfileSummaryFragment extends Fragment
         m_userProfile = getActivity().getIntent().getParcelableExtra("profile");
         if (m_userProfile != null) {
             loadUserData(m_userProfile);
-        } else {
-            Log.d(LOG, "no data in bundle, loadUserData using test profile");
-//            loadUserData(UserProfile.newTestUserProfileInstance());
         }
+// if (m_userProfile != null) {
+//            loadUserData(m_userProfile);
+//        } else {
+//            Log.d(LOG, "no data in bundle, loadUserData using test profile");
+////            loadUserData(UserProfile.newTestUserProfileInstance());
+//        }
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(LOG, Constants.CREATE_VIEW);
-        // Inflate the layout for this fragment
+
         View v = inflater.inflate(R.layout.fragment_profile_summary, container, false);
 
         m_firstName = v.findViewById(R.id.txtv_fname);
         m_lastName = v.findViewById(R.id.txtv_lname);
         m_sex = v.findViewById(R.id.txtv_sex);
-        m_dob = v.findViewById(R.id.txtv_dob);
+        m_age = v.findViewById(R.id.txtv_dob);
         m_heightFeet = v.findViewById(R.id.txtv_feet);
         m_heightInches = v.findViewById(R.id.txtv_inches);
-        m_editButton = v.findViewById(R.id.btn_edit);
         m_weight = v.findViewById(R.id.txtv_weight);
-//        m_weightGoal = v.findViewById(R.id);
+        m_city = v.findViewById(R.id.txtv_city);
+        m_country = v.findViewById(R.id.txtv_country);
+        m_activity = v.findViewById(R.id.radiogp_lifestyle);
+        m_weightGoal = v.findViewById(R.id.radiogp_weightGoal);
+        m_editButton = v.findViewById(R.id.btn_edit);
+
         m_editButton.setOnClickListener(this);
 
         if (m_userProfile != null) {
             m_firstName.setText(m_userProfile.getM_fName());
             m_lastName.setText(m_userProfile.getM_lName());
             m_sex.setText(m_userProfile.getM_sex());
-            m_dob.setText(m_userProfile.getM_dob());
-//            m_heightFeet.setText(m_userProfile.getBodyData().getHeightFeet());
-//            m_heightInches.setText(m_userProfile.getBodyData().getHeightInches());
-//            m_weight.setText((int) m_userProfile.getBodyData().getWeightInPounds());
-//            m_city.setText(m_userProfile.getM_city());
-//            m_country.setText(m_userProfile.getM_country());
-//            m_weight.setText((int) m_userProfile.getBodyData().getWeightInPounds());
-//            m_weightGoal.setText(m_userProfile.getM_weightGoal());
-//            m_lbsperweek.setText(us);
+            m_age.setText(calculateAge(m_userProfile.getM_dob())+ "y");
+            m_heightFeet.setText(String.valueOf(m_userProfile.getM_heightFeet()));
+            m_heightInches.setText(String.valueOf(m_userProfile.getM_heightInches()));
+            m_weight.setText(String.valueOf(m_userProfile.getM_weightInPounds()));
+            m_city.setText(m_userProfile.getM_city());
+            m_country.setText(m_userProfile.getM_country());
+            m_activity.setText(m_userProfile.getM_lifestyleSelection());
+            m_weightGoal.setText(String.valueOf(m_userProfile.getM_weightGoal() + " " + m_userProfile.getM_lbsPerWeek() + " lbs/week"));
         }
         return v;
     }
@@ -157,7 +168,7 @@ public class ProfileSummaryFragment extends Fragment
     }
 
     private void loadUserData(UserProfile profile) {
-        Log.d(LOG, "loadWeatherData");
+        Log.d(LOG, "loadUserData");
         m_userProfileViewModel.setUserProfile(profile);
     }
 
@@ -175,7 +186,7 @@ public class ProfileSummaryFragment extends Fragment
             userProfile.setM_fName(m_firstName.getText().toString());
             userProfile.setM_lName(m_lastName.getText().toString());
             userProfile.setM_sex(m_sex.getText().toString());
-            userProfile.setM_dob(m_dob.getText().toString());
+//            userProfile.setM_dob(m_d.getText().toString());
 
             //TODO: FINISH THIS LATER
             m_listener.onProfileSummaryEditButton(userProfile);

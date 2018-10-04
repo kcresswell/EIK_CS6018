@@ -187,7 +187,7 @@ public class DashboardActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onProfileEntryDataEntered(UserProfile profile) {
+    public void onProfileEntryDataEntered_DoneButtonOnClick(UserProfile profile) {
 
     }
 

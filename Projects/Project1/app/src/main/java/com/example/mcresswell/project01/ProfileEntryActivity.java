@@ -12,7 +12,8 @@ import com.example.mcresswell.project01.userProfile.UserProfile;
 import com.example.mcresswell.project01.util.Constants;
 
 public class ProfileEntryActivity extends AppCompatActivity
-        implements ProfileEntryFragment.OnProfileEntryFragmentListener {
+        implements ProfileEntryFragment.OnProfileEntryFragmentListener,
+        ProfileSummaryFragment.OnProfileSummaryInteractionListener {
     private final String LOG = getClass().getSimpleName();
 
     private FragmentTransaction m_fTrans;
@@ -33,16 +34,15 @@ public class ProfileEntryActivity extends AppCompatActivity
 //        }
         ProfileEntryFragment profileEntryFragment =
                 ProfileEntryFragment.newInstance(profile);
-//        ProfileEntryFragment profileEntryFragment = new ProfileEntryFragment();
 
         m_fTrans.replace(R.id.fl_activity_profile_entry, profileEntryFragment);
         m_fTrans.commit();
     }
 
     @Override
-    public void onProfileEntryDataEntered(UserProfile profile) {
+    public void onProfileEntryDataEntered_DoneButtonOnClick(UserProfile profile) {
         //TODO: pass data from ProfileEntry to ProfileSummary
-        Log.d(LOG, "onProfileEntryDataEntered");
+        Log.d(LOG, "onProfileEntryDataEntered_DoneButtonOnClick");
         Intent intent = new Intent(this, ProfileSummaryActivity.class);
 
         if (profile != null) {
@@ -61,5 +61,10 @@ public class ProfileEntryActivity extends AppCompatActivity
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
+    }
+
+    @Override
+    public void onProfileSummaryEditButton(UserProfile profile) {
+
     }
 }
