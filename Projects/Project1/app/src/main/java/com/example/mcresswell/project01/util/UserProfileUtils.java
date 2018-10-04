@@ -4,7 +4,6 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
-import com.example.mcresswell.project01.userProfile.PhysicalStats;
 import com.example.mcresswell.project01.userProfile.UserProfile;
 
 import java.time.LocalDate;
@@ -24,7 +23,7 @@ public class UserProfileUtils {
         CLINICALLY_OBESE
     }
 
-    public static double calculateBmi(int heightInInches, double weightInPounds) {
+    public static double calculateBmi(int heightInInches, int weightInPounds) {
         final double BMI_METRIC_TO_IMPERIAL_SCALE_FACTOR = 703;
         return weightInPounds/Math.pow(heightInInches, 2) * BMI_METRIC_TO_IMPERIAL_SCALE_FACTOR;
     }
@@ -43,27 +42,21 @@ public class UserProfileUtils {
     }
 
     public static double calculateBMR(int heightFeet, int heightInches,
-                                      String sex, double weightInPounds, int age) {
+                                      String sex, int weightInPounds, int age) {
         double BMR = 0.0;
         double totalHeightInInches = (heightFeet * 12.0) + heightInches;
 
         //calculate BMR based on sex of user
-        if(sex.equalsIgnoreCase("F")||
-                sex.equalsIgnoreCase("Female")) {
+        if(sex.equalsIgnoreCase("F")){
             //user is female, s = -161
             BMR = (9.99 * weightInPounds) +
                     (6.25 * totalHeightInInches) - 4.92 * age - 161;
         }
-        else if (sex.equalsIgnoreCase("M") ||
-                sex.equalsIgnoreCase("Male")) {
+        else if (sex.equalsIgnoreCase("M")) {
             //user is male, s = 5
             BMR = (9.99 * weightInPounds) +
                     (6.25 * totalHeightInInches) - 4.92 * age + 5;
-        } else {
-            Log.d(LOG, "Cannot calculate BMR; invalid gender.");
-            //--TODO: throw an error here if not male or female--//
         }
-
         return BMR;
     }
 

@@ -20,7 +20,7 @@
     <string name="btn_img_description_profile_image">Take a profile picture</string>
     <string name="hint_dob">DOB</string>
     <string name="txtv_ft_symbol">\'</string>
-    <string name="txtv_in_symble">\"</string>
+    <string name="txtv_in_symbol">\"</string>
     <string name="txtv_lbs_symbol">lbs</string>
     <string name="txtv_label_location">Location</string>
     <string name="txtv_label_fitness">Current Weight</string>

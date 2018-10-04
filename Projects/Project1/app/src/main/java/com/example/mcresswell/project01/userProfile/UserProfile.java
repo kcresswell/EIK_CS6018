@@ -36,7 +36,7 @@ public class UserProfile implements Parcelable {
     private String m_lifestyleSelection;
     private String m_weightGoal;  //GAIN/MAINTAIN/LOSE
     private int m_lbsPerWeek;
-    private double m_weightInPounds;
+    private int m_weightInPounds;
     private int m_heightFeet;
     private int m_heightInches;
     private double m_bmi;
@@ -57,7 +57,7 @@ public class UserProfile implements Parcelable {
                        String lifestyleSelection,
                        String weightGoal,
                        int lbsPerWeek,
-                       double weightInPounds,
+                       int weightInPounds,
                        int heightFeet,
                        int heightInches) {
 
@@ -90,10 +90,11 @@ public class UserProfile implements Parcelable {
         m_lifestyleSelection = in.readString();
         m_weightGoal = in.readString();
         m_lbsPerWeek = in.readInt();
-        m_weightInPounds = in.readDouble();
+        m_weightInPounds = in.readInt();
         m_heightFeet = in.readInt();
         m_heightInches = in.readInt();
-        m_bmi = calculateBmi(calculateHeightInInches(m_heightFeet, m_heightInches), m_weightInPounds);
+        m_bmi = in.readDouble();
+        m_bmr = in.readDouble();
 
     }
 
@@ -191,9 +192,9 @@ public class UserProfile implements Parcelable {
         this.m_lbsPerWeek = m_lbsPerWeek;
     }
 
-    public double getM_weightInPounds() { return m_weightInPounds; }
+    public int getM_weightInPounds() { return m_weightInPounds; }
 
-    public void setM_weightInPounds(double m_weightInPounds) { this.m_weightInPounds = m_weightInPounds; }
+    public void setM_weightInPounds(int m_weightInPounds) { this.m_weightInPounds = m_weightInPounds; }
 
     public int getM_heightFeet() { return m_heightFeet; }
 
@@ -273,5 +274,10 @@ public class UserProfile implements Parcelable {
         dest.writeString(m_lifestyleSelection);
         dest.writeString(m_weightGoal);
         dest.writeInt(m_lbsPerWeek);
+        dest.writeInt(m_weightInPounds);
+        dest.writeInt(m_heightFeet);
+        dest.writeInt(m_heightInches);
+        dest.writeDouble(m_bmi);
+        dest.writeDouble(m_bmr);
     }
 }

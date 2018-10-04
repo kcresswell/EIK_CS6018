@@ -24,7 +24,7 @@
     <string name="hint_inches">Inches</string>
     <string name="hint_weight">Weight</string>
     <string name="hint_city">City</string>
-    <string name="hint_Country">Country</string>
+    <string name="hint_Country">Country Code (Two Characters)</string>
     <string name="btn_done">Done</string>
     <string name="btn_img_description_profile_image">Take a profile picture</string>
     <string name="hint_dob">DOB</string>
@@ -32,7 +32,7 @@
     <!--Fitness Details-->
     <string name="title_activity_fitness">Fitness</string>
     <string name="txtv_ft_symbol">\'</string>
-    <string name="txtv_in_symble">\"</string>
+    <string name="txtv_in_symbol">\"</string>
     <string name="txtv_lbs_symbol">lbs</string>
     <string name="txtv_label_location">Location</string>
     <string name="txtv_label_fitness">Current Weight</string>
