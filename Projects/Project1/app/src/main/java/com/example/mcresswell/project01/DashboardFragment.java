@@ -27,15 +27,6 @@ public class DashboardFragment extends Fragment {
         // Required empty public constructor
     }
 
-//    public static DashboardFragment newInstance (ImageButtonListParcelable imageButtonListParcelable){
-//        Bundle args = new Bundle();
-//        args.putParcelable("BUTTONS", imageButtonListParcelable);
-//
-//        DashboardFragment fragment = new DashboardFragment();
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
