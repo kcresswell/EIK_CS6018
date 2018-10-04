@@ -2,49 +2,80 @@ package com.example.mcresswell.project01.util;
 
 import org.junit.Test;
 
+import static com.example.mcresswell.project01.util.ValidationUtils.isNotNullOrEmpty;
+import static com.example.mcresswell.project01.util.ValidationUtils.isValidCity;
+import static com.example.mcresswell.project01.util.ValidationUtils.isValidCountryCode;
+import static com.example.mcresswell.project01.util.ValidationUtils.isValidDobFormat;
+import static com.example.mcresswell.project01.util.ValidationUtils.isValidEmail;
 import static org.junit.Assert.*;
 
 public class ValidationUtilsTest {
 
     @Test
     public void inputIsNullOrEmpty() {
-        assertFalse(ValidationUtils.isNotNullOrEmpty(null));
-        assertFalse(ValidationUtils.isNotNullOrEmpty("     \n"));
-        assertFalse(ValidationUtils.isNotNullOrEmpty(""));
-        assertFalse(ValidationUtils.isNotNullOrEmpty(" "));
+        assertFalse(isNotNullOrEmpty(null));
+        assertFalse(isNotNullOrEmpty("     \n"));
+        assertFalse(isNotNullOrEmpty(""));
+        assertFalse(isNotNullOrEmpty(" "));
 
     }
 
     @Test
     public void inputIsNotNullOrEmpty() {
-        assertTrue(ValidationUtils.isNotNullOrEmpty("TEST"));
-        assertTrue(ValidationUtils.isNotNullOrEmpty("     \nTEST"));
-        assertTrue(ValidationUtils.isNotNullOrEmpty("  TEST  "));
-        assertTrue(ValidationUtils.isNotNullOrEmpty(" TEST SPACES "));
+        assertTrue(isNotNullOrEmpty("TEST"));
+        assertTrue(isNotNullOrEmpty("     \nTEST"));
+        assertTrue(isNotNullOrEmpty("  TEST  "));
+        assertTrue(isNotNullOrEmpty(" TEST SPACES "));
 
     }
 
     @Test
-    public void validateEmail_validEmailInput() {
-        assertTrue(ValidationUtils.isValidEmail("test123@test.com"));
-        assertTrue(ValidationUtils.isValidEmail("test_123@test.com"));
-        assertTrue(ValidationUtils.isValidEmail("test-123@test.com"));
-        assertTrue(ValidationUtils.isValidEmail("test.test@test.com"));
-        assertTrue(ValidationUtils.isValidEmail("test@hotmail.co.uk"));
-        assertTrue(ValidationUtils.isValidEmail("123456789@test.com"));
-        assertTrue(ValidationUtils.isValidEmail("   123456789@test.com   "));
-
-
+    public void isValidEmail_validEmailInput() {
+        assertTrue(isValidEmail("test123@test.com"));
+        assertTrue(isValidEmail("test_123@test.com"));
+        assertTrue(isValidEmail("test-123@test.com"));
+        assertTrue(isValidEmail("test.test@test.com"));
+        assertTrue(isValidEmail("test@hotmail.co.uk"));
+        assertTrue(isValidEmail("123456789@test.com"));
+        assertTrue(isValidEmail("   123456789@test.com   "));
 
     }
 
     @Test
-    public void validateEmail_invalidEmailInput() {
-        assertFalse(ValidationUtils.isValidEmail("email"));
-        assertFalse(ValidationUtils.isValidEmail("emailwith @ spaces.com"));
-        assertFalse(ValidationUtils.isValidEmail("helloemail@test"));
-        assertFalse(ValidationUtils.isValidEmail("hello*email@test.com"));
-        assertFalse(ValidationUtils.isValidEmail("hello#email@test.com"));
+    public void isValidEmail_invalidEmailInput() {
+        assertFalse(isValidEmail("email"));
+        assertFalse(isValidEmail("emailwith @ spaces.com"));
+        assertFalse(isValidEmail("helloemail@test"));
+        assertFalse(isValidEmail("hello*email@test.com"));
+        assertFalse(isValidEmail("hello#email@test.com"));
+
+    }
+
+    @Test
+    public void isValidDobFormat_validDob() {
+        assertTrue(isValidDobFormat("11/11/2011"));
+        assertTrue(isValidDobFormat("01/11/2011"));
+        assertTrue(isValidDobFormat("01/11/2000"));
+
+    }
+
+    @Test
+    public void isValidDobFormat_invalidDob() {
+        assertFalse(isValidDobFormat("11/11/201"));
+        assertFalse(isValidDobFormat("a1/22/1111"));
+        assertFalse(isValidDobFormat("01/11/200-"));
+        assertFalse(isValidDobFormat("01-11-2000"));
+        assertFalse(isValidDobFormat("01/11/99"));
+
+    }
+
+    @Test
+    public void isValidCityisValidCountryCode_validInput() {
+        assertTrue(isValidCity("provo"));
+        assertTrue(isValidCity("salt lake"));
+        assertTrue(isValidCity("NEW YORK CITY"));
+        assertTrue(isValidCountryCode("CA"));
+        assertTrue(isValidCountryCode("us "));
 
     }
 }
