@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.mcresswell.project01.userProfile.UserProfile;
-import com.example.mcresswell.project01.userProfile.UserProfileViewModel;
 import com.example.mcresswell.project01.util.GeocoderLocationUtils;
 import com.example.mcresswell.project01.util.ValidationUtils;
 import com.example.mcresswell.project01.weather.WeatherForecast;
@@ -30,7 +29,7 @@ public class DashboardActivity extends AppCompatActivity implements
     private final String DEFAULT_CITY = "PROVO";
     private final String DEFAULT_COUNTRY_CODE = "US";
     private FragmentTransaction m_fTrans;
-    private UserProfileViewModel userProfileViewModel;
+    private UserProfile m_userProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +52,7 @@ public class DashboardActivity extends AppCompatActivity implements
         }
         switch (buttonPosition) {
             case 0: //FitnessDetails
-                fitnessButtonHandler();
+                fitnessDetailsButtonHandler();
                 break;
             case 1: //Hiking
                 hikingButtonHandler();
@@ -62,17 +61,24 @@ public class DashboardActivity extends AppCompatActivity implements
                 profileButtonHandler();
                 break;
             case 3: //Weather
+
                 weatherButtonHandler(DEFAULT_CITY, DEFAULT_COUNTRY_CODE);
                 break;
         }
     }
 
-    private void fitnessButtonHandler() {
+    private void fitnessDetailsButtonHandler() {
         if(!isWideDisplay()) { //mobile
             Intent intent = new Intent(this, FitnessDetailsActivity.class);
+            if (m_userProfile != null) {
+                intent.putExtra("profile", m_userProfile);
+            }
             startActivity(intent);
         } else { //Tablet
-            m_fTrans.replace(R.id.fl_detail_wd, new FitnessDetailsFragment());
+            FitnessDetailsFragment fitnessDetailsFragment =
+                    m_userProfile == null ? new FitnessDetailsFragment() :
+                            FitnessDetailsFragment.newInstance(m_userProfile);
+            m_fTrans.replace(R.id.fl_detail_wd, fitnessDetailsFragment);
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
@@ -80,12 +86,13 @@ public class DashboardActivity extends AppCompatActivity implements
 
     private void hikingButtonHandler() {
         String coords = null;
-        if (userProfileViewModel == null) {
+        if (m_userProfile == null) {
             coords = DEFAULT_COORDINATES;
         } else {
-            UserProfile user = userProfileViewModel.getUserProfile().getValue();
             try {
-                coords = GeocoderLocationUtils.getCoordinatesFromCityCountry(user.getM_city(), user.getM_country());
+                coords =
+                        GeocoderLocationUtils.getCoordinatesFromCityCountry(
+                                m_userProfile.getM_city(), m_userProfile.getM_country());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -161,7 +168,12 @@ public class DashboardActivity extends AppCompatActivity implements
             m_fTrans.commit();
         } else { //Tablet default: master fragment left, detail fragment right
             m_fTrans.replace(R.id.fl_master_wd, frag_dashboard, "v_frag_dashboard");
-            m_fTrans.replace(R.id.fl_detail_wd, new FitnessDetailsFragment(), "v_frag_fitness");
+
+            FitnessDetailsFragment fitnessDetailsFragment =
+                    m_userProfile != null ? FitnessDetailsFragment.newInstance(m_userProfile) :
+                            new FitnessDetailsFragment();
+
+            m_fTrans.replace(R.id.fl_detail_wd, fitnessDetailsFragment, "v_frag_fitness");
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
@@ -169,11 +181,11 @@ public class DashboardActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
+//        if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
             restoreDefaultDashboardView();
-        } else {
-            super.onBackPressed();
-        }
+//        } else {
+//            super.onBackPressed();
+//        }
     }
 
     private boolean isWideDisplay(){
@@ -182,11 +194,13 @@ public class DashboardActivity extends AppCompatActivity implements
 
     @Override
     public void onProfileEntryDataEntered_DoneButtonOnClick(UserProfile profile) {
-
+        m_userProfile = profile;
     }
 
     @Override
     public void onProfileEntryDataPass_DoneButtonClicked(boolean isClicked) {
+
+        //FIXME: THIS EXTRA INTERFACE METHOD IS NOT NEEDED. SEE onProfileEntryDataEntered_DoneButtonOnClick()
         //nothing to implement for this class. This indicates we need to clean up the code structure
     }
 

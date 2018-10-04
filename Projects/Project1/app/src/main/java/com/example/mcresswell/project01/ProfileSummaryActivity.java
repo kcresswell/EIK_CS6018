@@ -57,8 +57,8 @@ public class ProfileSummaryActivity extends AppCompatActivity
         m_fTrans = getSupportFragmentManager().beginTransaction();
 
         ProfileSummaryFragment fragment =
-                profile == null ? new ProfileSummaryFragment() :
-                        ProfileSummaryFragment.newInstance(profile);
+                profile != null ?
+                        ProfileSummaryFragment.newInstance(profile) : new ProfileSummaryFragment();
 
         m_fTrans.replace(R.id.fl_activity_profile_details, fragment);
         m_fTrans.commit();
@@ -68,12 +68,4 @@ public class ProfileSummaryActivity extends AppCompatActivity
     public void onProfileEntryDataPass_DoneButtonClicked(boolean isClicked) {
         //nothing to implement for this class. This indicates we need to clean up the code structure
     }
-
-//    @Override
-//    public void onProfileEntryDataEntered_DoneButtonOnClick(UserProfile profile) {
-////            Log.d(LOG, "onProfileEntryDataEntered_DoneButtonOnClick");
-////            profile.printUserProfileData();
-//
-////        Intent intent = new Intent(this, ProfileSummaryFragment.new);
-//    }
 }

@@ -44,7 +44,6 @@ public class UserProfileViewModel extends AndroidViewModel {
                 if (userProfiles != null){
                     Log.d(TAG, String.format("Retrieving %d userProfiles from userProfile database", userProfiles.length));
                     for (UserProfile user: userProfiles){
-                        //TODO:  KEEP THIS LINE OF CODE IN; WE'LL CALL THIS METHOD LATER TO LOOKUP A USER PROFILE IN DATABASE BY PROFILE ID
 //                       profile = userProfileRepository.userProfileFromFitnessProfile(user.getId());
                         user.printUserProfileData();
                     }
