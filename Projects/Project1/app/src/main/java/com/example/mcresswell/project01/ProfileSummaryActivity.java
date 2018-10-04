@@ -52,7 +52,7 @@ public class ProfileSummaryActivity extends AppCompatActivity
     }
 
     @Override
-    public void onProfileEntryDataEntered(UserProfile profile) {
+    public void onProfileEntryDataEntered_DoneButtonOnClick(UserProfile profile) {
         Log.d(LOG, "onProfileEntryDoneButton listener, user finished adding data");
         m_fTrans = getSupportFragmentManager().beginTransaction();
 
@@ -70,8 +70,8 @@ public class ProfileSummaryActivity extends AppCompatActivity
     }
 
 //    @Override
-//    public void onProfileEntryDataEntered(UserProfile profile) {
-////            Log.d(LOG, "onProfileEntryDataEntered");
+//    public void onProfileEntryDataEntered_DoneButtonOnClick(UserProfile profile) {
+////            Log.d(LOG, "onProfileEntryDataEntered_DoneButtonOnClick");
 ////            profile.printUserProfileData();
 //
 ////        Intent intent = new Intent(this, ProfileSummaryFragment.new);
