@@ -30,5 +30,4 @@ public class FitnessProfileRepository {
         //Then generate a UserProfile object from the record retrieved
         return null;
     }
-
 }

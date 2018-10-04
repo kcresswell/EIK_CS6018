@@ -11,11 +11,14 @@ import android.util.Log;
 import com.example.mcresswell.project01.userProfile.UserProfile;
 import com.example.mcresswell.project01.userProfile.UserProfileViewModel;
 import com.example.mcresswell.project01.util.GeocoderLocationUtils;
+import com.example.mcresswell.project01.util.SampleProfileData;
 import com.example.mcresswell.project01.util.ValidationUtils;
 import com.example.mcresswell.project01.weather.WeatherForecast;
 import com.example.mcresswell.project01.weather.WeatherFragment;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DashboardActivity extends AppCompatActivity implements
         ProfileSummaryFragment.OnProfileSummaryInteractionListener,
@@ -24,6 +27,7 @@ public class DashboardActivity extends AppCompatActivity implements
         WeatherFragment.OnWeatherDataLoadedListener {
 
     private final String LOG = getClass().getSimpleName();
+    private List<UserProfile> userProfilesData = new ArrayList<>();
 
     //member variables
     private final String DEFAULT_COORDINATES = "40.7608,-111.8910";
@@ -40,6 +44,8 @@ public class DashboardActivity extends AppCompatActivity implements
         if(savedInstanceState == null){
             restoreDefaultDashboardView();
         }
+
+        userProfilesData.addAll(SampleProfileData.getUserProfiles());
     }
 
     @Override
