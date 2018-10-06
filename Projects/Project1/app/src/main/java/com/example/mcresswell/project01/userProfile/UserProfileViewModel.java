@@ -11,7 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
-import com.example.mcresswell.project01.dao.FitnessProfileRepository;
+import com.example.mcresswell.project01.db.FitnessProfileRepository;
 
 import static android.support.constraint.Constraints.TAG;
 
