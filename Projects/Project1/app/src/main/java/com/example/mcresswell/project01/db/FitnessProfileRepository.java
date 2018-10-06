@@ -1,6 +1,9 @@
 package com.example.mcresswell.project01.db;
 
+<<<<<<< HEAD:Projects/Project1/app/src/main/java/com/example/mcresswell/project01/db/FitnessProfileRepository.java
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
+=======
+>>>>>>> Eric:Projects/Project1/app/src/main/java/com/example/mcresswell/project01/dao/FitnessProfileRepository.java
 import com.example.mcresswell.project01.userProfile.UserProfile;
 
 public class FitnessProfileRepository {
@@ -30,5 +33,4 @@ public class FitnessProfileRepository {
         //Then generate a UserProfile object from the record retrieved
         return null;
     }
-
 }

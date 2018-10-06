@@ -61,7 +61,7 @@ public class SampleProfileData {
                 "Akmed",
                 "03/03/1940",
                 "M",
-                "Albuquerque",
+                "Salt Lake City",
                 "US",
                 "Active",
                 "Loose",
