@@ -1,13 +1,21 @@
 package com.example.mcresswell.project01.userProfile;
 
+
 import android.graphics.Bitmap;
+
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.PrimaryKey;
+
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
-import com.example.mcresswell.project01.util.UserProfileUtils;
+import com.example.mcresswell.project01.dao.FitnessProfile;
+
 import java.util.Date;
 
 import static com.example.mcresswell.project01.util.UserProfileUtils.calculateAge;
@@ -15,28 +23,51 @@ import static com.example.mcresswell.project01.util.UserProfileUtils.calculateBM
 import static com.example.mcresswell.project01.util.UserProfileUtils.calculateBmi;
 import static com.example.mcresswell.project01.util.UserProfileUtils.calculateHeightInInches;
 
+
+/**
+ *  A POJO class representing all of the data associated with a given user.
+ *  This is NOT the entity/DAO class, the corresponding entity class for UserProfile
+ *  is the FitnessProfile class.
+ *
+ */
+@Entity(foreignKeys = @ForeignKey(entity = FitnessProfile.class,
+        parentColumns = "id",
+        childColumns = "profile_id"))
 public class UserProfile implements Parcelable {
 
     private static final String LOG = UserProfile.class.getSimpleName();
 
+    //acount details
+    @PrimaryKey
     private int m_userID; // Profile ID in database
-    private Date m_dateCreated;
+    @ColumnInfo(name = "join_date")
+    private Date m_dateJoined;
+    @ColumnInfo(name = "email")
+    private String m_email;
+    @ColumnInfo(name = "password")
+    private String m_password;
+
     private String m_fName;
     private String m_lName;
-    private String m_dob;
-    private String m_sex;
+
+    //location
     private String m_city;
     private String m_country;
-    private String m_lifestyleSelection;
-    private String m_weightGoal;  //GAIN/MAINTAIN/LOSE
-    private int m_lbsPerWeek;
+
+    //physical profile
+    private String m_dob;
+    private String m_sex;
     private int m_weightInPounds;
     private int m_heightFeet;
     private int m_heightInches;
+
+    //fitness details
+    private String m_lifestyleSelection;
+    private String m_weightGoal;  //GAIN/MAINTAIN/LOSE
+    private int m_lbsPerWeek;
     private double m_bmi;
     private double m_bmr;
     private Bitmap m_profilePicture;
-
 
     public UserProfile() { }
 
@@ -57,7 +88,7 @@ public class UserProfile implements Parcelable {
                        int heightInches) {
 
         m_userID = userId;
-        m_dateCreated = dateCreated;
+        m_dateJoined = dateCreated;
         m_fName = fName;
         m_lName = lName;
         m_dob = dob;
@@ -113,9 +144,9 @@ public class UserProfile implements Parcelable {
         this.m_userID = id;
     }
 
-    public Date getM_dateCreated() { return m_dateCreated; }
+    public Date getM_dateJoined() { return m_dateJoined; }
 
-    public void setM_dateCreated(Date m_dateCreated) { this.m_dateCreated = m_dateCreated; }
+    public void setM_dateJoined(Date m_dateJoined) { this.m_dateJoined = m_dateJoined; }
 
     public String getM_fName() {
         return m_fName;
