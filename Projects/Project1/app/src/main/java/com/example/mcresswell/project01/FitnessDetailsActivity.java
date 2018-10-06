@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.mcresswell.project01.userProfile.UserProfile;
+import com.example.mcresswell.project01.db.entity.UserProfile;
 
 public class FitnessDetailsActivity extends AppCompatActivity {
     private FragmentTransaction m_fTrans;

@@ -2,9 +2,8 @@ package com.example.mcresswell.project01.util;
 
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 
-import com.example.mcresswell.project01.userProfile.UserProfile;
+import com.example.mcresswell.project01.db.entity.UserProfile;
 
 import java.time.LocalDate;
 import java.time.Period;

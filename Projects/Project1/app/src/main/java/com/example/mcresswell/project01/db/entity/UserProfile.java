@@ -1,11 +1,8 @@
-package com.example.mcresswell.project01.userProfile;
+package com.example.mcresswell.project01.db.entity;
 
-
-import android.graphics.Bitmap;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 
 import android.os.Build;
@@ -13,8 +10,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
-
-import com.example.mcresswell.project01.dao.FitnessProfile;
 
 import java.util.Date;
 
@@ -27,12 +22,9 @@ import static com.example.mcresswell.project01.util.UserProfileUtils.calculateHe
 /**
  *  A POJO class representing all of the data associated with a given user.
  *  This is NOT the entity/DAO class, the corresponding entity class for UserProfile
- *  is the FitnessProfile class.
  *
  */
-@Entity(foreignKeys = @ForeignKey(entity = FitnessProfile.class,
-        parentColumns = "id",
-        childColumns = "profile_id"))
+@Entity(tableName = "UserProfile")
 public class UserProfile implements Parcelable {
 
     private static final String LOG = UserProfile.class.getSimpleName();
@@ -42,10 +34,6 @@ public class UserProfile implements Parcelable {
     private int m_userID; // Profile ID in database
     @ColumnInfo(name = "join_date")
     private Date m_dateJoined;
-    @ColumnInfo(name = "email")
-    private String m_email;
-    @ColumnInfo(name = "password")
-    private String m_password;
 
     private String m_fName;
     private String m_lName;
@@ -67,7 +55,7 @@ public class UserProfile implements Parcelable {
     private int m_lbsPerWeek;
     private double m_bmi;
     private double m_bmr;
-    private Bitmap m_profilePicture;
+//    private Bitmap m_profilePicture;
 
     public UserProfile() { }
 

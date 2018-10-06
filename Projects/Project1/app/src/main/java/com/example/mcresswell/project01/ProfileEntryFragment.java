@@ -24,8 +24,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.example.mcresswell.project01.userProfile.UserProfile;
-import com.example.mcresswell.project01.userProfile.UserProfileViewModel;
+import com.example.mcresswell.project01.db.entity.UserProfile;
+import com.example.mcresswell.project01.ViewModels.UserProfileViewModel;
 import com.example.mcresswell.project01.util.Constants;
 
 import java.util.HashMap;
@@ -399,7 +399,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
             return false;
         }
         else if (!isValidWeightPlan(lbsPerWeek.getText().toString())) {
-            Toast.makeText(getContext(), "Please enter", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Please enter weekly weight goal", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;

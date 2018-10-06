@@ -3,7 +3,7 @@ package com.example.mcresswell.project01;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.example.mcresswell.project01.userProfile.UserProfile;
+import com.example.mcresswell.project01.db.entity.UserProfile;
 
 import java.util.ArrayList;
 
