@@ -1,6 +1,6 @@
-package com.example.mcresswell.project01.dao;
+package com.example.mcresswell.project01.db;
 
-import com.example.mcresswell.project01.dao.entity.FitnessProfile;
+import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.userProfile.UserProfile;
 
 public class FitnessProfileRepository {

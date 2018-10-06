@@ -97,12 +97,6 @@ public class UserProfileUtils {
         return feet * 12 + inches;
     }
 
-    public static boolean isWeightChangeWithinAcceptableRange(String lbsPerWeek){
-        return !ValidationUtils.isValidWeight(lbsPerWeek) &&
-                Integer.parseInt(lbsPerWeek) >= -5 && Integer.parseInt(lbsPerWeek) <= 5;
-    }
-
-
     //helper functions
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static int calculateAge(String m_dob) {

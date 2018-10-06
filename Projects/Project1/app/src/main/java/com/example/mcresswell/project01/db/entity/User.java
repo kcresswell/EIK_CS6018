@@ -1,4 +1,4 @@
-package com.example.mcresswell.project01.dao.entity;
+package com.example.mcresswell.project01.db.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
@@ -8,25 +8,25 @@ import android.arch.persistence.room.PrimaryKey;
 import java.util.Date;
 
 /**
- * UserAccount entity representing the UserAccount database table that will
+ * User @Entity representing the User table that will
  * exclusively store user account login data.
  */
 @Entity(foreignKeys = @ForeignKey(entity = FitnessProfile.class,
                         parentColumns = "id",
                         childColumns = "profile_id"))
-public class UserAccount {
+public class User {
 
     @PrimaryKey
     private int id;
 
     @ColumnInfo(name = "email")
-    private String firstName;
+    private String email;
 
-    @ColumnInfo(name = "password")
-    private String lastName;
+    @ColumnInfo(name = "pass")
+    private String password;
 
     @ColumnInfo(name = "profile_id")
-    private int userProfileId; //FK for record in UserProfile database
+    private int fitnessProfileId; //FK to id of user in FitnessProfile table
 
     @ColumnInfo(name = "join_date")
     private Date joinDate;
@@ -39,28 +39,28 @@ public class UserAccount {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getEmail() {
+        return email;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getPassword() {
+        return password;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public int getUserProfileId() {
-        return userProfileId;
+    public int getFitnessProfileId() {
+        return fitnessProfileId;
     }
 
-    public void setUserProfileId(int userProfileId) {
-        this.userProfileId = userProfileId;
+    public void setFitnessProfileId(int fitnessProfileId) {
+        this.fitnessProfileId = fitnessProfileId;
     }
 
     public Date getJoinDate() {

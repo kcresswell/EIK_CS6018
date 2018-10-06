@@ -3,29 +3,43 @@ package com.example.mcresswell.project01.weather;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.example.mcresswell.project01.db.entity.Weather;
+import com.example.mcresswell.project01.db.repo.WeatherRepository;
 import com.example.mcresswell.project01.util.WeatherUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 public class WeatherViewModel extends AndroidViewModel {
 
     private static final String LOG = WeatherViewModel.class.getSimpleName();
 
-    private final MutableLiveData<WeatherForecast> forecastData =
-            new MutableLiveData<>();
+    //OpenWeatherMap API member variables
+    private final MutableLiveData<WeatherForecast> mforecastData =
+            new MutableLiveData<>(); //Observable LiveData for WeatherForecast from API calls
     private String mLocationCity;
     private String mLocationCountry;
 
-
-    public WeatherViewModel(@NonNull Application application) {
+//    //Database
+//    private WeatherRepository mWeatherRepository;
+//    private LiveData<List<Weather>> mAllWeather;
+//
+    public WeatherViewModel (Application application) {
         super(application);
+//        mWeatherRepository = new WeatherRepository(application);
+//        mAllWeather = getAllWeather();
     }
+//
+//    LiveData<List<Weather>> getAllWeather() {
+//        return mAllWeather;
+//    }
 
     @SuppressLint("StaticFieldLeak")
     private void loadData(){
@@ -51,7 +65,7 @@ public class WeatherViewModel extends AndroidViewModel {
 
             @Override
             protected void onPostExecute(String s) {
-                    forecastData.setValue(WeatherUtils.getWeatherForecast(s));
+                    mforecastData.setValue(WeatherUtils.getWeatherForecast(s));
 
             }
         }.execute(mLocationCity, mLocationCountry);
@@ -65,6 +79,6 @@ public class WeatherViewModel extends AndroidViewModel {
 
 
     public MutableLiveData<WeatherForecast> getForecastData() {
-        return forecastData;
+        return mforecastData;
     }
 }

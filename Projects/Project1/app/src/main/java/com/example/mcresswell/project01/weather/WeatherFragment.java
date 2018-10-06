@@ -141,6 +141,7 @@ public class WeatherFragment extends ListFragment {
                 setListAdapter(adapter);
                 mListener.onWeatherDataLoaded(weatherData);
 
+
             }
 
 

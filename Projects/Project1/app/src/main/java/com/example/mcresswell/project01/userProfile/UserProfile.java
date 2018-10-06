@@ -1,5 +1,6 @@
 package com.example.mcresswell.project01.userProfile;
 
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -14,13 +15,6 @@ import static com.example.mcresswell.project01.util.UserProfileUtils.calculateBM
 import static com.example.mcresswell.project01.util.UserProfileUtils.calculateBmi;
 import static com.example.mcresswell.project01.util.UserProfileUtils.calculateHeightInInches;
 
-
-/**
- *  A POJO class representing all of the data associated with a given user.
- *  This is NOT the entity/DAO class, the corresponding entity class for UserProfile
- *  is the FitnessProfile class.
- *
- */
 public class UserProfile implements Parcelable {
 
     private static final String LOG = UserProfile.class.getSimpleName();
@@ -41,6 +35,7 @@ public class UserProfile implements Parcelable {
     private int m_heightInches;
     private double m_bmi;
     private double m_bmr;
+    private Bitmap m_profilePicture;
 
 
     public UserProfile() { }
@@ -77,6 +72,7 @@ public class UserProfile implements Parcelable {
         m_heightInches = heightInches;
         m_bmi = calculateBmi(calculateHeightInInches(heightFeet, heightInches), weightInPounds);
         m_bmr = calculateBMR(heightFeet, heightInches, sex, weightInPounds, calculateAge(dob));
+//        m_profilePicture = profileImage;
     }
 
     protected UserProfile(Parcel in) {
@@ -95,6 +91,7 @@ public class UserProfile implements Parcelable {
         m_heightInches = in.readInt();
         m_bmi = in.readDouble();
         m_bmr = in.readDouble();
+//        m_profilePicture =
 
     }
 
@@ -279,5 +276,6 @@ public class UserProfile implements Parcelable {
         dest.writeInt(m_heightInches);
         dest.writeDouble(m_bmi);
         dest.writeDouble(m_bmr);
+//        m_profilePicture.writeToParcel(dest, flags);
     }
 }

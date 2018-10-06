@@ -9,7 +9,7 @@
     <string name="login">Login</string>
 
     <!--Main Dashboard-->
-    <string name="calories">Daily Calories Goal</string>
+    <string name="calories">Recommended Daily Caloric Intake</string>
     <string name="bmr">Basal Metabolic Rate (BMR)</string>
     <string name="bmi">Body Mass Index (BMI)</string>
 
