@@ -18,6 +18,7 @@ public class ProfileSummaryActivity extends AppCompatActivity
     private final String LOG = getClass().getSimpleName();
 
     private FragmentTransaction m_fTrans;
+    private UserProfile m_userProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +29,11 @@ public class ProfileSummaryActivity extends AppCompatActivity
 
         m_fTrans = getSupportFragmentManager().beginTransaction();
 
-        ProfileSummaryFragment fragment =
-                savedInstanceState == null ? new ProfileSummaryFragment() :
-                        ProfileSummaryFragment.newInstance(getIntent().getParcelableExtra("profile"));
-
-        m_fTrans.replace(R.id.fl_activity_profile_details, fragment, "v_frag_profile");
+        if (savedInstanceState != null) {
+            m_userProfile = getIntent().getParcelableExtra("profile");
+//            Bitmap photo = getIntent().getParcelableExtra("M_IMG_DATA");
+        }
+        m_fTrans.replace(R.id.fl_activity_profile_details, ProfileSummaryFragment.newInstance(m_userProfile), "v_frag_profile");
         m_fTrans.commit();
     }
 
@@ -47,8 +48,6 @@ public class ProfileSummaryActivity extends AppCompatActivity
         }
         startActivity(intent);
 
-
-
     }
 
     @Override
@@ -56,11 +55,7 @@ public class ProfileSummaryActivity extends AppCompatActivity
         Log.d(LOG, "onProfileEntryDoneButton listener, user finished adding data");
         m_fTrans = getSupportFragmentManager().beginTransaction();
 
-        ProfileSummaryFragment fragment =
-                profile != null ?
-                        ProfileSummaryFragment.newInstance(profile) : new ProfileSummaryFragment();
-
-        m_fTrans.replace(R.id.fl_activity_profile_details, fragment);
+        m_fTrans.replace(R.id.fl_activity_profile_details, ProfileSummaryFragment.newInstance(profile));
         m_fTrans.commit();
     }
 
@@ -68,4 +63,17 @@ public class ProfileSummaryActivity extends AppCompatActivity
     public void onProfileEntryDataPass_DoneButtonClicked(boolean isClicked) {
         //nothing to implement for this class. This indicates we need to clean up the code structure
     }
+
+    @Override
+    public void onBackPressed() {
+        Log.d(LOG, "onBackPressed");
+        // code here to show dialog
+        Intent intent = new Intent(this, DashboardActivity.class);
+
+        if (m_userProfile != null){ //Existing profile data, transfer data
+            intent.putExtra("profile", m_userProfile);
+        }
+        startActivity(intent);
+    }
+
 }

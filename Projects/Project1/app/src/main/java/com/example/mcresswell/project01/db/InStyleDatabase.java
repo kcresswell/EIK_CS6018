@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
 import com.example.mcresswell.project01.db.dao.FitnessProfileDao;
@@ -13,10 +14,12 @@ import com.example.mcresswell.project01.db.dao.WeatherDao;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.db.entity.User;
 import com.example.mcresswell.project01.db.entity.Weather;
+import com.example.mcresswell.project01.util.DataTypeConverters;
 
 import java.util.List;
 
 @Database(entities = {User.class, FitnessProfile.class, Weather.class}, version = 1)
+@TypeConverters({DataTypeConverters.class})
 public abstract class InStyleDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "instyle_database";

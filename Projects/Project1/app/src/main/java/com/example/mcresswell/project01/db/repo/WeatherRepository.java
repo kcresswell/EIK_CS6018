@@ -20,7 +20,7 @@ public class WeatherRepository {
         mAllWeather = getAllWeather();
     }
 
-    LiveData<List<Weather>> getAllWeather() {
+    public LiveData<List<Weather>> getAllWeather() {
         return mAllWeather;
     }
 

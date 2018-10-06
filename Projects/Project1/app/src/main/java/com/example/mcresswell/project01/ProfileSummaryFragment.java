@@ -4,6 +4,7 @@ package com.example.mcresswell.project01;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.mcresswell.project01.userProfile.UserProfile;
@@ -35,6 +37,8 @@ public class ProfileSummaryFragment extends Fragment
     private OnProfileSummaryInteractionListener m_listener;
     private UserProfileViewModel m_userProfileViewModel;
     private UserProfile m_userProfile;
+//    private Bitmap m_photo;
+//    private ImageButton m_profilePhoto;
 
     //UI Elements
     private TextView m_firstName, m_lastName, m_sex, m_age, m_heightFeet, m_heightInches, m_city, m_country, m_weight, m_activity, m_weightGoal;
@@ -48,6 +52,7 @@ public class ProfileSummaryFragment extends Fragment
         ProfileSummaryFragment fragment = new ProfileSummaryFragment();
         Bundle args = new Bundle();
         if (profile != null) {
+            Log.d(LOG, "newInstance created with existing UserProfile data passed");
             args.putParcelable("profile", profile);
         }
         fragment.setArguments(args);
@@ -59,23 +64,12 @@ public class ProfileSummaryFragment extends Fragment
     public void onCreate(Bundle savedInstanceState) {
         Log.d(LOG, Constants.CREATE);
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-//            weatherForecast = getArguments().getParcelable("data");
-//            Log.d(LOG, "City: " + getArguments().getString("m_city"));
-//            Log.d(LOG, "Country: " + getArguments().getString("m_country"));
-        }
+
         m_userProfileViewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
         m_userProfileViewModel.getUserProfile().observe(this, nameObserver);
+
         m_userProfile = getActivity().getIntent().getParcelableExtra("profile");
-        if (m_userProfile != null) {
-            loadUserData(m_userProfile);
-        }
-// if (m_userProfile != null) {
-//            loadUserData(m_userProfile);
-//        } else {
-//            Log.d(LOG, "no data in bundle, loadUserData using test profile");
-////            loadUserData(UserProfile.newTestUserProfileInstance());
-//        }
+//        m_photo = getActivity().getIntent().getParcelableExtra("M_IMG_DATA");
     }
 
 
@@ -99,13 +93,15 @@ public class ProfileSummaryFragment extends Fragment
         m_activity = v.findViewById(R.id.radiogp_lifestyle);
         m_weightGoal = v.findViewById(R.id.radiogp_weightGoal);
         m_editButton = v.findViewById(R.id.btn_edit);
+//        m_profilePhoto = v.findViewById(R.id.btn_img_takeImage);
+
 
         m_editButton.setOnClickListener(this);
 
         if (m_userProfile != null) {
             m_firstName.setText(m_userProfile.getM_fName());
             m_lastName.setText(m_userProfile.getM_lName());
-            m_sex.setText(m_userProfile.getM_sex());
+            m_sex.setText(m_userProfile.getM_sex().toUpperCase());
             m_age.setText(calculateAge(m_userProfile.getM_dob())+ "y");
             m_heightFeet.setText(String.valueOf(m_userProfile.getM_heightFeet()));
             m_heightInches.setText(String.valueOf(m_userProfile.getM_heightInches()));
@@ -115,6 +111,10 @@ public class ProfileSummaryFragment extends Fragment
             m_activity.setText(m_userProfile.getM_lifestyleSelection());
             m_weightGoal.setText(String.valueOf(m_userProfile.getM_weightGoal() + " " + m_userProfile.getM_lbsPerWeek() + " lbs/week"));
         }
+
+//        if (m_photo != null) {
+//            m_profilePhoto.setImageBitmap(m_photo);
+//        }
         return v;
     }
 
@@ -128,11 +128,8 @@ public class ProfileSummaryFragment extends Fragment
             if (userProfile != null) { //UserProfile data has finished being retrieved
                 userProfile.printUserProfileData();
                 Log.d(LOG, "onChanged, updating data fields");
-                //Data now exists for user, update ui fields with data
-//                m_firstName.setText(m_userProfile.getM_fName());
-//                m_lastName.setText(m_userProfile.getM_lName());
-//                m_sex.setText(m_userProfile.getM_sex());
-//                m_dob.setText(m_userProfile.getM_dob());
+//                m_userProfile = userProfile;
+                loadUserData(userProfile);
             }
         }
     };
@@ -177,19 +174,11 @@ public class ProfileSummaryFragment extends Fragment
     }
 
     private void passExistingDataOnEditButtonClick() {
-        if (m_userProfileViewModel != null) {
-            Log.d(LOG, "m_userProfileViewModel NOT NULL!");
+        if (m_userProfileViewModel.getUserProfile().getValue() != null) {
+            Log.d(LOG, "m_userProfileViewModel NOT NULL");
             m_listener.onProfileSummaryEditButton(m_userProfileViewModel.getUserProfile().getValue());
         } else {
-            Log.d(LOG, "m_userProfileViewModel is still null, passing data manually");
-            UserProfile userProfile = new UserProfile();
-            userProfile.setM_fName(m_firstName.getText().toString());
-            userProfile.setM_lName(m_lastName.getText().toString());
-            userProfile.setM_sex(m_sex.getText().toString());
-//            userProfile.setM_dob(m_d.getText().toString());
-
-            //TODO: FINISH THIS LATER
-            m_listener.onProfileSummaryEditButton(userProfile);
+            m_listener.onProfileSummaryEditButton(m_userProfile);
         }
     }
 

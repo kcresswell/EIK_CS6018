@@ -87,7 +87,11 @@ public class FitnessDetailsFragment extends Fragment {
             m_tvBMR.setText(DEFAULT_BMR);
             m_bodyMassIndex.setText(defaultBmi);
         } else {
-            loadUserProfileData(m_userProfile);
+            double caloricIntake = calculateCalories(m_userProfile);
+            m_tvcalsToEat.setText(String.format(Locale.US,"%.1f calories", caloricIntake));
+            m_tvBMR.setText(String.format(Locale.US, "%.1f calories/day", m_userProfile.getM_bmr()));
+            m_bodyMassIndex.setText(String.format(Locale.US, "%.1f", m_userProfile.getM_bmi()));
+
         }
 
         return view;
@@ -99,11 +103,13 @@ public class FitnessDetailsFragment extends Fragment {
         public void onChanged(@Nullable final UserProfile userProfile) {
             if (userProfile != null) { //Weather data has finished being retrieved
                 userProfile.printUserProfileData();
+//
+//                double caloricIntake = calculateCalories(userProfile);
+//                m_tvcalsToEat.setText(String.format(Locale.US,"%.1f calories", caloricIntake));
+//                m_tvBMR.setText(String.format(Locale.US, "%.1f calories/day", userProfile.getM_bmr()));
+//                m_bodyMassIndex.setText(String.format(Locale.US, "%.1f", userProfile.getM_bmi()));
 
-                double caloricIntake = calculateCalories(userProfile);
-                m_tvcalsToEat.setText(String.format(Locale.US,"%.1f calories", caloricIntake));
-                m_tvBMR.setText(String.format(Locale.US, "%.1f calories/day", userProfile.getM_bmr()));
-                m_bodyMassIndex.setText(String.format(Locale.US, "%.1f", userProfile.getM_bmi()));
+                loadUserProfileData(m_userProfile);
 
             }
 

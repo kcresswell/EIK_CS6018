@@ -31,7 +31,7 @@ public class UserProfileViewModel extends AndroidViewModel {
 
     public UserProfileViewModel(@NonNull Application application) {
         super(application);
-//        loadUserProfileData();
+        loadUserProfileData();
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -43,12 +43,15 @@ public class UserProfileViewModel extends AndroidViewModel {
                 UserProfile profile = null;
                 if (userProfiles != null){
                     Log.d(TAG, String.format("Retrieving %d userProfiles from userProfile database", userProfiles.length));
-                    for (UserProfile user: userProfiles){
+                    profile = userProfiles[0];
+                    if (profile != null) {
+//                    for (UserProfile user: userProfiles){
 //                       profile = userProfileRepository.userProfileFromFitnessProfile(user.getId());
-                        user.printUserProfileData();
+                        profile.printUserProfileData();
                     }
                 }
-                return profile == null ? UserProfile.newTestUserProfileInstance() : profile ;
+//                return profile == null ? UserProfile.newTestUserProfileInstance() : profile ;
+                return profile;
 
             }
 
@@ -60,10 +63,8 @@ public class UserProfileViewModel extends AndroidViewModel {
     }
 
     public void setUserProfile(UserProfile profile) {
-        //
-        userProfile.setValue(profile);
         this.profile = profile;
-        loadUserProfileData();
+//        loadUserProfileData();
     }
 
     public LiveData<UserProfile> getUserProfile() {
