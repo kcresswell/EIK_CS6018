@@ -37,23 +37,21 @@
 
             <TextView
                 android:id="@+id/txtv_fname"
-                android:layout_width="161dp"
-                android:layout_height="39dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:layout_marginTop="8dp"
                 android:ems="10"
                 android:hint="@string/hint_fname"
-                android:textSize="25sp"
                 android:textAlignment="center"
+                android:textSize="25sp"
                 app:layout_constraintEnd_toStartOf="@+id/btn_img_takeImage"
-                app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/txtv_lname"
-                android:layout_width="150dp"
-                android:layout_height="43dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:ems="10"
                 android:hint="@string/hint_lname"
@@ -68,11 +66,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 android:ems="10"
                 android:hint="@string/hint_city"
                 android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintEnd_toStartOf="@+id/txtv_country"
+                app:layout_constraintHorizontal_weight="8"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtv_divider_location" />
 
@@ -84,22 +83,22 @@
                 android:ems="10"
                 android:hint="@string/hint_Country"
                 android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="@+id/txtv_city"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtv_city" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/txtv_city"
+                app:layout_constraintTop_toBottomOf="@+id/txtv_divider_location" />
 
             <ImageButton
                 android:id="@+id/btn_img_takeImage"
-                android:layout_width="168dp"
-                android:layout_height="176dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/btn_img_description_profile_image"
                 android:padding="@dimen/dashboard_button_padding"
                 android:src="@drawable/ic_profile_img_placeholder"
-                app:layout_constraintBottom_toBottomOf="@+id/txtv_inches"
-                app:layout_constraintDimensionRatio="w,1:1"
+                app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/txtv_fname"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
@@ -120,41 +119,41 @@
                 android:id="@+id/txtv_lbs_symbol"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="8dp"
                 android:text="@string/txtv_lbs_symbol"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@+id/txtv_weight"
-                app:layout_constraintEnd_toEndOf="@+id/txtv_dob"
+                app:layout_constraintEnd_toEndOf="@+id/txtv_divider_fitness"
                 app:layout_constraintStart_toEndOf="@+id/txtv_weight"
                 app:layout_constraintTop_toTopOf="@+id/txtv_weight"
                 app:layout_constraintVertical_bias="0.51" />
 
             <TextView
                 android:id="@+id/txtv_dob"
-                android:layout_width="85dp"
-                android:layout_height="64dp"
-                android:layout_marginStart="8dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:ems="10"
                 android:hint="Age"
+                android:paddingRight="10dp"
                 android:textAlignment="textEnd"
                 android:textSize="25sp"
                 android:textStyle="bold"
-                android:paddingRight="10dp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/txtv_sex"
                 app:layout_constraintEnd_toStartOf="@+id/txtv_sex"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtv_lname" />
 
             <TextView
                 android:id="@+id/txtv_sex"
-                android:layout_width="75dp"
-                android:layout_height="60dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:ems="10"
                 android:hint="@string/hint_sex"
+                android:paddingLeft="10dp"
                 android:textSize="25sp"
                 android:textStyle="bold"
-                android:paddingLeft="10dp"
-                app:layout_constraintEnd_toEndOf="@+id/txtv_lname"
+                app:layout_constraintEnd_toEndOf="@+id/txtv_fname"
                 app:layout_constraintStart_toEndOf="@+id/txtv_dob"
                 app:layout_constraintTop_toBottomOf="@+id/txtv_lname" />
 
@@ -162,12 +161,11 @@
                 android:id="@+id/txtv_feet"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
                 android:ems="10"
                 android:hint="@string/hint_feet"
+                android:textAlignment="textEnd"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/txtv_divider_location"
                 app:layout_constraintEnd_toStartOf="@+id/txtv_ft_symbol"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtv_dob" />
@@ -176,14 +174,15 @@
                 android:id="@+id/txtv_inches"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:ems="10"
                 android:hint="@string/hint_inches"
+                android:textAlignment="textEnd"
                 android:textSize="18sp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/txtv_feet"
-                app:layout_constraintEnd_toStartOf="@+id/btn_img_takeImage"
-                app:layout_constraintStart_toEndOf="@+id/txtv_ft_symbol" />
+                app:layout_constraintEnd_toStartOf="@+id/txtv_in_symbol"
+                app:layout_constraintStart_toEndOf="@+id/txtv_ft_symbol"
+                app:layout_constraintTop_toBottomOf="@+id/txtv_sex" />
 
             <TextView
                 android:id="@+id/txtv_weight"
@@ -192,6 +191,7 @@
                 android:layout_marginTop="8dp"
                 android:ems="10"
                 android:hint="@string/hint_weight"
+                android:textAlignment="textEnd"
                 android:textSize="18sp"
                 app:layout_constraintDimensionRatio=""
                 app:layout_constraintEnd_toStartOf="@+id/txtv_lbs_symbol"
@@ -203,30 +203,28 @@
                 android:id="@+id/txtv_ft_symbol"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:text="@string/txtv_ft_symbol"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@+id/txtv_feet"
-                app:layout_constraintEnd_toStartOf="@+id/txtv_inches"
+                app:layout_constraintEnd_toEndOf="@+id/txtv_dob"
                 app:layout_constraintStart_toEndOf="@+id/txtv_feet"
                 app:layout_constraintTop_toTopOf="@+id/txtv_feet" />
 
             <TextView
                 android:id="@+id/txtv_in_symbol"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:text="@string/txtv_in_symbol"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@+id/txtv_inches"
-                app:layout_constraintEnd_toEndOf="@+id/txtv_dob"
-                app:layout_constraintStart_toEndOf="@+id/txtv_inches"
+                app:layout_constraintEnd_toEndOf="@+id/txtv_sex"
                 app:layout_constraintTop_toTopOf="@+id/txtv_inches" />
 
             <TextView
                 android:id="@+id/txtv_divider_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:text="@string/txtv_label_location"
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintStart_toStartOf="parent"
@@ -236,12 +234,11 @@
                 android:id="@+id/txtv_divider_lifestyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="24dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/txtv_label_lifestyle"
                 android:textColor="@color/colorPrimary"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/radiogp_lifestyle"
+                app:layout_constraintStart_toEndOf="@+id/txtv_divider_fitness"
                 app:layout_constraintTop_toBottomOf="@+id/txtv_country" />
 
             <TextView
@@ -259,15 +256,12 @@
                 android:id="@+id/radiogp_lifestyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="8dp"
                 android:hint="@string/hint_lifestyle"
                 android:orientation="horizontal"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="@+id/txtv_weight"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/txtv_lbs_symbol"
+                app:layout_constraintStart_toStartOf="@+id/txtv_divider_lifestyle"
                 app:layout_constraintTop_toBottomOf="@+id/txtv_divider_lifestyle">
 
             </TextView>

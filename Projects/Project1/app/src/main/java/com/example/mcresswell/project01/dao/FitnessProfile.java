@@ -1,4 +1,4 @@
-package com.example.mcresswell.project01.dao.entity;
+package com.example.mcresswell.project01.dao;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
