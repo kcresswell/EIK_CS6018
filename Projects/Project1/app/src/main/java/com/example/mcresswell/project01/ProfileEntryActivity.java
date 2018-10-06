@@ -1,6 +1,7 @@
 package com.example.mcresswell.project01;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -17,6 +18,7 @@ public class ProfileEntryActivity extends AppCompatActivity
     private final String LOG = getClass().getSimpleName();
 
     private FragmentTransaction m_fTrans;
+    private UserProfile m_userProfile;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -30,7 +32,7 @@ public class ProfileEntryActivity extends AppCompatActivity
 
         m_fTrans = getSupportFragmentManager().beginTransaction();
 //        if (savedInstanceState != null) {
-            UserProfile profile = getIntent().getParcelableExtra("profile");
+        UserProfile profile = getIntent().getParcelableExtra("profile");
 //        }
         ProfileEntryFragment profileEntryFragment =
                 ProfileEntryFragment.newInstance(profile);
@@ -46,6 +48,7 @@ public class ProfileEntryActivity extends AppCompatActivity
         Intent intent = new Intent(this, ProfileSummaryActivity.class);
 
         if (profile != null) {
+            m_userProfile = profile;
             profile.printUserProfileData();
             intent.putExtra("profile", profile);
         }
@@ -65,6 +68,24 @@ public class ProfileEntryActivity extends AppCompatActivity
 
     @Override
     public void onProfileSummaryEditButton(UserProfile profile) {
+        Log.d(LOG, "onProfileSummaryEditButton Listener");
 
+        if (profile != null) {
+            Log.d(LOG, "Passing previously entered user data to ProfileEntryFragment");
+            m_fTrans.replace(R.id.fl_activity_profile_entry, ProfileEntryFragment.newInstance(profile));
+            m_fTrans.commit();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d(LOG, "onBackPressed");
+        // code here to show dialog
+        Intent intent = new Intent(this, DashboardActivity.class);
+
+        if (m_userProfile != null){ //Existing profile data, transfer data
+            intent.putExtra("profile", m_userProfile);
+        }
+        startActivity(intent);
     }
 }

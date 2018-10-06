@@ -235,7 +235,7 @@ public class UserProfile implements Parcelable {
         testUser.setM_dob("01/01/1900");
         testUser.setM_city("SACRAMENTO");
         testUser.setM_country("US");
-        testUser.setM_sex("FEMALE");
+        testUser.setM_sex("F");
         testUser.setM_lbsPerWeek(3);
         testUser.setM_lifestyleSelection("ACTIVE");
         testUser.setM_weightGoal("LOSE");

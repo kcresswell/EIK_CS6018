@@ -77,6 +77,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     //Data fields
 
     private Map<String, String> userEnteredData = new HashMap<>();
+    private UserProfile userProfile;
 
     public ProfileEntryFragment() {
         // Required empty public constructor
@@ -103,12 +104,12 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
         final Observer<UserProfile> nameObserver = userProfile -> {
             Log.d(LOG, "nameObserver userProfile view model onChanged");
-            // Update the UI, in this case, a TextView.
-//                firstName.setText(userProfile.getM_fName());
-//                lastName.setText(userProfile.getM_lName());
+            this.userProfile = userProfile;
         };
 
         viewModel.getUserProfile().observe(this, nameObserver);
+        userProfile = getArguments().getParcelable("profile");
+
     }
 
 
@@ -131,10 +132,8 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         maintain.setOnClickListener(this);
         lose.setOnClickListener(this);
 
-        if (savedInstanceState != null) {
-            UserProfile userProfile = getArguments().getParcelable("profile");
-            //TODO: RESTORE PREVIOUSLY ENTERED USER DATA FIELDS IF A USER WITH AN EXISTING PROFILE CLICKS THE EDIT BUTTON
-            //TODO: IN THIS CASE, THE PROFILE ENTRY FRAGMENT SHOULD AUTOPOPULATE WITH THE EXISTING USER DATA
+        if (userProfile != null) { //If UserProfile has existing data, autopopulate fields
+            autofillExistingUserProfileData(userProfile);
         }
 
         return view;
@@ -154,11 +153,6 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
             }
             case R.id.btn_submit: {
                 userProfileSubmitButtonHandler();
-
-                //TODO: ERIC: I MOVED THIS METHOD CALL INSIDE OF userProfileSubmitButtonHandler,
-                // TODO: because having it as a separate method call will cause the application to crash if any of the input data is invalid.
-                //TODO: Validation logic for the user profile input fields is performed inside of userProfileSubmitButtonHandler().
-//                loadProfileSummaryFragment();
                 break;
             }
             case R.id.btn_radio_active: {
@@ -205,10 +199,12 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         super.onViewStateRestored(savedInstanceState);
         //retrieve data
         if(savedInstanceState != null) {
-            //place data in fields
-//            firstName.setText("" + savedInstanceState.getString("M_FN_DATA"));
-//            lastName.setText("" + savedInstanceState.getString("M_LN_DATA"));
-//            dob.setText("" + savedInstanceState.getString("M_DOB_DATA"));
+//            UserProfile profile = savedInstanceState.getParcelable("profile");
+//
+//            if (profile != null) {
+//                autofillExistingUserProfileData(profile);
+//            }
+
             profileImage = savedInstanceState.getParcelable("M_IMG_DATA");
             takeProfileImageButton.setImageBitmap(profileImage);
         }
@@ -219,7 +215,9 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     public void onSaveInstanceState(Bundle bundle) {
         Log.d(LOG, Constants.SAVE_INSTANCE_STATE);
         super.onSaveInstanceState(bundle);
-        //Save user data strings in bundle
+        bundle.putParcelable("profile", userProfile);
+        bundle.putParcelable("M_ING_DATA", profileImage);
+
         userEnteredData.forEach(bundle::putString);
     }
 
@@ -247,11 +245,39 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         maintain = view.findViewById(R.id.btn_radio_maintain);
         lose = view.findViewById(R.id.btn_radio_lose);
 
-        //TODO: Need to add back lifestyle handler and weight loss goal fields back later
-//
-//        //--get submit and image buttons--//
+        //--get submit and image buttons--//
         profileEntryButton = (Button) view.findViewById(R.id.btn_submit);
         takeProfileImageButton = (ImageButton) view.findViewById(R.id.btn_img_takeImage);
+    }
+
+    private void autofillExistingUserProfileData(UserProfile userProfile) {
+        Log.d(LOG, "Autofilling existing UserProfile data");
+        firstName.setText(userProfile.getM_fName());
+        lastName.setText(userProfile.getM_lName());
+        dob.setText(userProfile.getM_dob());
+        sex.setText(userProfile.getM_sex());
+        heightFeet.setText(String.valueOf(userProfile.getM_heightFeet()));
+        heightInches.setText(String.valueOf(userProfile.getM_heightInches()));
+        city.setText(userProfile.getM_city());
+        country.setText(userProfile.getM_country());
+        weight.setText(String.valueOf(userProfile.getM_weightInPounds()));
+        lbsPerWeek.setText(String.valueOf(userProfile.getM_lbsPerWeek()));
+
+        if (userProfile.getM_lifestyleSelection().equalsIgnoreCase("ACTIVE")) {
+            lifestyleSelector.check(R.id.btn_radio_active);
+        } else {
+            lifestyleSelector.check(R.id.btn_radio_sedentary);
+        }
+
+        if (userProfile.getM_weightGoal().equalsIgnoreCase("GAIN")) {
+            weightGoal.check(R.id.btn_radio_gain);
+        }
+        else if (userProfile.getM_weightGoal().equalsIgnoreCase("MAINTAIN")) {
+            weightGoal.check(R.id.btn_radio_maintain);
+        } else {
+            weightGoal.check(R.id.btn_radio_lose);
+        }
+
     }
 
     @TargetApi(Build.VERSION_CODES.O)
@@ -326,8 +352,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         userProfile.setM_bmi(calculateBmi(totalHeightInches, userWeight));
         userProfile.setM_bmr(calculateBMR(heightFt, heightIn, userProfile.getM_sex(), userWeight, userAge));
 
-
-        loadProfileSummaryFragment();
+        loadUserProfileData(userProfile);
 
         if (viewModel.getUserProfile().getValue() != null){
             Log.d(LOG, "submit button handler, view model has data");
@@ -392,7 +417,6 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
     public void loadUserProfileData(UserProfile profile) {
         Log.d(LOG, "loadUserProfileData");
-
         viewModel.setUserProfile(profile);
     }
 

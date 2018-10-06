@@ -16,6 +16,10 @@ import com.example.mcresswell.project01.weather.WeatherFragment;
 
 import java.io.IOException;
 
+import static com.example.mcresswell.project01.util.GeocoderLocationUtils.getCoordinatesFromCityCountry;
+import static com.example.mcresswell.project01.util.ValidationUtils.isValidCity;
+import static com.example.mcresswell.project01.util.ValidationUtils.isValidCountryCode;
+
 public class DashboardActivity extends AppCompatActivity implements
         ProfileSummaryFragment.OnProfileSummaryInteractionListener,
         ProfileEntryFragment.OnProfileEntryFragmentListener,
@@ -36,7 +40,9 @@ public class DashboardActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        if(savedInstanceState == null){
+        if (savedInstanceState != null) {
+            m_userProfile = getIntent().getParcelableExtra("profile");
+        } else {
             restoreDefaultDashboardView();
         }
     }
@@ -61,8 +67,7 @@ public class DashboardActivity extends AppCompatActivity implements
                 profileButtonHandler();
                 break;
             case 3: //Weather
-
-                weatherButtonHandler(DEFAULT_CITY, DEFAULT_COUNTRY_CODE);
+                weatherButtonHandler();
                 break;
         }
     }
@@ -75,10 +80,7 @@ public class DashboardActivity extends AppCompatActivity implements
             }
             startActivity(intent);
         } else { //Tablet
-            FitnessDetailsFragment fitnessDetailsFragment =
-                    m_userProfile == null ? new FitnessDetailsFragment() :
-                            FitnessDetailsFragment.newInstance(m_userProfile);
-            m_fTrans.replace(R.id.fl_detail_wd, fitnessDetailsFragment);
+            m_fTrans.replace(R.id.fl_detail_wd, FitnessDetailsFragment.newInstance(m_userProfile));
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
@@ -90,9 +92,7 @@ public class DashboardActivity extends AppCompatActivity implements
             coords = DEFAULT_COORDINATES;
         } else {
             try {
-                coords =
-                        GeocoderLocationUtils.getCoordinatesFromCityCountry(
-                                m_userProfile.getM_city(), m_userProfile.getM_country());
+                coords = getCoordinatesFromCityCountry(m_userProfile.getM_city(), m_userProfile.getM_country());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -108,23 +108,31 @@ public class DashboardActivity extends AppCompatActivity implements
     private void profileButtonHandler() {
         if(!isWideDisplay()) { //mobile
             Intent intent = new Intent(this, ProfileSummaryActivity.class);
+            if (m_userProfile != null) {
+                intent.putExtra("profile", m_userProfile);
+            }
             startActivity(intent);
         } else { //Tablet
-            m_fTrans.replace(R.id.fl_detail_wd, new ProfileSummaryFragment());
+            m_fTrans.replace(R.id.fl_detail_wd, ProfileSummaryFragment.newInstance(m_userProfile));
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
     }
 
     //weather button behavior
-    private void weatherButtonHandler(String city, String country) {
+    private void weatherButtonHandler() {
+        String city = m_userProfile != null ?
+                isValidCity(m_userProfile.getM_city()) ?
+                        m_userProfile.getM_city() : DEFAULT_CITY : DEFAULT_CITY;
+        String country = m_userProfile != null ?
+                isValidCountryCode(m_userProfile.getM_country()) ?
+                        m_userProfile.getM_country() : DEFAULT_COUNTRY_CODE : DEFAULT_COUNTRY_CODE;
+
         if (!isWideDisplay()) { //Load WeatherActivity in mobile
             Log.d(LOG, "weatherButtonHanlder mobileView");
             Intent intent = new Intent(this, WeatherActivity.class);
-            intent.putExtra("city",
-                    !ValidationUtils.isValidCity(city) ? DEFAULT_CITY : city);
-            intent.putExtra("country",
-                    !ValidationUtils.isValidCountryCode(country) ? DEFAULT_COUNTRY_CODE : country);
+            intent.putExtra("city", city);
+            intent.putExtra("country", country);
             startActivity(intent);
         } else { //Tablet
             Log.d(LOG, "weatherButtonHanlder tabletView");
@@ -169,11 +177,8 @@ public class DashboardActivity extends AppCompatActivity implements
         } else { //Tablet default: master fragment left, detail fragment right
             m_fTrans.replace(R.id.fl_master_wd, frag_dashboard, "v_frag_dashboard");
 
-            FitnessDetailsFragment fitnessDetailsFragment =
-                    m_userProfile != null ? FitnessDetailsFragment.newInstance(m_userProfile) :
-                            new FitnessDetailsFragment();
-
-            m_fTrans.replace(R.id.fl_detail_wd, fitnessDetailsFragment, "v_frag_fitness");
+            m_fTrans.replace(R.id.fl_detail_wd,
+                    FitnessDetailsFragment.newInstance(m_userProfile), "v_frag_fitness");
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
@@ -181,8 +186,11 @@ public class DashboardActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
+        Log.d(LOG, "onBackPressed");
+//        super.onBackPressed();
 //        if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
-            restoreDefaultDashboardView();
+        restoreDefaultDashboardView();
+
 //        } else {
 //            super.onBackPressed();
 //        }
