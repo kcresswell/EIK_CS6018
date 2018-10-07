@@ -3,7 +3,7 @@ package com.example.mcresswell.project01.util;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
-import com.example.mcresswell.project01.db.entity.UserProfile;
+import com.example.mcresswell.project01.db.entity.FitnessProfile;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -64,7 +64,7 @@ public class UserProfileUtils {
     //Low	You get little to no exercise	Calories Burned a Day = BMR x 1.2
     //In order to lose 1 pound of fat each week, you must have a deficit of 3,500 calories over the course of a week.[5]
     // https://www.wikihow.com/Calculate-How-Many-Calories-You-Need-to-Eat-to-Lose-Weight
-    public static double calculateCalories(UserProfile profile) {
+    public static double calculateCalories(FitnessProfile profile) {
         double numOfCalories;
         double BMR = 1500;
 

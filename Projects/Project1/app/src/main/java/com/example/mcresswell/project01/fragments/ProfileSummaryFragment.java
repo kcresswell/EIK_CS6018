@@ -17,7 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.mcresswell.project01.R;
-import com.example.mcresswell.project01.db.entity.UserProfile;
+import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.ViewModels.UserProfileViewModel;
 import com.example.mcresswell.project01.util.Constants;
 
@@ -35,7 +35,7 @@ public class ProfileSummaryFragment extends Fragment
     private Button m_editButton;
     private OnProfileSummaryInteractionListener m_listener;
     private UserProfileViewModel m_userProfileViewModel;
-    private UserProfile m_userProfile;
+    private FitnessProfile m_fitnessProfile;
 //    private Bitmap m_photo;
 //    private ImageButton m_profilePhoto;
 
@@ -46,12 +46,12 @@ public class ProfileSummaryFragment extends Fragment
         // Required empty public constructor
     }
 
-    public static ProfileSummaryFragment newInstance(UserProfile profile) {
+    public static ProfileSummaryFragment newInstance(FitnessProfile profile) {
         Log.d(LOG, Constants.NEW);
         ProfileSummaryFragment fragment = new ProfileSummaryFragment();
         Bundle args = new Bundle();
         if (profile != null) {
-            Log.d(LOG, "newInstance created with existing UserProfile data passed");
+            Log.d(LOG, "newInstance created with existing FitnessProfile data passed");
             args.putParcelable("profile", profile);
         }
         fragment.setArguments(args);
@@ -67,7 +67,7 @@ public class ProfileSummaryFragment extends Fragment
         m_userProfileViewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
         m_userProfileViewModel.getUserProfile().observe(this, nameObserver);
 
-        m_userProfile = getActivity().getIntent().getParcelableExtra("profile");
+        m_fitnessProfile = getActivity().getIntent().getParcelableExtra("profile");
 //        m_photo = getActivity().getIntent().getParcelableExtra("M_IMG_DATA");
     }
 
@@ -97,18 +97,18 @@ public class ProfileSummaryFragment extends Fragment
 
         m_editButton.setOnClickListener(this);
 
-        if (m_userProfile != null) {
-            m_firstName.setText(m_userProfile.getM_fName());
-            m_lastName.setText(m_userProfile.getM_lName());
-            m_sex.setText(m_userProfile.getM_sex().toUpperCase());
-            m_age.setText(calculateAge(m_userProfile.getM_dob())+ "y");
-            m_heightFeet.setText(String.valueOf(m_userProfile.getM_heightFeet()));
-            m_heightInches.setText(String.valueOf(m_userProfile.getM_heightInches()));
-            m_weight.setText(String.valueOf(m_userProfile.getM_weightInPounds()));
-            m_city.setText(m_userProfile.getM_city());
-            m_country.setText(m_userProfile.getM_country());
-            m_activity.setText(m_userProfile.getM_lifestyleSelection());
-            m_weightGoal.setText(String.valueOf(m_userProfile.getM_weightGoal() + " " + m_userProfile.getM_lbsPerWeek() + " lbs/week"));
+        if (m_fitnessProfile != null) {
+            m_firstName.setText(m_fitnessProfile.getM_fName());
+            m_lastName.setText(m_fitnessProfile.getM_lName());
+            m_sex.setText(m_fitnessProfile.getM_sex().toUpperCase());
+            m_age.setText(calculateAge(m_fitnessProfile.getM_dob())+ "y");
+            m_heightFeet.setText(String.valueOf(m_fitnessProfile.getM_heightFeet()));
+            m_heightInches.setText(String.valueOf(m_fitnessProfile.getM_heightInches()));
+            m_weight.setText(String.valueOf(m_fitnessProfile.getM_weightInPounds()));
+            m_city.setText(m_fitnessProfile.getM_city());
+            m_country.setText(m_fitnessProfile.getM_country());
+            m_activity.setText(m_fitnessProfile.getM_lifestyleSelection());
+            m_weightGoal.setText(String.valueOf(m_fitnessProfile.getM_weightGoal() + " " + m_fitnessProfile.getM_lbsPerWeek() + " lbs/week"));
         }
 
 //        if (m_photo != null) {
@@ -120,15 +120,15 @@ public class ProfileSummaryFragment extends Fragment
     /*
     Create an observer that listens for changes to this data
      */
-    final Observer<UserProfile> nameObserver  = new Observer<UserProfile>() {
+    final Observer<FitnessProfile> nameObserver  = new Observer<FitnessProfile>() {
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
-        public void onChanged(@Nullable final UserProfile userProfile) {
-            if (userProfile != null) { //UserProfile data has finished being retrieved
-                userProfile.printUserProfileData();
+        public void onChanged(@Nullable final FitnessProfile fitnessProfile) {
+            if (fitnessProfile != null) { //FitnessProfile data has finished being retrieved
+                fitnessProfile.printUserProfileData();
                 Log.d(LOG, "onChanged, updating data fields");
-//                m_userProfile = userProfile;
-                loadUserData(userProfile);
+//                m_fitnessProfile = fitnessProfile;
+                loadUserData(fitnessProfile);
             }
         }
     };
@@ -163,13 +163,13 @@ public class ProfileSummaryFragment extends Fragment
         m_listener = null;
     }
 
-    private void loadUserData(UserProfile profile) {
+    private void loadUserData(FitnessProfile profile) {
         Log.d(LOG, "loadUserData");
         m_userProfileViewModel.setUserProfile(profile);
     }
 
     public interface OnProfileSummaryInteractionListener {
-        void onProfileSummaryEditButton(UserProfile profile);
+        void onProfileSummaryEditButton(FitnessProfile profile);
     }
 
     private void passExistingDataOnEditButtonClick() {
@@ -177,7 +177,7 @@ public class ProfileSummaryFragment extends Fragment
             Log.d(LOG, "m_userProfileViewModel NOT NULL");
             m_listener.onProfileSummaryEditButton(m_userProfileViewModel.getUserProfile().getValue());
         } else {
-            m_listener.onProfileSummaryEditButton(m_userProfile);
+            m_listener.onProfileSummaryEditButton(m_fitnessProfile);
         }
     }
 
