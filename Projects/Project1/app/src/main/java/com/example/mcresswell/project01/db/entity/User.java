@@ -11,8 +11,8 @@ import java.util.Date;
  * User @Entity representing the User table that will
  * exclusively store user account login data.
  */
-@Entity(foreignKeys = @ForeignKey(entity = FitnessProfile.class,
-                        parentColumns = "id",
+@Entity(foreignKeys = @ForeignKey(entity = UserProfile.class,
+                        parentColumns = "m_userID",
                         childColumns = "profile_id"))
 public class User {
 
@@ -26,7 +26,7 @@ public class User {
     private String password;
 
     @ColumnInfo(name = "profile_id")
-    private int fitnessProfileId; //FK to id of user in FitnessProfile table
+    private int userProfileId; //FK to id of user in UserProfile table
 
     @ColumnInfo(name = "join_date")
     private Date joinDate;
@@ -55,12 +55,12 @@ public class User {
         this.password = password;
     }
 
-    public int getFitnessProfileId() {
-        return fitnessProfileId;
+    public int getUserProfileId() {
+        return userProfileId;
     }
 
-    public void setFitnessProfileId(int fitnessProfileId) {
-        this.fitnessProfileId = fitnessProfileId;
+    public void setUserProfileId(int fitnessProfileId) {
+        this.userProfileId = fitnessProfileId;
     }
 
     public Date getJoinDate() {

@@ -1,10 +1,9 @@
-package com.example.mcresswell.project01;
+package com.example.mcresswell.project01.fragments;
 
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,11 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.mcresswell.project01.userProfile.UserProfile;
-import com.example.mcresswell.project01.userProfile.UserProfileViewModel;
+import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.db.entity.UserProfile;
+import com.example.mcresswell.project01.ViewModels.UserProfileViewModel;
 import com.example.mcresswell.project01.util.Constants;
 
 import static com.example.mcresswell.project01.util.UserProfileUtils.calculateAge;

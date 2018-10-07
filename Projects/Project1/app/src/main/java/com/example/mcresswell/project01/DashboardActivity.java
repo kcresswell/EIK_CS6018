@@ -1,5 +1,6 @@
 package com.example.mcresswell.project01;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,10 +9,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.example.mcresswell.project01.userProfile.UserProfile;
-import com.example.mcresswell.project01.util.GeocoderLocationUtils;
+import com.example.mcresswell.project01.db.entity.UserProfile;
+import com.example.mcresswell.project01.fragments.DashboardFragment;
+import com.example.mcresswell.project01.fragments.FitnessDetailsFragment;
+import com.example.mcresswell.project01.fragments.ProfileEntryFragment;
+import com.example.mcresswell.project01.fragments.ProfileSummaryFragment;
 import com.example.mcresswell.project01.util.SampleProfileData;
-import com.example.mcresswell.project01.util.ValidationUtils;
 import com.example.mcresswell.project01.weather.WeatherForecast;
 import com.example.mcresswell.project01.weather.WeatherFragment;
 
@@ -39,6 +42,8 @@ public class DashboardActivity extends AppCompatActivity implements
     private FragmentTransaction m_fTrans;
     private UserProfile m_userProfile;
 
+    private boolean isLoggedIn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +58,8 @@ public class DashboardActivity extends AppCompatActivity implements
         userProfilesData.addAll(SampleProfileData.getUserProfiles());
     }
 
+
+    //response to dashboard button click based on position of RecyclerView Button clicked.
     @Override
     public void onAdapterDataPass(int position) {
         executeDashboardButtonHandler(position);
@@ -84,7 +91,7 @@ public class DashboardActivity extends AppCompatActivity implements
             if (m_userProfile != null) {
                 intent.putExtra("profile", m_userProfile);
             }
-            startActivity(intent);
+            startActivityForResult(intent, Activity.RESULT_OK);
         } else { //Tablet
             m_fTrans.replace(R.id.fl_detail_wd, FitnessDetailsFragment.newInstance(m_userProfile));
             m_fTrans.addToBackStack(null);
@@ -107,7 +114,7 @@ public class DashboardActivity extends AppCompatActivity implements
         Uri searchUri = Uri.parse("geo:" + coords + "?q=hikes");
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, searchUri);
         if (mapIntent.resolveActivity(getPackageManager()) != null) {
-            startActivity(mapIntent);
+            startActivityForResult(mapIntent, Activity.RESULT_OK);
         }
     }
 
@@ -117,7 +124,7 @@ public class DashboardActivity extends AppCompatActivity implements
             if (m_userProfile != null) {
                 intent.putExtra("profile", m_userProfile);
             }
-            startActivity(intent);
+            startActivityForResult(intent, Activity.RESULT_OK);
         } else { //Tablet
             m_fTrans.replace(R.id.fl_detail_wd, ProfileSummaryFragment.newInstance(m_userProfile));
             m_fTrans.addToBackStack(null);
@@ -139,7 +146,7 @@ public class DashboardActivity extends AppCompatActivity implements
             Intent intent = new Intent(this, WeatherActivity.class);
             intent.putExtra("city", city);
             intent.putExtra("country", country);
-            startActivity(intent);
+            startActivityForResult(intent, Activity.RESULT_OK);
         } else { //Tablet
             Log.d(LOG, "weatherButtonHanlder tabletView");
             getIntent().putExtra("city", city);
@@ -209,13 +216,6 @@ public class DashboardActivity extends AppCompatActivity implements
     @Override
     public void onProfileEntryDataEntered_DoneButtonOnClick(UserProfile profile) {
         m_userProfile = profile;
-    }
-
-    @Override
-    public void onProfileEntryDataPass_DoneButtonClicked(boolean isClicked) {
-
-        //FIXME: THIS EXTRA INTERFACE METHOD IS NOT NEEDED. SEE onProfileEntryDataEntered_DoneButtonOnClick()
-        //nothing to implement for this class. This indicates we need to clean up the code structure
     }
 
     @Override

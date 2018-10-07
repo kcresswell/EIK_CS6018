@@ -1,4 +1,4 @@
-package com.example.mcresswell.project01.userProfile;
+package com.example.mcresswell.project01.ViewModels;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
@@ -11,7 +11,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
-import com.example.mcresswell.project01.db.FitnessProfileRepository;
+import com.example.mcresswell.project01.db.repo.FitnessProfileRepository;
+import com.example.mcresswell.project01.db.entity.UserProfile;
 
 import static android.support.constraint.Constraints.TAG;
 

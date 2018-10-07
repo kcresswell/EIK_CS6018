@@ -8,7 +8,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.example.mcresswell.project01.userProfile.UserProfile;
+import com.example.mcresswell.project01.db.entity.UserProfile;
+import com.example.mcresswell.project01.fragments.ProfileEntryFragment;
+import com.example.mcresswell.project01.fragments.ProfileSummaryFragment;
 import com.example.mcresswell.project01.util.Constants;
 
 public class ProfileSummaryActivity extends AppCompatActivity
@@ -57,11 +59,6 @@ public class ProfileSummaryActivity extends AppCompatActivity
 
         m_fTrans.replace(R.id.fl_activity_profile_details, ProfileSummaryFragment.newInstance(profile));
         m_fTrans.commit();
-    }
-
-    @Override
-    public void onProfileEntryDataPass_DoneButtonClicked(boolean isClicked) {
-        //nothing to implement for this class. This indicates we need to clean up the code structure
     }
 
     @Override
