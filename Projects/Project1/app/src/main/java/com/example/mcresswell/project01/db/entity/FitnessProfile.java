@@ -5,17 +5,12 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Build;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 
-import java.util.Date;
-
-import static com.example.mcresswell.project01.util.UserProfileUtils.calculateAge;
-import static com.example.mcresswell.project01.util.UserProfileUtils.calculateBMR;
-import static com.example.mcresswell.project01.util.UserProfileUtils.calculateBmi;
-import static com.example.mcresswell.project01.util.UserProfileUtils.calculateHeightInInches;
+import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateAge;
+import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateBMR;
+import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateBmi;
+import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateHeightInInches;
 
 
 /**
@@ -26,35 +21,54 @@ import static com.example.mcresswell.project01.util.UserProfileUtils.calculateHe
  */
 
 @Entity
-public class FitnessProfile implements Parcelable {
+public class FitnessProfile {
 
-    private static final String LOG = FitnessProfile.class.getSimpleName();
-
-    //acount details
     @PrimaryKey
     private int m_userID; // Profile ID in database
-    @ColumnInfo(name = "join_date")
-    private Date m_dateJoined;
 
+    @ColumnInfo(name = "first_name")
     private String m_fName;
+
+    @ColumnInfo(name = "last_name")
     private String m_lName;
 
     //location
+    @ColumnInfo(name = "city")
     private String m_city;
+
+    @ColumnInfo(name = "country")
     private String m_country;
 
     //physical profile
+    @ColumnInfo(name = "dob")
     private String m_dob;
+
+    @ColumnInfo(name = "sex")
     private String m_sex;
+
+    @ColumnInfo(name = "weight_lbs")
     private int m_weightInPounds;
+
+    @ColumnInfo(name = "height_ft")
     private int m_heightFeet;
+
+    @ColumnInfo(name = "height_in")
     private int m_heightInches;
 
     //fitness details
+    @ColumnInfo(name = "lifestyle")
     private String m_lifestyleSelection;
+
+    @ColumnInfo(name = "weight_goal")
     private String m_weightGoal;  //GAIN/MAINTAIN/LOSE
+
+    @ColumnInfo(name = "lbs_per_week")
     private int m_lbsPerWeek;
+
+    @ColumnInfo(name = "bmi")
     private double m_bmi;
+
+    @ColumnInfo(name = "bmr")
     private double m_bmr;
 //    private Bitmap m_profilePicture;
 
@@ -62,7 +76,6 @@ public class FitnessProfile implements Parcelable {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public FitnessProfile(int userId,
-                          Date dateCreated,
                           String fName,
                           String lName,
                           String dob,
@@ -77,7 +90,6 @@ public class FitnessProfile implements Parcelable {
                           int heightInches) {
 
         m_userID = userId;
-        m_dateJoined = dateCreated;
         m_fName = fName;
         m_lName = lName;
         m_dob = dob;
@@ -95,47 +107,11 @@ public class FitnessProfile implements Parcelable {
 //        m_profilePicture = profileImage;
     }
 
-    protected FitnessProfile(Parcel in) {
-        m_userID = in.readInt();
-        m_fName = in.readString();
-        m_lName = in.readString();
-        m_dob = in.readString();
-        m_sex = in.readString();
-        m_city = in.readString();
-        m_country = in.readString();
-        m_lifestyleSelection = in.readString();
-        m_weightGoal = in.readString();
-        m_lbsPerWeek = in.readInt();
-        m_weightInPounds = in.readInt();
-        m_heightFeet = in.readInt();
-        m_heightInches = in.readInt();
-        m_bmi = in.readDouble();
-        m_bmr = in.readDouble();
-//        m_profilePicture =
-
-    }
-
-    public static final Creator<FitnessProfile> CREATOR = new Creator<FitnessProfile>() {
-        @Override
-        public FitnessProfile createFromParcel(Parcel in) {
-            return new FitnessProfile(in);
-        }
-
-        @Override
-        public FitnessProfile[] newArray(int size) {
-            return new FitnessProfile[size];
-        }
-    };
-
     public int getM_userID() { return m_userID; }
 
     public void setM_userID(int id) {
         this.m_userID = id;
     }
-
-    public Date getM_dateJoined() { return m_dateJoined; }
-
-    public void setM_dateJoined(Date m_dateJoined) { this.m_dateJoined = m_dateJoined; }
 
     public String getM_fName() {
         return m_fName;
@@ -228,74 +204,4 @@ public class FitnessProfile implements Parcelable {
     public double getM_bmr() { return m_bmr; }
 
     public void setM_bmr(double m_bmr) { this.m_bmr = m_bmr; }
-
-    public void printUserProfileData(){
-        Log.d(LOG, "printUserProfileData");
-        Log.d(LOG, "userID: " + this.getM_userID());
-        Log.d(LOG, "First Name: " + this.getM_fName());
-        Log.d(LOG, "Last Name: " + this.getM_lName());
-        Log.d(LOG, "DOB: " + this.getM_dob());
-        Log.d(LOG, "Sex: " + this.getM_sex());
-        Log.d(LOG, "Location: " + this.getM_city() + ", " + this.getM_country());
-        Log.d(LOG, "Lifestyle Selection (ACTIVE/SEDENTERY): " + this.getM_lifestyleSelection());
-        Log.d(LOG, "Weight Goal/Objectives (GAIN/MAINTAIN/LOSE): " + this.getM_weightGoal() + " " + this.getM_lbsPerWeek() + " lbs/week");
-        Log.d(LOG, "Current Weight (lbs): " + this.getM_weightInPounds());
-        Log.d(LOG, "Current Height: " + this.getM_heightFeet() + " Feet and " + this.getM_heightInches() + " Inches");
-        Log.d(LOG, "Current Basal Metabolic Weight (BMR): " + this.getM_bmr() + " calories/day");
-        Log.d(LOG, "Current BMI: " + this.getM_bmi());
-
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public static FitnessProfile newTestUserProfileInstance() {
-        FitnessProfile testUser = new FitnessProfile();
-        testUser.setM_userID(1);
-        testUser.setM_fName("TEST");
-        testUser.setM_lName("LASTNAME");
-        testUser.setM_dob("01/01/1900");
-        testUser.setM_city("SACRAMENTO");
-        testUser.setM_country("US");
-        testUser.setM_sex("F");
-        testUser.setM_lbsPerWeek(3);
-        testUser.setM_lifestyleSelection("ACTIVE");
-        testUser.setM_weightGoal("LOSE");
-        testUser.setM_lbsPerWeek(2);
-        testUser.setM_weightInPounds(150);
-        testUser.setM_heightFeet(5);
-        testUser.setM_heightInches(9);
-        testUser.setM_bmi(calculateBmi(calculateHeightInInches(testUser.getM_heightFeet(),
-                testUser.getM_heightInches()), testUser.getM_weightInPounds()));
-        int age = calculateAge(testUser.getM_dob());
-        double bmr = calculateBMR(testUser.getM_heightFeet(),
-                testUser.getM_heightInches(), testUser.getM_sex(),
-                testUser.getM_weightInPounds(), age);
-        testUser.setM_bmr(bmr);
-
-        return testUser;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(m_userID);
-        dest.writeString(m_fName);
-        dest.writeString(m_lName);
-        dest.writeString(m_dob);
-        dest.writeString(m_sex);
-        dest.writeString(m_city);
-        dest.writeString(m_country);
-        dest.writeString(m_lifestyleSelection);
-        dest.writeString(m_weightGoal);
-        dest.writeInt(m_lbsPerWeek);
-        dest.writeInt(m_weightInPounds);
-        dest.writeInt(m_heightFeet);
-        dest.writeInt(m_heightInches);
-        dest.writeDouble(m_bmi);
-        dest.writeDouble(m_bmr);
-//        m_profilePicture.writeToParcel(dest, flags);
-    }
 }

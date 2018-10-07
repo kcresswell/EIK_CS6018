@@ -10,21 +10,11 @@ import java.util.List;
 
 public class SampleProfileData {
 
-//    private static final FitnessProfile();
-
-    private static Date getDate(int diff){
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.add(Calendar.MILLISECOND, diff);
-
-        return cal.getTime();
-    }
-
     public static List<FitnessProfile> getUserProfiles(){
         List<FitnessProfile> fitnessProfiles = new ArrayList<>();
 
         fitnessProfiles.add(new FitnessProfile(
                 1,
-                getDate(0),
                 "Flynn",
                 "White",
                 "07/07/1970",
@@ -40,7 +30,6 @@ public class SampleProfileData {
 
         fitnessProfiles.add(new FitnessProfile(
                 2,
-                getDate(-1),
                 "Norma",
                 "Jones",
                 "01/01/1980",
@@ -56,7 +45,6 @@ public class SampleProfileData {
 
         fitnessProfiles.add(new FitnessProfile(
                 3,
-                getDate(-2),
                 "Omar",
                 "Akmed",
                 "03/03/1940",

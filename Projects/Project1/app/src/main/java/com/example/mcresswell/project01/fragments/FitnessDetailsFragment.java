@@ -18,12 +18,13 @@ import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.ViewModels.FitnessProfileViewModel;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.util.Constants;
-import com.example.mcresswell.project01.util.UserProfileUtils;
+import com.example.mcresswell.project01.util.FitnessProfileUtils;
 
 import java.util.Locale;
 
 import static com.example.mcresswell.project01.util.Constants.CREATE_VIEW;
-import static com.example.mcresswell.project01.util.UserProfileUtils.calculateCalories;
+import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateCalories;
+import static com.example.mcresswell.project01.util.FitnessProfileUtils.printUserProfileData;
 
 public class FitnessDetailsFragment extends Fragment {
 
@@ -50,7 +51,7 @@ public class FitnessDetailsFragment extends Fragment {
         Bundle args = new Bundle();
         if (fitnessProfile != null) {
             Log.d(LOG, "NEW INSTANCE WITH NON-NULL fitnessProfile!!");
-            args.putParcelable("profile", fitnessProfile);
+//            args.putParcelable("profile", fitnessProfile);
         }
         fragment.setArguments(args);
         return fragment;
@@ -83,7 +84,7 @@ public class FitnessDetailsFragment extends Fragment {
         m_bodyMassIndex = view.findViewById(R.id.tv_bmi);
 
         if (m_fitnessProfile == null) {
-            String defaultBmi = String.format(Locale.US, "%.1f", UserProfileUtils.calculateBmi(DEFAULT_HEIGHT, DEFAULT_WEIGHT));
+            String defaultBmi = String.format(Locale.US, "%.1f", FitnessProfileUtils.calculateBmi(DEFAULT_HEIGHT, DEFAULT_WEIGHT));
             m_tvcalsToEat.setText(DEFAULT_CALORIES);
             m_tvBMR.setText(DEFAULT_BMR);
             m_bodyMassIndex.setText(defaultBmi);
@@ -103,7 +104,7 @@ public class FitnessDetailsFragment extends Fragment {
         @Override
         public void onChanged(@Nullable final FitnessProfile fitnessProfile) {
             if (fitnessProfile != null) { //Weather data has finished being retrieved
-                fitnessProfile.printUserProfileData();
+                printUserProfileData(fitnessProfile);
 //
 //                double caloricIntake = calculateCalories(fitnessProfile);
 //                m_tvcalsToEat.setText(String.format(Locale.US,"%.1f calories", caloricIntake));
