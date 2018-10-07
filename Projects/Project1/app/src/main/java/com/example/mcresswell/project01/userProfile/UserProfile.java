@@ -14,7 +14,7 @@ import android.os.Parcelable;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
-import com.example.mcresswell.project01.dao.FitnessProfile;
+import com.example.mcresswell.project01.db.entity.FitnessProfile;
 
 import java.util.Date;
 

@@ -27,6 +27,8 @@ public class GeocoderLocationUtils {
 
     private static final String LOG = DashboardFragment.class.getSimpleName();
 
+    public static final String DEFAULT_COORDINATES = "40.7608,-111.8910";
+
     private static final String GEOCODER_API_BASE_URL =
             "https://maps.googleapis.com/maps/api/geocode/json?address=";
     private static final String GOOGLE_MAPS_API_KEY = "AIzaSyB_U6PQFP1cdeWwwhPgM9VA7xMfWaGzhJo";

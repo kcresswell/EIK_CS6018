@@ -1,5 +1,6 @@
 package com.example.mcresswell.project01.weather;
 
+import android.app.ProgressDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -17,6 +18,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.userProfile.UserProfile;
+import com.example.mcresswell.project01.userProfile.UserProfileViewModel;
 import com.example.mcresswell.project01.util.Constants;
 
 import java.util.ArrayList;
@@ -35,16 +38,13 @@ public class WeatherFragment extends ListFragment {
     private OnWeatherDataLoadedListener mListener;
     //    private WeatherForecast weatherForecast;
     private WeatherViewModel weatherViewModel;
+    private UserProfileViewModel userProfileViewModel;
 
-    //UI elements
-//    private TextView forecastTitle;
     private TextView location;
-    //    private TextView mainForecast, description, temp, tempMin, tempMax;
-//    private Image weatherIcon;
-//    private TextView pressure, humidity, wind; //optional extra forecast details
     Map<String, String> mapper;
     private ArrayList<String> data;
-    private ListView listView;
+    private ListView mlistView;
+    private ProgressDialog dialog;
 
     public WeatherFragment() {
     }
@@ -70,10 +70,18 @@ public class WeatherFragment extends ListFragment {
 
         }
         weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
-        weatherViewModel.getForecastData().observe(this, nameObserver);
+        weatherViewModel.getForecastData().observe(this, weatherObserver);
+
+        userProfileViewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
+        subscribeToUserProfileModel();
 
         String city = getActivity().getIntent().getStringExtra("city");
         String country = getActivity().getIntent().getStringExtra("country");
+
+        dialog = new ProgressDialog(getContext());
+        dialog.setMessage(String.format("Loading weather for %s, %s...", city.replace("+", " "), country));
+        dialog.show();
+
         loadWeatherData(city, country);
     }
 
@@ -82,13 +90,19 @@ public class WeatherFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(LOG, Constants.CREATE_VIEW);
-        View v = inflater.inflate(R.layout.fragment_weather, container, false);
+        View view = inflater.inflate(R.layout.fragment_weather, container, false);
 
-        location = v.findViewById(R.id.weatherLocation);
-        listView = v.findViewById(android.R.id.list);
-        listView.setId(android.R.id.list);
+        location = view.findViewById(R.id.weatherLocation);
+        mlistView = view.findViewById(android.R.id.list);
+        mlistView.setId(android.R.id.list);
 
-        return v;
+        return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.d(LOG, Constants.DESTROY_VIEW);
+        super.onDestroyView();
     }
 
     @Override
@@ -119,11 +133,13 @@ public class WeatherFragment extends ListFragment {
 
     }
 
-    final Observer<WeatherForecast> nameObserver  = new Observer<WeatherForecast>() {
+    final Observer<WeatherForecast> weatherObserver = new Observer<WeatherForecast>() {
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onChanged(@Nullable final WeatherForecast weatherData) {
             if (weatherData != null) { //Weather data has finished being retrieved
+                Log.d(LOG, "weatherObserver onChanged listener: weather data changed and is not null");
+                dialog.dismiss();
                 weatherData.printWeatherForecast();
 
                 data = new ArrayList<>();
@@ -147,6 +163,23 @@ public class WeatherFragment extends ListFragment {
 
         }
     };
+
+    private void subscribeToUserProfileModel() {
+        userProfileViewModel.getUserProfile().observe(this, new Observer<UserProfile>() {
+            @Override
+            public void onChanged(@Nullable UserProfile userProfile) {
+                //Now that valid user profile data has been entered, reload
+                if (userProfile != null) {
+                    Log.d(LOG, "subscribeToUserProfileModel: UserProfileViewModel onChanged " +
+                            "listener, re-fetching current weather based on user city and country");
+                    loadWeatherData(userProfile.getM_city(), userProfile.getM_country());
+                    dialog = new ProgressDialog(getContext());
+                    dialog.setMessage(String.format("Loading weather for %s, %s...", userProfile.getM_city(), userProfile.getM_country()));
+                    dialog.show();
+                }
+            }
+        });
+    }
 
     private void loadWeatherData(String city, String country){
         Log.d(LOG, "loadWeatherData");

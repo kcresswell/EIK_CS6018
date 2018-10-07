@@ -9,9 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.mcresswell.project01.userProfile.UserProfile;
-import com.example.mcresswell.project01.util.GeocoderLocationUtils;
 import com.example.mcresswell.project01.util.SampleProfileData;
-import com.example.mcresswell.project01.util.ValidationUtils;
+import com.example.mcresswell.project01.weather.WeatherClient;
 import com.example.mcresswell.project01.weather.WeatherForecast;
 import com.example.mcresswell.project01.weather.WeatherFragment;
 
@@ -19,9 +18,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.mcresswell.project01.util.GeocoderLocationUtils.DEFAULT_COORDINATES;
 import static com.example.mcresswell.project01.util.GeocoderLocationUtils.getCoordinatesFromCityCountry;
-import static com.example.mcresswell.project01.util.ValidationUtils.isValidCity;
-import static com.example.mcresswell.project01.util.ValidationUtils.isValidCountryCode;
 
 public class DashboardActivity extends AppCompatActivity implements
         ProfileSummaryFragment.OnProfileSummaryInteractionListener,
@@ -33,9 +31,6 @@ public class DashboardActivity extends AppCompatActivity implements
     private List<UserProfile> userProfilesData = new ArrayList<>();
 
     //member variables
-    private final String DEFAULT_COORDINATES = "40.7608,-111.8910";
-    private final String DEFAULT_CITY = "PROVO";
-    private final String DEFAULT_COUNTRY_CODE = "US";
     private FragmentTransaction m_fTrans;
     private UserProfile m_userProfile;
 
@@ -127,21 +122,22 @@ public class DashboardActivity extends AppCompatActivity implements
 
     //weather button behavior
     private void weatherButtonHandler() {
-        String city = m_userProfile != null ?
-                isValidCity(m_userProfile.getM_city()) ?
-                        m_userProfile.getM_city() : DEFAULT_CITY : DEFAULT_CITY;
-        String country = m_userProfile != null ?
-                isValidCountryCode(m_userProfile.getM_country()) ?
-                        m_userProfile.getM_country() : DEFAULT_COUNTRY_CODE : DEFAULT_COUNTRY_CODE;
+        String city = WeatherClient.DEFAULT_CITY;
+        String country = WeatherClient.DEFAULT_COUNTRY;
+         if (m_userProfile != null) {
+            Log.d(LOG, "weatherButtonHandler: at least the user profile object has data ..?");
+            city = m_userProfile.getM_city();
+            country = m_userProfile.getM_country();
+        }
 
         if (!isWideDisplay()) { //Load WeatherActivity in mobile
-            Log.d(LOG, "weatherButtonHanlder mobileView");
+            Log.d(LOG, "weatherButtonHandler mobileView");
             Intent intent = new Intent(this, WeatherActivity.class);
             intent.putExtra("city", city);
             intent.putExtra("country", country);
             startActivity(intent);
         } else { //Tablet
-            Log.d(LOG, "weatherButtonHanlder tabletView");
+            Log.d(LOG, "weatherButtonHandler tabletView");
             getIntent().putExtra("city", city);
             getIntent().putExtra("country", country);
 
@@ -193,13 +189,7 @@ public class DashboardActivity extends AppCompatActivity implements
     @Override
     public void onBackPressed() {
         Log.d(LOG, "onBackPressed");
-//        super.onBackPressed();
-//        if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
         restoreDefaultDashboardView();
-
-//        } else {
-//            super.onBackPressed();
-//        }
     }
 
     private boolean isWideDisplay(){
