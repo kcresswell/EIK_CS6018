@@ -15,8 +15,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.ViewModels.FitnessProfileViewModel;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
-import com.example.mcresswell.project01.ViewModels.UserProfileViewModel;
 import com.example.mcresswell.project01.util.Constants;
 import com.example.mcresswell.project01.util.UserProfileUtils;
 
@@ -35,7 +35,7 @@ public class FitnessDetailsFragment extends Fragment {
     private static final int DEFAULT_WEIGHT = 120;
 
     private TextView m_tvcalsToEat, m_tvBMR, m_bodyMassIndex, m_tvbmiClassification;
-    private UserProfileViewModel viewModel;
+    private FitnessProfileViewModel viewModel;
     private FitnessProfile m_fitnessProfile;
 
 
@@ -61,7 +61,7 @@ public class FitnessDetailsFragment extends Fragment {
         Log.d(LOG, Constants.CREATE);
         super.onCreate(savedInstanceState);
 
-        viewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
         viewModel.getUserProfile().observe(this, nameObserver);
 
         if (getArguments() != null) {

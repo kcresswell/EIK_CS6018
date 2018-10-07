@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
-import com.example.mcresswell.project01.ViewModels.UserProfileViewModel;
+import com.example.mcresswell.project01.ViewModels.FitnessProfileViewModel;
 import com.example.mcresswell.project01.util.Constants;
 
 import static com.example.mcresswell.project01.util.UserProfileUtils.calculateAge;
@@ -34,7 +34,7 @@ public class ProfileSummaryFragment extends Fragment
 
     private Button m_editButton;
     private OnProfileSummaryInteractionListener m_listener;
-    private UserProfileViewModel m_userProfileViewModel;
+    private FitnessProfileViewModel m_fitnessProfileViewModel;
     private FitnessProfile m_fitnessProfile;
 //    private Bitmap m_photo;
 //    private ImageButton m_profilePhoto;
@@ -64,8 +64,8 @@ public class ProfileSummaryFragment extends Fragment
         Log.d(LOG, Constants.CREATE);
         super.onCreate(savedInstanceState);
 
-        m_userProfileViewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
-        m_userProfileViewModel.getUserProfile().observe(this, nameObserver);
+        m_fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
+        m_fitnessProfileViewModel.getUserProfile().observe(this, nameObserver);
 
         m_fitnessProfile = getActivity().getIntent().getParcelableExtra("profile");
 //        m_photo = getActivity().getIntent().getParcelableExtra("M_IMG_DATA");
@@ -165,7 +165,7 @@ public class ProfileSummaryFragment extends Fragment
 
     private void loadUserData(FitnessProfile profile) {
         Log.d(LOG, "loadUserData");
-        m_userProfileViewModel.setUserProfile(profile);
+        m_fitnessProfileViewModel.setUserProfile(profile);
     }
 
     public interface OnProfileSummaryInteractionListener {
@@ -173,9 +173,9 @@ public class ProfileSummaryFragment extends Fragment
     }
 
     private void passExistingDataOnEditButtonClick() {
-        if (m_userProfileViewModel.getUserProfile().getValue() != null) {
-            Log.d(LOG, "m_userProfileViewModel NOT NULL");
-            m_listener.onProfileSummaryEditButton(m_userProfileViewModel.getUserProfile().getValue());
+        if (m_fitnessProfileViewModel.getUserProfile().getValue() != null) {
+            Log.d(LOG, "m_fitnessProfileViewModel NOT NULL");
+            m_listener.onProfileSummaryEditButton(m_fitnessProfileViewModel.getUserProfile().getValue());
         } else {
             m_listener.onProfileSummaryEditButton(m_fitnessProfile);
         }

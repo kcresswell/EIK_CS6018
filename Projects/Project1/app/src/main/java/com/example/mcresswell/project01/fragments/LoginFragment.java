@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.mcresswell.project01.DashboardActivity;
-import com.example.mcresswell.project01.ProfileSummaryActivity;
+import com.example.mcresswell.project01.Activities.DashboardActivity;
+import com.example.mcresswell.project01.Activities.ProfileSummaryActivity;
 import com.example.mcresswell.project01.R;
 
 

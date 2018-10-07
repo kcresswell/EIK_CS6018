@@ -16,9 +16,9 @@ import com.example.mcresswell.project01.db.repo.FitnessProfileRepository;
 
 import static android.support.constraint.Constraints.TAG;
 
-public class UserProfileViewModel extends AndroidViewModel {
+public class FitnessProfileViewModel extends AndroidViewModel {
 
-    private static final String LOG = UserProfileViewModel.class.getSimpleName();
+    private static final String LOG = FitnessProfileViewModel.class.getSimpleName();
 
     private MutableLiveData<FitnessProfile> mUserProfile = new MutableLiveData<>();
     private FitnessProfile profile;
@@ -30,7 +30,7 @@ public class UserProfileViewModel extends AndroidViewModel {
 
     private FitnessProfileRepository userProfileRepository;
 
-    public UserProfileViewModel(@NonNull Application application) {
+    public FitnessProfileViewModel(@NonNull Application application) {
         super(application);
 //        loadUserProfileData();
     }

@@ -1,4 +1,4 @@
-package com.example.mcresswell.project01;
+package com.example.mcresswell.project01.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,6 +9,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.RV_Adapter;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.fragments.DashboardFragment;
 import com.example.mcresswell.project01.fragments.FitnessDetailsFragment;
@@ -17,7 +19,7 @@ import com.example.mcresswell.project01.fragments.ProfileSummaryFragment;
 import com.example.mcresswell.project01.util.SampleProfileData;
 import com.example.mcresswell.project01.weather.WeatherClient;
 import com.example.mcresswell.project01.weather.WeatherForecast;
-import com.example.mcresswell.project01.weather.WeatherFragment;
+import com.example.mcresswell.project01.fragments.WeatherFragment;
 
 import java.io.IOException;
 import java.util.ArrayList;
