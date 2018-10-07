@@ -65,7 +65,7 @@ public class SampleProfileData {
                 "US",
                 "Active",
                 "Loose",
-                -1,
+                1,
                 220,
                 5,
                 10));

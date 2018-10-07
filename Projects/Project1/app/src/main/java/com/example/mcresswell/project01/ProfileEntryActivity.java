@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.mcresswell.project01.db.entity.UserProfile;
+import com.example.mcresswell.project01.fragments.ProfileEntryFragment;
+import com.example.mcresswell.project01.fragments.ProfileSummaryFragment;
 import com.example.mcresswell.project01.util.Constants;
 
 public class ProfileEntryActivity extends AppCompatActivity
@@ -52,17 +54,6 @@ public class ProfileEntryActivity extends AppCompatActivity
             intent.putExtra("profile", profile);
         }
         startActivity(intent);
-
-    }
-
-    @Override
-    public void onProfileEntryDataPass_DoneButtonClicked(boolean isClicked) {
-        if(isClicked){
-            m_fTrans = getSupportFragmentManager().beginTransaction();
-            m_fTrans.replace(R.id.fl_activity_profile_details, new ProfileSummaryFragment(), "v_frag_profile_entry");
-            m_fTrans.addToBackStack(null);
-            m_fTrans.commit();
-        }
     }
 
     @Override

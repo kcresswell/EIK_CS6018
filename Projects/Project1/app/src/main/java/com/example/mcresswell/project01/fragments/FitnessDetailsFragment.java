@@ -1,4 +1,4 @@
-package com.example.mcresswell.project01;
+package com.example.mcresswell.project01.fragments;
 
 
 import android.arch.lifecycle.Observer;
@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.db.entity.UserProfile;
 import com.example.mcresswell.project01.ViewModels.UserProfileViewModel;
 import com.example.mcresswell.project01.util.Constants;
