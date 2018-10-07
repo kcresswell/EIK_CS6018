@@ -13,6 +13,8 @@ import com.example.mcresswell.project01.fragments.ProfileEntryFragment;
 import com.example.mcresswell.project01.fragments.ProfileSummaryFragment;
 import com.example.mcresswell.project01.util.Constants;
 
+import static com.example.mcresswell.project01.util.FitnessProfileUtils.printUserProfileData;
+
 public class ProfileEntryActivity extends AppCompatActivity
         implements ProfileEntryFragment.OnProfileEntryFragmentListener,
         ProfileSummaryFragment.OnProfileSummaryInteractionListener {
@@ -50,8 +52,8 @@ public class ProfileEntryActivity extends AppCompatActivity
 
         if (profile != null) {
             m_fitnessProfile = profile;
-            profile.printUserProfileData();
-            intent.putExtra("profile", profile);
+            printUserProfileData(profile);
+//            intent.putExtra("profile", profile);
         }
         startActivity(intent);
     }
@@ -73,9 +75,9 @@ public class ProfileEntryActivity extends AppCompatActivity
         // code here to show dialog
         Intent intent = new Intent(this, DashboardActivity.class);
 
-        if (m_fitnessProfile != null){ //Existing profile data, transfer data
-            intent.putExtra("profile", m_fitnessProfile);
-        }
+//        if (m_fitnessProfile != null){ //Existing profile data, transfer data
+//            intent.putExtra("profile", m_fitnessProfile);
+//        }
         startActivity(intent);
     }
 }

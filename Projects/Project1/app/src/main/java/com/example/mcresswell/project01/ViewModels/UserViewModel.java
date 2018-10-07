@@ -1,4 +1,4 @@
-package com.example.mcresswell.project01.userProfile;
+package com.example.mcresswell.project01.ViewModels;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;

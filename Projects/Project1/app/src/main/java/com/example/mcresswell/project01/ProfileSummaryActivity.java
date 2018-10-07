@@ -45,9 +45,9 @@ public class ProfileSummaryActivity extends AppCompatActivity
         Log.d(LOG, "onProfileSummaryEditButton listener");
         Intent intent = new Intent(this, ProfileEntryActivity.class);
 
-        if (profile != null){ //Existing profile data, transfer data
-            intent.putExtra("profile", profile);
-        }
+//        if (profile != null){ //Existing profile data, transfer data
+//            intent.putExtra("profile", profile);
+//        }
         startActivity(intent);
 
     }
@@ -67,9 +67,9 @@ public class ProfileSummaryActivity extends AppCompatActivity
         // code here to show dialog
         Intent intent = new Intent(this, DashboardActivity.class);
 
-        if (m_fitnessProfile != null){ //Existing profile data, transfer data
-            intent.putExtra("profile", m_fitnessProfile);
-        }
+//        if (m_fitnessProfile != null){ //Existing profile data, transfer data
+//            intent.putExtra("profile", m_fitnessProfile);
+//        }
         startActivity(intent);
     }
 

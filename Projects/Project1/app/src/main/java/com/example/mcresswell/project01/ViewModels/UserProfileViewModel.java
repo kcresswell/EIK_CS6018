@@ -15,6 +15,7 @@ import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.db.repo.FitnessProfileRepository;
 
 import static android.support.constraint.Constraints.TAG;
+import static com.example.mcresswell.project01.util.FitnessProfileUtils.printUserProfileData;
 
 public class UserProfileViewModel extends AndroidViewModel {
 
@@ -48,7 +49,7 @@ public class UserProfileViewModel extends AndroidViewModel {
                     if (profile != null) {
 //                    for (FitnessProfile user: fitnessProfiles){
 //                       profile = userProfileRepository.userProfileFromFitnessProfile(user.getId());
-                        profile.printUserProfileData();
+                        printUserProfileData(profile);
                     }
                 }
 //                return profile == null ? FitnessProfile.newTestUserProfileInstance() : profile ;

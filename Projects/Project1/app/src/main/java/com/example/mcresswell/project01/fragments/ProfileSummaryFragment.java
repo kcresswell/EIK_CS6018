@@ -21,7 +21,8 @@ import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.ViewModels.UserProfileViewModel;
 import com.example.mcresswell.project01.util.Constants;
 
-import static com.example.mcresswell.project01.util.UserProfileUtils.calculateAge;
+import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateAge;
+import static com.example.mcresswell.project01.util.FitnessProfileUtils.printUserProfileData;
 
 
 /**
@@ -52,7 +53,7 @@ public class ProfileSummaryFragment extends Fragment
         Bundle args = new Bundle();
         if (profile != null) {
             Log.d(LOG, "newInstance created with existing FitnessProfile data passed");
-            args.putParcelable("profile", profile);
+//            args.putParcelable("profile", profile);
         }
         fragment.setArguments(args);
         return fragment;
@@ -125,7 +126,7 @@ public class ProfileSummaryFragment extends Fragment
         @Override
         public void onChanged(@Nullable final FitnessProfile fitnessProfile) {
             if (fitnessProfile != null) { //FitnessProfile data has finished being retrieved
-                fitnessProfile.printUserProfileData();
+                printUserProfileData(fitnessProfile);
                 Log.d(LOG, "onChanged, updating data fields");
 //                m_fitnessProfile = fitnessProfile;
                 loadUserData(fitnessProfile);

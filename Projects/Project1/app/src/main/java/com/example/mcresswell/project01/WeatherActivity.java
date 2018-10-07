@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.mcresswell.project01.weather.WeatherForecast;
-import com.example.mcresswell.project01.weather.WeatherFragment;
+import com.example.mcresswell.project01.fragments.WeatherFragment;
 
 public class WeatherActivity extends AppCompatActivity
         implements WeatherFragment.OnWeatherDataLoadedListener {

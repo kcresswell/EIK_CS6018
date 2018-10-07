@@ -17,7 +17,7 @@ import com.example.mcresswell.project01.fragments.ProfileSummaryFragment;
 import com.example.mcresswell.project01.util.SampleProfileData;
 import com.example.mcresswell.project01.weather.WeatherClient;
 import com.example.mcresswell.project01.weather.WeatherForecast;
-import com.example.mcresswell.project01.weather.WeatherFragment;
+import com.example.mcresswell.project01.fragments.WeatherFragment;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -85,9 +85,9 @@ public class DashboardActivity extends AppCompatActivity implements
     private void fitnessDetailsButtonHandler() {
         if(!isWideDisplay()) { //mobile
             Intent intent = new Intent(this, FitnessDetailsActivity.class);
-            if (m_fitnessProfile != null) {
-                intent.putExtra("profile", m_fitnessProfile);
-            }
+//            if (m_fitnessProfile != null) {
+//                intent.putExtra("profile", m_fitnessProfile);
+//            }
             startActivityForResult(intent, Activity.RESULT_OK);
         } else { //Tablet
             m_fTrans.replace(R.id.fl_detail_wd, FitnessDetailsFragment.newInstance(m_fitnessProfile));
@@ -118,9 +118,9 @@ public class DashboardActivity extends AppCompatActivity implements
     private void profileButtonHandler() {
         if(!isWideDisplay()) { //mobile
             Intent intent = new Intent(this, ProfileSummaryActivity.class);
-            if (m_fitnessProfile != null) {
-                intent.putExtra("profile", m_fitnessProfile);
-            }
+//            if (m_fitnessProfile != null) {
+//                intent.putExtra("profile", m_fitnessProfile);
+//            }
             startActivityForResult(intent, Activity.RESULT_OK);
         } else { //Tablet
             m_fTrans.replace(R.id.fl_detail_wd, ProfileSummaryFragment.newInstance(m_fitnessProfile));

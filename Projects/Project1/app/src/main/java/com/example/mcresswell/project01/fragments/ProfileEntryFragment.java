@@ -32,10 +32,11 @@ import com.example.mcresswell.project01.util.Constants;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.example.mcresswell.project01.util.UserProfileUtils.calculateAge;
-import static com.example.mcresswell.project01.util.UserProfileUtils.calculateBMR;
-import static com.example.mcresswell.project01.util.UserProfileUtils.calculateBmi;
-import static com.example.mcresswell.project01.util.UserProfileUtils.calculateHeightInInches;
+import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateAge;
+import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateBMR;
+import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateBmi;
+import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateHeightInInches;
+import static com.example.mcresswell.project01.util.FitnessProfileUtils.printUserProfileData;
 import static com.example.mcresswell.project01.util.ValidationUtils.isNotNullOrEmpty;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidAlphaChars;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidCity;
@@ -88,7 +89,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         Bundle args = new Bundle();
         if (profile != null) {
             Log.d(LOG, "newInstance being initialized with previously entered user profile data");
-            args.putParcelable("profile", profile);
+//            args.putParcelable("profile", profile);
         }
         fragment.setArguments(args);
         return fragment;
@@ -219,7 +220,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     public void onSaveInstanceState(Bundle bundle) {
         Log.d(LOG, Constants.SAVE_INSTANCE_STATE);
         super.onSaveInstanceState(bundle);
-        bundle.putParcelable("profile", fitnessProfile);
+//        bundle.putParcelable("profile", fitnessProfile);
         bundle.putParcelable("M_ING_DATA", profileImage);
 
         userEnteredData.forEach(bundle::putString);
@@ -328,7 +329,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 //        fitnessProfile.setM_weightGoal(userEnteredData.get("goal"));
 //
 //        String userSex = userEnteredData.get("sex");
-//        int userAge = UserProfileUtils.calculateAge(userEnteredData.get("dob"));
+//        int userAge = FitnessProfileUtils.calculateAge(userEnteredData.get("dob"));
 //        double userWeight = Double.parseDouble(userEnteredData.get("weight"));
 //        int heightFt = Integer.parseInt(userEnteredData.get("heightFeet"));
 //        int heightIn = Integer.parseInt(userEnteredData.get("heightInches"));
@@ -361,7 +362,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         if (viewModel.getUserProfile().getValue() != null){
             Log.d(LOG, "submit button handler, view model has data");
             FitnessProfile p = viewModel.getUserProfile().getValue();
-            p.printUserProfileData();
+            printUserProfileData(p);
             m_dataListener.onProfileEntryDataEntered_DoneButtonOnClick(p);
         } else {
             Log.d(LOG, "view model null");

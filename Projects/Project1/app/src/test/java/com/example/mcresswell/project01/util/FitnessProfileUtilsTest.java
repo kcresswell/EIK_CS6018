@@ -8,38 +8,38 @@ public class FitnessProfileUtilsTest {
 
     @Test
     public void calculateHealthyWeightBmi() {
-        double bmi = UserProfileUtils.calculateBmi(65, 150);
-        assertTrue(UserProfileUtils.getBmiClassification(bmi).equals(UserProfileUtils.BodyMassIndex.HEALTHY_WEIGHT));
+        double bmi = FitnessProfileUtils.calculateBmi(65, 150);
+        assertTrue(FitnessProfileUtils.getBmiClassification(bmi).equals(FitnessProfileUtils.BodyMassIndex.HEALTHY_WEIGHT));
     }
 
     @Test
     public void calculateUnderWeightBmi() {
-        double bmi = UserProfileUtils.calculateBmi(65, 105);
-        assertTrue(UserProfileUtils.getBmiClassification(bmi).equals(UserProfileUtils.BodyMassIndex.UNDERWEIGHT));
+        double bmi = FitnessProfileUtils.calculateBmi(65, 105);
+        assertTrue(FitnessProfileUtils.getBmiClassification(bmi).equals(FitnessProfileUtils.BodyMassIndex.UNDERWEIGHT));
     }
 
     @Test
     public void calculateObeseBmi() {
-        double bmi = UserProfileUtils.calculateBmi(65, 195);
-        assertTrue(UserProfileUtils.getBmiClassification(bmi).equals(UserProfileUtils.BodyMassIndex.OBESE));
+        double bmi = FitnessProfileUtils.calculateBmi(65, 195);
+        assertTrue(FitnessProfileUtils.getBmiClassification(bmi).equals(FitnessProfileUtils.BodyMassIndex.OBESE));
     }
 
     @Test
     public void calculateClinicallyObeseBmi() {
-        double bmi = UserProfileUtils.calculateBmi(65, 235);
-        assertTrue(UserProfileUtils.getBmiClassification(bmi).equals(UserProfileUtils.BodyMassIndex.CLINICALLY_OBESE));
+        double bmi = FitnessProfileUtils.calculateBmi(65, 235);
+        assertTrue(FitnessProfileUtils.getBmiClassification(bmi).equals(FitnessProfileUtils.BodyMassIndex.CLINICALLY_OBESE));
     }
 
     @Test
     public void getBmi() {
-        assertTrue(UserProfileUtils.getBmiClassification(18.49999).equals(UserProfileUtils.BodyMassIndex.UNDERWEIGHT));
-        assertTrue(UserProfileUtils.getBmiClassification(18.5).equals(UserProfileUtils.BodyMassIndex.HEALTHY_WEIGHT));
-        assertTrue(UserProfileUtils.getBmiClassification(24.9).equals(UserProfileUtils.BodyMassIndex.HEALTHY_WEIGHT));
-        assertTrue(UserProfileUtils.getBmiClassification(25).equals(UserProfileUtils.BodyMassIndex.OVERWEIGHT));
-        assertTrue(UserProfileUtils.getBmiClassification(30).equals(UserProfileUtils.BodyMassIndex.OBESE));
-        assertTrue(UserProfileUtils.getBmiClassification(34.9).equals(UserProfileUtils.BodyMassIndex.OBESE));
-        assertTrue(UserProfileUtils.getBmiClassification(35).equals(UserProfileUtils.BodyMassIndex.CLINICALLY_OBESE));
-        assertTrue(UserProfileUtils.getBmiClassification(40).equals(UserProfileUtils.BodyMassIndex.CLINICALLY_OBESE));
+        assertTrue(FitnessProfileUtils.getBmiClassification(18.49999).equals(FitnessProfileUtils.BodyMassIndex.UNDERWEIGHT));
+        assertTrue(FitnessProfileUtils.getBmiClassification(18.5).equals(FitnessProfileUtils.BodyMassIndex.HEALTHY_WEIGHT));
+        assertTrue(FitnessProfileUtils.getBmiClassification(24.9).equals(FitnessProfileUtils.BodyMassIndex.HEALTHY_WEIGHT));
+        assertTrue(FitnessProfileUtils.getBmiClassification(25).equals(FitnessProfileUtils.BodyMassIndex.OVERWEIGHT));
+        assertTrue(FitnessProfileUtils.getBmiClassification(30).equals(FitnessProfileUtils.BodyMassIndex.OBESE));
+        assertTrue(FitnessProfileUtils.getBmiClassification(34.9).equals(FitnessProfileUtils.BodyMassIndex.OBESE));
+        assertTrue(FitnessProfileUtils.getBmiClassification(35).equals(FitnessProfileUtils.BodyMassIndex.CLINICALLY_OBESE));
+        assertTrue(FitnessProfileUtils.getBmiClassification(40).equals(FitnessProfileUtils.BodyMassIndex.CLINICALLY_OBESE));
 
     }
 }

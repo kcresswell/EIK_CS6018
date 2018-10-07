@@ -1,4 +1,4 @@
-package com.example.mcresswell.project01.weather;
+package com.example.mcresswell.project01.ViewModels;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
@@ -10,6 +10,8 @@ import android.util.Log;
 
 import com.example.mcresswell.project01.db.entity.Weather;
 import com.example.mcresswell.project01.db.repo.WeatherRepository;
+import com.example.mcresswell.project01.weather.WeatherClient;
+import com.example.mcresswell.project01.weather.WeatherForecast;
 
 import java.net.MalformedURLException;
 import java.util.List;

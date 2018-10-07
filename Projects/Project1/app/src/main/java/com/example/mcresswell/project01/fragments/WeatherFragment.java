@@ -1,4 +1,4 @@
-package com.example.mcresswell.project01.weather;
+package com.example.mcresswell.project01.fragments;
 
 import android.app.ProgressDialog;
 import android.arch.lifecycle.Observer;
@@ -19,8 +19,10 @@ import android.widget.TextView;
 
 import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.ViewModels.UserProfileViewModel;
+import com.example.mcresswell.project01.ViewModels.WeatherViewModel;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.util.Constants;
+import com.example.mcresswell.project01.weather.WeatherForecast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
