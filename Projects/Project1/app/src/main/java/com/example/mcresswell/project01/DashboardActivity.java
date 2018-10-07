@@ -9,12 +9,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.example.mcresswell.project01.db.entity.UserProfile;
+import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.fragments.DashboardFragment;
 import com.example.mcresswell.project01.fragments.FitnessDetailsFragment;
 import com.example.mcresswell.project01.fragments.ProfileEntryFragment;
 import com.example.mcresswell.project01.fragments.ProfileSummaryFragment;
-import com.example.mcresswell.project01.userProfile.UserProfile;
 import com.example.mcresswell.project01.util.SampleProfileData;
 import com.example.mcresswell.project01.weather.WeatherClient;
 import com.example.mcresswell.project01.weather.WeatherForecast;
@@ -34,11 +33,11 @@ public class DashboardActivity extends AppCompatActivity implements
         WeatherFragment.OnWeatherDataLoadedListener {
 
     private final String LOG = getClass().getSimpleName();
-    private List<UserProfile> userProfilesData = new ArrayList<>();
+    private List<FitnessProfile> fitnessProfilesData = new ArrayList<>();
 
     //member variables
     private FragmentTransaction m_fTrans;
-    private UserProfile m_userProfile;
+    private FitnessProfile m_fitnessProfile;
 
     private boolean isLoggedIn;
 
@@ -48,12 +47,12 @@ public class DashboardActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_dashboard);
 
         if (savedInstanceState != null) {
-            m_userProfile = getIntent().getParcelableExtra("profile");
+            m_fitnessProfile = getIntent().getParcelableExtra("profile");
         } else {
             restoreDefaultDashboardView();
         }
 
-        userProfilesData.addAll(SampleProfileData.getUserProfiles());
+        fitnessProfilesData.addAll(SampleProfileData.getUserProfiles());
     }
 
 
@@ -86,12 +85,12 @@ public class DashboardActivity extends AppCompatActivity implements
     private void fitnessDetailsButtonHandler() {
         if(!isWideDisplay()) { //mobile
             Intent intent = new Intent(this, FitnessDetailsActivity.class);
-            if (m_userProfile != null) {
-                intent.putExtra("profile", m_userProfile);
+            if (m_fitnessProfile != null) {
+                intent.putExtra("profile", m_fitnessProfile);
             }
             startActivityForResult(intent, Activity.RESULT_OK);
         } else { //Tablet
-            m_fTrans.replace(R.id.fl_detail_wd, FitnessDetailsFragment.newInstance(m_userProfile));
+            m_fTrans.replace(R.id.fl_detail_wd, FitnessDetailsFragment.newInstance(m_fitnessProfile));
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
@@ -99,11 +98,11 @@ public class DashboardActivity extends AppCompatActivity implements
 
     private void hikingButtonHandler() {
         String coords = null;
-        if (m_userProfile == null) {
+        if (m_fitnessProfile == null) {
             coords = DEFAULT_COORDINATES;
         } else {
             try {
-                coords = getCoordinatesFromCityCountry(m_userProfile.getM_city(), m_userProfile.getM_country());
+                coords = getCoordinatesFromCityCountry(m_fitnessProfile.getM_city(), m_fitnessProfile.getM_country());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -119,12 +118,12 @@ public class DashboardActivity extends AppCompatActivity implements
     private void profileButtonHandler() {
         if(!isWideDisplay()) { //mobile
             Intent intent = new Intent(this, ProfileSummaryActivity.class);
-            if (m_userProfile != null) {
-                intent.putExtra("profile", m_userProfile);
+            if (m_fitnessProfile != null) {
+                intent.putExtra("profile", m_fitnessProfile);
             }
             startActivityForResult(intent, Activity.RESULT_OK);
         } else { //Tablet
-            m_fTrans.replace(R.id.fl_detail_wd, ProfileSummaryFragment.newInstance(m_userProfile));
+            m_fTrans.replace(R.id.fl_detail_wd, ProfileSummaryFragment.newInstance(m_fitnessProfile));
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
@@ -134,10 +133,10 @@ public class DashboardActivity extends AppCompatActivity implements
     private void weatherButtonHandler() {
         String city = WeatherClient.DEFAULT_CITY;
         String country = WeatherClient.DEFAULT_COUNTRY;
-         if (m_userProfile != null) {
+         if (m_fitnessProfile != null) {
             Log.d(LOG, "weatherButtonHandler: at least the user profile object has data ..?");
-            city = m_userProfile.getM_city();
-            country = m_userProfile.getM_country();
+            city = m_fitnessProfile.getM_city();
+            country = m_fitnessProfile.getM_country();
         }
 
         if (!isWideDisplay()) { //Load WeatherActivity in mobile
@@ -190,7 +189,7 @@ public class DashboardActivity extends AppCompatActivity implements
             m_fTrans.replace(R.id.fl_master_wd, frag_dashboard, "v_frag_dashboard");
 
             m_fTrans.replace(R.id.fl_detail_wd,
-                    FitnessDetailsFragment.newInstance(m_userProfile), "v_frag_fitness");
+                    FitnessDetailsFragment.newInstance(m_fitnessProfile), "v_frag_fitness");
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
@@ -207,12 +206,12 @@ public class DashboardActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onProfileEntryDataEntered_DoneButtonOnClick(UserProfile profile) {
-        m_userProfile = profile;
+    public void onProfileEntryDataEntered_DoneButtonOnClick(FitnessProfile profile) {
+        m_fitnessProfile = profile;
     }
 
     @Override
-    public void onProfileSummaryEditButton(UserProfile profile) {
+    public void onProfileSummaryEditButton(FitnessProfile profile) {
         //Do stuff with the user profile. This seems to be something that we will need to remove
         //once the view model and repository are fully working. As we should not have interfaces anymore.
     }

@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class UserProfileUtilsTest {
+public class FitnessProfileUtilsTest {
 
     @Test
     public void calculateHealthyWeightBmi() {

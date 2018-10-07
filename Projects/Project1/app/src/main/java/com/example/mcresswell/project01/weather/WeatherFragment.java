@@ -18,8 +18,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.mcresswell.project01.R;
-import com.example.mcresswell.project01.userProfile.UserProfile;
-import com.example.mcresswell.project01.userProfile.UserProfileViewModel;
+import com.example.mcresswell.project01.ViewModels.UserProfileViewModel;
+import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.util.Constants;
 
 import java.util.ArrayList;
@@ -165,16 +165,16 @@ public class WeatherFragment extends ListFragment {
     };
 
     private void subscribeToUserProfileModel() {
-        userProfileViewModel.getUserProfile().observe(this, new Observer<UserProfile>() {
+        userProfileViewModel.getUserProfile().observe(this, new Observer<FitnessProfile>() {
             @Override
-            public void onChanged(@Nullable UserProfile userProfile) {
+            public void onChanged(@Nullable FitnessProfile fitnessProfile) {
                 //Now that valid user profile data has been entered, reload
-                if (userProfile != null) {
+                if (fitnessProfile != null) {
                     Log.d(LOG, "subscribeToUserProfileModel: UserProfileViewModel onChanged " +
                             "listener, re-fetching current weather based on user city and country");
-                    loadWeatherData(userProfile.getM_city(), userProfile.getM_country());
+                    loadWeatherData(fitnessProfile.getM_city(), fitnessProfile.getM_country());
                     dialog = new ProgressDialog(getContext());
-                    dialog.setMessage(String.format("Loading weather for %s, %s...", userProfile.getM_city(), userProfile.getM_country()));
+                    dialog.setMessage(String.format("Loading weather for %s, %s...", fitnessProfile.getM_city(), fitnessProfile.getM_country()));
                     dialog.show();
                 }
             }

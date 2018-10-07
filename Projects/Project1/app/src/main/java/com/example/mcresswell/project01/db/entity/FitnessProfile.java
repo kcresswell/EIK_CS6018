@@ -3,16 +3,12 @@ package com.example.mcresswell.project01.db.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
-
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
-
-import com.example.mcresswell.project01.db.entity.FitnessProfile;
 
 import java.util.Date;
 
@@ -24,16 +20,15 @@ import static com.example.mcresswell.project01.util.UserProfileUtils.calculateHe
 
 /**
  *  A POJO class representing all of the data associated with a given user.
- *  This is NOT the entity/DAO class, the corresponding entity class for UserProfile
+ *  This is NOT the entity/DAO class, the corresponding entity class for FitnessProfile
  *  is the FitnessProfile class.
  *
  */
-@Entity(foreignKeys = @ForeignKey(entity = FitnessProfile.class,
-        parentColumns = "id",
-        childColumns = "profile_id"))
-public class UserProfile implements Parcelable {
 
-    private static final String LOG = UserProfile.class.getSimpleName();
+@Entity
+public class FitnessProfile implements Parcelable {
+
+    private static final String LOG = FitnessProfile.class.getSimpleName();
 
     //acount details
     @PrimaryKey
@@ -63,23 +58,23 @@ public class UserProfile implements Parcelable {
     private double m_bmr;
 //    private Bitmap m_profilePicture;
 
-    public UserProfile() { }
+    public FitnessProfile() { }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public UserProfile(int userId,
-                       Date dateCreated,
-                       String fName,
-                       String lName,
-                       String dob,
-                       String sex,
-                       String city,
-                       String country,
-                       String lifestyleSelection,
-                       String weightGoal,
-                       int lbsPerWeek,
-                       int weightInPounds,
-                       int heightFeet,
-                       int heightInches) {
+    public FitnessProfile(int userId,
+                          Date dateCreated,
+                          String fName,
+                          String lName,
+                          String dob,
+                          String sex,
+                          String city,
+                          String country,
+                          String lifestyleSelection,
+                          String weightGoal,
+                          int lbsPerWeek,
+                          int weightInPounds,
+                          int heightFeet,
+                          int heightInches) {
 
         m_userID = userId;
         m_dateJoined = dateCreated;
@@ -100,7 +95,7 @@ public class UserProfile implements Parcelable {
 //        m_profilePicture = profileImage;
     }
 
-    protected UserProfile(Parcel in) {
+    protected FitnessProfile(Parcel in) {
         m_userID = in.readInt();
         m_fName = in.readString();
         m_lName = in.readString();
@@ -120,15 +115,15 @@ public class UserProfile implements Parcelable {
 
     }
 
-    public static final Creator<UserProfile> CREATOR = new Creator<UserProfile>() {
+    public static final Creator<FitnessProfile> CREATOR = new Creator<FitnessProfile>() {
         @Override
-        public UserProfile createFromParcel(Parcel in) {
-            return new UserProfile(in);
+        public FitnessProfile createFromParcel(Parcel in) {
+            return new FitnessProfile(in);
         }
 
         @Override
-        public UserProfile[] newArray(int size) {
-            return new UserProfile[size];
+        public FitnessProfile[] newArray(int size) {
+            return new FitnessProfile[size];
         }
     };
 
@@ -252,8 +247,8 @@ public class UserProfile implements Parcelable {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static UserProfile newTestUserProfileInstance() {
-        UserProfile testUser = new UserProfile();
+    public static FitnessProfile newTestUserProfileInstance() {
+        FitnessProfile testUser = new FitnessProfile();
         testUser.setM_userID(1);
         testUser.setM_fName("TEST");
         testUser.setM_lName("LASTNAME");

@@ -1,6 +1,6 @@
 package com.example.mcresswell.project01.util;
 
-import com.example.mcresswell.project01.db.entity.UserProfile;
+import com.example.mcresswell.project01.db.entity.FitnessProfile;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -10,7 +10,7 @@ import java.util.List;
 
 public class SampleProfileData {
 
-//    private static final UserProfile();
+//    private static final FitnessProfile();
 
     private static Date getDate(int diff){
         GregorianCalendar cal = new GregorianCalendar();
@@ -19,10 +19,10 @@ public class SampleProfileData {
         return cal.getTime();
     }
 
-    public static List<UserProfile> getUserProfiles(){
-        List<UserProfile> userProfiles = new ArrayList<>();
+    public static List<FitnessProfile> getUserProfiles(){
+        List<FitnessProfile> fitnessProfiles = new ArrayList<>();
 
-        userProfiles.add(new UserProfile(
+        fitnessProfiles.add(new FitnessProfile(
                 1,
                 getDate(0),
                 "Flynn",
@@ -38,7 +38,7 @@ public class SampleProfileData {
                 6,
                 0));
 
-        userProfiles.add(new UserProfile(
+        fitnessProfiles.add(new FitnessProfile(
                 2,
                 getDate(-1),
                 "Norma",
@@ -54,7 +54,7 @@ public class SampleProfileData {
                 5,
                 7));
 
-        userProfiles.add(new UserProfile(
+        fitnessProfiles.add(new FitnessProfile(
                 3,
                 getDate(-2),
                 "Omar",
@@ -70,6 +70,6 @@ public class SampleProfileData {
                 5,
                 10));
 
-        return userProfiles;
+        return fitnessProfiles;
     }
 }

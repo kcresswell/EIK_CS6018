@@ -11,8 +11,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
+import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.db.repo.FitnessProfileRepository;
-import com.example.mcresswell.project01.db.entity.UserProfile;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -20,8 +20,8 @@ public class UserProfileViewModel extends AndroidViewModel {
 
     private static final String LOG = UserProfileViewModel.class.getSimpleName();
 
-    private MutableLiveData<UserProfile> mUserProfile = new MutableLiveData<>();
-    private UserProfile profile;
+    private MutableLiveData<FitnessProfile> mUserProfile = new MutableLiveData<>();
+    private FitnessProfile profile;
 
     private String m_fName, m_lName, m_dob, m_sex, m_city, m_country, m_lifestyleSelection, m_weightGoal;
     private int m_Age, m_weight, m_feet, m_inches, m_lbsPerWeek;
@@ -37,38 +37,38 @@ public class UserProfileViewModel extends AndroidViewModel {
 
     @SuppressLint("StaticFieldLeak")
     private void loadUserProfileData() {
-        new AsyncTask<UserProfile, Void, UserProfile>() {
+        new AsyncTask<FitnessProfile, Void, FitnessProfile>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
-            protected UserProfile doInBackground(UserProfile... userProfiles) {
-                UserProfile profile = null;
-                if (userProfiles != null){
-                    Log.d(TAG, String.format("Retrieving %d userProfiles from userProfile database", userProfiles.length));
-                    profile = userProfiles[0];
+            protected FitnessProfile doInBackground(FitnessProfile... fitnessProfiles) {
+                FitnessProfile profile = null;
+                if (fitnessProfiles != null){
+                    Log.d(TAG, String.format("Retrieving %d fitnessProfiles from userProfile database", fitnessProfiles.length));
+                    profile = fitnessProfiles[0];
                     if (profile != null) {
-//                    for (UserProfile user: userProfiles){
+//                    for (FitnessProfile user: fitnessProfiles){
 //                       profile = userProfileRepository.userProfileFromFitnessProfile(user.getId());
                         profile.printUserProfileData();
                     }
                 }
-//                return profile == null ? UserProfile.newTestUserProfileInstance() : profile ;
+//                return profile == null ? FitnessProfile.newTestUserProfileInstance() : profile ;
                 return profile;
 
             }
 
             @Override
-            protected void onPostExecute(UserProfile profile) {
+            protected void onPostExecute(FitnessProfile profile) {
                 mUserProfile.setValue(profile);
             }
         }.execute(profile);
     }
 
-    public void setUserProfile(UserProfile profile) {
+    public void setUserProfile(FitnessProfile profile) {
         this.profile = profile;
         loadUserProfileData();
     }
 
-    public LiveData<UserProfile> getUserProfile() {
+    public LiveData<FitnessProfile> getUserProfile() {
         return mUserProfile;
     }
 }
