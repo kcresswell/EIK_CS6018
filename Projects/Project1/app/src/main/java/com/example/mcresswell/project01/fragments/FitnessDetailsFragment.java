@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.mcresswell.project01.R;
-import com.example.mcresswell.project01.db.entity.UserProfile;
+import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.ViewModels.UserProfileViewModel;
 import com.example.mcresswell.project01.util.Constants;
 import com.example.mcresswell.project01.util.UserProfileUtils;
@@ -36,7 +36,7 @@ public class FitnessDetailsFragment extends Fragment {
 
     private TextView m_tvcalsToEat, m_tvBMR, m_bodyMassIndex, m_tvbmiClassification;
     private UserProfileViewModel viewModel;
-    private UserProfile m_userProfile;
+    private FitnessProfile m_fitnessProfile;
 
 
 
@@ -44,13 +44,13 @@ public class FitnessDetailsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static FitnessDetailsFragment newInstance(UserProfile userProfile) {
+    public static FitnessDetailsFragment newInstance(FitnessProfile fitnessProfile) {
         Log.d(LOG, Constants.NEW);
         FitnessDetailsFragment fragment = new FitnessDetailsFragment();
         Bundle args = new Bundle();
-        if (userProfile != null) {
-            Log.d(LOG, "NEW INSTANCE WITH NON-NULL userProfile!!");
-            args.putParcelable("profile", userProfile);
+        if (fitnessProfile != null) {
+            Log.d(LOG, "NEW INSTANCE WITH NON-NULL fitnessProfile!!");
+            args.putParcelable("profile", fitnessProfile);
         }
         fragment.setArguments(args);
         return fragment;
@@ -65,9 +65,9 @@ public class FitnessDetailsFragment extends Fragment {
         viewModel.getUserProfile().observe(this, nameObserver);
 
         if (getArguments() != null) {
-            m_userProfile = getActivity().getIntent().getParcelableExtra("profile");
+            m_fitnessProfile = getActivity().getIntent().getParcelableExtra("profile");
 
-            loadUserProfileData(m_userProfile);
+            loadUserProfileData(m_fitnessProfile);
         }
     }
 
@@ -82,35 +82,35 @@ public class FitnessDetailsFragment extends Fragment {
         m_tvBMR = view.findViewById(R.id.tv_BMR);
         m_bodyMassIndex = view.findViewById(R.id.tv_bmi);
 
-        if (m_userProfile == null) {
+        if (m_fitnessProfile == null) {
             String defaultBmi = String.format(Locale.US, "%.1f", UserProfileUtils.calculateBmi(DEFAULT_HEIGHT, DEFAULT_WEIGHT));
             m_tvcalsToEat.setText(DEFAULT_CALORIES);
             m_tvBMR.setText(DEFAULT_BMR);
             m_bodyMassIndex.setText(defaultBmi);
         } else {
-            double caloricIntake = calculateCalories(m_userProfile);
+            double caloricIntake = calculateCalories(m_fitnessProfile);
             m_tvcalsToEat.setText(String.format(Locale.US,"%.1f calories", caloricIntake));
-            m_tvBMR.setText(String.format(Locale.US, "%.1f calories/day", m_userProfile.getM_bmr()));
-            m_bodyMassIndex.setText(String.format(Locale.US, "%.1f", m_userProfile.getM_bmi()));
+            m_tvBMR.setText(String.format(Locale.US, "%.1f calories/day", m_fitnessProfile.getM_bmr()));
+            m_bodyMassIndex.setText(String.format(Locale.US, "%.1f", m_fitnessProfile.getM_bmi()));
 
         }
 
         return view;
     }
 
-    final Observer<UserProfile> nameObserver  = new Observer<UserProfile>() {
+    final Observer<FitnessProfile> nameObserver  = new Observer<FitnessProfile>() {
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
-        public void onChanged(@Nullable final UserProfile userProfile) {
-            if (userProfile != null) { //Weather data has finished being retrieved
-                userProfile.printUserProfileData();
+        public void onChanged(@Nullable final FitnessProfile fitnessProfile) {
+            if (fitnessProfile != null) { //Weather data has finished being retrieved
+                fitnessProfile.printUserProfileData();
 //
-//                double caloricIntake = calculateCalories(userProfile);
+//                double caloricIntake = calculateCalories(fitnessProfile);
 //                m_tvcalsToEat.setText(String.format(Locale.US,"%.1f calories", caloricIntake));
-//                m_tvBMR.setText(String.format(Locale.US, "%.1f calories/day", userProfile.getM_bmr()));
-//                m_bodyMassIndex.setText(String.format(Locale.US, "%.1f", userProfile.getM_bmi()));
+//                m_tvBMR.setText(String.format(Locale.US, "%.1f calories/day", fitnessProfile.getM_bmr()));
+//                m_bodyMassIndex.setText(String.format(Locale.US, "%.1f", fitnessProfile.getM_bmi()));
 
-                loadUserProfileData(m_userProfile);
+                loadUserProfileData(m_fitnessProfile);
 
             }
 
@@ -118,11 +118,11 @@ public class FitnessDetailsFragment extends Fragment {
         }
     };
 
-    private void loadUserProfileData(UserProfile userProfile){
+    private void loadUserProfileData(FitnessProfile fitnessProfile){
         Log.d(LOG, "loadUserProfileData");
 
         //pass the user profile in to the view model
-        viewModel.setUserProfile(userProfile);
+        viewModel.setUserProfile(fitnessProfile);
     }
 
 }
