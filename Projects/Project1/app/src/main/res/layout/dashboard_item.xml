@@ -5,7 +5,7 @@
     android:id="@+id/cl_dashboard_item"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:context=".DashboardActivity">
+    tools:context=".Activities.DashboardActivity">
 
     <ImageButton
         android:id="@+id/btn_img_dashboard_item"

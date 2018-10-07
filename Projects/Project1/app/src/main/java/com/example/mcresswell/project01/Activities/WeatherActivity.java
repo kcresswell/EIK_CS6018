@@ -1,4 +1,4 @@
-package com.example.mcresswell.project01;
+package com.example.mcresswell.project01.Activities;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -6,8 +6,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.weather.WeatherForecast;
-import com.example.mcresswell.project01.weather.WeatherFragment;
+import com.example.mcresswell.project01.fragments.WeatherFragment;
 
 public class WeatherActivity extends AppCompatActivity
         implements WeatherFragment.OnWeatherDataLoadedListener {

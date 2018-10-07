@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/fragment_weather"
-    tools:context=".weather.WeatherFragment">
+    tools:context=".fragments.WeatherFragment">
 
     <TextView
         android:id="@+id/weatherTitle"
