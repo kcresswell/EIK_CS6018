@@ -1,9 +1,10 @@
-package com.example.mcresswell.project01;
+package com.example.mcresswell.project01.Activities;
 
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.fragments.LoginFragment;
 
 public class LoginActivity extends AppCompatActivity {

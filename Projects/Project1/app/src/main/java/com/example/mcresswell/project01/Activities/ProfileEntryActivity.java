@@ -1,4 +1,4 @@
-package com.example.mcresswell.project01;
+package com.example.mcresswell.project01.Activities;
 
 import android.content.Intent;
 import android.os.Build;
@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.fragments.ProfileEntryFragment;
 import com.example.mcresswell.project01.fragments.ProfileSummaryFragment;

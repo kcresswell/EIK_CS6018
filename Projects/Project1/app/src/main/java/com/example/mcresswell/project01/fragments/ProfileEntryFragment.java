@@ -25,8 +25,8 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.ViewModels.FitnessProfileViewModel;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
-import com.example.mcresswell.project01.ViewModels.UserProfileViewModel;
 import com.example.mcresswell.project01.util.Constants;
 
 import java.util.HashMap;
@@ -57,7 +57,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private OnProfileEntryFragmentListener m_dataListener;
-    private UserProfileViewModel viewModel;
+    private FitnessProfileViewModel viewModel;
 
     //UI Elements
     private EditText firstName, lastName, dob, sex, city, country,
@@ -100,7 +100,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         Log.d(LOG, Constants.CREATE);
         super.onCreate(savedInstanceState);
 
-        viewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
 
         final Observer<FitnessProfile> nameObserver = userProfile -> {
             Log.d(LOG, "nameObserver fitnessProfile view model onChanged");

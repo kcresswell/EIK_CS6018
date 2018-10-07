@@ -18,7 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.mcresswell.project01.R;
-import com.example.mcresswell.project01.ViewModels.UserProfileViewModel;
+import com.example.mcresswell.project01.ViewModels.FitnessProfileViewModel;
 import com.example.mcresswell.project01.ViewModels.WeatherViewModel;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.util.Constants;
@@ -40,7 +40,7 @@ public class WeatherFragment extends ListFragment {
     private OnWeatherDataLoadedListener mListener;
     //    private WeatherForecast weatherForecast;
     private WeatherViewModel weatherViewModel;
-    private UserProfileViewModel userProfileViewModel;
+    private FitnessProfileViewModel fitnessProfileViewModel;
 
     private TextView location;
     Map<String, String> mapper;
@@ -74,7 +74,7 @@ public class WeatherFragment extends ListFragment {
         weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
         weatherViewModel.getForecastData().observe(this, weatherObserver);
 
-        userProfileViewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
+        fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
         subscribeToUserProfileModel();
 
         String city = getActivity().getIntent().getStringExtra("city");
@@ -167,12 +167,12 @@ public class WeatherFragment extends ListFragment {
     };
 
     private void subscribeToUserProfileModel() {
-        userProfileViewModel.getUserProfile().observe(this, new Observer<FitnessProfile>() {
+        fitnessProfileViewModel.getUserProfile().observe(this, new Observer<FitnessProfile>() {
             @Override
             public void onChanged(@Nullable FitnessProfile fitnessProfile) {
                 //Now that valid user profile data has been entered, reload
                 if (fitnessProfile != null) {
-                    Log.d(LOG, "subscribeToUserProfileModel: UserProfileViewModel onChanged " +
+                    Log.d(LOG, "subscribeToUserProfileModel: FitnessProfileViewModel onChanged " +
                             "listener, re-fetching current weather based on user city and country");
                     loadWeatherData(fitnessProfile.getM_city(), fitnessProfile.getM_country());
                     dialog = new ProgressDialog(getContext());

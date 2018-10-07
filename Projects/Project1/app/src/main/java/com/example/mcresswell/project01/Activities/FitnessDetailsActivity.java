@@ -1,10 +1,11 @@
-package com.example.mcresswell.project01;
+package com.example.mcresswell.project01.Activities;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.fragments.FitnessDetailsFragment;
 
