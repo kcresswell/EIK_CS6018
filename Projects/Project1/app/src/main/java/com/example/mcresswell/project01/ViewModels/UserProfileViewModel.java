@@ -20,7 +20,7 @@ public class UserProfileViewModel extends AndroidViewModel {
 
     private static final String LOG = UserProfileViewModel.class.getSimpleName();
 
-    private MutableLiveData<UserProfile> userProfile = new MutableLiveData<>();
+    private MutableLiveData<UserProfile> mUserProfile = new MutableLiveData<>();
     private UserProfile profile;
 
     private String m_fName, m_lName, m_dob, m_sex, m_city, m_country, m_lifestyleSelection, m_weightGoal;
@@ -32,7 +32,7 @@ public class UserProfileViewModel extends AndroidViewModel {
 
     public UserProfileViewModel(@NonNull Application application) {
         super(application);
-        loadUserProfileData();
+//        loadUserProfileData();
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -58,17 +58,17 @@ public class UserProfileViewModel extends AndroidViewModel {
 
             @Override
             protected void onPostExecute(UserProfile profile) {
-                userProfile.setValue(profile);
+                mUserProfile.setValue(profile);
             }
         }.execute(profile);
     }
 
     public void setUserProfile(UserProfile profile) {
         this.profile = profile;
-//        loadUserProfileData();
+        loadUserProfileData();
     }
 
     public LiveData<UserProfile> getUserProfile() {
-        return userProfile;
+        return mUserProfile;
     }
 }

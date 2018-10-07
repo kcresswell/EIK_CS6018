@@ -104,6 +104,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         final Observer<UserProfile> nameObserver = userProfile -> {
             Log.d(LOG, "nameObserver userProfile view model onChanged");
             this.userProfile = userProfile;
+            loadUserProfileData(userProfile);
         };
 
         viewModel.getUserProfile().observe(this, nameObserver);

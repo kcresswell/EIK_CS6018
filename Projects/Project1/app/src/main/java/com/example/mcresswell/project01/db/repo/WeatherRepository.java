@@ -10,6 +10,15 @@ import com.example.mcresswell.project01.db.entity.Weather;
 
 import java.util.List;
 
+/**
+ * Repository/model class for the Weather entity that handles all business logic associated
+ * handling Weather data.
+ * This class interfaces with the in-memory database, and handles API calls to the
+ * OpenWeatherMap API to retrieve live weather data. Data that is retrieved and/or modified is
+ * passed to the WeatherViewModel class.
+ */
+
+//TODO: MOVE EXISTING BUSINESS LOGIC FROM WEATHERVIEWMODEL TO WEATHERREPOSITORY
 public class WeatherRepository {
     private WeatherDao mWeatherDao;
     private LiveData<List<Weather>> mAllWeather; // All weather forecast records in Weather table
@@ -27,6 +36,7 @@ public class WeatherRepository {
     public void insert (Weather weather) {
         new insertAsyncTask(mWeatherDao).execute(weather);
     }
+
 
     private static class insertAsyncTask extends AsyncTask<Weather, Void, Void> {
 

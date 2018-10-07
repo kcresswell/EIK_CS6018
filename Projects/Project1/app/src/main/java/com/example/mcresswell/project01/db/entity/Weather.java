@@ -1,13 +1,29 @@
 package com.example.mcresswell.project01.db.entity;
 
 import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity
+import static android.arch.persistence.room.ForeignKey.SET_NULL;
+
+@Entity(indices = {@Index(value = {"city", "country"})})
 public class Weather {
+
+    public static class Temperature {
+        @ColumnInfo(name = "current_temp")
+        public float temp;
+
+        @ColumnInfo(name = "temp_min")
+        public float tempMin;
+
+        @ColumnInfo(name = "temp_max")
+        public float tempMax;
+    }
 
     @PrimaryKey
     private int id;
@@ -30,14 +46,8 @@ public class Weather {
     @ColumnInfo(name = "detail")
     private String forecastDescription;
 
-    @ColumnInfo(name = "current_temp")
-    private float temp;
-
-    @ColumnInfo(name = "temp_min")
-    private float temp_min;
-
-    @ColumnInfo(name = "temp_max")
-    private float temp_max;
+    @Embedded
+    private Temperature temperature;
 
     @ColumnInfo(name = "wind")
     private float windSpeed;
@@ -103,33 +113,11 @@ public class Weather {
         return forecastDescription;
     }
 
-    public void setForecastDescription(String forecastDescription) {
-        this.forecastDescription = forecastDescription;
-    }
+    public void setForecastDescription(String forecastDescription) { this.forecastDescription = forecastDescription; }
 
-    public float getTemp() {
-        return temp;
-    }
+    public Temperature getTemperature() { return temperature; }
 
-    public void setTemp(float temp) {
-        this.temp = temp;
-    }
-
-    public float getTemp_min() {
-        return temp_min;
-    }
-
-    public void setTemp_min(float temp_min) {
-        this.temp_min = temp_min;
-    }
-
-    public float getTemp_max() {
-        return temp_max;
-    }
-
-    public void setTemp_max(float temp_max) {
-        this.temp_max = temp_max;
-    }
+    public void setTemperature(Temperature temperature) { this.temperature = temperature; }
 
     public float getWindSpeed() {
         return windSpeed;
