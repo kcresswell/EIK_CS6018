@@ -12,6 +12,7 @@ public class Constants {
     public static final String DETACH = "onDetach";
     public static final String SAVE_INSTANCE_STATE = "onSaveInstanceState";
     public static final String NEW = "newInstance";
+    public static final String DESTROY_VIEW = "onDestroyView";
 
     //Callbacks
     public static final String LOCATION_CHANGED = "onLocationChanged";

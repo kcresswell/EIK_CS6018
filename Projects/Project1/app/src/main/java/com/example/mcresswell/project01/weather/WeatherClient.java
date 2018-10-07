@@ -12,23 +12,59 @@ import java.net.URI;
 import java.net.URL;
 import java.util.Scanner;
 
+import javax.inject.Singleton;
+
+import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
+
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidCity;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidCountryCode;
 
+@Singleton
 public class WeatherClient {
 
     private static final String LOG = WeatherClient.class.getSimpleName();
 
+    public static final String API_BASE_URL = "http://api.openweathermap.org";
+    private static final String API_ENDPOINT = "/data/2.5/weather?q=";
 
-    public static final String API_BASE_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
     //private static final String API_URL_LATLON_BASE_URL = "http://api.openweathermap.org/data/2.5/weather?lat=%s&lon=%s";
     private static final String OWM_API_KEY = "718324f1015a96a2369287e867133dd9";
     private static final String API_KEY_QUERY = "&appid=" + OWM_API_KEY;
 
-    private static final String DEFAULT_CITY = "SALT+LAKE+CITY";
-    private static final String DEFAULT_COUNTRY = "US";
-
+    public static final String DEFAULT_CITY = "SALT+LAKE+CITY";
+    public static final String DEFAULT_COUNTRY = "US";
     public static final String INVALID_CITY_URL_JSON_RESPONSE = "{\"cod\":\"404\",\"message\":\"city not found\"}";
+
+    private static Retrofit retrofit;
+
+    @Singleton
+    public static Retrofit getRetrofitInstance() {
+        if (retrofit == null) {
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(API_BASE_URL)
+                    .build();
+        }
+        return retrofit;
+    }
+
+    public interface WeatherService {
+        @GET("/data/2.5/weather?q={city},{country}&appid={api_key}")
+        Call<WeatherForecast> getnWeatherByCityCountry(@Path("city") String city,
+                                                       @Path("country") String country,
+                                                       @Path("api_key") String apiKey);
+
+        @GET("/data/2.5/weather?q={city}&appid={api_key}")
+        Call<WeatherForecast> getWeatherByCity(@Path("city") String city,
+                                               @Path("api_key") String apiKey);
+
+        @GET("/data/2.5/weather?q=" + DEFAULT_CITY + "," + DEFAULT_COUNTRY + "&appid={api_key}")
+        Call<WeatherForecast> getDefaultWeather(@Path("api_key") String apiKey);
+
+
+    }
 
     public static WeatherForecast fetchCurrentWeather(String city, String country) throws MalformedURLException {
         final URL FETCH_WEATHER_URL = buildWeatherApiUrl(city, country);
@@ -84,28 +120,19 @@ public class WeatherClient {
     }
 
     private static String getAbsoluteUrl(String relativeUrl) {
-        return API_BASE_URL + relativeUrl;
+        return API_BASE_URL + API_ENDPOINT + relativeUrl;
     }
 
     public static URL buildWeatherApiUrl(String city, String countryCode){
-        URI uri = null;
-        if (!isValidCity(city)) {
-            return buildDefaultWeatherApiUrl();
-        }
-        else if (!isValidCountryCode(countryCode)) { //Country code is not required
-//                uri = URI.create(API_BASE_URL + city + API_KEY_QUERY);
-            uri = URI.create(getAbsoluteUrl(city + API_KEY_QUERY));
+        URI uri = URI.create(getAbsoluteUrl( city + "," + countryCode + API_KEY_QUERY));
 
-        } else { // City and country are valid
-            uri = URI.create(getAbsoluteUrl(city + "," + countryCode + API_KEY_QUERY));
-        }
         Log.d(LOG, "Weather url: " + uri.toString());
         try {
             return uri.toURL();
         } catch (MalformedURLException e) {
+            Log.d(LOG, "Malformed URL: " + uri.toString());
             e.printStackTrace();
         }
-
         return null;
     }
 

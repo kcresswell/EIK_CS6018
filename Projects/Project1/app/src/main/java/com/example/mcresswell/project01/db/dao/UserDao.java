@@ -37,8 +37,6 @@ public interface UserDao {
     @Delete
     void deleteUserAccount(User user);
 
-    //Below methods are for configuring/populating User database table
-
     @Insert
     void insertAll(List<User> users);
 

@@ -15,30 +15,28 @@ import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 public class WeatherViewModel extends AndroidViewModel {
 
     private static final String LOG = WeatherViewModel.class.getSimpleName();
 
-    //OpenWeatherMap API member variables
     private final MutableLiveData<WeatherForecast> mforecastData =
             new MutableLiveData<>(); //Observable LiveData for WeatherForecast from API calls
+
     private Map<String, String> mRecentWeatherLocations;
     private String mLocationCity;
     private String mLocationCountry;
 
-    //Database
-    private WeatherRepository mWeatherRepository;
+    @Inject
+    WeatherRepository mWeatherRepository;
     private LiveData<List<Weather>> mAllWeather;
-    //
+
     public WeatherViewModel (Application application) {
         super(application);
         mWeatherRepository = new WeatherRepository(application);
         mAllWeather = mWeatherRepository.getAllWeather();
     }
-//
-//    LiveData<List<Weather>> getAllWeather() {
-//        return mAllWeather;
-//    }
 
     @SuppressLint("StaticFieldLeak")
     private void loadData(){

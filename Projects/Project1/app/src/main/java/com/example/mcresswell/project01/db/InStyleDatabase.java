@@ -29,6 +29,7 @@ public abstract class InStyleDatabase extends RoomDatabase {
     public abstract FitnessProfileDao fitnessProfileDao();
     public abstract WeatherDao weatherDao();
 
+    //DATABASE IS A SINGLETON
     private static volatile InStyleDatabase INSTANCE;
 
     private final MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
