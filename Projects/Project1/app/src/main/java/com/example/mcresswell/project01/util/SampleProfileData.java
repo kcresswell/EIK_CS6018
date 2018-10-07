@@ -1,6 +1,6 @@
 package com.example.mcresswell.project01.util;
 
-import com.example.mcresswell.project01.userProfile.UserProfile;
+import com.example.mcresswell.project01.db.entity.UserProfile;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -65,7 +65,7 @@ public class SampleProfileData {
                 "US",
                 "Active",
                 "Loose",
-                -1,
+                1,
                 220,
                 5,
                 10));

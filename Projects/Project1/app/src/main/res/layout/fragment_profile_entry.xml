@@ -5,7 +5,7 @@
     android:id="@+id/cl_profile_edit"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileEntryFragment">
+    tools:context=".fragments.ProfileEntryFragment">
 
     <ScrollView
         android:id="@+id/scrollV_profile"

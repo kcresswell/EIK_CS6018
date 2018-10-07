@@ -11,14 +11,14 @@ import android.content.Context;
 import com.example.mcresswell.project01.db.dao.FitnessProfileDao;
 import com.example.mcresswell.project01.db.dao.UserDao;
 import com.example.mcresswell.project01.db.dao.WeatherDao;
-import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.db.entity.User;
 import com.example.mcresswell.project01.db.entity.Weather;
+import com.example.mcresswell.project01.db.entity.UserProfile;
 import com.example.mcresswell.project01.util.DataTypeConverters;
 
 import java.util.List;
 
-@Database(entities = {User.class, FitnessProfile.class, Weather.class}, version = 1)
+@Database(entities = {User.class, UserProfile.class, Weather.class}, version = 1)
 @TypeConverters({DataTypeConverters.class})
 public abstract class InStyleDatabase extends RoomDatabase {
 
@@ -39,7 +39,7 @@ public abstract class InStyleDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (InStyleDatabase.class) {
                 if (INSTANCE == null) {
-                    //Create single instance of database with FitnessProfile, User, and Weather tables
+                    //Create single instance of database with UserProfile, User, and Weather tables
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             InStyleDatabase.class, DATABASE_NAME).build();
                 }
@@ -72,7 +72,7 @@ public abstract class InStyleDatabase extends RoomDatabase {
      */
     private static void insertTestData(final InStyleDatabase database,
                                        final List<User> userList,
-                                       final List<FitnessProfile> fitnessProfileList,
+                                       final List<UserProfile> fitnessProfileList,
                                        final List<Weather> weatherList) {
         database.runInTransaction(() -> {
             database.userDao().insertAll(userList);

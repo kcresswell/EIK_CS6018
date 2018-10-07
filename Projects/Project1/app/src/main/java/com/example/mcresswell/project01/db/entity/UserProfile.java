@@ -1,7 +1,5 @@
-package com.example.mcresswell.project01.userProfile;
+package com.example.mcresswell.project01.db.entity;
 
-
-import android.graphics.Bitmap;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
@@ -42,10 +40,6 @@ public class UserProfile implements Parcelable {
     private int m_userID; // Profile ID in database
     @ColumnInfo(name = "join_date")
     private Date m_dateJoined;
-    @ColumnInfo(name = "email")
-    private String m_email;
-    @ColumnInfo(name = "password")
-    private String m_password;
 
     private String m_fName;
     private String m_lName;
@@ -67,7 +61,7 @@ public class UserProfile implements Parcelable {
     private int m_lbsPerWeek;
     private double m_bmi;
     private double m_bmr;
-    private Bitmap m_profilePicture;
+//    private Bitmap m_profilePicture;
 
     public UserProfile() { }
 

@@ -6,7 +6,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.util.Log;
 
-import com.example.mcresswell.project01.DashboardFragment;
+import com.example.mcresswell.project01.fragments.DashboardFragment;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 

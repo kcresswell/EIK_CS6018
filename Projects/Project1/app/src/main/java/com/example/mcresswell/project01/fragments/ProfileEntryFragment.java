@@ -1,4 +1,4 @@
-package com.example.mcresswell.project01;
+package com.example.mcresswell.project01.fragments;
 
 
 import android.annotation.TargetApi;
@@ -24,8 +24,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.example.mcresswell.project01.userProfile.UserProfile;
-import com.example.mcresswell.project01.userProfile.UserProfileViewModel;
+import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.db.entity.UserProfile;
+import com.example.mcresswell.project01.ViewModels.UserProfileViewModel;
 import com.example.mcresswell.project01.util.Constants;
 
 import java.util.HashMap;
@@ -44,8 +45,6 @@ import static com.example.mcresswell.project01.util.ValidationUtils.isValidHeigh
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidSex;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidWeight;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidWeightPlan;
-
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -125,6 +124,16 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         initializeProfileEntryUIElements(view);
 
         //set buttons to listen to this class
+        setButtonListeners();
+
+        if (userProfile != null) { //If UserProfile has existing data, autopopulate fields
+            autofillExistingUserProfileData(userProfile);
+        }
+
+        return view;
+    }
+
+    private void setButtonListeners() {
         profileEntryButton.setOnClickListener(this);
         takeProfileImageButton.setOnClickListener(this);
         activeLifestyle.setOnClickListener(this);
@@ -132,12 +141,6 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         gain.setOnClickListener(this);
         maintain.setOnClickListener(this);
         lose.setOnClickListener(this);
-
-        if (userProfile != null) { //If UserProfile has existing data, autopopulate fields
-            autofillExistingUserProfileData(userProfile);
-        }
-
-        return view;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -400,7 +403,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
             return false;
         }
         else if (!isValidWeightPlan(lbsPerWeek.getText().toString())) {
-            Toast.makeText(getContext(), "Please enter", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Please enter weekly weight goal", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -427,6 +430,5 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
     public interface OnProfileEntryFragmentListener {
         void onProfileEntryDataEntered_DoneButtonOnClick(UserProfile profile);
-        void onProfileEntryDataPass_DoneButtonClicked (boolean isClicked);
     }
 }
