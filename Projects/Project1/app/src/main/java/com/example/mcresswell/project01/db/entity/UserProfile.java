@@ -3,16 +3,12 @@ package com.example.mcresswell.project01.db.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
-
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
-
-import com.example.mcresswell.project01.db.entity.FitnessProfile;
 
 import java.util.Date;
 
@@ -28,9 +24,8 @@ import static com.example.mcresswell.project01.util.UserProfileUtils.calculateHe
  *  is the FitnessProfile class.
  *
  */
-@Entity(foreignKeys = @ForeignKey(entity = FitnessProfile.class,
-        parentColumns = "id",
-        childColumns = "profile_id"))
+
+@Entity
 public class UserProfile implements Parcelable {
 
     private static final String LOG = UserProfile.class.getSimpleName();
