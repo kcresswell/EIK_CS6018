@@ -18,8 +18,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.mcresswell.project01.R;
-import com.example.mcresswell.project01.userProfile.UserProfile;
-import com.example.mcresswell.project01.userProfile.UserProfileViewModel;
+import com.example.mcresswell.project01.ViewModels.UserProfileViewModel;
+import com.example.mcresswell.project01.db.entity.UserProfile;
 import com.example.mcresswell.project01.util.Constants;
 
 import java.util.ArrayList;

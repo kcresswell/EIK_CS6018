@@ -14,7 +14,6 @@ import com.example.mcresswell.project01.fragments.DashboardFragment;
 import com.example.mcresswell.project01.fragments.FitnessDetailsFragment;
 import com.example.mcresswell.project01.fragments.ProfileEntryFragment;
 import com.example.mcresswell.project01.fragments.ProfileSummaryFragment;
-import com.example.mcresswell.project01.userProfile.UserProfile;
 import com.example.mcresswell.project01.util.SampleProfileData;
 import com.example.mcresswell.project01.weather.WeatherClient;
 import com.example.mcresswell.project01.weather.WeatherForecast;
