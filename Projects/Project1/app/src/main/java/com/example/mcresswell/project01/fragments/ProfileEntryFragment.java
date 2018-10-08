@@ -420,7 +420,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
     public void loadFitnessProfileData(FitnessProfile profile) {
         Log.d(LOG, "loadUserProfileData");
-        viewModel.setFitnessProfile(profile);
+//        viewModel.setFitnessProfile(profile);
     }
 
     public interface OnProfileEntryFragmentListener {
