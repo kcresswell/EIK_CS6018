@@ -63,7 +63,7 @@ public class FitnessDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         viewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
-        viewModel.getUserProfile().observe(this, nameObserver);
+        viewModel.getFitnessProfile().observe(this, nameObserver);
 
         if (getArguments() != null) {
             m_fitnessProfile = getActivity().getIntent().getParcelableExtra("profile");
@@ -123,7 +123,7 @@ public class FitnessDetailsFragment extends Fragment {
         Log.d(LOG, "loadUserProfileData");
 
         //pass the user profile in to the view model
-        viewModel.setUserProfile(fitnessProfile);
+//        viewModel.setFitnessProfile(fitnessProfile);
     }
 
 }

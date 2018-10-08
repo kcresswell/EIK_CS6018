@@ -21,55 +21,59 @@ public class FitnessProfileViewModel extends AndroidViewModel {
 
     private static final String LOG = FitnessProfileViewModel.class.getSimpleName();
 
-    private MutableLiveData<FitnessProfile> mUserProfile = new MutableLiveData<>();
-    private FitnessProfile profile;
-
-    private String m_fName, m_lName, m_dob, m_sex, m_city, m_country, m_lifestyleSelection, m_weightGoal;
-    private int m_Age, m_weight, m_feet, m_inches, m_lbsPerWeek;
-    private double m_BMR, m_BMI;
-    private int m_calsPerDay;
-
-    private FitnessProfileRepository userProfileRepository;
+    private MutableLiveData<FitnessProfile> m_fitnessProfile;
+    private FitnessProfileRepository m_fitnessProfileRepository;
 
     public FitnessProfileViewModel(@NonNull Application application) {
         super(application);
+        m_fitnessProfileRepository = FitnessProfileRepository.getInsance();
+        m_fitnessProfile = m_fitnessProfileRepository.getFitnessProfileData();
+    }
+
+    public MutableLiveData<FitnessProfile> getFitnessProfile() {
+        return m_fitnessProfile;
+    }
+
+
+//    @SuppressLint("StaticFieldLeak")
+//    private void loadUserProfileData() {
+//        new AsyncTask<FitnessProfile, Void, FitnessProfile>() {
+//            @RequiresApi(api = Build.VERSION_CODES.O)
+//            @Override
+//            protected FitnessProfile doInBackground(FitnessProfile... fitnessProfiles) {
+//                FitnessProfile profile = null;
+//                if (fitnessProfiles != null){
+//                    Log.d(TAG, String.format("Retrieving %d fitnessProfiles from userProfile database", fitnessProfiles.length));
+//                    profile = fitnessProfiles[0];
+//                    if (profile != null) {
+////                    for (FitnessProfile user: fitnessProfiles){
+////                       profile = userProfileRepository.userProfileFromFitnessProfile(user.getId());
+//                        printUserProfileData(profile);
+//                    }
+//                }
+////                return profile == null ? FitnessProfile.newTestUserProfileInstance() : profile ;
+//                return profile;
+//
+//            }
+//
+//            @Override
+//            protected void onPostExecute(FitnessProfile profile) {
+//                mUserProfile.setValue(profile);
+//            }
+//        }.execute(profile);
+//    }
+
+//    public void setUserProfile(FitnessProfile profile) {
+//        this.profile = profile;
 //        loadUserProfileData();
-    }
+//    }
 
-    @SuppressLint("StaticFieldLeak")
-    private void loadUserProfileData() {
-        new AsyncTask<FitnessProfile, Void, FitnessProfile>() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            protected FitnessProfile doInBackground(FitnessProfile... fitnessProfiles) {
-                FitnessProfile profile = null;
-                if (fitnessProfiles != null){
-                    Log.d(TAG, String.format("Retrieving %d fitnessProfiles from userProfile database", fitnessProfiles.length));
-                    profile = fitnessProfiles[0];
-                    if (profile != null) {
-//                    for (FitnessProfile user: fitnessProfiles){
-//                       profile = userProfileRepository.userProfileFromFitnessProfile(user.getId());
-                        printUserProfileData(profile);
-                    }
-                }
-//                return profile == null ? FitnessProfile.newTestUserProfileInstance() : profile ;
-                return profile;
-
-            }
-
-            @Override
-            protected void onPostExecute(FitnessProfile profile) {
-                mUserProfile.setValue(profile);
-            }
-        }.execute(profile);
-    }
-
-    public void setUserProfile(FitnessProfile profile) {
-        this.profile = profile;
-        loadUserProfileData();
-    }
-
-    public LiveData<FitnessProfile> getUserProfile() {
-        return mUserProfile;
-    }
+//    public void setFitnessProfile(FitnessProfile profile) {
+//        this.profile = profile;
+//        loadFitnessProfileData();
+//    }
+//
+//    public LiveData<FitnessProfile> getFitnessProfile() {
+//        return mFitnessProfile;
+//    }
 }

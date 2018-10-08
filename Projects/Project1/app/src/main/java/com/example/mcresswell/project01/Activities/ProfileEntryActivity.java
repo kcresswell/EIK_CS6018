@@ -1,5 +1,6 @@
 package com.example.mcresswell.project01.Activities;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.ViewModels.FitnessProfileViewModel;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.fragments.ProfileEntryFragment;
 import com.example.mcresswell.project01.fragments.ProfileSummaryFragment;
@@ -23,6 +25,8 @@ public class ProfileEntryActivity extends AppCompatActivity
 
     private FragmentTransaction m_fTrans;
     private FitnessProfile m_fitnessProfile;
+    private FitnessProfileViewModel m_fitnessProfileViewModel;
+    private boolean m_isLoggedIn = false;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -32,7 +36,7 @@ public class ProfileEntryActivity extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_entry);
-
+        initViewModel();
 
         m_fTrans = getSupportFragmentManager().beginTransaction();
 //        if (savedInstanceState != null) {
@@ -43,6 +47,11 @@ public class ProfileEntryActivity extends AppCompatActivity
 
         m_fTrans.replace(R.id.fl_activity_profile_entry, profileEntryFragment);
         m_fTrans.commit();
+    }
+
+    private void initViewModel() {
+        m_fitnessProfileViewModel = ViewModelProviders.of(this)
+                .get(FitnessProfileViewModel.class);
     }
 
     @Override
@@ -73,9 +82,12 @@ public class ProfileEntryActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         Log.d(LOG, "onBackPressed");
-        // code here to show dialog
-        Intent intent = new Intent(this, DashboardActivity.class);
-
+        Intent intent = null;
+        if (m_isLoggedIn) {
+            intent = new Intent(this, DashboardActivity.class);
+        } else {
+            intent = new Intent(this, LoginActivity.class);
+        }
 //        if (m_fitnessProfile != null){ //Existing profile data, transfer data
 //            intent.putExtra("profile", m_fitnessProfile);
 //        }

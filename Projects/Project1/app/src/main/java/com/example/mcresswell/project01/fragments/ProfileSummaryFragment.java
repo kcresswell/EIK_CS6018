@@ -66,7 +66,7 @@ public class ProfileSummaryFragment extends Fragment
         super.onCreate(savedInstanceState);
 
         m_fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
-        m_fitnessProfileViewModel.getUserProfile().observe(this, nameObserver);
+        m_fitnessProfileViewModel.getFitnessProfile().observe(this, nameObserver);
 
         m_fitnessProfile = getActivity().getIntent().getParcelableExtra("profile");
 //        m_photo = getActivity().getIntent().getParcelableExtra("M_IMG_DATA");
@@ -166,7 +166,7 @@ public class ProfileSummaryFragment extends Fragment
 
     private void loadUserData(FitnessProfile profile) {
         Log.d(LOG, "loadUserData");
-        m_fitnessProfileViewModel.setUserProfile(profile);
+//        m_fitnessProfileViewModel.setFitnessProfile(profile);
     }
 
     public interface OnProfileSummaryInteractionListener {
@@ -174,9 +174,9 @@ public class ProfileSummaryFragment extends Fragment
     }
 
     private void passExistingDataOnEditButtonClick() {
-        if (m_fitnessProfileViewModel.getUserProfile().getValue() != null) {
+        if (m_fitnessProfileViewModel.getFitnessProfile().getValue() != null) {
             Log.d(LOG, "m_fitnessProfileViewModel NOT NULL");
-            m_listener.onProfileSummaryEditButton(m_fitnessProfileViewModel.getUserProfile().getValue());
+            m_listener.onProfileSummaryEditButton(m_fitnessProfileViewModel.getFitnessProfile().getValue());
         } else {
             m_listener.onProfileSummaryEditButton(m_fitnessProfile);
         }

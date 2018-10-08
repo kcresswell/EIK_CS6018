@@ -23,7 +23,7 @@ import static android.arch.persistence.room.ForeignKey.SET_NULL;
         indices = {@Index(value = {"email"}, unique = true)})
 public class User {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
     @ColumnInfo(name = "email")

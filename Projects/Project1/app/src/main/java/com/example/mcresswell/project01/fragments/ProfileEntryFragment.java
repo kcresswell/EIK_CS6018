@@ -102,13 +102,13 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
         viewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
 
-        final Observer<FitnessProfile> nameObserver = userProfile -> {
+        final Observer<FitnessProfile> nameObserver = fitnessProfile -> {
             Log.d(LOG, "nameObserver fitnessProfile view model onChanged");
-            this.fitnessProfile = userProfile;
-            loadUserProfileData(userProfile);
+            this.fitnessProfile = fitnessProfile;
+            loadFitnessProfileData(fitnessProfile);
         };
 
-        viewModel.getUserProfile().observe(this, nameObserver);
+        viewModel.getFitnessProfile().observe(this, nameObserver);
         fitnessProfile = getArguments().getParcelable("profile");
 
     }
@@ -357,11 +357,9 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         fitnessProfile.setM_bmi(calculateBmi(totalHeightInches, userWeight));
         fitnessProfile.setM_bmr(calculateBMR(heightFt, heightIn, fitnessProfile.getM_sex(), userWeight, userAge));
 
-        loadUserProfileData(fitnessProfile);
-
-        if (viewModel.getUserProfile().getValue() != null){
+        if (viewModel.getFitnessProfile().getValue() != null){
             Log.d(LOG, "submit button handler, view model has data");
-            FitnessProfile p = viewModel.getUserProfile().getValue();
+            FitnessProfile p = viewModel.getFitnessProfile().getValue();
             printUserProfileData(p);
             m_dataListener.onProfileEntryDataEntered_DoneButtonOnClick(p);
         } else {
@@ -420,13 +418,9 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         }
     }
 
-    public void loadUserProfileData(FitnessProfile profile) {
+    public void loadFitnessProfileData(FitnessProfile profile) {
         Log.d(LOG, "loadUserProfileData");
-        viewModel.setUserProfile(profile);
-    }
-
-    private void loadProfileSummaryFragment(){
-        m_dataListener = (OnProfileEntryFragmentListener) getActivity();
+//        viewModel.setFitnessProfile(profile);
     }
 
     public interface OnProfileEntryFragmentListener {
