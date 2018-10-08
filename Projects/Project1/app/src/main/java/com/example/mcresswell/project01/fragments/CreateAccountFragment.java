@@ -1,4 +1,4 @@
-package com.example.mcresswell.project01.Activities;
+package com.example.mcresswell.project01.fragments;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.mcresswell.project01.Activities.ProfileEntryActivity;
 import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.ViewModels.UserViewModel;
 import com.example.mcresswell.project01.db.entity.User;

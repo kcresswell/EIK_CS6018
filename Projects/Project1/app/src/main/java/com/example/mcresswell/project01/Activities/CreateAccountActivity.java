@@ -1,12 +1,17 @@
 package com.example.mcresswell.project01.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.fragments.CreateAccountFragment;
 
 public class CreateAccountActivity extends AppCompatActivity {
+
+    private static final String LOG = CreateAccountActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +33,15 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private boolean isWideDisplay(){
         return getResources().getBoolean(R.bool.isWideDisplay);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d(LOG, "onBackPressed");
+
+        Intent intent = new Intent(this, LoginActivity.class);
+
+        startActivity(intent);
     }
 
 }
