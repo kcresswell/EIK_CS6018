@@ -11,8 +11,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.mcresswell.project01.Activities.CreateAccountActivity;
 import com.example.mcresswell.project01.Activities.DashboardActivity;
-import com.example.mcresswell.project01.Activities.ProfileSummaryActivity;
+import com.example.mcresswell.project01.Activities.ProfileEntryActivity;
 import com.example.mcresswell.project01.R;
 
 
@@ -65,15 +66,15 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             }
             case R.id.btn_create_account: {
                 Toast.makeText(getContext(),"Create Account",Toast.LENGTH_SHORT).show();
-                createUserButtonHandler();
+                createAccountButtonHandler();
                 break;
             }
 
         }
     }
 
-    private void createUserButtonHandler() {
-        Intent intent = new Intent(getActivity(), ProfileSummaryActivity.class);
+    private void createAccountButtonHandler() {
+        Intent intent = new Intent(getActivity(), CreateAccountActivity.class);
         startActivity(intent);
     }
 

@@ -21,7 +21,7 @@ public class FitnessProfileViewModel extends AndroidViewModel {
 
     private static final String LOG = FitnessProfileViewModel.class.getSimpleName();
 
-    private MutableLiveData<FitnessProfile> mUserProfile = new MutableLiveData<>();
+    private MutableLiveData<FitnessProfile> mFitnessProfile = new MutableLiveData<>();
     private FitnessProfile profile;
 
     private String m_fName, m_lName, m_dob, m_sex, m_city, m_country, m_lifestyleSelection, m_weightGoal;
@@ -33,11 +33,11 @@ public class FitnessProfileViewModel extends AndroidViewModel {
 
     public FitnessProfileViewModel(@NonNull Application application) {
         super(application);
-//        loadUserProfileData();
+//        loadFitnessProfileData();
     }
 
     @SuppressLint("StaticFieldLeak")
-    private void loadUserProfileData() {
+    private void loadFitnessProfileData() {
         new AsyncTask<FitnessProfile, Void, FitnessProfile>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -59,17 +59,17 @@ public class FitnessProfileViewModel extends AndroidViewModel {
 
             @Override
             protected void onPostExecute(FitnessProfile profile) {
-                mUserProfile.setValue(profile);
+                mFitnessProfile.setValue(profile);
             }
         }.execute(profile);
     }
 
-    public void setUserProfile(FitnessProfile profile) {
+    public void setFitnessProfile(FitnessProfile profile) {
         this.profile = profile;
-        loadUserProfileData();
+        loadFitnessProfileData();
     }
 
-    public LiveData<FitnessProfile> getUserProfile() {
-        return mUserProfile;
+    public LiveData<FitnessProfile> getFitnessProfile() {
+        return mFitnessProfile;
     }
 }
