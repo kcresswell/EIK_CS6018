@@ -23,6 +23,7 @@ public class ProfileEntryActivity extends AppCompatActivity
 
     private FragmentTransaction m_fTrans;
     private FitnessProfile m_fitnessProfile;
+    private boolean m_isLoggedIn = false;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -73,9 +74,12 @@ public class ProfileEntryActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         Log.d(LOG, "onBackPressed");
-        // code here to show dialog
-        Intent intent = new Intent(this, DashboardActivity.class);
-
+        Intent intent = null;
+        if (m_isLoggedIn) {
+            intent = new Intent(this, DashboardActivity.class);
+        } else {
+            intent = new Intent(this, LoginActivity.class);
+        }
 //        if (m_fitnessProfile != null){ //Existing profile data, transfer data
 //            intent.putExtra("profile", m_fitnessProfile);
 //        }

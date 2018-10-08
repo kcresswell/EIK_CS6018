@@ -2,6 +2,7 @@ package com.example.mcresswell.project01.db.repo;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
 
 import com.example.mcresswell.project01.db.InStyleDatabase;
@@ -21,12 +22,14 @@ import java.util.List;
 //TODO: MOVE EXISTING BUSINESS LOGIC FROM WEATHERVIEWMODEL TO WEATHERREPOSITORY
 public class WeatherRepository {
     private WeatherDao mWeatherDao;
+    private MutableLiveData<Weather> mWeather = new MutableLiveData<>();
     private LiveData<List<Weather>> mAllWeather; // All weather forecast records in Weather table
+
 
     public WeatherRepository(Application application) {
         InStyleDatabase db = InStyleDatabase.getDatabaseInstance(application);
         mWeatherDao = db.weatherDao();
-        mAllWeather = getAllWeather();
+//        mAllWeather = getAllWeather();
     }
 
     public LiveData<List<Weather>> getAllWeather() {

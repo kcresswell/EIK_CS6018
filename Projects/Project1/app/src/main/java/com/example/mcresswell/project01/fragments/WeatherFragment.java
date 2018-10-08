@@ -167,7 +167,7 @@ public class WeatherFragment extends ListFragment {
     };
 
     private void subscribeToUserProfileModel() {
-        fitnessProfileViewModel.getUserProfile().observe(this, new Observer<FitnessProfile>() {
+        fitnessProfileViewModel.getFitnessProfile().observe(this, new Observer<FitnessProfile>() {
             @Override
             public void onChanged(@Nullable FitnessProfile fitnessProfile) {
                 //Now that valid user profile data has been entered, reload
