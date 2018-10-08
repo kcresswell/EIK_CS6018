@@ -24,27 +24,15 @@ public class FitnessProfileViewModel extends AndroidViewModel {
     private MutableLiveData<FitnessProfile> m_fitnessProfile;
     private FitnessProfileRepository m_fitnessProfileRepository;
 
-    private String m_fName, m_lName, m_dob, m_sex, m_city, m_country, m_lifestyleSelection, m_weightGoal;
-    private int m_Age, m_weight, m_feet, m_inches, m_lbsPerWeek;
-    private double m_BMR, m_BMI;
-    private int m_calsPerDay;
-
-    public FitnessProfile m_fitnessProfile;
-
     public FitnessProfileViewModel(@NonNull Application application) {
         super(application);
-        m_fitnessProfileRepository = new FitnessProfileRepository(application);
+        m_fitnessProfileRepository = FitnessProfileRepository.getInsance();
         m_fitnessProfile = m_fitnessProfileRepository.getFitnessProfileData();
     }
 
-
-
-
-
-
-
-
-
+    public MutableLiveData<FitnessProfile> getFitnessProfile() {
+        return m_fitnessProfile;
+    }
 
 
 //    @SuppressLint("StaticFieldLeak")

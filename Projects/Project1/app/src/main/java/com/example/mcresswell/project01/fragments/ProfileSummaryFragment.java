@@ -166,7 +166,7 @@ public class ProfileSummaryFragment extends Fragment
 
     private void loadUserData(FitnessProfile profile) {
         Log.d(LOG, "loadUserData");
-        m_fitnessProfileViewModel.setFitnessProfile(profile);
+//        m_fitnessProfileViewModel.setFitnessProfile(profile);
     }
 
     public interface OnProfileSummaryInteractionListener {

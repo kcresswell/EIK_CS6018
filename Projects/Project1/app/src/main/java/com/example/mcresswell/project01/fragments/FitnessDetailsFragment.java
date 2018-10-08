@@ -123,7 +123,7 @@ public class FitnessDetailsFragment extends Fragment {
         Log.d(LOG, "loadUserProfileData");
 
         //pass the user profile in to the view model
-        viewModel.setFitnessProfile(fitnessProfile);
+//        viewModel.setFitnessProfile(fitnessProfile);
     }
 
 }
