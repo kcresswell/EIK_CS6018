@@ -9,7 +9,6 @@
     <dimen name="dashboard_fitness_details_data">36sp</dimen>
 
 
-
     <dimen name="widget_margin">25dp</dimen>
     <dimen name="widget_text_padding">4dp</dimen>
     <dimen name="widget_text_margin">6dp</dimen>
@@ -18,8 +17,7 @@
     <dimen name="widget_subtitle_text_size">20sp</dimen>
     <dimen name="widget_location_text_size">25sp</dimen>
     <dimen name="widget_data_text_size">18sp</dimen>
-
-
+    <dimen name="fab_margin">16dp</dimen>
 
 
 </resources>

@@ -3,8 +3,8 @@
 
     <!--Application Login-->
     <string name="greeting">Hello</string>
-    <string name="email">email</string>
-    <string name="password">password</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
     <string name="btn_createAccount">Create Account</string>
     <string name="login">Login</string>
 
@@ -76,6 +76,8 @@
     <!-- TODO: Clean these up -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="btn_generic">button</string>
+    <string name="title_activity_create_account">Create a new account to get started creating your fitness profile!</string>
+    <string name="action_settings">Settings</string>
 
 
 </resources>

@@ -80,7 +80,12 @@ public class FitnessProfileViewModel extends AndroidViewModel {
 //        loadUserProfileData();
 //    }
 
-//    public LiveData<FitnessProfile> getUserProfile() {
-//        return mUserProfile;
+//    public void setFitnessProfile(FitnessProfile profile) {
+//        this.profile = profile;
+//        loadFitnessProfileData();
+//    }
+//
+//    public LiveData<FitnessProfile> getFitnessProfile() {
+//        return mFitnessProfile;
 //    }
 }

@@ -27,17 +27,15 @@
         <activity
             android:name=".Activities.LoginActivity"
             android:label="@string/app_name"
-            android:noHistory="true"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".Activities.DashboardActivity" />
+        <activity android:name=".Activities.DashboardActivity" />
         <activity
             android:name=".Activities.ProfileEntryActivity"
             android:parentActivityName=".Activities.DashboardActivity" />
@@ -53,6 +51,10 @@
             android:name=".Activities.FitnessDetailsActivity"
             android:label="Fitness"
             android:parentActivityName=".Activities.DashboardActivity" />
+        <activity
+            android:name=".Activities.CreateAccountActivity"
+            android:label="@string/title_activity_create_account"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
