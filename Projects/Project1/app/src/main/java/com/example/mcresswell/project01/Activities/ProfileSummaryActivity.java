@@ -15,7 +15,8 @@ import com.example.mcresswell.project01.fragments.ProfileSummaryFragment;
 import com.example.mcresswell.project01.util.Constants;
 
 public class ProfileSummaryActivity extends AppCompatActivity
-    implements ProfileSummaryFragment.OnProfileSummaryInteractionListener,
+    implements
+        ProfileSummaryFragment.OnProfileSummaryInteractionListener,
         ProfileEntryFragment.OnProfileEntryFragmentListener {
 
     private final String LOG = getClass().getSimpleName();
@@ -30,36 +31,32 @@ public class ProfileSummaryActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_summary);
 
-        m_fTrans = getSupportFragmentManager().beginTransaction();
+        loadProfileSummaryFragment();
+    }
 
-        if (savedInstanceState != null) {
-            m_fitnessProfile = getIntent().getParcelableExtra("profile");
-//            Bitmap photo = getIntent().getParcelableExtra("M_IMG_DATA");
-        }
-        m_fTrans.replace(R.id.fl_activity_profile_details, ProfileSummaryFragment.newInstance(m_fitnessProfile), "v_frag_profile");
+    private void loadProfileSummaryFragment() {
+        m_fTrans = getSupportFragmentManager().beginTransaction();
+        m_fTrans.replace(R.id.fl_activity_profile_details, new ProfileSummaryFragment(), "v_frag_profile");
         m_fTrans.commit();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    public void onProfileSummaryEditButton(FitnessProfile profile) {
-        Log.d(LOG, "onProfileSummaryEditButton listener");
-        Intent intent = new Intent(this, ProfileEntryActivity.class);
-
-//        if (profile != null){ //Existing profile data, transfer data
-//            intent.putExtra("profile", profile);
-//        }
-        startActivity(intent);
-
-    }
+//    @RequiresApi(api = Build.VERSION_CODES.O)
+//    @Override
+//    public void onProfileSummary_EditButton(FitnessProfile profile) {
+//        Log.d(LOG, "onProfileSummary_EditButton listener");
+//        Intent intent = new Intent(this, ProfileEntryActivity.class);
+//
+////        if (profile != null){ //Existing profile data, transfer data
+////            intent.putExtra("profile", profile);
+////        }
+//        startActivity(intent);
+//
+//    }
 
     @Override
     public void onProfileEntryDataEntered_DoneButtonOnClick(FitnessProfile profile) {
         Log.d(LOG, "onProfileEntryDoneButton listener, user finished adding data");
-        m_fTrans = getSupportFragmentManager().beginTransaction();
-
-        m_fTrans.replace(R.id.fl_activity_profile_details, ProfileSummaryFragment.newInstance(profile));
-        m_fTrans.commit();
+        loadProfileSummaryFragment();
     }
 
     @Override
@@ -72,6 +69,15 @@ public class ProfileSummaryActivity extends AppCompatActivity
 //            intent.putExtra("profile", m_fitnessProfile);
 //        }
         startActivity(intent);
+    }
+
+    @Override
+    public void onProfileSummary_EditButton(boolean isClicked) {
+        if (isClicked){
+            Log.d(LOG, "onProfileSummary_EditButton listener");
+            Intent intent = new Intent(this, ProfileEntryActivity.class);
+            startActivity(intent);
+        }
     }
 
 }

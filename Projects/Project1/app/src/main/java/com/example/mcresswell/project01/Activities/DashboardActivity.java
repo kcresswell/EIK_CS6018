@@ -1,6 +1,9 @@
 package com.example.mcresswell.project01.Activities;
 
 import android.app.Activity;
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +14,7 @@ import android.util.Log;
 
 import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.RV_Adapter;
+import com.example.mcresswell.project01.ViewModels.FitnessProfileViewModel;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.fragments.DashboardFragment;
 import com.example.mcresswell.project01.fragments.FitnessDetailsFragment;
@@ -29,8 +33,8 @@ import static com.example.mcresswell.project01.util.GeocoderLocationUtils.DEFAUL
 import static com.example.mcresswell.project01.util.GeocoderLocationUtils.getCoordinatesFromCityCountry;
 
 public class DashboardActivity extends AppCompatActivity implements
-        ProfileSummaryFragment.OnProfileSummaryInteractionListener,
-        ProfileEntryFragment.OnProfileEntryFragmentListener,
+//        ProfileSummaryFragment.OnProfileSummaryInteractionListener,
+//        ProfileEntryFragment.OnProfileEntryFragmentListener,
         RV_Adapter.OnAdapterDataChannel,
         WeatherFragment.OnWeatherDataLoadedListener {
 
@@ -39,7 +43,8 @@ public class DashboardActivity extends AppCompatActivity implements
 
     //member variables
     private FragmentTransaction m_fTrans;
-    private FitnessProfile m_fitnessProfile;
+    private MutableLiveData<FitnessProfile> m_fitnessProfile;
+    private FitnessProfileViewModel m_fitnessProfileViewModel;
 
     private boolean isLoggedIn;
 
@@ -48,13 +53,22 @@ public class DashboardActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+        initViewModel();
+        m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile();
+
         if (savedInstanceState != null) {
-            m_fitnessProfile = getIntent().getParcelableExtra("profile");
+//            m_fitnessProfile = getIntent().getParcelableExtra("profile");
+
         } else {
             restoreDefaultDashboardView();
         }
+    }
 
-        fitnessProfilesData.addAll(SampleProfileData.getUserProfiles());
+    private void initViewModel() {
+        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile.setValue(fitnessProfile);
+        m_fitnessProfileViewModel = ViewModelProviders.of(this)
+                .get(FitnessProfileViewModel.class);
+        m_fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfileObserver);
     }
 
 
@@ -92,7 +106,7 @@ public class DashboardActivity extends AppCompatActivity implements
 //            }
             startActivityForResult(intent, Activity.RESULT_OK);
         } else { //Tablet
-            m_fTrans.replace(R.id.fl_detail_wd, FitnessDetailsFragment.newInstance(m_fitnessProfile));
+            m_fTrans.replace(R.id.fl_detail_wd, FitnessDetailsFragment.newInstance(m_fitnessProfile.getValue()));
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
@@ -104,7 +118,7 @@ public class DashboardActivity extends AppCompatActivity implements
             coords = DEFAULT_COORDINATES;
         } else {
             try {
-                coords = getCoordinatesFromCityCountry(m_fitnessProfile.getM_city(), m_fitnessProfile.getM_country());
+                coords = getCoordinatesFromCityCountry(m_fitnessProfile.getValue().getM_city(), m_fitnessProfile.getValue().getM_country());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -125,7 +139,7 @@ public class DashboardActivity extends AppCompatActivity implements
 //            }
             startActivityForResult(intent, Activity.RESULT_OK);
         } else { //Tablet
-            m_fTrans.replace(R.id.fl_detail_wd, ProfileSummaryFragment.newInstance(m_fitnessProfile));
+            m_fTrans.replace(R.id.fl_detail_wd, ProfileSummaryFragment.newInstance(m_fitnessProfile.getValue()));
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
@@ -137,8 +151,8 @@ public class DashboardActivity extends AppCompatActivity implements
         String country = WeatherClient.DEFAULT_COUNTRY;
          if (m_fitnessProfile != null) {
             Log.d(LOG, "weatherButtonHandler: at least the user profile object has data ..?");
-            city = m_fitnessProfile.getM_city();
-            country = m_fitnessProfile.getM_country();
+            city = m_fitnessProfile.getValue().getM_city();
+            country = m_fitnessProfile.getValue().getM_country();
         }
 
         if (!isWideDisplay()) { //Load WeatherActivity in mobile
@@ -191,7 +205,7 @@ public class DashboardActivity extends AppCompatActivity implements
             m_fTrans.replace(R.id.fl_master_wd, frag_dashboard, "v_frag_dashboard");
 
             m_fTrans.replace(R.id.fl_detail_wd,
-                    FitnessDetailsFragment.newInstance(m_fitnessProfile), "v_frag_fitness");
+                    FitnessDetailsFragment.newInstance(m_fitnessProfile.getValue()), "v_frag_fitness");
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
@@ -207,14 +221,14 @@ public class DashboardActivity extends AppCompatActivity implements
         return getResources().getBoolean(R.bool.isWideDisplay);
     }
 
-    @Override
-    public void onProfileEntryDataEntered_DoneButtonOnClick(FitnessProfile profile) {
-        m_fitnessProfile = profile;
-    }
+//    @Override
+//    public void onProfileEntryDataEntered_DoneButtonOnClick(FitnessProfile profile) {
+//        m_fitnessProfile = profile;
+//    }
 
-    @Override
-    public void onProfileSummaryEditButton(FitnessProfile profile) {
-        //Do stuff with the user profile. This seems to be something that we will need to remove
-        //once the view model and repository are fully working. As we should not have interfaces anymore.
-    }
+//    @Override
+//    public void onProfileSummary_EditButton(FitnessProfile profile) {
+//        //Do stuff with the user profile. This seems to be something that we will need to remove
+//        //once the view model and repository are fully working. As we should not have interfaces anymore.
+//    }
 }

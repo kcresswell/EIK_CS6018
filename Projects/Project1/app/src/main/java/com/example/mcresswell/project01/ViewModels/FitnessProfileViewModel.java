@@ -26,7 +26,7 @@ public class FitnessProfileViewModel extends AndroidViewModel {
 
     public FitnessProfileViewModel(@NonNull Application application) {
         super(application);
-        m_fitnessProfileRepository = FitnessProfileRepository.getInsance();
+        m_fitnessProfileRepository = FitnessProfileRepository.getInsance(application.getApplicationContext());
         m_fitnessProfile = m_fitnessProfileRepository.getFitnessProfileData();
     }
 
@@ -34,6 +34,9 @@ public class FitnessProfileViewModel extends AndroidViewModel {
         return m_fitnessProfile;
     }
 
+    public void updateFitnessProfile(){
+        m_fitnessProfileRepository.updateFitnessProfile();
+    }
 
 //    @SuppressLint("StaticFieldLeak")
 //    private void loadUserProfileData() {

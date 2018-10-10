@@ -57,7 +57,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private OnProfileEntryFragmentListener m_dataListener;
-    private FitnessProfileViewModel viewModel;
+    private FitnessProfileViewModel m_fitnessProfileViewModel;
 
     //UI Elements
     private EditText firstName, lastName, dob, sex, city, country,
@@ -77,41 +77,45 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     //Data fields
 
     private Map<String, String> userEnteredData = new HashMap<>();
-    private FitnessProfile fitnessProfile;
+    private FitnessProfile m_fitnessProfile;
 
     public ProfileEntryFragment() {
         // Required empty public constructor
     }
 
-    public static ProfileEntryFragment newInstance(FitnessProfile profile){
-        ProfileEntryFragment fragment = new ProfileEntryFragment();
-
-        Bundle args = new Bundle();
-        if (profile != null) {
-            Log.d(LOG, "newInstance being initialized with previously entered user profile data");
-//            args.putParcelable("profile", profile);
-        }
-        fragment.setArguments(args);
-        return fragment;
-    }
+//    public static ProfileEntryFragment newInstance(FitnessProfile profile){
+//        ProfileEntryFragment fragment = new ProfileEntryFragment();
+//
+//        Bundle args = new Bundle();
+//        if (profile != null) {
+//            Log.d(LOG, "newInstance being initialized with previously entered user profile data");
+////            args.putParcelable("profile", profile);
+//        }
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d(LOG, Constants.CREATE);
         super.onCreate(savedInstanceState);
 
-        viewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
-
-        final Observer<FitnessProfile> nameObserver = fitnessProfile -> {
-            Log.d(LOG, "nameObserver fitnessProfile view model onChanged");
-            this.fitnessProfile = fitnessProfile;
-            loadFitnessProfileData(fitnessProfile);
-        };
-
-        viewModel.getFitnessProfile().observe(this, nameObserver);
-        fitnessProfile = getArguments().getParcelable("profile");
-
+        initViewModel();
     }
+
+    private void initViewModel() {
+//        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> {
+//            Log.d(LOG, "nameObserver m_fitnessProfile view model onChanged");
+//            this.m_fitnessProfile = fitnessProfile;
+//            loadFitnessProfileData(fitnessProfile);
+//        };
+
+        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile = fitnessProfile;
+        m_fitnessProfileViewModel = ViewModelProviders.of(this)
+                .get(FitnessProfileViewModel.class);
+        m_fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfileObserver);
+    }
+
 
 
     @Override
@@ -127,8 +131,8 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         //set buttons to listen to this class
         setButtonListeners();
 
-        if (fitnessProfile != null) { //If FitnessProfile has existing data, autopopulate fields
-            autofillExistingUserProfileData(fitnessProfile);
+        if (m_fitnessProfile != null) { //If FitnessProfile has existing data, autopopulate fields
+            autofillExistingUserProfileData(m_fitnessProfile);
         }
 
         return view;
@@ -220,7 +224,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     public void onSaveInstanceState(Bundle bundle) {
         Log.d(LOG, Constants.SAVE_INSTANCE_STATE);
         super.onSaveInstanceState(bundle);
-//        bundle.putParcelable("profile", fitnessProfile);
+//        bundle.putParcelable("profile", m_fitnessProfile);
         bundle.putParcelable("M_ING_DATA", profileImage);
 
         userEnteredData.forEach(bundle::putString);
@@ -316,17 +320,17 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
             Log.d(LOG, "Key: '" + k + "' Value: '" + v + "'");
         });
 
-//        FitnessProfile fitnessProfile = new FitnessProfile();
-//        fitnessProfile.setM_fName(userEnteredData.get("firstName"));
-//        fitnessProfile.setM_lName(userEnteredData.get("lastName"));
-//        fitnessProfile.setM_sex(userEnteredData.get("sex"));
-//        fitnessProfile.setM_dob(userEnteredData.get("dob"));
-//        fitnessProfile.setM_city(userEnteredData.get("city"));
-//        fitnessProfile.setM_country(userEnteredData.get("country"));
-//        fitnessProfile.setM_lbsPerWeek(Integer.parseInt(userEnteredData.get("llbsPerWeek")));
-////        fitnessProfile.setM_lbsPerWeek(2);
-//        fitnessProfile.setM_lifestyleSelection(userEnteredData.get("lifestyle"));
-//        fitnessProfile.setM_weightGoal(userEnteredData.get("goal"));
+//        FitnessProfile m_fitnessProfile = new FitnessProfile();
+//        m_fitnessProfile.setM_fName(userEnteredData.get("firstName"));
+//        m_fitnessProfile.setM_lName(userEnteredData.get("lastName"));
+//        m_fitnessProfile.setM_sex(userEnteredData.get("sex"));
+//        m_fitnessProfile.setM_dob(userEnteredData.get("dob"));
+//        m_fitnessProfile.setM_city(userEnteredData.get("city"));
+//        m_fitnessProfile.setM_country(userEnteredData.get("country"));
+//        m_fitnessProfile.setM_lbsPerWeek(Integer.parseInt(userEnteredData.get("llbsPerWeek")));
+////        m_fitnessProfile.setM_lbsPerWeek(2);
+//        m_fitnessProfile.setM_lifestyleSelection(userEnteredData.get("lifestyle"));
+//        m_fitnessProfile.setM_weightGoal(userEnteredData.get("goal"));
 //
 //        String userSex = userEnteredData.get("sex");
 //        int userAge = FitnessProfileUtils.calculateAge(userEnteredData.get("dob"));
@@ -357,9 +361,9 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         fitnessProfile.setM_bmi(calculateBmi(totalHeightInches, userWeight));
         fitnessProfile.setM_bmr(calculateBMR(heightFt, heightIn, fitnessProfile.getM_sex(), userWeight, userAge));
 
-        if (viewModel.getFitnessProfile().getValue() != null){
+        if (m_fitnessProfileViewModel.getFitnessProfile().getValue() != null){
             Log.d(LOG, "submit button handler, view model has data");
-            FitnessProfile p = viewModel.getFitnessProfile().getValue();
+            FitnessProfile p = m_fitnessProfileViewModel.getFitnessProfile().getValue();
             printUserProfileData(p);
             m_dataListener.onProfileEntryDataEntered_DoneButtonOnClick(p);
         } else {
@@ -420,10 +424,14 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
     public void loadFitnessProfileData(FitnessProfile profile) {
         Log.d(LOG, "loadUserProfileData");
-//        viewModel.setFitnessProfile(profile);
+//        m_fitnessProfileViewModel.setFitnessProfile(profile);
     }
 
     public interface OnProfileEntryFragmentListener {
         void onProfileEntryDataEntered_DoneButtonOnClick(FitnessProfile profile);
+    }
+
+    private void updateFitnessProfile(){
+        m_fitnessProfileViewModel.updateFitnessProfile();
     }
 }
