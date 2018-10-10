@@ -57,6 +57,7 @@ public class DashboardActivity extends AppCompatActivity implements
         m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile();
 
         if (savedInstanceState != null) {
+
 //            m_fitnessProfile = getIntent().getParcelableExtra("profile");
 
         } else {
@@ -65,10 +66,10 @@ public class DashboardActivity extends AppCompatActivity implements
     }
 
     private void initViewModel() {
-        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile.setValue(fitnessProfile);
+//        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile.setValue(fitnessProfile);
         m_fitnessProfileViewModel = ViewModelProviders.of(this)
                 .get(FitnessProfileViewModel.class);
-        m_fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfileObserver);
+//        m_fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfileObserver);
     }
 
 
@@ -199,7 +200,7 @@ public class DashboardActivity extends AppCompatActivity implements
 
         if(!isWideDisplay()){ //Mobile default
             m_fTrans.replace(R.id.fl_master_nd, frag_dashboard, "v_frag_dashboard");
-            m_fTrans.addToBackStack(null);
+//            m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         } else { //Tablet default: master fragment left, detail fragment right
             m_fTrans.replace(R.id.fl_master_wd, frag_dashboard, "v_frag_dashboard");
