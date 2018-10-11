@@ -39,15 +39,20 @@ public class FitnessProfileRepository {
         return SampleProfileData.getUserProfiles().get(0);
     }
 
-    public void updateFitnessProfile() {
-        m_executor.execute(
-                new Runnable() {
-                    @Override
-                    public void run() {
-//                        m_db.fitnessProfileDao().updateExistingFitnessProfileData(fitnessProfileData);
-                    }
-                }
-        );
+    public void updateFitnessProfile(FitnessProfile fitnessProfile) {
+        //This is only used to updated the fitness profile data for the sample data
+        //This is not correctly using the pub sub model of the observer and live data
+        fitnessProfileData.setValue(fitnessProfile);
+//        MutableLiveData<FitnessProfile> fitProMut = new MutableLiveData<>();
+//        fitProMut.setValue(fitnessProfile);
+//        SampleProfileData.getUserProfiles().set(0, fitProMut);
+
+//        m_executor.execute(
+//                () -> {
+//
+////                  m_db.fitnessProfileDao().updateExistingFitnessProfileData(fitnessProfileData);
+//                }
+//        );
     }
 
     public void addNewFitnessProfile() {

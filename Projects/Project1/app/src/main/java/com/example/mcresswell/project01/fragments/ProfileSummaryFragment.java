@@ -56,17 +56,17 @@ public class ProfileSummaryFragment extends Fragment
         // Required empty public constructor
     }
 
-    public static ProfileSummaryFragment newInstance(FitnessProfile profile) {
-        Log.d(LOG, Constants.NEW);
-        ProfileSummaryFragment fragment = new ProfileSummaryFragment();
-        Bundle args = new Bundle();
-        if (profile != null) {
-            Log.d(LOG, "newInstance created with existing FitnessProfile data passed");
-//            args.putParcelable("profile", profile);
-        }
-        fragment.setArguments(args);
-        return fragment;
-    }
+//    public static ProfileSummaryFragment newInstance(FitnessProfile profile) {
+//        Log.d(LOG, Constants.NEW);
+//        ProfileSummaryFragment fragment = new ProfileSummaryFragment();
+//        Bundle args = new Bundle();
+//        if (profile != null) {
+//            Log.d(LOG, "newInstance created with existing FitnessProfile data passed");
+////            args.putParcelable("profile", profile);
+//        }
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -148,7 +148,6 @@ public class ProfileSummaryFragment extends Fragment
             case R.id.btn_edit: {
                 Log.d(LOG, "Edit button onClick");
                 m_listener.onProfileSummary_EditButton(true);
-
             }
         }
     }
@@ -156,7 +155,6 @@ public class ProfileSummaryFragment extends Fragment
     @Override
     public void onAttach(Context context) {
         Log.d(LOG, Constants.ATTACH);
-
         super.onAttach(context);
         try {
             m_listener = (OnProfileSummaryInteractionListener) context;

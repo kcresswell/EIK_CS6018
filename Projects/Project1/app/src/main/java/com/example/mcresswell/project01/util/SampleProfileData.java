@@ -15,8 +15,6 @@ public class SampleProfileData {
     public static List<MutableLiveData<FitnessProfile>> getUserProfiles(){
         List<MutableLiveData<FitnessProfile>> fitnessProfiles = new ArrayList<>();
 
-
-
                 FitnessProfile fitnessProfile1 = new FitnessProfile(
                 1,
                 "Flynn",
