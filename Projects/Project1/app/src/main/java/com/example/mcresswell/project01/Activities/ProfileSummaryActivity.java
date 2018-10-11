@@ -51,10 +51,16 @@ public class ProfileSummaryActivity extends AppCompatActivity
     @Override
     public void onProfileSummary_EditButton(boolean isClicked) {
         if (isClicked){
-            Log.d(LOG, "onProfileSummary_EditButton listener");
-            Intent intent = new Intent(this, ProfileEntryActivity.class);
-            startActivity(intent);
+            if (!isWideDisplay()) {
+                Log.d(LOG, "onProfileSummary_EditButton listener");
+                Intent intent = new Intent(this, ProfileEntryActivity.class);
+                startActivity(intent);
+            }
         }
+    }
+
+    private boolean isWideDisplay(){
+        return getResources().getBoolean(R.bool.isWideDisplay);
     }
 
 }

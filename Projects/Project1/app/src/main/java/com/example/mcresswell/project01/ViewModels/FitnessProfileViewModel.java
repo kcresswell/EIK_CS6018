@@ -34,8 +34,8 @@ public class FitnessProfileViewModel extends AndroidViewModel {
         return m_fitnessProfile;
     }
 
-    public void updateFitnessProfile(){
-        m_fitnessProfileRepository.updateFitnessProfile();
+    public void updateFitnessProfile(FitnessProfile fitnessProfile){
+        m_fitnessProfileRepository.updateFitnessProfile(fitnessProfile);
     }
 
     public void addNewFitnessProfile() {m_fitnessProfileRepository.addNewFitnessProfile();}

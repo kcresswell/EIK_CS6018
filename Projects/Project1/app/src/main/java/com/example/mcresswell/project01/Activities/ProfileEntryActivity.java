@@ -70,8 +70,18 @@ public class ProfileEntryActivity extends AppCompatActivity
     @Override
     public void onProfileEntryDataEntered_DoneButtonOnClick(boolean isClicked) {
         if (isClicked) {
-            Intent intent = new Intent(this, ProfileSummaryActivity.class);
-            startActivity(intent);
+            if (!isWideDisplay()){
+                Intent intent = new Intent(this, ProfileSummaryActivity.class);
+                startActivity(intent);
+            } else {
+                m_fTrans.replace(R.id.fl_detail_wd, new ProfileSummaryFragment());
+                m_fTrans.addToBackStack(null);
+                m_fTrans.commit();
+            }
         }
+    }
+
+    private boolean isWideDisplay(){
+        return getResources().getBoolean(R.bool.isWideDisplay);
     }
 }

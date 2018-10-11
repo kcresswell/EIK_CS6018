@@ -97,7 +97,8 @@ public class DashboardActivity extends AppCompatActivity implements
             Intent intent = new Intent(this, FitnessDetailsActivity.class);
             startActivityForResult(intent, Activity.RESULT_OK);
         } else { //Tablet
-            m_fTrans.replace(R.id.fl_detail_wd, FitnessDetailsFragment.newInstance(m_fitnessProfile.getValue()));
+//            m_fTrans.replace(R.id.fl_detail_wd, FitnessDetailsFragment.newInstance(m_fitnessProfile.getValue()));
+            m_fTrans.replace(R.id.fl_detail_wd, new FitnessDetailsFragment());
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
@@ -127,7 +128,7 @@ public class DashboardActivity extends AppCompatActivity implements
             Intent intent = new Intent(this, ProfileSummaryActivity.class);
             startActivity(intent);
         } else { //Tablet
-            m_fTrans.replace(R.id.fl_detail_wd, ProfileSummaryFragment.newInstance(m_fitnessProfile.getValue()));
+            m_fTrans.replace(R.id.fl_detail_wd, new ProfileSummaryFragment());
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
@@ -192,8 +193,8 @@ public class DashboardActivity extends AppCompatActivity implements
         } else { //Tablet default: master fragment left, detail fragment right
             m_fTrans.replace(R.id.fl_master_wd, frag_dashboard, "v_frag_dashboard");
 
-            m_fTrans.replace(R.id.fl_detail_wd,
-                    FitnessDetailsFragment.newInstance(m_fitnessProfile.getValue()), "v_frag_fitness");
+//            m_fTrans.replace(R.id.fl_detail_wd, FitnessDetailsFragment.newInstance(m_fitnessProfile.getValue()), "v_frag_fitness");
+            m_fTrans.replace(R.id.fl_detail_wd, new FitnessDetailsFragment(), "v_frag_fitness");
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
