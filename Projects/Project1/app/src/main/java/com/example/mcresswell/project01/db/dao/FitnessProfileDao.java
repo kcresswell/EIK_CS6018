@@ -9,7 +9,6 @@ import android.arch.persistence.room.Update;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Data Access Object (DAO) for querying FitnessProfile table in database.
@@ -23,10 +22,12 @@ import java.util.Optional;
  */
 @Dao
 public interface FitnessProfileDao {
-    @Query("SELECT * FROM FitnessProfile "  +
-            "JOIN User ON FitnessProfile.m_userID = User.profile_id " +
-            "WHERE FitnessProfile.m_userID = User.profile_id")
-    MutableLiveData<FitnessProfile> findByUserID(int userID);
+//    @Query("SELECT * FROM FitnessProfile "  +
+//            "JOIN User ON FitnessProfile.m_userID = User.profile_id " +
+//            "WHERE FitnessProfile.m_userID = User.profile_id")
+    @Query("SELECT * FROM FitnessProfile WHERE id = " +
+            "(SELECT u.profile_id FROM User u WHERE u.id = :userID)")
+    MutableLiveData<FitnessProfile> findByuserID(int userID);
 
     @Insert
     void insertNewUserData(FitnessProfile fitnessProfile);
@@ -34,7 +35,7 @@ public interface FitnessProfileDao {
     @Update
     void updateExistingFitnessProfileData(FitnessProfile fitnessProfile);
 
-    @Query("SELECT * FROM FitnessProfile ORDER BY m_userID ASC")
-    List<FitnessProfile> getFitnessProfileDataForAllUsers();
+    @Query("SELECT * FROM FitnessProfile ORDER BY id ASC")
+    List<FitnessProfile> getAllFitnessProfileData();
 }
 

@@ -24,7 +24,8 @@ import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculat
 public class FitnessProfile {
 
     @PrimaryKey
-    private int m_userID; // Profile ID in database
+    @ColumnInfo(name = "id")
+    private int m_userID;
 
     @ColumnInfo(name = "first_name")
     private String m_fName;
@@ -75,21 +76,54 @@ public class FitnessProfile {
     public FitnessProfile() { }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public FitnessProfile(int userId,
-                          String fName,
-                          String lName,
-                          String dob,
-                          String sex,
-                          String city,
-                          String country,
-                          String lifestyleSelection,
-                          String weightGoal,
-                          int lbsPerWeek,
-                          int weightInPounds,
-                          int heightFeet,
-                          int heightInches) {
+    public FitnessProfile(
+            int userId,
+            String fName,
+            String lName,
+            String dob,
+            String sex,
+            String city,
+            String country,
+            String lifestyleSelection,
+            String weightGoal,
+            int lbsPerWeek,
+            int weightInPounds,
+            int heightFeet,
+            int heightInches) {
 
         m_userID = userId;
+        m_fName = fName;
+        m_lName = lName;
+        m_dob = dob;
+        m_sex = sex;
+        m_city = city;
+        m_country = country;
+        m_lifestyleSelection = lifestyleSelection;
+        m_weightGoal = weightGoal;
+        m_lbsPerWeek = lbsPerWeek;
+        m_weightInPounds = weightInPounds;
+        m_heightFeet = heightFeet;
+        m_heightInches = heightInches;
+        m_bmi = calculateBmi(calculateHeightInInches(heightFeet, heightInches), weightInPounds);
+        m_bmr = calculateBMR(heightFeet, heightInches, sex, weightInPounds, calculateAge(dob));
+//        m_profilePicture = profileImage;
+    }
+
+    //may not need both constructors, this one is just with all data but no id number
+    public FitnessProfile(
+            String fName,
+            String lName,
+            String dob,
+            String sex,
+            String city,
+            String country,
+            String lifestyleSelection,
+            String weightGoal,
+            int lbsPerWeek,
+            int weightInPounds,
+            int heightFeet,
+            int heightInches) {
+
         m_fName = fName;
         m_lName = lName;
         m_dob = dob;

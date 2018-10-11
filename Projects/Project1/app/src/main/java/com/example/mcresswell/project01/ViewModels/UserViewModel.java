@@ -4,32 +4,33 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Transformations;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
-import com.example.mcresswell.project01.db.InStyleDatabase;
 import com.example.mcresswell.project01.db.entity.User;
 import com.example.mcresswell.project01.db.repo.UserRepository;
 
 import java.util.List;
-import java.util.function.Function;
-
-import javax.inject.Inject;
 
 public class UserViewModel extends AndroidViewModel {
 
     private MutableLiveData<User> m_user = new MutableLiveData<>();
-//    private LiveData<List<User>> m_userList;
+    private LiveData<List<User>> m_userList;
 
     UserRepository m_userRepository;
 
     public UserViewModel(@NonNull Application application) {
         super(application);
-        if (m_userRepository == null) {
+//        if (m_userRepository == null) {
             m_userRepository = new UserRepository(application);
-//            m_userList = m_userRepository.getAllUsers();
+            m_userList = m_userRepository.getAllUsers();
             m_user = m_userRepository.getUser();
+//        }
+    }
+
+    public void init(User user) {
+        if (m_user == null) {
+            User u = m_userRepository.find(user);
+            m_user.setValue(u);
         }
     }
 
@@ -53,7 +54,16 @@ public class UserViewModel extends AndroidViewModel {
         m_userRepository.delete(user);
     }
 
+    public LiveData<List<User>> retrieveAllUsers() {
+        m_userList = m_userRepository.findAll();
+        return m_userList;
+    }
+
     public LiveData<User> getUser() {
         return m_user;
+    }
+
+    public LiveData<List<User>> getUserList() {
+        return m_userList;
     }
 }
