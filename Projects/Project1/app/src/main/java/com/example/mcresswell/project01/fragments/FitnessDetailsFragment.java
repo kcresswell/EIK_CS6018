@@ -39,8 +39,6 @@ public class FitnessDetailsFragment extends Fragment {
     private FitnessProfileViewModel viewModel;
     private FitnessProfile m_fitnessProfile;
 
-
-
     public FitnessDetailsFragment() {
         // Required empty public constructor
     }

@@ -26,7 +26,7 @@ public class FitnessProfileViewModel extends AndroidViewModel {
 
     public FitnessProfileViewModel(@NonNull Application application) {
         super(application);
-        m_fitnessProfileRepository = FitnessProfileRepository.getInsance();
+        m_fitnessProfileRepository = FitnessProfileRepository.getInsance(application.getApplicationContext());
         m_fitnessProfile = m_fitnessProfileRepository.getFitnessProfileData();
     }
 
@@ -34,46 +34,9 @@ public class FitnessProfileViewModel extends AndroidViewModel {
         return m_fitnessProfile;
     }
 
+    public void updateFitnessProfile(){
+        m_fitnessProfileRepository.updateFitnessProfile();
+    }
 
-//    @SuppressLint("StaticFieldLeak")
-//    private void loadUserProfileData() {
-//        new AsyncTask<FitnessProfile, Void, FitnessProfile>() {
-//            @RequiresApi(api = Build.VERSION_CODES.O)
-//            @Override
-//            protected FitnessProfile doInBackground(FitnessProfile... fitnessProfiles) {
-//                FitnessProfile profile = null;
-//                if (fitnessProfiles != null){
-//                    Log.d(TAG, String.format("Retrieving %d fitnessProfiles from userProfile database", fitnessProfiles.length));
-//                    profile = fitnessProfiles[0];
-//                    if (profile != null) {
-////                    for (FitnessProfile user: fitnessProfiles){
-////                       profile = userProfileRepository.userProfileFromFitnessProfile(user.getId());
-//                        printUserProfileData(profile);
-//                    }
-//                }
-////                return profile == null ? FitnessProfile.newTestUserProfileInstance() : profile ;
-//                return profile;
-//
-//            }
-//
-//            @Override
-//            protected void onPostExecute(FitnessProfile profile) {
-//                mUserProfile.setValue(profile);
-//            }
-//        }.execute(profile);
-//    }
-
-//    public void setUserProfile(FitnessProfile profile) {
-//        this.profile = profile;
-//        loadUserProfileData();
-//    }
-
-//    public void setFitnessProfile(FitnessProfile profile) {
-//        this.profile = profile;
-//        loadFitnessProfileData();
-//    }
-//
-//    public LiveData<FitnessProfile> getFitnessProfile() {
-//        return mFitnessProfile;
-//    }
+    public void addNewFitnessProfile() {m_fitnessProfileRepository.addNewFitnessProfile();}
 }

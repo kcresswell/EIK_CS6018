@@ -1,12 +1,12 @@
 package com.example.mcresswell.project01.fragments;
 
 
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -22,7 +22,6 @@ import com.example.mcresswell.project01.ViewModels.FitnessProfileViewModel;
 import com.example.mcresswell.project01.util.Constants;
 
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateAge;
-import static com.example.mcresswell.project01.util.FitnessProfileUtils.printUserProfileData;
 
 
 /**
@@ -36,12 +35,22 @@ public class ProfileSummaryFragment extends Fragment
     private Button m_editButton;
     private OnProfileSummaryInteractionListener m_listener;
     private FitnessProfileViewModel m_fitnessProfileViewModel;
-    private FitnessProfile m_fitnessProfile;
+    private MutableLiveData<FitnessProfile> m_fitnessProfile;
 //    private Bitmap m_photo;
 //    private ImageButton m_profilePhoto;
 
     //UI Elements
-    private TextView m_firstName, m_lastName, m_sex, m_age, m_heightFeet, m_heightInches, m_city, m_country, m_weight, m_activity, m_weightGoal;
+    private TextView m_firstName,
+            m_lastName,
+            m_sex,
+            m_age,
+            m_heightFeet,
+            m_heightInches,
+            m_city,
+            m_country,
+            m_weight,
+            m_activity,
+            m_weightGoal;
 
     public ProfileSummaryFragment() {
         // Required empty public constructor
@@ -65,10 +74,8 @@ public class ProfileSummaryFragment extends Fragment
         Log.d(LOG, Constants.CREATE);
         super.onCreate(savedInstanceState);
 
-        m_fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
-        m_fitnessProfileViewModel.getFitnessProfile().observe(this, nameObserver);
-
-        m_fitnessProfile = getActivity().getIntent().getParcelableExtra("profile");
+        initViewModel();
+        m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile();
 //        m_photo = getActivity().getIntent().getParcelableExtra("M_IMG_DATA");
     }
 
@@ -80,7 +87,44 @@ public class ProfileSummaryFragment extends Fragment
         Log.d(LOG, Constants.CREATE_VIEW);
 
         View v = inflater.inflate(R.layout.fragment_profile_summary, container, false);
+        initViewElements(v);
+        m_editButton.setOnClickListener(this);
+        setDataToViewElements();
 
+        return v;
+    }
+
+    private void initViewModel() {
+//        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile.setValue(fitnessProfile);
+        m_fitnessProfileViewModel = ViewModelProviders.of(this)
+                .get(FitnessProfileViewModel.class);
+//        m_fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfileObserver);
+    }
+
+    private void setDataToViewElements() {
+        if (m_fitnessProfile != null) {
+            m_firstName.setText(m_fitnessProfile.getValue().getM_fName());
+            m_lastName.setText(m_fitnessProfile.getValue().getM_lName());
+            m_sex.setText(m_fitnessProfile.getValue().getM_sex().toUpperCase());
+            m_age.setText(calculateAge(m_fitnessProfile.getValue().getM_dob())+ "y");
+            m_heightFeet.setText(String.valueOf(m_fitnessProfile.getValue().getM_heightFeet()));
+            m_heightInches.setText(String.valueOf(m_fitnessProfile.getValue().getM_heightInches()));
+            m_weight.setText(String.valueOf(m_fitnessProfile.getValue().getM_weightInPounds()));
+            m_city.setText(m_fitnessProfile.getValue().getM_city());
+            m_country.setText(m_fitnessProfile.getValue().getM_country());
+            m_activity.setText(m_fitnessProfile.getValue().getM_lifestyleSelection());
+            m_weightGoal.setText(String.valueOf(
+                    m_fitnessProfile.getValue().getM_weightGoal()
+                    + " " + m_fitnessProfile.getValue().getM_lbsPerWeek() + " lbs/week")
+            );
+//
+//          if (m_photo != null) {
+//            m_profilePhoto.setImageBitmap(m_photo);
+//          }
+        }
+    }
+
+    private void initViewElements(View v) {
         m_firstName = v.findViewById(R.id.txtv_fname);
         m_lastName = v.findViewById(R.id.txtv_lname);
         m_sex = v.findViewById(R.id.txtv_sex);
@@ -94,53 +138,18 @@ public class ProfileSummaryFragment extends Fragment
         m_weightGoal = v.findViewById(R.id.radiogp_weightGoal);
         m_editButton = v.findViewById(R.id.btn_edit);
 //        m_profilePhoto = v.findViewById(R.id.btn_img_takeImage);
-
-
-        m_editButton.setOnClickListener(this);
-
-        if (m_fitnessProfile != null) {
-            m_firstName.setText(m_fitnessProfile.getM_fName());
-            m_lastName.setText(m_fitnessProfile.getM_lName());
-            m_sex.setText(m_fitnessProfile.getM_sex().toUpperCase());
-            m_age.setText(calculateAge(m_fitnessProfile.getM_dob())+ "y");
-            m_heightFeet.setText(String.valueOf(m_fitnessProfile.getM_heightFeet()));
-            m_heightInches.setText(String.valueOf(m_fitnessProfile.getM_heightInches()));
-            m_weight.setText(String.valueOf(m_fitnessProfile.getM_weightInPounds()));
-            m_city.setText(m_fitnessProfile.getM_city());
-            m_country.setText(m_fitnessProfile.getM_country());
-            m_activity.setText(m_fitnessProfile.getM_lifestyleSelection());
-            m_weightGoal.setText(String.valueOf(m_fitnessProfile.getM_weightGoal() + " " + m_fitnessProfile.getM_lbsPerWeek() + " lbs/week"));
-        }
-
-//        if (m_photo != null) {
-//            m_profilePhoto.setImageBitmap(m_photo);
-//        }
-        return v;
     }
-
-    /*
-    Create an observer that listens for changes to this data
-     */
-    final Observer<FitnessProfile> nameObserver  = new Observer<FitnessProfile>() {
-        @RequiresApi(api = Build.VERSION_CODES.N)
-        @Override
-        public void onChanged(@Nullable final FitnessProfile fitnessProfile) {
-            if (fitnessProfile != null) { //FitnessProfile data has finished being retrieved
-                printUserProfileData(fitnessProfile);
-                Log.d(LOG, "onChanged, updating data fields");
-//                m_fitnessProfile = fitnessProfile;
-                loadUserData(fitnessProfile);
-            }
-        }
-    };
 
     //edit button on click fragment replace with edit fragment
     //id = btn_edit
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_edit) {
-            Log.d(LOG, "Edit button onClick");
-            passExistingDataOnEditButtonClick();
+        switch (v.getId()){
+            case R.id.btn_edit: {
+                Log.d(LOG, "Edit button onClick");
+                m_listener.onProfileSummary_EditButton(true);
+
+            }
         }
     }
 
@@ -149,37 +158,16 @@ public class ProfileSummaryFragment extends Fragment
         Log.d(LOG, Constants.ATTACH);
 
         super.onAttach(context);
-        if (context instanceof OnProfileSummaryInteractionListener) {
+        try {
             m_listener = (OnProfileSummaryInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
+        } catch (ClassCastException cce){
+            throw new ClassCastException(
+                    context.toString()
                     + " must implement OnProfileSummaryInteractionListener");
         }
     }
 
-    @Override
-    public void onDetach() {
-        Log.d(LOG, Constants.DETACH);
-        super.onDetach();
-        m_listener = null;
-    }
-
-    private void loadUserData(FitnessProfile profile) {
-        Log.d(LOG, "loadUserData");
-//        m_fitnessProfileViewModel.setFitnessProfile(profile);
-    }
-
     public interface OnProfileSummaryInteractionListener {
-        void onProfileSummaryEditButton(FitnessProfile profile);
+        void onProfileSummary_EditButton(boolean isClicked);
     }
-
-    private void passExistingDataOnEditButtonClick() {
-        if (m_fitnessProfileViewModel.getFitnessProfile().getValue() != null) {
-            Log.d(LOG, "m_fitnessProfileViewModel NOT NULL");
-            m_listener.onProfileSummaryEditButton(m_fitnessProfileViewModel.getFitnessProfile().getValue());
-        } else {
-            m_listener.onProfileSummaryEditButton(m_fitnessProfile);
-        }
-    }
-
 }
