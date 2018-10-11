@@ -22,9 +22,11 @@ import java.util.Optional;
  */
 @Dao
 public interface FitnessProfileDao {
-    @Query("SELECT * FROM FitnessProfile "  +
-            "JOIN User ON FitnessProfile.m_userID = User.profile_id " +
-            "WHERE FitnessProfile.m_userID = User.profile_id")
+//    @Query("SELECT * FROM FitnessProfile "  +
+//            "JOIN User ON FitnessProfile.m_userID = User.profile_id " +
+//            "WHERE FitnessProfile.m_userID = User.profile_id")
+    @Query("SELECT * FROM FitnessProfile WHERE id = " +
+            "(SELECT u.profile_id FROM User u WHERE u.id = :userID)")
     Optional<FitnessProfile> findByuserID(int userID);
 
     @Insert
@@ -33,7 +35,7 @@ public interface FitnessProfileDao {
     @Update
     void updateExistingFitnessProfileData(FitnessProfile fitnessProfile);
 
-    @Query("SELECT * FROM FitnessProfile ORDER BY m_userID ASC")
+    @Query("SELECT * FROM FitnessProfile ORDER BY id ASC")
     List<FitnessProfile> getAllFitnessProfileData();
 }
 

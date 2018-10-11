@@ -41,7 +41,9 @@ public abstract class InStyleDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     //Create single instance of database with FitnessProfile, User, and Weather tables
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            InStyleDatabase.class, DATABASE_NAME).build();
+                            InStyleDatabase.class, DATABASE_NAME)
+                            .fallbackToDestructiveMigration() //Clear database every time schema is changed
+                            .build();
                 }
             }
         }
