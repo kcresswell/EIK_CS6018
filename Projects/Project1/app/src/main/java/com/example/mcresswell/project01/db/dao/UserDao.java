@@ -1,5 +1,6 @@
 package com.example.mcresswell.project01.db.dao;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -40,7 +41,7 @@ public interface UserDao {
     @Insert
     void insertAll(List<User> users);
 
-    @Query("SELECT * FROM User ORDER BY email ASC")
-    List<User> getAllUserAccountData();
+    @Query("SELECT * FROM User ORDER BY id ASC")
+    LiveData<List<User>> getAllUserAccountData();
 
 }

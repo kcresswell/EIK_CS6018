@@ -24,7 +24,8 @@ import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculat
 public class FitnessProfile {
 
     @PrimaryKey
-    private int m_userID; // Profile ID in database
+    @ColumnInfo(name = "id")
+    private int m_userID;
 
     @ColumnInfo(name = "first_name")
     private String m_fName;
