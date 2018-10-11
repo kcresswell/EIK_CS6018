@@ -25,7 +25,7 @@ public interface FitnessProfileDao {
     @Query("SELECT * FROM FitnessProfile "  +
             "JOIN User ON FitnessProfile.m_userID = User.profile_id " +
             "WHERE FitnessProfile.m_userID = User.profile_id")
-    Optional<FitnessProfile> findByuserID(int userID);
+    Optional<FitnessProfile> findByuserID(/*int userID*/);
 
     @Insert
     void insertNewUserData(FitnessProfile fitnessProfile);

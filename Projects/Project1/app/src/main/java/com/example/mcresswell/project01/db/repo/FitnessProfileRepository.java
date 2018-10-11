@@ -1,75 +1,63 @@
 package com.example.mcresswell.project01.db.repo;
 
-import android.app.Application;
 import android.arch.lifecycle.MutableLiveData;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.util.Log;
-
+import android.content.Context;
+import com.example.mcresswell.project01.db.InStyleDatabase;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.util.SampleProfileData;
-
-import static android.support.constraint.Constraints.TAG;
-import static com.example.mcresswell.project01.util.FitnessProfileUtils.printUserProfileData;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class FitnessProfileRepository {
-    private final MutableLiveData<FitnessProfile> fitnessProfileData = new MutableLiveData<FitnessProfile>();
-    private FitnessProfile m_fitnessProfile;
+    private MutableLiveData<FitnessProfile> fitnessProfileData;
+    private InStyleDatabase m_db;
+    private Executor m_executor = Executors.newSingleThreadExecutor();
 
     //The following three items make this a singleton
     //make the only call that applies to all accesses of the repository.
-    private static final FitnessProfileRepository FPR_instance = new FitnessProfileRepository();
+    private static FitnessProfileRepository FPR_instance;
     //the only way to access the instance.
-    public static FitnessProfileRepository getInsance() {return FPR_instance;}
+    public static FitnessProfileRepository getInsance(Context context) {
+        if (FPR_instance == null){
+             FPR_instance = new FitnessProfileRepository(context);
+        }
+        return FPR_instance;}
     //made private to ensure that nothing can create an instance besides itself
-    private FitnessProfileRepository() {
+    private FitnessProfileRepository(Context context) {
 //      m_fitnessProfile = //TODO: Get data from database.
         //TODO: This is just a sample data until the database is established.
-        m_fitnessProfile = SampleProfileData.getUserProfiles().get(0);
-        loadData();
+        m_db = InStyleDatabase.getDatabaseInstance(context);
+        fitnessProfileData = getFitnessProfileData();
     }
 
-    public MutableLiveData<FitnessProfile> getFitnessProfileData(){return fitnessProfileData;}
+    //This is where the Repository gets the data.
+    public MutableLiveData<FitnessProfile> getFitnessProfileData(){
+        //get from database when ready
+//       return m_db.fitnessProfileDao().findByuserID();
 
-    private void loadData() {
-        new AsyncTask<FitnessProfile, Void, FitnessProfile>() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            protected FitnessProfile doInBackground(FitnessProfile... fitnessProfiles) {
-                FitnessProfile fitnessProfile = null;
-                if (fitnessProfiles != null){
-                    Log.d(TAG, String.format("Retrieving %d fitnessProfiles from userProfile database", fitnessProfiles.length));
-                    fitnessProfile = fitnessProfiles[0];
-                    if (fitnessProfile != null) {
-                        printUserProfileData(fitnessProfile);
+        //until database is ready, pull from sample data.
+        return SampleProfileData.getUserProfiles().get(0);
+    }
+
+    public void updateFitnessProfile() {
+        m_executor.execute(
+                new Runnable() {
+                    @Override
+                    public void run() {
+//                        m_db.fitnessProfileDao().updateExistingFitnessProfileData(fitnessProfileData);
                     }
                 }
-                return fitnessProfile;
-
-            }
-
-            @Override
-            protected void onPostExecute(FitnessProfile profile) {
-                fitnessProfileData.setValue(profile);
-            }
-        }.execute(m_fitnessProfile);
+        );
     }
 
-
-//    public void setFitnessProfile(FitnessProfile fitnessProfile){
-//        m_fitnessProfile = fitnessProfile;
-//        loadData();
-//    }
-
-//    public FitnessProfile getFitnessProfile() {
-//        return fitnessProfile;
-//    }
-
-// TODO: KEEP THIS METHOD. WE'LL NEED THIS METHOD LATER TO BUILD A USER PROFILE OBJECT FROM DATABASE LOOKUP
-//    public FitnessProfile userProfileFromFitnessProfile(int fitnessProfileId) {
-//        //Retrieve a record from FitnessProfile with the given id
-//        //Then generate a FitnessProfile object from the record retrieved
-//        return null;
-//    }
+    public void addNewFitnessProfile() {
+        m_executor.execute(
+                new Runnable() {
+                    @Override
+                    public void run() {
+//                        m_db.fitnessProfileDao().insertNewUserData(fitnessProfileData);
+                    }
+                }
+        );
+    }
 }
