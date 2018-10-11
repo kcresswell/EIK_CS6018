@@ -1,5 +1,6 @@
 package com.example.mcresswell.project01.db.dao;
 
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
@@ -17,7 +18,7 @@ import java.util.Optional;
  * 2. An existing user edits their fitness data
  * 3. An new user enters their fitness data for the first time (same query as scenario 2)
  *
- *  * An Optional<FitnessProfile> is returned in the case where no fitness profile account exists
+ *  * An MutableLiveData<FitnessProfile> is returned in the case where no fitness profile account exists
  *  for the m_userID that is given from the User table.  This prevents an exception from being thrown.
  */
 @Dao
@@ -25,7 +26,7 @@ public interface FitnessProfileDao {
     @Query("SELECT * FROM FitnessProfile "  +
             "JOIN User ON FitnessProfile.m_userID = User.profile_id " +
             "WHERE FitnessProfile.m_userID = User.profile_id")
-    Optional<FitnessProfile> findByuserID(int userID);
+    MutableLiveData<FitnessProfile> findByUserID(int userID);
 
     @Insert
     void insertNewUserData(FitnessProfile fitnessProfile);
@@ -34,6 +35,6 @@ public interface FitnessProfileDao {
     void updateExistingFitnessProfileData(FitnessProfile fitnessProfile);
 
     @Query("SELECT * FROM FitnessProfile ORDER BY m_userID ASC")
-    List<FitnessProfile> getAllFitnessProfileData();
+    List<FitnessProfile> getFitnessProfileDataForAllUsers();
 }
 
