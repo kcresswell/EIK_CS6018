@@ -1,5 +1,6 @@
 package com.example.mcresswell.project01.Activities;
 
+import android.arch.lifecycle.MutableLiveData;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,13 +17,13 @@ import com.example.mcresswell.project01.util.Constants;
 
 public class ProfileSummaryActivity extends AppCompatActivity
     implements
-        ProfileSummaryFragment.OnProfileSummaryInteractionListener,
-        ProfileEntryFragment.OnProfileEntryFragmentListener {
+        ProfileSummaryFragment.OnProfileSummaryInteractionListener
+{
 
     private final String LOG = getClass().getSimpleName();
 
     private FragmentTransaction m_fTrans;
-    private FitnessProfile m_fitnessProfile;
+    private MutableLiveData<FitnessProfile> m_fitnessProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +31,6 @@ public class ProfileSummaryActivity extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_summary);
-
         loadProfileSummaryFragment();
     }
 
@@ -40,34 +40,11 @@ public class ProfileSummaryActivity extends AppCompatActivity
         m_fTrans.commit();
     }
 
-//    @RequiresApi(api = Build.VERSION_CODES.O)
-//    @Override
-//    public void onProfileSummary_EditButton(FitnessProfile profile) {
-//        Log.d(LOG, "onProfileSummary_EditButton listener");
-//        Intent intent = new Intent(this, ProfileEntryActivity.class);
-//
-////        if (profile != null){ //Existing profile data, transfer data
-////            intent.putExtra("profile", profile);
-////        }
-//        startActivity(intent);
-//
-//    }
-
-    @Override
-    public void onProfileEntryDataEntered_DoneButtonOnClick(FitnessProfile profile) {
-        Log.d(LOG, "onProfileEntryDoneButton listener, user finished adding data");
-        loadProfileSummaryFragment();
-    }
-
     @Override
     public void onBackPressed() {
         Log.d(LOG, "onBackPressed");
         // code here to show dialog
         Intent intent = new Intent(this, DashboardActivity.class);
-
-//        if (m_fitnessProfile != null){ //Existing profile data, transfer data
-//            intent.putExtra("profile", m_fitnessProfile);
-//        }
         startActivity(intent);
     }
 

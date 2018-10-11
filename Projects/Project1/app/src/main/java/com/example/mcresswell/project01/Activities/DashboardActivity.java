@@ -55,14 +55,7 @@ public class DashboardActivity extends AppCompatActivity implements
 
         initViewModel();
         m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile();
-
-        if (savedInstanceState != null) {
-
-//            m_fitnessProfile = getIntent().getParcelableExtra("profile");
-
-        } else {
-            restoreDefaultDashboardView();
-        }
+        restoreDefaultDashboardView();
     }
 
     private void initViewModel() {
@@ -102,9 +95,6 @@ public class DashboardActivity extends AppCompatActivity implements
     private void fitnessDetailsButtonHandler() {
         if(!isWideDisplay()) { //mobile
             Intent intent = new Intent(this, FitnessDetailsActivity.class);
-//            if (m_fitnessProfile != null) {
-//                intent.putExtra("profile", m_fitnessProfile);
-//            }
             startActivityForResult(intent, Activity.RESULT_OK);
         } else { //Tablet
             m_fTrans.replace(R.id.fl_detail_wd, FitnessDetailsFragment.newInstance(m_fitnessProfile.getValue()));
@@ -128,17 +118,14 @@ public class DashboardActivity extends AppCompatActivity implements
         Uri searchUri = Uri.parse("geo:" + coords + "?q=hikes");
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, searchUri);
         if (mapIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(mapIntent, Activity.RESULT_OK);
+            startActivity(mapIntent);
         }
     }
 
     private void profileButtonHandler() {
         if(!isWideDisplay()) { //mobile
             Intent intent = new Intent(this, ProfileSummaryActivity.class);
-//            if (m_fitnessProfile != null) {
-//                intent.putExtra("profile", m_fitnessProfile);
-//            }
-            startActivityForResult(intent, Activity.RESULT_OK);
+            startActivity(intent);
         } else { //Tablet
             m_fTrans.replace(R.id.fl_detail_wd, ProfileSummaryFragment.newInstance(m_fitnessProfile.getValue()));
             m_fTrans.addToBackStack(null);
@@ -221,15 +208,4 @@ public class DashboardActivity extends AppCompatActivity implements
     private boolean isWideDisplay(){
         return getResources().getBoolean(R.bool.isWideDisplay);
     }
-
-//    @Override
-//    public void onProfileEntryDataEntered_DoneButtonOnClick(FitnessProfile profile) {
-//        m_fitnessProfile = profile;
-//    }
-
-//    @Override
-//    public void onProfileSummary_EditButton(FitnessProfile profile) {
-//        //Do stuff with the user profile. This seems to be something that we will need to remove
-//        //once the view model and repository are fully working. As we should not have interfaces anymore.
-//    }
 }

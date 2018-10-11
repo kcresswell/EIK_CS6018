@@ -1,5 +1,6 @@
 package com.example.mcresswell.project01.Activities;
 
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -22,13 +23,12 @@ import static com.example.mcresswell.project01.util.FitnessProfileUtils.printUse
 
 public class ProfileEntryActivity extends AppCompatActivity
         implements
-//        ProfileEntryFragment.OnProfileEntryFragmentListener,
-        ProfileSummaryFragment.OnProfileSummaryInteractionListener
+        ProfileEntryFragment.OnProfileEntryFragmentListener
 {
     private final String LOG = getClass().getSimpleName();
 
     private FragmentTransaction m_fTrans;
-    private FitnessProfile m_fitnessProfile;
+    private MutableLiveData<FitnessProfile> m_fitnessProfile;
     private FitnessProfileViewModel m_fitnessProfileViewModel;
     private boolean m_isLoggedIn = false;
 
@@ -42,80 +42,36 @@ public class ProfileEntryActivity extends AppCompatActivity
         setContentView(R.layout.activity_profile_entry);
 
         initViewModel();
+        m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile();
+
         loadFragment();
     }
 
     private void loadFragment() {
         m_fTrans = getSupportFragmentManager().beginTransaction();
-//        if (savedInstanceState != null) {
-//        FitnessProfile profile = getIntent().getParcelableExtra("profile");
-//        }
-//        ProfileEntryFragment profileEntryFragment =
-//                ProfileEntryFragment.newInstance(profile);
-
         m_fTrans.replace(R.id.fl_activity_profile_entry, new ProfileEntryFragment());
         m_fTrans.commit();
     }
 
     private void initViewModel() {
-        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile = fitnessProfile;
+//        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile.setValue(fitnessProfile);
         m_fitnessProfileViewModel = ViewModelProviders.of(this)
                 .get(FitnessProfileViewModel.class);
-        m_fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfileObserver);
+//        m_fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfileObserver);
     }
 
     @Override
     public void onBackPressed() {
         Log.d(LOG, "onBackPressed");
-        Intent intent = null;
-//        if (m_isLoggedIn) {
-            intent = new Intent(this, DashboardActivity.class);
-//        } else {
-//            intent = new Intent(this, LoginActivity.class);
-//        }
-//        if (m_fitnessProfile != null){ //Existing profile data, transfer data
-//            intent.putExtra("profile", m_fitnessProfile);
-//        }
+        Intent intent = new Intent(this, DashboardActivity.class);
         startActivity(intent);
     }
 
-
     @Override
-    public void onProfileSummary_EditButton(boolean isClicked) {
+    public void onProfileEntryDataEntered_DoneButtonOnClick(boolean isClicked) {
         if (isClicked) {
             Intent intent = new Intent(this, ProfileSummaryActivity.class);
             startActivity(intent);
         }
     }
-
-
-
-
-
-
-    //    @Override
-//    public void onProfileEntryDataEntered_DoneButtonOnClick(FitnessProfile profile) {
-////        //TODO: pass data from ProfileEntry to ProfileSummary
-////        Log.d(LOG, "onProfileEntryDataEntered_DoneButtonOnClick");
-//        Intent intent = new Intent(this, ProfileSummaryActivity.class);
-////
-////        if (profile != null) {
-////            m_fitnessProfile = profile;
-////            printUserProfileData(profile);
-//////            intent.putExtra("profile", profile);
-////        }
-//        startActivity(intent);
-//    }
-
-//    @Override
-//    public void onProfileSummary_EditButton(FitnessProfile profile) {
-//        Log.d(LOG, "onProfileSummary_EditButton Listener");
-//
-//        if (profile != null) {
-//            loadFragment();
-////            Log.d(LOG, "Passing previously entered user data to ProfileEntryFragment");
-////            m_fTrans.replace(R.id.fl_activity_profile_entry, ProfileEntryFragment.newInstance(profile));
-////            m_fTrans.commit();
-//        }
-//    }
 }

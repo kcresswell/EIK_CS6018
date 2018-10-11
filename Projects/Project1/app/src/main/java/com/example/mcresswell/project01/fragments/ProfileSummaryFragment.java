@@ -76,7 +76,6 @@ public class ProfileSummaryFragment extends Fragment
 
         initViewModel();
         m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile();
-//        m_fitnessProfile = getActivity().getIntent().getParcelableExtra("profile");
 //        m_photo = getActivity().getIntent().getParcelableExtra("M_IMG_DATA");
     }
 
@@ -141,22 +140,6 @@ public class ProfileSummaryFragment extends Fragment
 //        m_profilePhoto = v.findViewById(R.id.btn_img_takeImage);
     }
 
-    /*
-    Create an observer that listens for changes to this data
-     */
-//    final Observer<FitnessProfile> nameObserver  = new Observer<FitnessProfile>() {
-//        @RequiresApi(api = Build.VERSION_CODES.N)
-//        @Override
-//        public void onChanged(@Nullable final FitnessProfile fitnessProfile) {
-//            if (fitnessProfile != null) { //FitnessProfile data has finished being retrieved
-//                printUserProfileData(fitnessProfile);
-//                Log.d(LOG, "onChanged, updating data fields");
-////                m_fitnessProfile = fitnessProfile;
-//                loadUserData(fitnessProfile);
-//            }
-//        }
-//    };
-
     //edit button on click fragment replace with edit fragment
     //id = btn_edit
     @Override
@@ -187,18 +170,4 @@ public class ProfileSummaryFragment extends Fragment
     public interface OnProfileSummaryInteractionListener {
         void onProfileSummary_EditButton(boolean isClicked);
     }
-
-//    @Override
-//    public void onDetach() {
-//        Log.d(LOG, Constants.DETACH);
-//        super.onDetach();
-//        m_listener = null;
-//    }
-
-//    private void loadUserData(FitnessProfile profile) {
-//        Log.d(LOG, "loadUserData");
-////        m_fitnessProfileViewModel.setFitnessProfile(profile);
-//    }
-
-
 }
