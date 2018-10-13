@@ -31,6 +31,9 @@ public class FitnessProfileViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<FitnessProfile> getFitnessProfile() {
+        if (m_fitnessProfile == null){
+            m_fitnessProfile = new MutableLiveData<>();
+        }
         return m_fitnessProfile;
     }
 
