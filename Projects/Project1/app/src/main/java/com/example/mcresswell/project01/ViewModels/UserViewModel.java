@@ -31,6 +31,11 @@ public class UserViewModel extends AndroidViewModel {
         m_userRepository = UserRepository.getInstance(database);
 
         mObservableUser = new MediatorLiveData<>();
+
+        configureMediatorLiveData();
+    }
+
+    private void configureMediatorLiveData() {
         mObservableUser.setValue(null);
 
         LiveData<User> userLiveData = m_userRepository.getUser();
@@ -43,12 +48,15 @@ public class UserViewModel extends AndroidViewModel {
             mObservableUser.setValue(user);
 
         });
-
-
     }
 
     public boolean authenticateUser(User user) {
-        return m_userRepository.authenticateUser(user);
+        if (user == null) {
+            return false;
+        }
+        LiveData<User> result = findUser(user.getEmail());
+        return result.getValue().getEmail().equals(user.getEmail()) &&
+                result.getValue().getPassword().equals(user.getPassword());
     }
 
     public void createUser(User user) {
@@ -59,17 +67,15 @@ public class UserViewModel extends AndroidViewModel {
         m_userRepository.update(user);
     }
 
-
-
     public void deleteUser(User user) {
         m_userRepository.delete(user);
     }
 
     public LiveData<User> findUser(String email) {
         LiveData<User> result = m_userRepository.find(email);
-        if (result.getValue() != null) {
-            Log.d(LOG, "User found.");
-        }
+//        if (result.getValue() != null) {
+//            Log.d(LOG, "User found.");
+//        }
         return result;
     }
 

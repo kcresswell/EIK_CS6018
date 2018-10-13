@@ -6,8 +6,10 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.example.mcresswell.project01.db.InStyleDatabase;
 import com.example.mcresswell.project01.db.entity.Weather;
 import com.example.mcresswell.project01.db.repo.WeatherRepository;
 import com.example.mcresswell.project01.weather.WeatherClient;
@@ -34,9 +36,11 @@ public class WeatherViewModel extends AndroidViewModel {
     WeatherRepository mWeatherRepository;
     private LiveData<List<Weather>> mAllWeather;
 
-    public WeatherViewModel (Application application) {
+    public WeatherViewModel (@NonNull Application application) {
         super(application);
-        mWeatherRepository = new WeatherRepository(application);
+        InStyleDatabase database = InStyleDatabase.getDatabaseInstance(application);
+        mWeatherRepository = WeatherRepository.getInstance(database);
+
         mAllWeather = mWeatherRepository.getAllWeather();
     }
 

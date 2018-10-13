@@ -33,7 +33,6 @@ public class InStyleApp extends Application {
     }
 
     public WeatherRepository getWeatherRepository() {
-//        return WeatherRepository.getInstance(getDatabase());
-        return null;
+        return WeatherRepository.getInstance(getDatabase());
     }
 }

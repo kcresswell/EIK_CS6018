@@ -55,21 +55,15 @@ public class LoginFragment extends Fragment {
         userListViewModel.getUserList().observe(this, userList -> {
             if (userList != null) {
                 Log.d(LOG, "Update to user list view model");
-                Log.d(LOG, "Number of users in User table: " + userList.size());
+                Log.d(LOG, "Number of users in User database: " + userList.size());
             }
         });
 
-
         userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
         userViewModel.getUser().observe(this, user -> {
-            Log.d(LOG, "userviewmodel getuser observer onchanged!!!");
             if (user != null) {
                 Log.d(LOG, "Update to user view model");
                 Log.d(LOG, String.format("User: %s \t %s", user.getEmail(), user.getPassword()));
-
-            } else {
-                Log.d(LOG, "NULL NULL NULL NULL NULL");
-
             }
         });
     }
@@ -91,7 +85,6 @@ public class LoginFragment extends Fragment {
     private void initializeFragmentView(View view){
         m_email = view.findViewById(R.id.text_email_login);
         m_password = view.findViewById(R.id.text_password_login);
-
         m_btn_login = view.findViewById(R.id.btn_login);
         m_btn_createUser = view.findViewById(R.id.link_create_account);
     }
@@ -148,7 +141,7 @@ public class LoginFragment extends Fragment {
         user.setPassword(password);
 
         LiveData<User> lookupResult = userViewModel.findUser(email);
-
+//        if(userViewModel.getUser() != null && userViewModel.getUser().getValue().getEmail().equals(email))
         if (lookupResult.getValue() != null && userViewModel.authenticateUser(user)) {
             Toast.makeText(getContext(), "Login success", Toast.LENGTH_SHORT).show();
 
@@ -164,24 +157,6 @@ public class LoginFragment extends Fragment {
 
         }
     }
-
-//    @Override
-//    public void onClick(View view) {
-//        Log.d(LOG, "onClick");
-//        switch (view.getId()){
-//            case R.id.btn_login: {
-//                Toast.makeText(getContext(),"Login",Toast.LENGTH_SHORT).show();
-//                loginSuccessHandler();
-//                break;
-//            }
-//            case R.id.link_create_account: {
-//                Toast.makeText(getContext(),"Create Account",Toast.LENGTH_SHORT).show();
-//                createAccountHandler();
-//                break;
-//            }
-//
-//        }
-//    }
 
     private void createAccountHandler() {
         Intent intent = new Intent(getActivity(), CreateAccountActivity.class);

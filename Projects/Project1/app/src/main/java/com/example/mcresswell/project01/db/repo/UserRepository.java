@@ -3,7 +3,6 @@ package com.example.mcresswell.project01.db.repo;
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -12,6 +11,7 @@ import com.example.mcresswell.project01.db.dao.UserDao;
 import com.example.mcresswell.project01.db.entity.User;
 import com.example.mcresswell.project01.util.UserGenerator;
 
+import java.sql.Date;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,30 +29,29 @@ import javax.inject.Singleton;
 public class UserRepository {
     private static final String LOG = UserRepository.class.getSimpleName();
 
-    private final MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
     private final UserDao mUserDao;
 
-    private InStyleDatabase db;
+    private InStyleDatabase inStyleDatabase;
     private static UserRepository userRepository;
 
-    private MediatorLiveData<List<User>> mObservableUsers;
+    private MediatorLiveData<List<User>> mObservableUserList;
 
     private MediatorLiveData<User> mObservableUser;
 
-    private static final int NUM_USERS = 20;
-    private static final int MAX_USERS = 500;
+    private static final int NUM_TEST_USERS = 10; //Number of random test users to generate
+    private static final int MAX_USERS = 500; //Maximum allowable of users in table
 
 
     private UserRepository(final InStyleDatabase database) {
-        db = database;
-        mUserDao = db.userDao();
+        inStyleDatabase = database;
+        mUserDao = inStyleDatabase.userDao();
 
-        //Clear out  User database table if number of records exceeds allowable max
+        //Clear out User database
         asyncReset();
 
-        //Populate with test data
-        List<User> testUsers = UserGenerator.generateUserData(NUM_USERS);
+        List<User> testUsers = UserGenerator.generateUserData(NUM_TEST_USERS);
 
+        //Populate with randomly generated test data
         asyncPopulateUsers(testUsers);
 
         Log.d(LOG, "Users generated and added to database.");
@@ -62,15 +61,15 @@ public class UserRepository {
     }
 
     private void addLiveDataListenerSources() {
-        mObservableUsers = new MediatorLiveData<>();
-        mObservableUsers.setValue(null);
+        mObservableUserList = new MediatorLiveData<>();
+        mObservableUserList.setValue(null);
 
         //Add listener for livedata source for List<User>
-        mObservableUsers.addSource(db.userDao().loadAllUsers(),
+        mObservableUserList.addSource(mUserDao.loadAllUsers(),
                 users -> {
                     Log.d(LOG, "LiveData<List<<User>> loadAllUsers onChanged");
-                    if (db.isDatabaseCreated().getValue() != null) {
-                        mObservableUsers.setValue(users);
+                    if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
+                        mObservableUserList.setValue(users);
                     }
                 });
 
@@ -78,9 +77,9 @@ public class UserRepository {
         mObservableUser.setValue(null);
 
         //Add listener for livedata source for User
-        mObservableUser.addSource(mUserDao.findFirstUser(), user -> { //FIXME:
-//            Log.d(LOG, "LiveData<User> onChanged");
-            if (db.isDatabaseCreated().getValue() != null) {
+        mObservableUser.addSource(mUserDao.findFirstUser(), user -> { //FIXME: ADDED THIS IN PURELY FOR DEBUGGING, REMOVE THIS LATER
+            if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
+
                 Log.d(LOG, "Broadcasting updated value of LiveData<User> to observers");
 
                 mObservableUser.setValue(user);
@@ -104,50 +103,38 @@ public class UserRepository {
         return userRepository;
     }
 
+    ///////// Getters ///////////
+
     public LiveData<User> getUser() {
-//        return userMutableLiveData;
         return mObservableUser;
     }
 
-    public void deleteAll() {
-        asyncDeleteAllUsers();
-
-    }
-
     public LiveData<List<User>> getUsers() {
-        return mObservableUsers;
+        return mObservableUserList;
     }
 
-//    public LiveData<List<User>> getAllUsers() {
-//        return mAllUsers;
-//    }
+    ///////// CRUD Operations ///////////
 
-    public void update(User user) {
-//        mUser = user;
-        asyncUpdateUser(user);
-
+    public void insert(User user) {
+        asyncInsertUser(user);
     }
 
     public LiveData<User> find(String userEmail) {
         mObservableUser.addSource(mUserDao.findByEmail(userEmail), user -> {
-            Log.d(LOG, "FindByEmail LiveData<User> onChanged");
-            if (db.isDatabaseCreated().getValue() != null) {
+            Log.d(LOG, String.format("findByEmail() for email  %s LiveData<User> onChanged", userEmail));
+            if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
                 Log.d(LOG, "Broadcasting findByEmail() result to observers... ");
-
                 mObservableUser.setValue(user);
-
             }
         });
-
         asyncLoadUser(userEmail);
 
         return mObservableUser;
-
     }
 
-    public void insert(User user) {
-//        asyncInsertUser(mUserDao);
-        mUserDao.insertUser(user);
+
+    public void update(User user) {
+        asyncUpdateUser(user);
     }
 
     public void delete(User user) {
@@ -155,17 +142,93 @@ public class UserRepository {
 //        asyncDeleteUser(mUserDao);
     }
 
+    public void deleteAll() {
+        asyncDeleteAllUsers();
+    }
+
     public boolean authenticateUser(User user) {
         if (user == null) {
             return false;
         }
         LiveData<User> result = find(user.getEmail());
-
-        return result.getValue() != null &&
-                result.getValue().getPassword().equals(user.getPassword());
+        return result.getValue().getPassword().equals(user.getPassword());
     }
 
-    //////////// ASYNC TASKS FOR LIST<USER> //////////
+
+    //////////// ASYNC TASKS FOR A SINGLE USER /////////////
+
+
+    @SuppressLint("StaticFieldLeak")
+    private void asyncLoadUser(String email) {
+        new AsyncTask<String, Void, User>() {
+            @Override
+            protected User doInBackground(String... params) {
+                String userToLoad = params[0];
+                Log.d(LOG, String.format("Retrieving user record with email %s", userToLoad));
+
+                LiveData<User> user = mUserDao.findByEmail(userToLoad);
+
+                return user.getValue();
+            }
+
+            @Override
+            protected void onPostExecute(User user) {
+                mObservableUser.setValue(user);
+            }
+        }.execute(email);
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private void asyncInsertUser(User user) {
+        new AsyncTask<User, Void, Void>() {
+            @Override
+            protected Void doInBackground(User... params) {
+                User userToInsert = params[0];
+                Log.d(LOG, String.format("Inserting new user record with email %s into database", userToInsert.getEmail()));
+                //Insert new user record into database
+                mUserDao.insertUser(userToInsert);
+
+                Log.d(LOG, "Inserting User data . . .");
+                return null;
+            }
+        }.execute(user);
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private void asyncUpdateUser(User user) {
+        new AsyncTask<User, Void, Void>() {
+            @Override
+            protected Void doInBackground(User... params) {
+                User userToUpdate = params[0];
+                Log.d(LOG, String.format("Updating existing user record with email %s in database", userToUpdate.getEmail()));
+
+                //Updating existing user record in database
+                mUserDao.updateUser(userToUpdate);
+
+                Log.d(LOG, "Updating User data . . .");
+                return null;
+            }
+        }.execute(user);
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private void asyncDeleteUser(User user) {
+        new AsyncTask<User, Void, Void>() {
+            @Override
+            protected Void doInBackground(User... params) {
+                User userToDelete = params[0];
+                Log.d(LOG, String.format("Deleting existing user record with email %s from database", userToDelete.getEmail()));
+
+                //Delete user record from database
+                mUserDao.deleteUser(userToDelete);
+                Log.d(LOG, "Deleting User data . . .");
+                return null;
+            }
+        }.execute(user);
+    }
+
+
+    ////////////////// ASYNC TASKS FOR A LIST OF USERS //////////////////
 
     @SuppressLint("StaticFieldLeak")
     @SuppressWarnings("unchecked")
@@ -173,11 +236,11 @@ public class UserRepository {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                LiveData<Integer> numRecords = mUserDao.getUserCount();
-                if (numRecords.getValue() != null && numRecords.getValue() >= MAX_USERS) {
-                    Log.d(LOG, "Number of records in User table exceeds max. Resetting database contents");
+//                LiveData<Integer> numRecords = mUserDao.getUserCount();
+//                if (numRecords.getValue() != null && numRecords.getValue() >= MAX_USERS) {
+//                    Log.d(LOG, "Number of records in User table exceeds max. Resetting database contents");
                     mUserDao.deleteAllUsers();
-                }
+//                }
                 return null;
             }
         }.execute();
@@ -191,7 +254,13 @@ public class UserRepository {
             protected Void doInBackground(List<User>... params) {
 
                 Log.d(LOG, "Inserting test data into database table to populate.");
+                //Insert randomly generated user data
                 mUserDao.insertAllUsers(params[0]);
+
+                //Insert specific test user record for facilitating manual testing of app
+                insertTestUser();
+
+
                 return null;
             }
         }.execute(users);
@@ -213,7 +282,7 @@ public class UserRepository {
 
             @Override
             protected void onPostExecute(List<User> userList) {
-                mObservableUsers.setValue(userList);
+                mObservableUserList.setValue(userList);
             }
         }.execute();
     }
@@ -230,87 +299,19 @@ public class UserRepository {
 
             @Override
             protected void onPostExecute(Void voidResult) {
-                mObservableUsers.setValue(Collections.emptyList());
+                mObservableUserList.setValue(Collections.emptyList());
             }
         }.execute();
     }
 
-
-    //////////// ASYNC TASKS FOR SINGLE USER /////////
-
-
-
-
-    @SuppressLint("StaticFieldLeak")
-    private void asyncLoadUser(String email) {
-        new AsyncTask<String, Void, User>() {
-            @Override
-            protected User doInBackground(String... params) {
-                String userToLoad = params[0];
-                Log.d(LOG, String.format("Retrieving user record with email %s", userToLoad));
-
-                LiveData<User> user = mUserDao.findByEmail(userToLoad);
-                if (user.getValue() != null) {
-                    Log.d(LOG, String.format("FindByEmail for %s record lookup successful. ", userToLoad));
-                }
-                return user.getValue();
-            }
-
-            @Override
-            protected void onPostExecute(User user) {
-                mObservableUser.setValue(user);
-            }
-        }.execute(email);
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private void asyncInsertUser(User user) {
-        new AsyncTask<User, Void, Void>() {
-            @Override
-            protected Void doInBackground(User... params) {
-                User userToInsert = params[0];
-                if (userToInsert != null) {
-                    //Insert new user record into database
-                    mUserDao.insertUser(userToInsert);
-
-
-                    Log.d(LOG, "Inserting User data . . .");
-                }
-                return null;
-            }
-        }.execute(user);
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private void asyncUpdateUser(User user) {
-        new AsyncTask<User, Void, Void>() {
-            @Override
-            protected Void doInBackground(User... params) {
-                User userToUpdate = params[0];
-                if (userToUpdate != null) {
-                    //Insert new user record into database
-                    mUserDao.updateUser(userToUpdate);
-
-                    Log.d(LOG, "Updating User data . . .");
-                }
-                return null;
-            }
-        }.execute(user);
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private void asyncDeleteUser(User user) {
-        new AsyncTask<User, Void, Void>() {
-            @Override
-            protected Void doInBackground(User... params) {
-                User userToDelete = params[0];
-                if (userToDelete != null) {
-                    //Insert new user record into database
-                    mUserDao.deleteUser(userToDelete);
-                    Log.d(LOG, "Deleting User data . . .");
-                }
-                return null;
-            }
-        }.execute(user);
+    private void insertTestUser() {
+        User testUser = new User();
+        testUser.setEmail("test@test.com");
+        testUser.setPassword("password");
+        testUser.setFirstName("Hello");
+        testUser.setLastName("Kitty");
+        testUser.setJoinDate(Date.valueOf("2018-01-01"));
+        mUserDao.insertUser(testUser);
+        Log.d(LOG, "GENERIC TEST USER successfully inserted into User database");
     }
 }
