@@ -95,4 +95,8 @@ public class ValidationUtils {
                 Integer.parseInt(lbsPerWeek) >= -5 &&
                 Integer.parseInt(lbsPerWeek) <= 5;
     }
+
+    public static boolean isValidEmailAndPassword(String email, String password) {
+        return isValidEmail(email) && isNotNullOrEmpty(password);
+    }
 }

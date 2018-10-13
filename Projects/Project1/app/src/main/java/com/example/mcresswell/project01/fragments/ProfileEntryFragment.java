@@ -376,19 +376,19 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
             return false;
         }
         else if (!isValidSex(etxt_sex.getText().toString())) {
-            Toast.makeText(getContext(), "Invalid etxt_sex.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Invalid sex.", Toast.LENGTH_SHORT).show();
             return false;
         }
         else if (!isValidCity(etxt_city.getText().toString())) {
-            Toast.makeText(getContext(), "Invalid etxt_city.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Invalid city.", Toast.LENGTH_SHORT).show();
             return false;
         }
         else if (!isValidCountryCode(etxt_country.getText().toString())) {
-            Toast.makeText(getContext(), "Please enter a valid 2-character etxt_country code.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Please enter a valid 2-character country code.", Toast.LENGTH_SHORT).show();
             return false;
         }
         else if (!isValidWeight(etxt_weight.getText().toString())) {
-            Toast.makeText(getContext(), "Invalid etxt_weight.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Invalid weight.", Toast.LENGTH_SHORT).show();
             return false;
         }
         else if (!isValidHeight(etxt_heightFeet.getText().toString(), etxt_heightInches.getText().toString())) {
@@ -396,7 +396,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
             return false;
         }
         else if (!isValidWeightPlan(etxt_lbsPerWeek.getText().toString())) {
-            Toast.makeText(getContext(), "Please enter weekly etxt_weight goal", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Please enter a valid weekly weight goal (i.e., a maximum weight management change of 5lbs/week)", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;

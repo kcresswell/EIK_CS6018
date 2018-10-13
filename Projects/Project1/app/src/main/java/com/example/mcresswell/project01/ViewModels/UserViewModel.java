@@ -3,39 +3,60 @@ package com.example.mcresswell.project01.ViewModels;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.util.Log;
 
+import com.example.mcresswell.project01.db.InStyleDatabase;
 import com.example.mcresswell.project01.db.entity.User;
 import com.example.mcresswell.project01.db.repo.UserRepository;
 
 import java.util.List;
 
+
 public class UserViewModel extends AndroidViewModel {
 
-    private MutableLiveData<User> m_user = new MutableLiveData<>();
-    private LiveData<List<User>> m_userList;
+    private static final String LOG = UserViewModel.class.getSimpleName();
 
-    UserRepository m_userRepository;
+    private final MediatorLiveData<User> mObservableUser;
+
+    private final UserRepository m_userRepository;
 
     public UserViewModel(@NonNull Application application) {
         super(application);
-//        if (m_userRepository == null) {
-            m_userRepository = new UserRepository(application);
-            m_userList = m_userRepository.getAllUsers();
-            m_user = m_userRepository.getUser();
-//        }
+        InStyleDatabase database = InStyleDatabase.getDatabaseInstance(application);
+        m_userRepository = UserRepository.getInstance(database);
+
+        mObservableUser = new MediatorLiveData<>();
+
+        configureMediatorLiveData();
     }
 
-    public void init(User user) {
-        if (m_user == null) {
-            User u = m_userRepository.find(user);
-            m_user.setValue(u);
-        }
+    private void configureMediatorLiveData() {
+        mObservableUser.setValue(null);
+
+        LiveData<User> userLiveData = m_userRepository.getUser();
+        mObservableUser.addSource(userLiveData, user -> {
+            Log.d(LOG, "m_userRepository.getUser() listener onChanged");
+            if (user == null) {
+                Log.d(LOG, "BUT ALAS IT IS NULL :(");
+                return;
+            }
+            mObservableUser.setValue(user);
+
+        });
     }
 
     public boolean authenticateUser(User user) {
-        return m_userRepository.authenticateUser(user);
+        if (user == null) {
+            return false;
+        }
+        LiveData<User> result = findUser(user.getEmail());
+        return result.getValue().getEmail().equals(user.getEmail()) &&
+                result.getValue().getPassword().equals(user.getPassword());
     }
 
     public void createUser(User user) {
@@ -46,24 +67,20 @@ public class UserViewModel extends AndroidViewModel {
         m_userRepository.update(user);
     }
 
-    public User retrieveUser(User user) {
-        return m_userRepository.find(user);
-    }
-
     public void deleteUser(User user) {
         m_userRepository.delete(user);
     }
 
-    public LiveData<List<User>> retrieveAllUsers() {
-        m_userList = m_userRepository.findAll();
-        return m_userList;
+    public LiveData<User> findUser(String email) {
+        LiveData<User> result = m_userRepository.find(email);
+//        if (result.getValue() != null) {
+//            Log.d(LOG, "User found.");
+//        }
+        return result;
     }
 
     public LiveData<User> getUser() {
-        return m_user;
+        return mObservableUser;
     }
 
-    public LiveData<List<User>> getUserList() {
-        return m_userList;
-    }
 }
