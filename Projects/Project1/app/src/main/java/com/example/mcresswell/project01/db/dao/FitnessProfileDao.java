@@ -1,6 +1,6 @@
 package com.example.mcresswell.project01.db.dao;
 
-import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
@@ -27,7 +27,7 @@ public interface FitnessProfileDao {
 //            "WHERE FitnessProfile.m_userID = User.profile_id")
     @Query("SELECT * FROM FitnessProfile WHERE id = " +
             "(SELECT u.profile_id FROM User u WHERE u.id = :userID)")
-    MutableLiveData<FitnessProfile> findByuserID(int userID);
+    LiveData<FitnessProfile> findByuserID(int userID);
 
     @Insert
     void insertNewUserData(FitnessProfile fitnessProfile);

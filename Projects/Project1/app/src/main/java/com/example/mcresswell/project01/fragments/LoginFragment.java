@@ -17,21 +17,17 @@ import android.widget.Toast;
 import com.example.mcresswell.project01.Activities.CreateAccountActivity;
 import com.example.mcresswell.project01.Activities.DashboardActivity;
 import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.ViewModels.UserListViewModel;
 import com.example.mcresswell.project01.ViewModels.UserViewModel;
 import com.example.mcresswell.project01.db.entity.User;
 
-import java.time.Instant;
-import java.util.Date;
-import java.util.List;
-
-import static com.example.mcresswell.project01.util.ValidationUtils.isNotNullOrEmpty;
-import static com.example.mcresswell.project01.util.ValidationUtils.isValidEmail;
+import static com.example.mcresswell.project01.util.ValidationUtils.isValidEmailAndPassword;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LoginFragment extends Fragment implements View.OnClickListener {
+public class LoginFragment extends Fragment {
 
     private static final String LOG = LoginFragment.class.getSimpleName();
 
@@ -39,19 +35,43 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private Button m_btn_createUser;
     private EditText m_email, m_password;
 
-    private UserViewModel m_userViewModel;
+    private UserListViewModel userListViewModel;
+    private UserViewModel userViewModel;
 //    private FitnessProfileViewModel fitnessProfileViewModel;
 
 
-    public LoginFragment() {
-        // Required empty public constructor
-    }
+    public LoginFragment() { }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        m_userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
-//        fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
+
+        configureViewModels();
+
+    }
+
+    private void configureViewModels() {
+        userListViewModel = ViewModelProviders.of(this).get(UserListViewModel.class);
+        userListViewModel.getUserList().observe(this, userList -> {
+            if (userList != null) {
+                Log.d(LOG, "Update to user list view model");
+                Log.d(LOG, "Number of users in User table: " + userList.size());
+            }
+        });
+
+
+        userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+        userViewModel.getUser().observe(this, user -> {
+            Log.d(LOG, "userviewmodel getuser observer onchanged!!!");
+            if (user != null) {
+                Log.d(LOG, "Update to user view model");
+                Log.d(LOG, String.format("User: %s \t %s", user.getEmail(), user.getPassword()));
+
+            } else {
+                Log.d(LOG, "NULL NULL NULL NULL NULL");
+
+            }
+        });
     }
 
 
@@ -63,7 +83,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         initializeFragmentView(view);
 
-        setButtonListeners();
+        setOnClickListeners();
 
         return view;
     }
@@ -76,44 +96,38 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         m_btn_createUser = view.findViewById(R.id.link_create_account);
     }
 
-    private void setButtonListeners() {
+    private void setOnClickListeners() {
 
-        m_btn_createUser.setOnClickListener(this);
+        m_btn_createUser.setOnClickListener(listener -> createAccountHandler());
 
         m_btn_login.setOnClickListener(view -> {
 
             String email = m_email.getText().toString();
-            String pass = m_password.getText().toString();
+            String password = m_password.getText().toString();
 
-            if (!isValidEmail(email) || !isNotNullOrEmpty(pass)) {
+            if (!isValidEmailAndPassword(email, password)) {
                 Toast.makeText(getContext(),
-                        "Please enter a valid email and password.", Toast.LENGTH_SHORT).show();
+                "Please enter a valid email and password.",
+                Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            User userToAuth = new User();
-            userToAuth.setEmail(email);
-            userToAuth.setPassword(pass);
-            userToAuth.setFirstName("TestFirst");
-            userToAuth.setLastName("TestLast");
-            userToAuth.setJoinDate(Date.from(Instant.now()));
-            userToAuth.setFitnessProfileId(1);
+            authenticateUserLoginCredentials(email, password);
+        });
 
-//            m_userViewModel.getUser().observe(this, user -> up);
-//            m_userViewModel.createUser(userToAuth);
+//
+//            User userResult = userListViewModel.retrieveUser(userToAuth);
+//            if (userResult == null) {
+//                Toast.makeText(getContext(),
+//                        "No account with that email address exists.", Toast.LENGTH_SHORT).show();
+//            }
+//            else if (!userListViewModel.authenticateUser(userToAuth)) {
+//                Toast.makeText(getContext(),
+//                        "Incorrect password for user account was entered.", Toast.LENGTH_SHORT).show();
+//            }
+//             userListViewModel.retrieveAllUsers();
 
-            User userResult = m_userViewModel.retrieveUser(userToAuth);
-            if (userResult == null) {
-                Toast.makeText(getContext(),
-                        "No account with that email address exists.", Toast.LENGTH_SHORT).show();
-            }
-            else if (!m_userViewModel.authenticateUser(userToAuth)) {
-                Toast.makeText(getContext(),
-                        "Incorrect password for user account was entered.", Toast.LENGTH_SHORT).show();
-            }
-             m_userViewModel.retrieveAllUsers();
-
-            LiveData<List<User>> userList = m_userViewModel.getUserList();
+//            LiveData<List<User>> userList = userListViewModel.getUserList();
 //            if (userList == null) {
 //                Log.d(LOG, "NULL NULL NULL!");
 //                return;
@@ -126,42 +140,57 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 //
 //            });
 
-
-            //Clear input field data
-            m_password.setText("");
-            m_email.setText("");
-
-        });
-
     }
 
-    @Override
-    public void onClick(View view) {
-        Log.d(LOG, "onClick");
-        switch (view.getId()){
-            case R.id.btn_login: {
-                Toast.makeText(getContext(),"Login",Toast.LENGTH_SHORT).show();
-                loginButtonHandler();
-                break;
-            }
-            case R.id.link_create_account: {
-                Toast.makeText(getContext(),"Create Account",Toast.LENGTH_SHORT).show();
-                createAccountHandler();
-                break;
-            }
+    private void authenticateUserLoginCredentials(String email, String password) {
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(password);
+
+        LiveData<User> lookupResult = userViewModel.findUser(email);
+
+        if (lookupResult.getValue() != null && userViewModel.authenticateUser(user)) {
+            Toast.makeText(getContext(), "Login success", Toast.LENGTH_SHORT).show();
+
+            final int fitnessProfileId = lookupResult.getValue().getFitnessProfileId();
+
+            loginSuccessHandler();
+
+            //TODO: use fitnessProfileViewModel to call FitnessProfileRepository to retrieve fitness profile from fitness_profile_id. Either take user to dashboard or take user to ProfileSummaryFragment screen and use the retrieved fitness profile data to display that user's fitness data.
+
+        } else {
+            Toast.makeText(getContext(), "Invalid login credentials.", Toast.LENGTH_SHORT).show();
+            m_password.setText("");
 
         }
     }
+
+//    @Override
+//    public void onClick(View view) {
+//        Log.d(LOG, "onClick");
+//        switch (view.getId()){
+//            case R.id.btn_login: {
+//                Toast.makeText(getContext(),"Login",Toast.LENGTH_SHORT).show();
+//                loginSuccessHandler();
+//                break;
+//            }
+//            case R.id.link_create_account: {
+//                Toast.makeText(getContext(),"Create Account",Toast.LENGTH_SHORT).show();
+//                createAccountHandler();
+//                break;
+//            }
+//
+//        }
+//    }
 
     private void createAccountHandler() {
         Intent intent = new Intent(getActivity(), CreateAccountActivity.class);
         startActivity(intent);
     }
 
-    private void loginButtonHandler() {
+    private void loginSuccessHandler() {
         Intent intent = new Intent(getActivity(), DashboardActivity.class);
         startActivity(intent);
     }
-
 
 }

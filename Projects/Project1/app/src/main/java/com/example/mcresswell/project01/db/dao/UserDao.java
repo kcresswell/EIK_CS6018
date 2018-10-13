@@ -22,26 +22,39 @@ import java.util.Optional;
  *
  *  * An Optional<User> is returned in the case where no user account exists
  * for the email that was entered upon login. This prevents an exception from being thrown.
+ *
+ * Queries that return a LiveData object can be observed, so when a change in any of the tables
+ * is detected, LiveData delivers a notification of that change to the registered observers.
  */
 @Dao
 public interface UserDao {
 
-    @Query("SELECT * FROM User WHERE email = :email")
-    Optional<User> findByEmail(String email);
+    @Query("SELECT * FROM User LIMIT 1")
+    LiveData<User> findFirstUser();
+
+    @Query("SELECT * FROM User u WHERE u.email LIKE :email")
+    LiveData<User> findByEmail(String email);
 
     @Insert
-    void createUserAccount(User user);
+    void insertUser(User user);
 
     @Update
-    void updateUserAccount(User user);
+    void updateUser(User user);
 
     @Delete
-    void deleteUserAccount(User user);
+    void deleteUser(User user);
 
     @Insert
-    void insertAll(List<User> users);
+    void insertAllUsers(List<User> users);
+
+    @Query("DELETE FROM User")
+    void deleteAllUsers();
+
 
     @Query("SELECT * FROM User ORDER BY id ASC")
-    LiveData<List<User>> getAllUserAccountData();
+    LiveData<List<User>> loadAllUsers();
+
+    @Query("SELECT COUNT(*) FROM User")
+    LiveData<Integer> getUserCount();
 
 }

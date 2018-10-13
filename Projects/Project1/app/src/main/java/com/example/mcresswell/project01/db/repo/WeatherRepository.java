@@ -24,6 +24,7 @@ public class WeatherRepository {
     private WeatherDao mWeatherDao;
     private MutableLiveData<Weather> mWeather = new MutableLiveData<>();
     private LiveData<List<Weather>> mAllWeather; // All weather forecast records in Weather table
+    private InStyleDatabase inStyleDatabase;
 
 
     public WeatherRepository(Application application) {
@@ -31,6 +32,23 @@ public class WeatherRepository {
         mWeatherDao = db.weatherDao();
 //        mAllWeather = getAllWeather();
     }
+
+//    private WeatherRepository(final InStyleDatabase database) {
+//        inStyleDatabase = database;
+//        m
+//    }
+
+//    public static UserRepository getInstance(final InStyleDatabase database) {
+//        in
+//        if (userRepository == null) {
+//            synchronized (UserRepository.class) {
+//                if (userRepository == null) {
+//                    userRepository = new UserRepository(database);
+//                }
+//            }
+//        }
+//        return userRepository;
+//    }
 
     public LiveData<List<Weather>> getAllWeather() {
         return mAllWeather;
