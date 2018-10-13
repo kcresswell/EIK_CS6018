@@ -18,13 +18,12 @@ import java.util.List;
 
 
 public class UserViewModel extends AndroidViewModel {
+
     private static final String LOG = UserViewModel.class.getSimpleName();
+
     private final MediatorLiveData<User> mObservableUser;
 
     private final UserRepository m_userRepository;
-
-
-    private LiveData<User> m_user = new MutableLiveData<>();
 
     public UserViewModel(@NonNull Application application) {
         super(application);
@@ -34,13 +33,11 @@ public class UserViewModel extends AndroidViewModel {
         mObservableUser = new MediatorLiveData<>();
         mObservableUser.setValue(null);
 
-//        m_user = m_userRepository.find(email);
-//        LiveData<User> user = m_userRepository.find(email);
         LiveData<User> userLiveData = m_userRepository.getUser();
         mObservableUser.addSource(userLiveData, user -> {
-            Log.d(LOG, "m_userRepository.getUser() ON CHANGED1!!!!!!!");
+            Log.d(LOG, "m_userRepository.getUser() listener onChanged");
             if (user == null) {
-                Log.d(LOG, "BUT WHY IS IT NULL??? :(");
+                Log.d(LOG, "BUT ALAS IT IS NULL :(");
                 return;
             }
             mObservableUser.setValue(user);
@@ -58,12 +55,6 @@ public class UserViewModel extends AndroidViewModel {
         m_userRepository.insert(user);
     }
 
-//    public LiveData<User> retrieveUser(User user) {
-//        LiveData<User> u = m_userRepository.find(user);
-//        mObservableUser.setValue(u.getValue());
-//        return mObservableUser;
-//    }
-
     public void updateUser(User user) {
         m_userRepository.update(user);
     }
@@ -74,18 +65,16 @@ public class UserViewModel extends AndroidViewModel {
         m_userRepository.delete(user);
     }
 
-
-
-    public LiveData<User> getUser() {
-        return mObservableUser;
-    }
-
     public LiveData<User> findUser(String email) {
         LiveData<User> result = m_userRepository.find(email);
         if (result.getValue() != null) {
-        Log.d(LOG, "USER FOUND!1!!!!!!!!!!!!!!!!!!!!!!!");
+            Log.d(LOG, "User found.");
         }
         return result;
+    }
+
+    public LiveData<User> getUser() {
+        return mObservableUser;
     }
 
 }

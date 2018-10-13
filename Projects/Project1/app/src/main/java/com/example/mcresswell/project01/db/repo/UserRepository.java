@@ -258,8 +258,7 @@ public class UserRepository {
 
             @Override
             protected void onPostExecute(User user) {
-                Log.d(LOG, "onPostExecute");
-                    mObservableUser.setValue(user);
+                mObservableUser.setValue(user);
             }
         }.execute(email);
     }
