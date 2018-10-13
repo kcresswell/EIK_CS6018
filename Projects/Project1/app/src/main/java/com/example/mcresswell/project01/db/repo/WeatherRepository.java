@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import com.example.mcresswell.project01.db.InStyleDatabase;
 import com.example.mcresswell.project01.db.dao.WeatherDao;
 import com.example.mcresswell.project01.db.entity.Weather;
+import com.example.mcresswell.project01.util.NetworkUtils;
 
 import java.util.List;
 
@@ -21,15 +22,46 @@ import java.util.List;
 
 //TODO: MOVE EXISTING BUSINESS LOGIC FROM WEATHERVIEWMODEL TO WEATHERREPOSITORY
 public class WeatherRepository {
+
+    private static final String LOG = WeatherRepository.class.getSimpleName();
+    public static final int DATA_REFRESH_INTERVAL = 5; //If weather data is older than 5 minutes, refetch data
+
     private WeatherDao mWeatherDao;
+    private InStyleDatabase inStyleDatabase;
+    private static WeatherRepository weatherRepository;
+
     private MutableLiveData<Weather> mWeather = new MutableLiveData<>();
     private LiveData<List<Weather>> mAllWeather; // All weather forecast records in Weather table
 
 
-    public WeatherRepository(Application application) {
-        InStyleDatabase db = InStyleDatabase.getDatabaseInstance(application);
-        mWeatherDao = db.weatherDao();
-//        mAllWeather = getAllWeather();
+
+//    public WeatherRepository(Application application) {
+//        InStyleDatabase db = InStyleDatabase.getDatabaseInstance(application);
+//        mWeatherDao = db.weatherDao();
+////        mAllWeather = getAllWeather();
+//    }
+
+    private WeatherRepository(final InStyleDatabase database) {
+        inStyleDatabase = database;
+        mWeatherDao = inStyleDatabase.weatherDao();
+
+
+    }
+
+    /**
+     * Static method to ensure only one instance of the WeatherRepository is instantiated.
+     * @param database
+     * @return
+     */
+    public static WeatherRepository getInstance(final InStyleDatabase database) {
+        if (weatherRepository == null) {
+            synchronized (WeatherRepository.class) {
+                if (weatherRepository == null) {
+                    weatherRepository = new WeatherRepository(database);
+                }
+            }
+        }
+        return weatherRepository;
     }
 
     public LiveData<List<Weather>> getAllWeather() {
@@ -55,4 +87,5 @@ public class WeatherRepository {
             return null;
         }
     }
+
 }

@@ -1,5 +1,6 @@
 package com.example.mcresswell.project01.fragments;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,7 +29,7 @@ import static com.example.mcresswell.project01.util.ValidationUtils.isValidEmail
 /**
  * Fragment class for screen that user sees when the Create Account button is pressed in the Login screen.
  */
-public class CreateAccountFragment extends Fragment implements View.OnClickListener {
+public class CreateAccountFragment extends Fragment {
 
     private static final String LOG = CreateAccountFragment.class.getSimpleName();
 
@@ -44,11 +45,14 @@ public class CreateAccountFragment extends Fragment implements View.OnClickListe
         Log.d(LOG, Constants.CREATE);
         super.onCreate(savedInstanceState);
 
+        configureViewModels();
+    }
+
+    private void configureViewModels() {
         userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
 
         userViewModel.getUser().observe(this, user -> {
-            Log.d(LOG, "UserViewModel observer");
-
+            Log.d(LOG, "UserViewModel observer for getUser()");
         });
     }
 
@@ -62,7 +66,7 @@ public class CreateAccountFragment extends Fragment implements View.OnClickListe
 
         initializeFragmentView(view);
 
-        m_btn_createAccount.setOnClickListener(this);
+        setOnClickListeners();
 
         return view;
     }
@@ -73,23 +77,19 @@ public class CreateAccountFragment extends Fragment implements View.OnClickListe
         m_firstName = view.findViewById(R.id.text_first_name_create_account);
         m_lastName = view.findViewById(R.id.text_last_name_create_account);
         m_btn_createAccount = view.findViewById(R.id.btn_create_account);
-
     }
 
-    @Override
-    public void onClick(View view) {
-        Log.d(LOG, "onClick");
-        switch (view.getId()){
-            case R.id.btn_create_account: {
-                createAccountButtonHandler();
-                break;
-            }
-
-        }
+    private void setOnClickListeners() {
+        m_btn_createAccount.setOnClickListener(listener -> createAccountButtonHandler());
     }
 
     private void createAccountButtonHandler() {
         if (isAccountDataValid()) {
+            if (!isUniqueUserLogin(m_email.getText().toString())) {
+                Toast.makeText(getContext(), "A user account with that email already exists.",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
             User newUser = new User();
             newUser.setEmail(m_email.getText().toString());
             newUser.setPassword(m_password.getText().toString());
@@ -102,6 +102,27 @@ public class CreateAccountFragment extends Fragment implements View.OnClickListe
             Intent intent = new Intent(getActivity(), ProfileEntryActivity.class);
             startActivity(intent);
         }
+    }
+
+    private boolean isUniqueUserLogin(String email) {
+        LiveData<User> userResult = userViewModel.findUser(email);
+        if (userResult.getValue() != null && userResult.getValue().getEmail().equals(email)) {
+            Log.d(LOG, "Email is not unique. A user with that email already exists.");
+//            Log.d(LOG, "EMAIL: " + userViewModel.getUser().getValue().getEmail());
+//            Log.d(LOG, "PASSOWRD: " + userViewModel.getUser().getValue().getPassword());
+//            Log.d(LOG, "First name: " +userViewModel.getUser().getValue().getFirstName());
+//            Log.d(LOG, "Last Name: " + userViewModel.getUser().getValue().getLastName());
+//            Log.d(LOG, "Date joined: " +userViewModel.getUser().getValue().getJoinDate());
+
+            Log.d(LOG, "EMAIL: " + userResult.getValue().getEmail());
+            Log.d(LOG, "PASSOWRD: " + userResult.getValue().getPassword());
+            Log.d(LOG, "First name: " + userResult.getValue().getFirstName());
+            Log.d(LOG, "Last Name: " + userResult.getValue().getLastName());
+            Log.d(LOG, "Date joined: " + userResult.getValue().getJoinDate());
+
+            return false;
+        }
+        return true;
     }
 
     private boolean isAccountDataValid () {
@@ -136,9 +157,5 @@ public class CreateAccountFragment extends Fragment implements View.OnClickListe
         Log.d(LOG, Constants.SAVE_INSTANCE_STATE);
 
         super.onSaveInstanceState(bundle);
-    }
-
-    private void loadUserData() {
-
     }
 }
