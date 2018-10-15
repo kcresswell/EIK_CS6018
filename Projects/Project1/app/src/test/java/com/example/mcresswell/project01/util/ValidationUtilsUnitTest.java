@@ -9,7 +9,7 @@ import static com.example.mcresswell.project01.util.ValidationUtils.isValidDobFo
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidEmail;
 import static org.junit.Assert.*;
 
-public class ValidationUtilsTest {
+public class ValidationUtilsUnitTest {
 
     @Test
     public void inputIsNullOrEmpty() {

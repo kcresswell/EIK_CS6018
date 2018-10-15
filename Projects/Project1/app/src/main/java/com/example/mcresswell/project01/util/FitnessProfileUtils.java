@@ -13,7 +13,7 @@ import java.util.Locale;
 
 public class FitnessProfileUtils {
 
-    private static final String LOG = FitnessProfileUtils.class.getSimpleName();
+    private static final String LOG_TAG = FitnessProfileUtils.class.getSimpleName();
 
     public enum BodyMassIndex {
         UNDERWEIGHT,
@@ -110,19 +110,19 @@ public class FitnessProfileUtils {
     }
 
     public static void printUserProfileData(FitnessProfile fitnessProfile){
-        Log.d(LOG, "printUserProfileData");
-        Log.d(LOG, "userID: " + fitnessProfile.getM_userID());
-        Log.d(LOG, "First Name: " + fitnessProfile.getM_fName());
-        Log.d(LOG, "Last Name: " + fitnessProfile.getM_lName());
-        Log.d(LOG, "DOB: " + fitnessProfile.getM_dob());
-        Log.d(LOG, "Sex: " + fitnessProfile.getM_sex());
-        Log.d(LOG, "Location: " + fitnessProfile.getM_city() + ", " + fitnessProfile.getM_country());
-        Log.d(LOG, "Lifestyle Selection (ACTIVE/SEDENTERY): " + fitnessProfile.getM_lifestyleSelection());
-        Log.d(LOG, "Weight Goal/Objectives (GAIN/MAINTAIN/LOSE): " + fitnessProfile.getM_weightGoal() + " " + fitnessProfile.getM_lbsPerWeek() + " lbs/week");
-        Log.d(LOG, "Current Weight (lbs): " + fitnessProfile.getM_weightInPounds());
-        Log.d(LOG, "Current Height: " + fitnessProfile.getM_heightFeet() + " Feet and " + fitnessProfile.getM_heightInches() + " Inches");
-        Log.d(LOG, "Current Basal Metabolic Weight (BMR): " + fitnessProfile.getM_bmr() + " calories/day");
-        Log.d(LOG, "Current BMI: " + fitnessProfile.getM_bmi());
+        Log.d(LOG_TAG, "printUserProfileData");
+        Log.d(LOG_TAG, "userID: " + fitnessProfile.getM_userID());
+        Log.d(LOG_TAG, "First Name: " + fitnessProfile.getM_fName());
+        Log.d(LOG_TAG, "Last Name: " + fitnessProfile.getM_lName());
+        Log.d(LOG_TAG, "DOB: " + fitnessProfile.getM_dob());
+        Log.d(LOG_TAG, "Sex: " + fitnessProfile.getM_sex());
+        Log.d(LOG_TAG, "Location: " + fitnessProfile.getM_city() + ", " + fitnessProfile.getM_country());
+        Log.d(LOG_TAG, "Lifestyle Selection (ACTIVE/SEDENTERY): " + fitnessProfile.getM_lifestyleSelection());
+        Log.d(LOG_TAG, "Weight Goal/Objectives (GAIN/MAINTAIN/LOSE): " + fitnessProfile.getM_weightGoal() + " " + fitnessProfile.getM_lbsPerWeek() + " lbs/week");
+        Log.d(LOG_TAG, "Current Weight (lbs): " + fitnessProfile.getM_weightInPounds());
+        Log.d(LOG_TAG, "Current Height: " + fitnessProfile.getM_heightFeet() + " Feet and " + fitnessProfile.getM_heightInches() + " Inches");
+        Log.d(LOG_TAG, "Current Basal Metabolic Weight (BMR): " + fitnessProfile.getM_bmr() + " calories/day");
+        Log.d(LOG_TAG, "Current BMI: " + fitnessProfile.getM_bmi());
 
     }
 

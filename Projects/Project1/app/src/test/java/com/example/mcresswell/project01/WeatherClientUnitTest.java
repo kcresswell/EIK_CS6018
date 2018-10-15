@@ -1,5 +1,6 @@
 package com.example.mcresswell.project01;
 
+import com.example.mcresswell.project01.util.WeatherUtils;
 import com.example.mcresswell.project01.weather.WeatherClient;
 
 import org.junit.Test;
@@ -20,67 +21,67 @@ public class WeatherClientUnitTest {
     public void getJsonDataFromUrl_defaultLocation_returnsValidJson() {
         String s = null;
         try {
-            s = WeatherClient.getJsonDataFromUrl(WeatherClient.buildDefaultWeatherApiUrl());
+            s = WeatherClient.getJsonDataFromUrl(WeatherUtils.buildDefaultWeatherApiUrl());
         } catch (IOException e) {
             e.printStackTrace();
         }
         assertNotNull(s);
-        assertNotEquals(s, WeatherClient.INVALID_CITY_URL_JSON_RESPONSE);
+        assertNotEquals(s, WeatherUtils.INVALID_CITY_URL_JSON_RESPONSE);
     }
 
     @Test
     public void getJsonDataFromUrl_invalidLocation_returnsErrorJson() {
         String s = null;
         try {
-            s = WeatherClient.getJsonDataFromUrl(WeatherClient.buildWeatherApiUrl("INVALIDCITY", null));
+            s = WeatherClient.getJsonDataFromUrl(WeatherUtils.buildWeatherApiUrl("INVALIDCITY", null));
         } catch (IOException e) {
             e.printStackTrace();
         }
         assertNotNull(s);
-        assertEquals(s, WeatherClient.INVALID_CITY_URL_JSON_RESPONSE);
+        assertEquals(s, WeatherUtils.INVALID_CITY_URL_JSON_RESPONSE);
     }
 
     @Test
     public void buildWeatherApiUrl() throws MalformedURLException {
-        URL url = WeatherClient.buildWeatherApiUrl("PROVO", "US");
+        URL url = WeatherUtils.buildWeatherApiUrl("PROVO", "US");
         assertTrue(url.equals(new URL("http://api.openweathermap.org/data/2.5/weather?q=PROVO,US&appid=718324f1015a96a2369287e867133dd9")));
 
     }
 
     @Test
     public void buildWeatherApiUrl_invalidCountry_returnsValidUrl() throws MalformedURLException {
-        URL url = WeatherClient.buildWeatherApiUrl("PROVO", null);
+        URL url = WeatherUtils.buildWeatherApiUrl("PROVO", null);
         assertTrue(url.equals(new URL("http://api.openweathermap.org/data/2.5/weather?q=PROVO&appid=718324f1015a96a2369287e867133dd9")));
     }
 
     @Test
     public void buildWeatherApiUrl_invalidCityInvalidCountry_returnsDefaultUrl() {
-        URL url = WeatherClient.buildWeatherApiUrl(" ", null);
-        assertTrue(url.equals(WeatherClient.buildDefaultWeatherApiUrl()));
+        URL url = WeatherUtils.buildWeatherApiUrl(" ", null);
+        assertTrue(url.equals(WeatherUtils.buildDefaultWeatherApiUrl()));
     }
 
     @Test
     public void getJsonDataFromUrl_validCity_returnsWeatherForecast() {
-        URL url = WeatherClient.buildWeatherApiUrl("PROVO", null);
+        URL url = WeatherUtils.buildWeatherApiUrl("PROVO", null);
         String result = null;
         try {
             result = WeatherClient.getJsonDataFromUrl(url);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        assertNotNull(WeatherClient.getWeatherForecast(result));
+        assertNotNull(WeatherClient.parseWeatherFromApiResponse(result));
     }
 
     @Test
     public void getJsonDataFromUrl_invalidCity_returnsNullWeatherForecast() throws MalformedURLException {
-        URL url = WeatherClient.buildWeatherApiUrl("INVALIDCITY", null);
+        URL url = WeatherUtils.buildWeatherApiUrl("INVALIDCITY", null);
         String result = null;
         try {
             result = WeatherClient.getJsonDataFromUrl(url);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        assertNull(WeatherClient.getWeatherForecast(result));
+        assertNull(WeatherClient.parseWeatherFromApiResponse(result));
     }
 
 

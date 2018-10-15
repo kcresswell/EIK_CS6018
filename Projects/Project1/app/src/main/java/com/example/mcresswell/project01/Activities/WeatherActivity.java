@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.mcresswell.project01.R;
-import com.example.mcresswell.project01.weather.WeatherForecast;
+import com.example.mcresswell.project01.db.entity.Weather;
 import com.example.mcresswell.project01.fragments.WeatherFragment;
 
 public class WeatherActivity extends AppCompatActivity
@@ -25,17 +25,17 @@ public class WeatherActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
 
-        String city = getIntent().getStringExtra("city");
-        String country = getIntent().getStringExtra("country");
+//        String city = getIntent().getStringExtra("city");
+//        String country = getIntent().getStringExtra("country");
 
         FragmentTransaction fragmentTransaction = m_fragmentManager.beginTransaction();
-        WeatherFragment frag_weather = WeatherFragment.newInstance(city, country);
+        WeatherFragment frag_weather = WeatherFragment.newInstance();
         fragmentTransaction.add(R.id.fl_activity_weather, frag_weather);
         fragmentTransaction.commit();
     }
 
     @Override
-    public void onWeatherDataLoaded(WeatherForecast forecast) {
+    public void onWeatherDataLoaded(Weather weather) {
         if (!getResources().getBoolean(R.bool.isWideDisplay)) {
             Log.d(LOG, "onWeatherDataLoaded, mobile");
 

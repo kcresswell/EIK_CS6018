@@ -36,6 +36,7 @@ import static com.example.mcresswell.project01.util.ValidationUtils.isValidCity;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidCountryCode;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidDobFormat;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidHeight;
+import static com.example.mcresswell.project01.util.ValidationUtils.isValidName;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidSex;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidWeight;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidWeightPlan;
@@ -44,7 +45,7 @@ import static com.example.mcresswell.project01.util.ValidationUtils.isValidWeigh
  */
 public class ProfileEntryFragment extends Fragment implements View.OnClickListener {
 
-    private static final String LOG = ProfileEntryFragment.class.getSimpleName();
+    private static final String LOG_TAG = ProfileEntryFragment.class.getSimpleName();
 
     //request code for camera
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -77,7 +78,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d(LOG, Constants.CREATE);
+        Log.d(LOG_TAG, Constants.CREATE);
         super.onCreate(savedInstanceState);
 
         initViewModel();
@@ -85,16 +86,16 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     }
 
     private void initViewModel() {
-//        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile.setValue(fitnessProfile);
+        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile.setValue(fitnessProfile);
         m_fitnessProfileViewModel = ViewModelProviders.of(this)
                 .get(FitnessProfileViewModel.class);
-//        m_fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfileObserver);
+        m_fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfileObserver);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(LOG, Constants.CREATE_VIEW);
+        Log.d(LOG_TAG, Constants.CREATE_VIEW);
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile_entry, container, false);
@@ -124,7 +125,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onClick(View view) {
-        Log.d(LOG, "onClick");
+        Log.d(LOG_TAG, "onClick");
         switch (view.getId()){
             case R.id.btn_img_takeImage: {
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -177,7 +178,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onViewStateRestored (Bundle savedInstanceState) {
-        Log.d(LOG, "onViewStateRestored");
+        Log.d(LOG_TAG, "onViewStateRestored");
         super.onViewStateRestored(savedInstanceState);
         //retrieve data
         if(savedInstanceState != null) {
@@ -215,7 +216,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     }
 
     private void autofillExistingUserProfileData(FitnessProfile fitnessProfile) {
-        Log.d(LOG, "Autofilling existing FitnessProfile data");
+        Log.d(LOG_TAG, "Autofilling existing FitnessProfile data");
         etxt_firstName.setText(fitnessProfile.getM_fName());
         etxt_lastName.setText(fitnessProfile.getM_lName());
         etxt_dob.setText(fitnessProfile.getM_dob());
@@ -246,10 +247,10 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     @TargetApi(Build.VERSION_CODES.O)
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void userProfileSubmitButtonHandler() {
-        Log.d(LOG, "User Profile Entry Done Button clicked");
+        Log.d(LOG_TAG, "User Profile Entry Done Button clicked");
 
         if (!isUserInputDataValid()) {
-            Log.d(LOG, "invalid user data input");
+            Log.d(LOG_TAG, "invalid user data input");
             return;
         }
 
@@ -307,7 +308,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 //        userEnteredData.put("goal", weightGoalString);
 //
 //        userEnteredData.forEach((k,v)-> {
-//            Log.d(LOG, "Key: '" + k + "' Value: '" + v + "'");
+//            Log.d(LOG_TAG, "Key: '" + k + "' Value: '" + v + "'");
 //        });
 
 //        FitnessProfile m_fitnessProfile = new FitnessProfile();
@@ -352,22 +353,22 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 //        fitnessProfile.setM_bmr(calculateBMR(heightFt, heightIn, fitnessProfile.getM_sex(), userWeight, userAge));
 
 //        if (m_fitnessProfileViewModel.getFitnessProfile().getValue() != null){
-//            Log.d(LOG, "submit button handler, view model has data");
+//            Log.d(LOG_TAG, "submit button handler, view model has data");
 //            FitnessProfile p = m_fitnessProfileViewModel.getFitnessProfile().getValue();
 //            printUserProfileData(p);
 //            m_dataListener.onProfileEntryDataEntered_DoneButtonOnClick(true);
 //        } else {
-//            Log.d(LOG, "view model null");
+//            Log.d(LOG_TAG, "view model null");
 //            m_dataListener.onProfileEntryDataEntered_DoneButtonOnClick(true);
 //        }
     }
 
     private boolean isUserInputDataValid() {
-        if (!isValidAlphaChars(etxt_firstName.getText().toString())) {
+        if (!isValidName(etxt_firstName.getText().toString())) {
             Toast.makeText(getContext(), "Invalid first name.", Toast.LENGTH_SHORT).show();
             return false;
         }
-        else if (!isValidAlphaChars(etxt_lastName.getText().toString())) {
+        else if (!isValidName(etxt_lastName.getText().toString())) {
             Toast.makeText(getContext(), "Invalid last name.", Toast.LENGTH_SHORT).show();
             return false;
         }

@@ -9,14 +9,16 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * Generates User data to populate the User database table.
+ * Random User generator class that generates random User data records
+ * to populate the User database table.
+ *
+ * User records that are generated have a unique email, to be consistent with the unique index on
+ * the email attribute of the User database table.
  */
 public class UserGenerator {
     private final static String LOG_TAG = UserGenerator.class.getSimpleName();
 
     private static Random rand = new Random();
-
-    private static final int NUM_USERS = 20;
 
     private static List<String> firstNames = generateFirstNames();
     private static List<String> lastNames = generateLastNames();

@@ -22,6 +22,8 @@ import com.example.mcresswell.project01.util.Constants;
 import java.time.Instant;
 import java.util.Date;
 
+import static com.example.mcresswell.project01.util.Constants.SAVE_INSTANCE_STATE;
+import static com.example.mcresswell.project01.util.Constants.VIEW_STATE_RESTORED;
 import static com.example.mcresswell.project01.util.ValidationUtils.isNotNullOrEmpty;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidAlphaChars;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidEmail;
@@ -31,7 +33,7 @@ import static com.example.mcresswell.project01.util.ValidationUtils.isValidEmail
  */
 public class CreateAccountFragment extends Fragment {
 
-    private static final String LOG = CreateAccountFragment.class.getSimpleName();
+    private static final String LOG_TAG = CreateAccountFragment.class.getSimpleName();
 
     private Button m_btn_createAccount;
     private EditText m_email, m_password, m_firstName, m_lastName;
@@ -42,7 +44,7 @@ public class CreateAccountFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d(LOG, Constants.CREATE);
+        Log.d(LOG_TAG, Constants.CREATE);
         super.onCreate(savedInstanceState);
 
         configureViewModels();
@@ -52,7 +54,7 @@ public class CreateAccountFragment extends Fragment {
         userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
 
         userViewModel.getUser().observe(this, user -> {
-            Log.d(LOG, "UserViewModel observer for getUser()");
+            Log.d(LOG_TAG, "UserViewModel observer for getUser()");
         });
     }
 
@@ -60,7 +62,7 @@ public class CreateAccountFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(LOG, Constants.CREATE_VIEW);
+        Log.d(LOG_TAG, Constants.CREATE_VIEW);
 
         View view = inflater.inflate(R.layout.fragment_create_account, container, false);
 
@@ -107,18 +109,18 @@ public class CreateAccountFragment extends Fragment {
     private boolean isUniqueUserLogin(String email) {
         LiveData<User> userResult = userViewModel.findUser(email);
         if (userResult.getValue() != null && userResult.getValue().getEmail().equals(email)) {
-            Log.d(LOG, "Email is not unique. A user with that email already exists.");
-//            Log.d(LOG, "EMAIL: " + userViewModel.getUser().getValue().getEmail());
-//            Log.d(LOG, "PASSOWRD: " + userViewModel.getUser().getValue().getPassword());
-//            Log.d(LOG, "First name: " +userViewModel.getUser().getValue().getFirstName());
-//            Log.d(LOG, "Last Name: " + userViewModel.getUser().getValue().getLastName());
-//            Log.d(LOG, "Date joined: " +userViewModel.getUser().getValue().getJoinDate());
+            Log.d(LOG_TAG, "Email is not unique. A user with that email already exists.");
+//            Log.d(LOG_TAG, "EMAIL: " + userViewModel.getUser().getValue().getEmail());
+//            Log.d(LOG_TAG, "PASSOWRD: " + userViewModel.getUser().getValue().getPassword());
+//            Log.d(LOG_TAG, "First name: " +userViewModel.getUser().getValue().getFirstName());
+//            Log.d(LOG_TAG, "Last Name: " + userViewModel.getUser().getValue().getLastName());
+//            Log.d(LOG_TAG, "Date joined: " +userViewModel.getUser().getValue().getJoinDate());
 
-            Log.d(LOG, "EMAIL: " + userResult.getValue().getEmail());
-            Log.d(LOG, "PASSOWRD: " + userResult.getValue().getPassword());
-            Log.d(LOG, "First name: " + userResult.getValue().getFirstName());
-            Log.d(LOG, "Last Name: " + userResult.getValue().getLastName());
-            Log.d(LOG, "Date joined: " + userResult.getValue().getJoinDate());
+            Log.d(LOG_TAG, "EMAIL: " + userResult.getValue().getEmail());
+            Log.d(LOG_TAG, "PASSOWRD: " + userResult.getValue().getPassword());
+            Log.d(LOG_TAG, "First name: " + userResult.getValue().getFirstName());
+            Log.d(LOG_TAG, "Last Name: " + userResult.getValue().getLastName());
+            Log.d(LOG_TAG, "Date joined: " + userResult.getValue().getJoinDate());
 
             return false;
         }
@@ -147,14 +149,14 @@ public class CreateAccountFragment extends Fragment {
 
     @Override
     public void onViewStateRestored (Bundle savedInstanceState) {
-        Log.d(LOG, "onViewStateRestored");
+        Log.d(LOG_TAG, VIEW_STATE_RESTORED);
         super.onViewStateRestored(savedInstanceState);
 
     }
 
     @Override
     public void onSaveInstanceState(Bundle bundle) {
-        Log.d(LOG, Constants.SAVE_INSTANCE_STATE);
+        Log.d(LOG_TAG, SAVE_INSTANCE_STATE);
 
         super.onSaveInstanceState(bundle);
     }

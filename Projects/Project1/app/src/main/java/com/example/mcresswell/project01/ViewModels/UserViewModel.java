@@ -4,24 +4,19 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.example.mcresswell.project01.db.InStyleDatabase;
 import com.example.mcresswell.project01.db.entity.User;
 import com.example.mcresswell.project01.db.repo.UserRepository;
 
-import java.util.List;
-
 
 public class UserViewModel extends AndroidViewModel {
 
     private static final String LOG = UserViewModel.class.getSimpleName();
 
-    private final MediatorLiveData<User> mObservableUser;
+    private final MediatorLiveData<User> m_observableUser;
 
     private final UserRepository m_userRepository;
 
@@ -30,22 +25,22 @@ public class UserViewModel extends AndroidViewModel {
         InStyleDatabase database = InStyleDatabase.getDatabaseInstance(application);
         m_userRepository = UserRepository.getInstance(database);
 
-        mObservableUser = new MediatorLiveData<>();
+        m_observableUser = new MediatorLiveData<>();
 
         configureMediatorLiveData();
     }
 
     private void configureMediatorLiveData() {
-        mObservableUser.setValue(null);
+        m_observableUser.setValue(null);
 
         LiveData<User> userLiveData = m_userRepository.getUser();
-        mObservableUser.addSource(userLiveData, user -> {
+        m_observableUser.addSource(userLiveData, user -> {
             Log.d(LOG, "m_userRepository.getUser() listener onChanged");
             if (user == null) {
                 Log.d(LOG, "BUT ALAS IT IS NULL :(");
                 return;
             }
-            mObservableUser.setValue(user);
+            m_observableUser.setValue(user);
 
         });
     }
@@ -80,7 +75,7 @@ public class UserViewModel extends AndroidViewModel {
     }
 
     public LiveData<User> getUser() {
-        return mObservableUser;
+        return m_observableUser;
     }
 
 }
