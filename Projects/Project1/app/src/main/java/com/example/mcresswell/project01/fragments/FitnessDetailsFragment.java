@@ -38,7 +38,7 @@ public class FitnessDetailsFragment extends Fragment {
 
     private TextView m_tvcalsToEat, m_tvBMR, m_bodyMassIndex, m_tvbmiClassification;
     private FitnessProfileViewModel m_fitnessProfileViewModel;
-    private MutableLiveData<FitnessProfile> m_fitnessProfile;
+    private FitnessProfile m_fitnessProfile;
 
     public FitnessDetailsFragment() {
         // Required empty public constructor
@@ -50,14 +50,13 @@ public class FitnessDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         initViewModel();
-        m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile();
     }
 
     private void initViewModel() {
-//        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile.setValue(fitnessProfile);
-        m_fitnessProfileViewModel = ViewModelProviders.of(this)
+        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile = fitnessProfile;
+        m_fitnessProfileViewModel = ViewModelProviders.of(getActivity())
                 .get(FitnessProfileViewModel.class);
-//        m_fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfileObserver);
+        m_fitnessProfileViewModel.getFitnessProfile().observe(getActivity(), fitnessProfileObserver);
     }
 
     @Override
@@ -77,11 +76,10 @@ public class FitnessDetailsFragment extends Fragment {
             m_tvBMR.setText(DEFAULT_BMR);
             m_bodyMassIndex.setText(defaultBmi);
         } else {
-            double caloricIntake = calculateCalories(m_fitnessProfile.getValue());
+            double caloricIntake = calculateCalories(m_fitnessProfile);
             m_tvcalsToEat.setText(String.format(Locale.US,"%.1f calories", caloricIntake));
-            m_tvBMR.setText(String.format(Locale.US, "%.1f calories/day", m_fitnessProfile.getValue().getM_bmr()));
-            m_bodyMassIndex.setText(String.format(Locale.US, "%.1f", m_fitnessProfile.getValue().getM_bmi()));
-
+            m_tvBMR.setText(String.format(Locale.US, "%.1f calories/day", m_fitnessProfile.getM_bmr()));
+            m_bodyMassIndex.setText(String.format(Locale.US, "%.1f", m_fitnessProfile.getM_bmi()));
         }
 
         return view;

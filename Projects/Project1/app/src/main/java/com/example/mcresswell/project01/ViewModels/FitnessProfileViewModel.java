@@ -21,7 +21,7 @@ public class FitnessProfileViewModel extends AndroidViewModel {
 
     private static final String LOG = FitnessProfileViewModel.class.getSimpleName();
 
-    private MutableLiveData<FitnessProfile> m_fitnessProfile;
+    private LiveData<FitnessProfile> m_fitnessProfile;
     private FitnessProfileRepository m_fitnessProfileRepository;
 
     public FitnessProfileViewModel(@NonNull Application application) {
@@ -30,10 +30,7 @@ public class FitnessProfileViewModel extends AndroidViewModel {
         m_fitnessProfile = m_fitnessProfileRepository.getFitnessProfileData();
     }
 
-    public MutableLiveData<FitnessProfile> getFitnessProfile() {
-        if (m_fitnessProfile == null){
-            m_fitnessProfile = new MutableLiveData<>();
-        }
+    public LiveData<FitnessProfile> getFitnessProfile() {
         return m_fitnessProfile;
     }
 

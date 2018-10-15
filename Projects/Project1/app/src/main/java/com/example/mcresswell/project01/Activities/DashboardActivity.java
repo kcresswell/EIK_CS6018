@@ -43,7 +43,7 @@ public class DashboardActivity extends AppCompatActivity implements
 
     //member variables
     private FragmentTransaction m_fTrans;
-    private MutableLiveData<FitnessProfile> m_fitnessProfile;
+    private FitnessProfile m_fitnessProfile;
     private FitnessProfileViewModel m_fitnessProfileViewModel;
 
     private boolean isLoggedIn;
@@ -54,7 +54,6 @@ public class DashboardActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_dashboard);
 
         initViewModel();
-        m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile();
         restoreDefaultDashboardView();
     }
 
@@ -97,7 +96,7 @@ public class DashboardActivity extends AppCompatActivity implements
             Intent intent = new Intent(this, FitnessDetailsActivity.class);
             startActivityForResult(intent, Activity.RESULT_OK);
         } else { //Tablet
-//            m_fTrans.replace(R.id.fl_detail_wd, FitnessDetailsFragment.newInstance(m_fitnessProfile.getValue()));
+//            m_fTrans.replace(R.id.fl_detail_wd, FitnessDetailsFragment.newInstance(m_fitnessProfile));
             m_fTrans.replace(R.id.fl_detail_wd, new FitnessDetailsFragment());
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
@@ -110,7 +109,7 @@ public class DashboardActivity extends AppCompatActivity implements
             coords = DEFAULT_COORDINATES;
         } else {
             try {
-                coords = getCoordinatesFromCityCountry(m_fitnessProfile.getValue().getM_city(), m_fitnessProfile.getValue().getM_country());
+                coords = getCoordinatesFromCityCountry(m_fitnessProfile.getM_city(), m_fitnessProfile.getM_country());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -140,8 +139,8 @@ public class DashboardActivity extends AppCompatActivity implements
         String country = WeatherClient.DEFAULT_COUNTRY;
          if (m_fitnessProfile != null) {
             Log.d(LOG, "weatherButtonHandler: at least the user profile object has data ..?");
-            city = m_fitnessProfile.getValue().getM_city();
-            country = m_fitnessProfile.getValue().getM_country();
+            city = m_fitnessProfile.getM_city();
+            country = m_fitnessProfile.getM_country();
         }
 
         if (!isWideDisplay()) { //Load WeatherActivity in mobile
@@ -193,7 +192,7 @@ public class DashboardActivity extends AppCompatActivity implements
         } else { //Tablet default: master fragment left, detail fragment right
             m_fTrans.replace(R.id.fl_master_wd, frag_dashboard, "v_frag_dashboard");
 
-//            m_fTrans.replace(R.id.fl_detail_wd, FitnessDetailsFragment.newInstance(m_fitnessProfile.getValue()), "v_frag_fitness");
+//            m_fTrans.replace(R.id.fl_detail_wd, FitnessDetailsFragment.newInstance(m_fitnessProfile), "v_frag_fitness");
             m_fTrans.replace(R.id.fl_detail_wd, new FitnessDetailsFragment(), "v_frag_fitness");
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();

@@ -35,7 +35,7 @@ public class ProfileSummaryFragment extends Fragment
     private Button m_editButton;
     private OnProfileSummaryInteractionListener m_listener;
     private FitnessProfileViewModel m_fitnessProfileViewModel;
-    private MutableLiveData<FitnessProfile> m_fitnessProfile;
+    private FitnessProfile m_fitnessProfile;
 //    private Bitmap m_photo;
 //    private ImageButton m_profilePhoto;
 
@@ -75,7 +75,6 @@ public class ProfileSummaryFragment extends Fragment
         super.onCreate(savedInstanceState);
 
         initViewModel();
-        m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile();
 //        m_photo = getActivity().getIntent().getParcelableExtra("M_IMG_DATA");
     }
 
@@ -95,27 +94,27 @@ public class ProfileSummaryFragment extends Fragment
     }
 
     private void initViewModel() {
-//        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile.setValue(fitnessProfile);
-        m_fitnessProfileViewModel = ViewModelProviders.of(this)
+        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile = fitnessProfile;
+        m_fitnessProfileViewModel = ViewModelProviders.of(getActivity())
                 .get(FitnessProfileViewModel.class);
-//        m_fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfileObserver);
+        m_fitnessProfileViewModel.getFitnessProfile().observe(getActivity(), fitnessProfileObserver);
     }
 
     private void setDataToViewElements() {
         if (m_fitnessProfile != null) {
-            m_firstName.setText(m_fitnessProfile.getValue().getM_fName());
-            m_lastName.setText(m_fitnessProfile.getValue().getM_lName());
-            m_sex.setText(m_fitnessProfile.getValue().getM_sex().toUpperCase());
-            m_age.setText(calculateAge(m_fitnessProfile.getValue().getM_dob())+ "y");
-            m_heightFeet.setText(String.valueOf(m_fitnessProfile.getValue().getM_heightFeet()));
-            m_heightInches.setText(String.valueOf(m_fitnessProfile.getValue().getM_heightInches()));
-            m_weight.setText(String.valueOf(m_fitnessProfile.getValue().getM_weightInPounds()));
-            m_city.setText(m_fitnessProfile.getValue().getM_city());
-            m_country.setText(m_fitnessProfile.getValue().getM_country());
-            m_activity.setText(m_fitnessProfile.getValue().getM_lifestyleSelection());
+            m_firstName.setText(m_fitnessProfile.getM_fName());
+            m_lastName.setText(m_fitnessProfile.getM_lName());
+            m_sex.setText(m_fitnessProfile.getM_sex().toUpperCase());
+            m_age.setText(calculateAge(m_fitnessProfile.getM_dob())+ "y");
+            m_heightFeet.setText(String.valueOf(m_fitnessProfile.getM_heightFeet()));
+            m_heightInches.setText(String.valueOf(m_fitnessProfile.getM_heightInches()));
+            m_weight.setText(String.valueOf(m_fitnessProfile.getM_weightInPounds()));
+            m_city.setText(m_fitnessProfile.getM_city());
+            m_country.setText(m_fitnessProfile.getM_country());
+            m_activity.setText(m_fitnessProfile.getM_lifestyleSelection());
             m_weightGoal.setText(String.valueOf(
-                    m_fitnessProfile.getValue().getM_weightGoal()
-                    + " " + m_fitnessProfile.getValue().getM_lbsPerWeek() + " lbs/week")
+                    m_fitnessProfile.getM_weightGoal()
+                    + " " + m_fitnessProfile.getM_lbsPerWeek() + " lbs/week")
             );
 //
 //          if (m_photo != null) {
