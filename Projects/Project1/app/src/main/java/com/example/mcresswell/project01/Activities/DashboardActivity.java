@@ -16,11 +16,13 @@ import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.RV_Adapter;
 import com.example.mcresswell.project01.ViewModels.FitnessProfileViewModel;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
+import com.example.mcresswell.project01.db.entity.Weather;
 import com.example.mcresswell.project01.fragments.DashboardFragment;
 import com.example.mcresswell.project01.fragments.FitnessDetailsFragment;
 import com.example.mcresswell.project01.fragments.ProfileEntryFragment;
 import com.example.mcresswell.project01.fragments.ProfileSummaryFragment;
 import com.example.mcresswell.project01.util.SampleProfileData;
+import com.example.mcresswell.project01.util.WeatherUtils;
 import com.example.mcresswell.project01.weather.WeatherClient;
 import com.example.mcresswell.project01.weather.WeatherForecast;
 import com.example.mcresswell.project01.fragments.WeatherFragment;
@@ -39,41 +41,38 @@ public class DashboardActivity extends AppCompatActivity implements
         WeatherFragment.OnWeatherDataLoadedListener {
 
     private final String LOG = getClass().getSimpleName();
-    private List<FitnessProfile> fitnessProfilesData = new ArrayList<>();
 
-    //member variables
     private FragmentTransaction m_fTrans;
     private MutableLiveData<FitnessProfile> m_fitnessProfile;
     private FitnessProfileViewModel m_fitnessProfileViewModel;
 
-    private boolean isLoggedIn;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_dashboard);
 
-        initViewModel();
-        m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile();
         restoreDefaultDashboardView();
+
+        initViewModel();
+
+        m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile();
+
     }
 
     private void initViewModel() {
 //        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile.setValue(fitnessProfile);
-        m_fitnessProfileViewModel = ViewModelProviders.of(this)
-                .get(FitnessProfileViewModel.class);
+        m_fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
 //        m_fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfileObserver);
     }
 
-
-    //response to dashboard button click based on position of RecyclerView Button clicked.
     @Override
     public void onAdapterDataPass(int position) {
         executeDashboardButtonHandler(position);
     }
 
     private void executeDashboardButtonHandler(int buttonPosition) {
-        if (isWideDisplay()){
+        if (isWideDisplay()) {
             m_fTrans = getSupportFragmentManager().beginTransaction();
         }
         switch (buttonPosition) {
@@ -93,11 +92,10 @@ public class DashboardActivity extends AppCompatActivity implements
     }
 
     private void fitnessDetailsButtonHandler() {
-        if(!isWideDisplay()) { //mobile
+        if (!isWideDisplay()) {
             Intent intent = new Intent(this, FitnessDetailsActivity.class);
             startActivityForResult(intent, Activity.RESULT_OK);
-        } else { //Tablet
-//            m_fTrans.replace(R.id.fl_detail_wd, FitnessDetailsFragment.newInstance(m_fitnessProfile.getValue()));
+        } else {
             m_fTrans.replace(R.id.fl_detail_wd, new FitnessDetailsFragment());
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
@@ -124,7 +122,7 @@ public class DashboardActivity extends AppCompatActivity implements
     }
 
     private void profileButtonHandler() {
-        if(!isWideDisplay()) { //mobile
+        if (!isWideDisplay()) { //mobile
             Intent intent = new Intent(this, ProfileSummaryActivity.class);
             startActivity(intent);
         } else { //Tablet
@@ -134,11 +132,10 @@ public class DashboardActivity extends AppCompatActivity implements
         }
     }
 
-    //weather button behavior
     private void weatherButtonHandler() {
-        String city = WeatherClient.DEFAULT_CITY;
-        String country = WeatherClient.DEFAULT_COUNTRY;
-         if (m_fitnessProfile != null) {
+        String city = WeatherUtils.DEFAULT_CITY;
+        String country = WeatherUtils.DEFAULT_COUNTRY;
+        if (m_fitnessProfile.getValue() != null) {
             Log.d(LOG, "weatherButtonHandler: at least the user profile object has data ..?");
             city = m_fitnessProfile.getValue().getM_city();
             country = m_fitnessProfile.getValue().getM_country();
@@ -152,10 +149,8 @@ public class DashboardActivity extends AppCompatActivity implements
             startActivityForResult(intent, Activity.RESULT_OK);
         } else { //Tablet
             Log.d(LOG, "weatherButtonHandler tabletView");
-            getIntent().putExtra("city", city);
-            getIntent().putExtra("country", country);
 
-            WeatherFragment weatherFragment = WeatherFragment.newInstance(city, country);
+            WeatherFragment weatherFragment = WeatherFragment.newInstance();
 
             m_fTrans = getSupportFragmentManager().beginTransaction();
             m_fTrans.replace(R.id.fl_detail_wd, weatherFragment).setTransition(5);
@@ -164,9 +159,8 @@ public class DashboardActivity extends AppCompatActivity implements
         }
     }
 
-    //helper functions //////////////////////////////////////////////////
     @Override
-    public void onWeatherDataLoaded(WeatherForecast forecast) {
+    public void onWeatherDataLoaded(Weather forecast) {
         Log.d(LOG, "onWeatherDataLoaded");
         if (isWideDisplay()) {
             FragmentManager manager = getSupportFragmentManager();
@@ -184,15 +178,15 @@ public class DashboardActivity extends AppCompatActivity implements
      */
     private void restoreDefaultDashboardView() {
         m_fTrans = getSupportFragmentManager().beginTransaction();
+
         DashboardFragment frag_dashboard = new DashboardFragment();
 
-        if(!isWideDisplay()){ //Mobile default
+        if (!isWideDisplay()) {
             m_fTrans.replace(R.id.fl_master_nd, frag_dashboard, "v_frag_dashboard");
 //            m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         } else { //Tablet default: master fragment left, detail fragment right
             m_fTrans.replace(R.id.fl_master_wd, frag_dashboard, "v_frag_dashboard");
-
 //            m_fTrans.replace(R.id.fl_detail_wd, FitnessDetailsFragment.newInstance(m_fitnessProfile.getValue()), "v_frag_fitness");
             m_fTrans.replace(R.id.fl_detail_wd, new FitnessDetailsFragment(), "v_frag_fitness");
             m_fTrans.addToBackStack(null);
@@ -206,7 +200,8 @@ public class DashboardActivity extends AppCompatActivity implements
         restoreDefaultDashboardView();
     }
 
-    private boolean isWideDisplay(){
+    private boolean isWideDisplay() {
         return getResources().getBoolean(R.bool.isWideDisplay);
     }
+
 }

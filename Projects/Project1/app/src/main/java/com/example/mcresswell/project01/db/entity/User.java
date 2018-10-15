@@ -16,6 +16,11 @@ import static android.arch.persistence.room.ForeignKey.SET_NULL;
  * created, as well as less frequently accessed
  * in comparison to all of the fitness data for the user.
  */
+
+//@Entity(foreignKeys = @ForeignKey(entity = FitnessProfile.class,
+//                            parentColumns = "id",
+//                            childColumns = "profile_id"),
+//        indices = {@Index(value = {"email"}, unique = true)})
 @Entity(indices = {@Index(value = {"email"}, unique = true)})
 public class User {
 

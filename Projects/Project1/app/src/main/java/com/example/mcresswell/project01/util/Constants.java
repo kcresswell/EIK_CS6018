@@ -16,5 +16,10 @@ public class Constants {
 
     //Callbacks
     public static final String LOCATION_CHANGED = "onLocationChanged";
+    public static final String ON_CLICK = "onClick";
+    public static final String BACK_PRESSED = "onBackPressed";
+    public static final String POST_EXECUTE = "onPostExecute";
+    public static final String ON_CHANGED = "LiveData onChanged";
+    public static final String VIEW_STATE_RESTORED = "onViewStateRestored";
 
 }

@@ -12,18 +12,10 @@ import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculat
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateBmi;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateHeightInInches;
 
-
-/**
- *  A POJO class representing all of the data associated with a given user.
- *  This is NOT the entity/DAO class, the corresponding entity class for FitnessProfile
- *  is the FitnessProfile class.
- *
- */
-
 @Entity
 public class FitnessProfile {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private int m_userID;
 

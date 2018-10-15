@@ -1,6 +1,5 @@
 package com.example.mcresswell.project01.fragments;
 
-import android.app.ProgressDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -20,14 +19,19 @@ import android.widget.TextView;
 import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.ViewModels.FitnessProfileViewModel;
 import com.example.mcresswell.project01.ViewModels.WeatherViewModel;
-import com.example.mcresswell.project01.db.entity.FitnessProfile;
+import com.example.mcresswell.project01.db.entity.Weather;
 import com.example.mcresswell.project01.util.Constants;
-import com.example.mcresswell.project01.weather.WeatherForecast;
+import com.example.mcresswell.project01.util.WeatherUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import static com.example.mcresswell.project01.util.WeatherUtils.DEFAULT_CITY;
+import static com.example.mcresswell.project01.util.WeatherUtils.DEFAULT_COUNTRY;
+import static com.example.mcresswell.project01.util.WeatherUtils.convertAndFormatKelvinTemp;
+import static com.example.mcresswell.project01.util.WeatherUtils.formatTemp;
 
 
 /**
@@ -35,81 +39,125 @@ import java.util.Objects;
  */
 public class WeatherFragment extends ListFragment {
 
-    private static final String LOG = WeatherFragment.class.getSimpleName();
+    private static final String LOG_TAG = WeatherFragment.class.getSimpleName();
 
     private OnWeatherDataLoadedListener mListener;
-    //    private WeatherForecast weatherForecast;
     private WeatherViewModel weatherViewModel;
     private FitnessProfileViewModel fitnessProfileViewModel;
 
     private TextView location;
     Map<String, String> mapper;
     private ArrayList<String> data;
-    private ListView mlistView;
-    private ProgressDialog dialog;
+    private ListView m_listView;
 
     public WeatherFragment() {
     }
 
-    public static WeatherFragment newInstance(String city, String country) {
-        Log.d(LOG, Constants.NEW);
+    public static WeatherFragment newInstance() {
+        Log.d(LOG_TAG, Constants.NEW);
         WeatherFragment fragment = new WeatherFragment();
-        Bundle args = new Bundle();
-        args.putString("city", city);
-        args.putString("country", country);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d(LOG, Constants.CREATE);
+        Log.d(LOG_TAG, Constants.CREATE);
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-//            weatherForecast = getArguments().getParcelable("data");
-            Log.d(LOG, "City: " + getArguments().getString("city"));
-            Log.d(LOG, "Country: " + getArguments().getString("country"));
+//        if (getArguments() != null) {
+////            weatherForecast = getArguments().getParcelable("data");
+//            Log.d(LOG_TAG, "City: " + getArguments().getString("city"));
+//            Log.d(LOG_TAG, "Country: " + getArguments().getString("country"));
+//
+//        }
 
-        }
+        configureViewModels();
+
+        weatherViewModel.findWeather(DEFAULT_CITY, DEFAULT_COUNTRY);
+
+//        weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
+//        weatherViewModel.getWeather().observe(this, weatherObserver);
+//
+//        fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
+//
+//        subscribeToUserProfileModel();
+
+
+//        String city = getActivity().getIntent().getStringExtra("city");
+//        String country = getActivity().getIntent().getStringExtra("country");
+//
+//        dialog = new ProgressDialog(getContext());
+//        dialog.setMessage(String.format("Loading weather for %s, %s...", city.replace("+", " "), country));
+//        dialog.show();
+
+//        loadWeatherData(city, country);
+    }
+
+    private void configureViewModels() {
         weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
-        weatherViewModel.getForecastData().observe(this, weatherObserver);
+        weatherViewModel.getWeather().observe(this, weather -> {
+            if (weather != null) { //Weather data has finished being retrieved
+                Log.d(LOG_TAG, "weatherObserver onChanged listener: weather data changed and is not null");
+
+                WeatherUtils.printWeather(weather);
+
+                displayWeatherWidget(weather);
+            }
+        });
 
         fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
-        subscribeToUserProfileModel();
 
-        String city = getActivity().getIntent().getStringExtra("city");
-        String country = getActivity().getIntent().getStringExtra("country");
+        fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfile -> {
+            //Upon updates to the fitness profile, reload weather data
+            if (fitnessProfile != null) {
+                Log.d(LOG_TAG, "FitnessProfileViewModel onChanged listener: an update to the value of the fitness" +
+                        "profile stored by the view model has occurred");
 
-        dialog = new ProgressDialog(getContext());
-        dialog.setMessage(String.format("Loading weather for %s, %s...", city.replace("+", " "), country));
-        dialog.show();
+                weatherViewModel.findWeather(fitnessProfile.getM_city(), fitnessProfile.getM_country());
+            }
+        });
+    }
 
-        loadWeatherData(city, country);
+    private void displayWeatherWidget(Weather weather) {
+        data = new ArrayList<>();
+        mapper = createObjectMapper(weather);
+        mapper.forEach((key, val) -> {
+            if (key.equals("location")) { //
+                location.setText(val);
+                return;
+            }
+            data.add(key + "\t" + val);
+        });
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
+                R.layout.item_weather_widget,
+                data);
+        setListAdapter(adapter);
+
+        mListener.onWeatherDataLoaded(weather);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(LOG, Constants.CREATE_VIEW);
+        Log.d(LOG_TAG, Constants.CREATE_VIEW);
         View view = inflater.inflate(R.layout.fragment_weather, container, false);
 
         location = view.findViewById(R.id.weatherLocation);
-        mlistView = view.findViewById(android.R.id.list);
-        mlistView.setId(android.R.id.list);
+        m_listView = view.findViewById(android.R.id.list);
+        m_listView.setId(android.R.id.list);
 
         return view;
     }
 
     @Override
     public void onDestroyView() {
-        Log.d(LOG, Constants.DESTROY_VIEW);
+        Log.d(LOG_TAG, Constants.DESTROY_VIEW);
         super.onDestroyView();
     }
 
     @Override
     public void onAttach(Context context) {
-        Log.d(LOG, Constants.ATTACH);
+        Log.d(LOG_TAG, Constants.ATTACH);
 
         super.onAttach(context);
         if (context instanceof OnWeatherDataLoadedListener) {
@@ -122,32 +170,30 @@ public class WeatherFragment extends ListFragment {
 
     @Override
     public void onDetach() {
-        Log.d(LOG, Constants.DETACH);
+        Log.d(LOG_TAG, Constants.DETACH);
         super.onDetach();
         mListener = null;
     }
 
     @Override
     public void onSaveInstanceState(Bundle state){
+        Log.d(LOG_TAG, Constants.SAVE_INSTANCE_STATE);
         super.onSaveInstanceState(state);
-//        state.putParcelable("data", (Parcelable) weatherForecast);
-        Log.d(LOG, Constants.SAVE_INSTANCE_STATE);
-
     }
 
-    final Observer<WeatherForecast> weatherObserver = new Observer<WeatherForecast>() {
+    final Observer<Weather> weatherObserver = new Observer<Weather>() {
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
-        public void onChanged(@Nullable final WeatherForecast weatherData) {
-            if (weatherData != null) { //Weather data has finished being retrieved
-                Log.d(LOG, "weatherObserver onChanged listener: weather data changed and is not null");
-                dialog.dismiss();
-                weatherData.printWeatherForecast();
+        public void onChanged(@Nullable final Weather weather) {
+            if (weather != null) { //Weather data has finished being retrieved
+                Log.d(LOG_TAG, "weatherObserver onChanged listener: weather data changed and is not null");
+
+                WeatherUtils.printWeather(weather);
 
                 data = new ArrayList<>();
-                mapper = createObjectMapper(weatherData);
+                mapper = createObjectMapper(weather);
                 mapper.forEach((key, val) -> {
-                    if (key.equals("")) {
+                    if (key.equals("location")) { //
                         location.setText(val);
                         return;
                     }
@@ -157,7 +203,8 @@ public class WeatherFragment extends ListFragment {
                         R.layout.item_weather_widget,
                         data);
                 setListAdapter(adapter);
-                mListener.onWeatherDataLoaded(weatherData);
+
+                mListener.onWeatherDataLoaded(weather);
 
 
             }
@@ -166,41 +213,84 @@ public class WeatherFragment extends ListFragment {
         }
     };
 
-    private void subscribeToUserProfileModel() {
-        fitnessProfileViewModel.getFitnessProfile().observe(this, new Observer<FitnessProfile>() {
-            @Override
-            public void onChanged(@Nullable FitnessProfile fitnessProfile) {
-                //Now that valid user profile data has been entered, reload
-                if (fitnessProfile != null) {
-                    Log.d(LOG, "subscribeToUserProfileModel: FitnessProfileViewModel onChanged " +
-                            "listener, re-fetching current weather based on user city and country");
-                    loadWeatherData(fitnessProfile.getM_city(), fitnessProfile.getM_country());
-                    dialog = new ProgressDialog(getContext());
-                    dialog.setMessage(String.format("Loading weather for %s, %s...", fitnessProfile.getM_city(), fitnessProfile.getM_country()));
-                    dialog.show();
-                }
-            }
-        });
-    }
+    //    private void subscribeToUserProfileModel() {
+//        fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfile -> {
+//            //Now that valid user profile data has been entered, reload
+//            if (fitnessProfile != null) {
+//                Log.d(LOG_TAG, "subscribeToUserProfileModel: FitnessProfileViewModel onChanged " +
+//                        "listener, re-fetching current weather based on user city and country");
+//                loadWeatherData(fitnessProfile.getM_city(), fitnessProfile.getM_country());
+//                dialog = new ProgressDialog(getContext());
+//                dialog.setMessage(String.format("Loading weather for %s, %s...", fitnessProfile.getM_city(), fitnessProfile.getM_country()));
+//                dialog.show();
+//            }
+//        });
 
-    private void loadWeatherData(String city, String country){
-        Log.d(LOG, "loadWeatherData");
+//    final Observer<WeatherForecast> weatherObserver = new Observer<WeatherForecast>() {
+//        @RequiresApi(api = Build.VERSION_CODES.N)
+//        @Override
+//        public void onChanged(@Nullable final WeatherForecast weatherData) {
+//            if (weatherData != null) { //Weather data has finished being retrieved
+//                Log.d(LOG_TAG, "weatherObserver onChanged listener: weather data changed and is not null");
+//                dialog.dismiss();
+//                weatherData.printWeatherForecast();
+//
+//                data = new ArrayList<>();
+//                mapper = createObjectMapper(weatherData);
+//                mapper.forEach((key, val) -> {
+//                    if (key.equals("")) {
+//                        location.setText(val);
+//                        return;
+//                    }
+//                    data.add(key + "\t" + val);
+//                });
+//                ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
+//                        R.layout.item_weather_widget,
+//                        data);
+//                setListAdapter(adapter);
+//                mListener.onWeatherDataLoaded(weatherData);
+//
+//
+//            }
+//
+//
+//        }
+//    };
 
-        //pass the location in to the view model
-        weatherViewModel.setLocation(city, country);
-    }
+//    private void subscribeToUserProfileModel() {
+//        fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfile -> {
+//            //Now that valid user profile data has been entered, reload
+//            if (fitnessProfile != null) {
+//                Log.d(LOG_TAG, "subscribeToUserProfileModel: FitnessProfileViewModel onChanged " +
+//                        "listener, re-fetching current weather based on user city and country");
+//                loadWeatherData(fitnessProfile.getM_city(), fitnessProfile.getM_country());
+//                dialog = new ProgressDialog(getContext());
+//                dialog.setMessage(String.format("Loading weather for %s, %s...", fitnessProfile.getM_city(), fitnessProfile.getM_country()));
+//                dialog.show();
+//            }
+//        });
 
-    public Map<String, String> createObjectMapper(WeatherForecast data) {
+
+
+
+//    private void loadWeatherData(String city, String country){
+//        Log.d(LOG_TAG, "loadWeatherData");
+//
+//        //pass the location in to the view model
+//        weatherViewModel.setLocation(city, country);
+//    }
+
+    public Map<String, String> createObjectMapper(Weather data) {
         Map<String, String> mapper = new HashMap<String, String>();
-        mapper.put("", data.getCity() + ", " + data.getCountryCode());
+        mapper.put("location", data.getCity().replace("+", " ") + ", " + data.getCountryCode());
         mapper.put(getResources().getString(R.string.current_conditions_weather_widget), data.getForecastMain());
         mapper.put(getResources().getString(R.string.forecast_detail_weather_widget), data.getForecastDescription());
-        mapper.put(getResources().getString(R.string.temp_weather_widget), data.getTemp());
-        mapper.put(getResources().getString(R.string.temp_min_weather_widget), data.getTemp_min());
-        mapper.put(getResources().getString(R.string.temp_max_weather_widget), data.getTemp_max());
-        mapper.put(getResources().getString(R.string.humidity_weather_widget), data.getHumidity());
-        mapper.put(getResources().getString(R.string.wind_weather_widget), data.getWindSpeed());
-        mapper.put(getResources().getString(R.string.pressure_weather_widget), data.getPressure());
+        mapper.put(getResources().getString(R.string.temp_weather_widget), convertAndFormatKelvinTemp(data.getTemperature().temp));
+        mapper.put(getResources().getString(R.string.temp_min_weather_widget), convertAndFormatKelvinTemp(data.getTemperature().tempMin));
+        mapper.put(getResources().getString(R.string.temp_max_weather_widget), convertAndFormatKelvinTemp(data.getTemperature().tempMax));
+        mapper.put(getResources().getString(R.string.humidity_weather_widget), String.valueOf(data.getHumidity()));
+        mapper.put(getResources().getString(R.string.wind_weather_widget), String.valueOf(data.getWindSpeed()));
+        mapper.put(getResources().getString(R.string.pressure_weather_widget), String.valueOf(data.getPressure()));
 
         return mapper;
     }
@@ -210,6 +300,6 @@ public class WeatherFragment extends ListFragment {
      *  in this fragment to be communicated with its hosting activity.
      **/
     public interface OnWeatherDataLoadedListener {
-        void onWeatherDataLoaded(WeatherForecast forecast);
+        void onWeatherDataLoaded(Weather weather);
     }
 }

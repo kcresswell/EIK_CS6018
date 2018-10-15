@@ -2,7 +2,6 @@ package com.example.mcresswell.project01.fragments;
 
 
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Build;
@@ -17,21 +16,16 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.mcresswell.project01.R;
-import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.ViewModels.FitnessProfileViewModel;
+import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.util.Constants;
 
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateAge;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class ProfileSummaryFragment extends Fragment
         implements View.OnClickListener {
 
-    private static final String LOG = ProfileSummaryFragment.class.getSimpleName();
-
+    private static final String LOG_TAG = ProfileSummaryFragment.class.getSimpleName();
     private Button m_editButton;
     private OnProfileSummaryInteractionListener m_listener;
     private FitnessProfileViewModel m_fitnessProfileViewModel;
@@ -52,16 +46,14 @@ public class ProfileSummaryFragment extends Fragment
             m_activity,
             m_weightGoal;
 
-    public ProfileSummaryFragment() {
-        // Required empty public constructor
-    }
+    public ProfileSummaryFragment() { }
 
 //    public static ProfileSummaryFragment newInstance(FitnessProfile profile) {
-//        Log.d(LOG, Constants.NEW);
+//        Log.d(LOG_TAG, Constants.NEW);
 //        ProfileSummaryFragment fragment = new ProfileSummaryFragment();
 //        Bundle args = new Bundle();
 //        if (profile != null) {
-//            Log.d(LOG, "newInstance created with existing FitnessProfile data passed");
+//            Log.d(LOG_TAG, "newInstance created with existing FitnessProfile data passed");
 ////            args.putParcelable("profile", profile);
 //        }
 //        fragment.setArguments(args);
@@ -71,7 +63,7 @@ public class ProfileSummaryFragment extends Fragment
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d(LOG, Constants.CREATE);
+        Log.d(LOG_TAG, Constants.CREATE);
         super.onCreate(savedInstanceState);
 
         initViewModel();
@@ -84,7 +76,7 @@ public class ProfileSummaryFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(LOG, Constants.CREATE_VIEW);
+        Log.d(LOG_TAG, Constants.CREATE_VIEW);
 
         View v = inflater.inflate(R.layout.fragment_profile_summary, container, false);
         initViewElements(v);
@@ -115,7 +107,7 @@ public class ProfileSummaryFragment extends Fragment
             m_activity.setText(m_fitnessProfile.getValue().getM_lifestyleSelection());
             m_weightGoal.setText(String.valueOf(
                     m_fitnessProfile.getValue().getM_weightGoal()
-                    + " " + m_fitnessProfile.getValue().getM_lbsPerWeek() + " lbs/week")
+                            + " " + m_fitnessProfile.getValue().getM_lbsPerWeek() + " lbs/week")
             );
 //
 //          if (m_photo != null) {
@@ -146,7 +138,7 @@ public class ProfileSummaryFragment extends Fragment
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_edit: {
-                Log.d(LOG, "Edit button onClick");
+                Log.d(LOG_TAG, "Edit button onClick");
                 m_listener.onProfileSummary_EditButton(true);
             }
         }
@@ -154,14 +146,14 @@ public class ProfileSummaryFragment extends Fragment
 
     @Override
     public void onAttach(Context context) {
-        Log.d(LOG, Constants.ATTACH);
+        Log.d(LOG_TAG, Constants.ATTACH);
         super.onAttach(context);
         try {
             m_listener = (OnProfileSummaryInteractionListener) context;
         } catch (ClassCastException cce){
             throw new ClassCastException(
                     context.toString()
-                    + " must implement OnProfileSummaryInteractionListener");
+                            + " must implement OnProfileSummaryInteractionListener");
         }
     }
 

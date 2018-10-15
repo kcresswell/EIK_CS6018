@@ -25,7 +25,7 @@ import static com.example.mcresswell.project01.util.ValidationUtils.isValidCount
 
 public class GeocoderLocationUtils {
 
-    private static final String LOG = DashboardFragment.class.getSimpleName();
+    private static final String LOG_TAG = DashboardFragment.class.getSimpleName();
 
     public static final String DEFAULT_COORDINATES = "40.7608,-111.8910";
 
@@ -56,7 +56,7 @@ public class GeocoderLocationUtils {
         } else { // City and country are valid
             uri = URI.create(GEOCODER_API_BASE_URL + cityName + "," + countryCode + API_KEY_QUERY);
         }
-        Log.d(LOG, "Google maps Geocoder API url: " + uri.toString());
+        Log.d(LOG_TAG, "Google maps Geocoder API url: " + uri.toString());
         try {
             return uri.toURL();
         } catch (MalformedURLException e) {
@@ -70,7 +70,7 @@ public class GeocoderLocationUtils {
         JsonObject jsonObject = new JsonParser().parse(jsonResponse).getAsJsonObject();
         String status = jsonObject.get("status").getAsString();
         if (!status.equals("OK")) {
-            Log.d(LOG, "Error performing Google Maps API Geocoder query");
+            Log.d(LOG_TAG, "Error performing Google Maps API Geocoder query");
             return null;
         }
         JsonObject results = jsonObject.get("results").getAsJsonArray().get(0).getAsJsonObject();
@@ -126,9 +126,9 @@ public class GeocoderLocationUtils {
         String cityName = addresses.get(0).getLocality();
         String stateName = addresses.get(0).getAdminArea();
         String countryName = addresses.get(0).getCountryName();
-        Log.d(LOG, "cityName :" + cityName);
-        Log.d(LOG, "state :" + stateName);
-        Log.d(LOG, "country :" + countryName);
+        Log.d(LOG_TAG, "cityName :" + cityName);
+        Log.d(LOG_TAG, "state :" + stateName);
+        Log.d(LOG_TAG, "country :" + countryName);
         return null;
     }
 

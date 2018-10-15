@@ -11,21 +11,30 @@ import java.util.Date;
 
 import static android.arch.persistence.room.ForeignKey.SET_NULL;
 
-@Entity(indices = {@Index(value = {"city", "country"})})
+@Entity(indices = {@Index(value = {"city", "country"}, unique = true)})
 public class Weather {
+
+    public Temperature createTemp(double currTemp, double min, double max) {
+        Temperature temperature = new Temperature();
+        temperature.temp = currTemp;
+        temperature.tempMin = min;
+        temperature.tempMax = max;
+
+        return temperature;
+    }
 
     public static class Temperature {
         @ColumnInfo(name = "current_temp")
-        public float temp;
+        public double temp;
 
         @ColumnInfo(name = "temp_min")
-        public float tempMin;
+        public double tempMin;
 
         @ColumnInfo(name = "temp_max")
-        public float tempMax;
+        public double tempMax;
     }
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
     @ColumnInfo(name = "city")

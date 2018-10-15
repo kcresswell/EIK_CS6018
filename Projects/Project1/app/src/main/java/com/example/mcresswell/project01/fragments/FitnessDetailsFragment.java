@@ -29,7 +29,7 @@ import static com.example.mcresswell.project01.util.FitnessProfileUtils.printUse
 
 public class FitnessDetailsFragment extends Fragment {
 
-    private static final String LOG = FitnessDetailsFragment.class.getSimpleName();
+    private static final String LOG_TAG = FitnessDetailsFragment.class.getSimpleName();
 
     private static final String DEFAULT_CALORIES = "2000 calories/day";
     private static final String DEFAULT_BMR = "1500 calories/day";
@@ -46,7 +46,7 @@ public class FitnessDetailsFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d(LOG, Constants.CREATE);
+        Log.d(LOG_TAG, Constants.CREATE);
         super.onCreate(savedInstanceState);
 
         initViewModel();
@@ -63,7 +63,7 @@ public class FitnessDetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(LOG, CREATE_VIEW);
+        Log.d(LOG_TAG, CREATE_VIEW);
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_fitness_details, container, false);
 
@@ -111,7 +111,7 @@ public class FitnessDetailsFragment extends Fragment {
 //    };
 //
 //    private void loadUserProfileData(FitnessProfile fitnessProfile){
-//        Log.d(LOG, "loadUserProfileData");
+//        Log.d(LOG_TAG, "loadUserProfileData");
 //
 //        //pass the user profile in to the view model
 ////        viewModel.setFitnessProfile(fitnessProfile);
