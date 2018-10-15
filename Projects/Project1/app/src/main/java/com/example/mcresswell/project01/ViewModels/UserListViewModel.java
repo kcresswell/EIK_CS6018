@@ -14,7 +14,7 @@ import java.util.List;
 
 public class UserListViewModel extends AndroidViewModel {
 
-    private final MediatorLiveData<List<User>> mObservableUsers;
+    private final MediatorLiveData<List<User>> m_observableUserList;
 
     private final UserRepository m_userRepository;
 
@@ -23,17 +23,17 @@ public class UserListViewModel extends AndroidViewModel {
         InStyleDatabase database = InStyleDatabase.getDatabaseInstance(application);
         m_userRepository = UserRepository.getInstance(database);
 
-        mObservableUsers = new MediatorLiveData<>();
+        m_observableUserList = new MediatorLiveData<>();
 
         configureMediatorLiveData();
     }
 
     private void configureMediatorLiveData() {
-        mObservableUsers.setValue(null);
+        m_observableUserList.setValue(null);
 
         LiveData<List<User>> users = m_userRepository.getUsers();
 
-        mObservableUsers.addSource(users, mObservableUsers::setValue);
+        m_observableUserList.addSource(users, m_observableUserList::setValue);
     }
 
     public void deleteAllUsers() {
@@ -41,6 +41,6 @@ public class UserListViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<User>> getUserList() {
-        return mObservableUsers;
+        return m_observableUserList;
     }
 }

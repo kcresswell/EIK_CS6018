@@ -1,20 +1,19 @@
 package com.example.mcresswell.project01.weather;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.util.Log;
-
-import com.example.mcresswell.project01.R;
-import com.example.mcresswell.project01.util.WeatherUtils;
+import com.example.mcresswell.project01.db.entity.Weather;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.util.HashMap;
+import java.time.Instant;
+import java.util.Date;
 import java.util.Locale;
-import java.util.Map;
 
-public class WeatherForecast implements Parcelable{
-    private final String FARENHEIT = " °F";
+import static com.example.mcresswell.project01.util.WeatherUtils.convertAndFormatKelvinTemp;
+import static com.example.mcresswell.project01.util.WeatherUtils.kelvinToFarenheit;
+
+public class WeatherForecast {
+
+    private Weather weather;
 
     private String coords;
     private String forecastMain;
@@ -32,7 +31,11 @@ public class WeatherForecast implements Parcelable{
 
     private String city;
 
-    public WeatherForecast (String response) {
+    public WeatherForecast() {}
+
+    public Weather initWeather (String response) {
+
+        //FIXME: Clean this up later if you have time
         JsonObject jsonObject = new JsonParser().parse(response).getAsJsonObject();
 
         JsonObject coord = jsonObject.get("coord").getAsJsonObject();
@@ -41,66 +44,77 @@ public class WeatherForecast implements Parcelable{
         JsonObject wind = jsonObject.get("wind").getAsJsonObject();
 
         coords = String.valueOf(coord.get("lat")) + "," + String.valueOf(coord.get("lon"));
-
         forecastMain = String.valueOf(weather.get("main")).replace("\"", "");
         forecastDescription = String.valueOf(weather.get("description")).replace("\"", "");
 
-        temp = convertAndFormatTemp(main.get("temp").getAsDouble());
+        temp = convertAndFormatKelvinTemp(main.get("temp").getAsDouble());
         pressure = String.valueOf(main.get("pressure"));
         humidity = String.valueOf(main.get("humidity")) + "%";
-        temp_min = convertAndFormatTemp(main.get("temp_min").getAsDouble());
-        temp_max = convertAndFormatTemp(main.get("temp_max").getAsDouble());
+        temp_min = convertAndFormatKelvinTemp(main.get("temp_min").getAsDouble());
+        temp_max = convertAndFormatKelvinTemp(main.get("temp_max").getAsDouble());
 
         windSpeed = String.format(Locale.US, "%.1f", wind.get("speed").getAsDouble());
 
         countryCode = String.valueOf(jsonObject.get("sys").getAsJsonObject().get("country")).replace("\"", "");;
         city = String.valueOf(jsonObject.get("name")).replace("\"", "");
+
+        //////////////////////////////////////////////////
+
+        this.weather = new Weather();
+        this.weather.setTemperature(
+                this.weather.createTemp(kelvinToFarenheit(main.get("temp").getAsDouble()),
+                                        main.get("temp_min").getAsDouble(),
+                                        main.get("temp_max").getAsDouble()));
+        this.weather.setCity(city);
+        this.weather.setCountryCode(countryCode);
+        this.weather.setLatitude(coord.get("lat").getAsFloat());
+        this.weather.setLongitude(coord.get("lon").getAsFloat());
+        this.weather.setForecastMain(forecastMain);
+        this.weather.setForecastDescription(forecastDescription);
+        this.weather.setWindSpeed(wind.get("speed").getAsFloat());
+        this.weather.setPressure(main.get("pressure").getAsInt());
+        this.weather.setHumidity(main.get("humidity").getAsInt());
+        this.weather.setLastUpdated(Date.from(Instant.now()));
+        return this.weather;
+
     }
 
-    protected WeatherForecast(Parcel in) {
-        coords = in.readString();
-        forecastMain = in.readString();
-        forecastDescription = in.readString();
-        temp = in.readString();
-        pressure = in.readString();
-        humidity = in.readString();
-        temp_min = in.readString();
-        temp_max = in.readString();
-        windSpeed = in.readString();
-        countryCode = in.readString();
-        city = in.readString();
+//    protected WeatherForecast(Parcel in) {
+//        coords = in.readString();
+//        forecastMain = in.readString();
+//        forecastDescription = in.readString();
+//        temp = in.readString();
+//        pressure = in.readString();
+//        humidity = in.readString();
+//        temp_min = in.readString();
+//        temp_max = in.readString();
+//        windSpeed = in.readString();
+//        countryCode = in.readString();
+//        city = in.readString();
+//    }
+
+//    public static final Creator<WeatherForecast> CREATOR = new Creator<WeatherForecast>() {
+//        @Override
+//        public WeatherForecast createFromParcel(Parcel in) {
+//            return new WeatherForecast(in);
+//        }
+//
+//        @Override
+//        public WeatherForecast[] newArray(int size) {
+//            return new WeatherForecast[size];
+//        }
+//    };
+
+
+    public Weather getWeather() {
+        return weather;
     }
 
-    public static final Creator<WeatherForecast> CREATOR = new Creator<WeatherForecast>() {
-        @Override
-        public WeatherForecast createFromParcel(Parcel in) {
-            return new WeatherForecast(in);
-        }
-
-        @Override
-        public WeatherForecast[] newArray(int size) {
-            return new WeatherForecast[size];
-        }
-    };
-
-    public void printWeatherForecast() {
-        System.out.println("Weather Forecast for " + city + ", " + countryCode + ":\n");
-        Log.d("Weather Forecast", "Weather Forecast for " + city + ", " + countryCode + ":\n");
-
-        System.out.println("coords: " + coords);
-        System.out.println("forecast: " + forecastMain);
-        System.out.println("forecast description: " + forecastDescription);
-        System.out.println("temp: " + temp + " F");
-        System.out.println("temp_min: " + temp_min + " F");
-        System.out.println("temp_max: " + temp_max + " F");
-        System.out.println("pressure: " + pressure);
-        System.out.println("humidity: " + humidity + "%");
-        System.out.println("windspeed: " + windSpeed);
+    public void setWeather(Weather weather) {
+        this.weather = weather;
     }
 
-    private String convertAndFormatTemp(double temp) {
-        return String.format(Locale.US,"%.1f", WeatherUtils.kelvinToFarenheit(temp)) + FARENHEIT;
-    }
+    //FIXME: Clean this up later if you have time
 
     public String getCoords() {
         return coords;
@@ -190,24 +204,26 @@ public class WeatherForecast implements Parcelable{
         this.city = city;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(FARENHEIT);
-        dest.writeString(coords);
-        dest.writeString(forecastMain);
-        dest.writeString(forecastDescription);
-        dest.writeString(temp);
-        dest.writeString(pressure);
-        dest.writeString(humidity);
-        dest.writeString(temp_min);
-        dest.writeString(temp_max);
-        dest.writeString(windSpeed);
-        dest.writeString(countryCode);
-        dest.writeString(city);
-    }
+
+    //    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel dest, int flags) {
+//        dest.writeString(FARENHEIT);
+//        dest.writeString(coords);
+//        dest.writeString(forecastMain);
+//        dest.writeString(forecastDescription);
+//        dest.writeString(temp);
+//        dest.writeString(pressure);
+//        dest.writeString(humidity);
+//        dest.writeString(temp_min);
+//        dest.writeString(temp_max);
+//        dest.writeString(windSpeed);
+//        dest.writeString(countryCode);
+//        dest.writeString(city);
+//    }
 }

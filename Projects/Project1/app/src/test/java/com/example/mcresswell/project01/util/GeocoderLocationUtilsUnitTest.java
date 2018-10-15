@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import static org.junit.Assert.*;
 
-public class GeocoderLocationUtilsTest {
+public class GeocoderLocationUtilsUnitTest {
 
     private final String DEFAULT_CITY = "PROVO";
     private final String DEFAULT_COUNTRY = "US";

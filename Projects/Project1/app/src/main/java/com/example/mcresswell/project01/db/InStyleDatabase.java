@@ -7,6 +7,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
+import android.util.Log;
 
 import com.example.mcresswell.project01.db.dao.FitnessProfileDao;
 import com.example.mcresswell.project01.db.dao.UserDao;
@@ -30,10 +31,9 @@ import java.util.List;
 @TypeConverters({DataTypeConverters.class})
 public abstract class InStyleDatabase extends RoomDatabase {
 
-    private static final String LOG = InStyleDatabase.class.getSimpleName();
+    private static final String LOG_TAG = InStyleDatabase.class.getSimpleName();
 
     private static final String DATABASE_NAME = "instyle_database";
-    private static final int NUM_USERS = 20;
 
     //Abstract getters for each DAO
     public abstract UserDao userDao();
@@ -58,6 +58,7 @@ public abstract class InStyleDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (InStyleDatabase.class) {
                 if (INSTANCE == null) {
+                    Log.d(LOG_TAG, "Instantiating InStyle Database . . .");
                     //Create single instance of database with FitnessProfile, User, and Weather tables
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             InStyleDatabase.class, DATABASE_NAME)
@@ -102,8 +103,8 @@ public abstract class InStyleDatabase extends RoomDatabase {
                                        final List<Weather> weatherList) {
         database.runInTransaction(() -> {
             database.userDao().insertAllUsers(userList);
-//            database.weatherDao().insertAllUsers(weatherList);
-//            database.fitnessProfileDao().insertAllUsers(fitnessProfileList);
+            database.weatherDao().insertAllWeather(weatherList);
+            database.fitnessProfileDao().insertAll(fitnessProfileList);
         });
     }
 

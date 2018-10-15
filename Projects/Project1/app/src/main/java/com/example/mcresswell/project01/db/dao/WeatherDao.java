@@ -1,7 +1,10 @@
 package com.example.mcresswell.project01.db.dao;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
@@ -17,28 +20,36 @@ import java.util.Optional;
  * 2. An updated weather forecast for an existing location is stored.
  * 3. The database is queried for a weather forecast for a given location.
  *
- * An Optional<Weather> is returned in the case where no weather forecast for a given location exists
- * in the Weather table yet. This prevents an exception from being thrown.
  */
 
 @Dao
 public interface WeatherDao {
 
-    @Query("SELECT * FROM Weather WHERE city=:city AND (country IS NULL OR country LIKE :country)")
-    Optional<Weather> findByLocation(String city, String country);
+    @Query("SELECT * FROM Weather LIMIT 1")
+    LiveData<Weather> findFirstWeatherRecord();
 
-    @Insert
-    void insert(Weather weather);
+    @Query("SELECT * FROM Weather WHERE city=:city AND (country IS NULL OR country LIKE :country)")
+    LiveData<Weather> findWeatherByLocation(String city, String country);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertWeather(Weather weather);
 
     @Update
-    void update(Weather weather);
+    void updateWeather(Weather weather);
 
+    @Delete
+    void deleteWeather(Weather weather);
 
-    //Below methods are for configuring/populating Weather database table
     @Insert
-    void insertAll(List<Weather> weatherList);
+    void insertAllWeather(List<Weather> weatherList);
+
+    @Query("DELETE FROM Weather")
+    void deleteAllWeather();
 
     @Query("SELECT * FROM Weather ORDER BY city ASC")
-    List<Weather> getAllWeatherData();
+    LiveData<List<Weather>> loadAllWeather();
+
+    @Query("SELECT COUNT(*) FROM Weather")
+    LiveData<Integer> getWeatherCount();
 
 }
