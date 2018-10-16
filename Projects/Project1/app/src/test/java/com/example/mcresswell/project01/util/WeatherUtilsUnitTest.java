@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static com.example.mcresswell.project01.util.WeatherUtils.convertAndFormatKelvinTemp;
 import static com.example.mcresswell.project01.util.WeatherUtils.formatCaseCity;
-import static com.example.mcresswell.project01.util.WeatherUtils.formatCaseCountryCode;
+import static com.example.mcresswell.project01.util.WeatherUtils.formatCaseCountryCodeFromCountryName;
 import static com.example.mcresswell.project01.util.WeatherUtils.kelvinToFarenheit;
 import static org.junit.Assert.*;
 
@@ -30,11 +30,12 @@ public class WeatherUtilsUnitTest {
     }
 
     @Test
-    public void testFormatCaseCountryCode() {
-        assertEquals(formatCaseCountryCode("us"), "US");
-        assertEquals(formatCaseCountryCode("US"), "US");
-        assertNull(formatCaseCountryCode("INVALID COUNTRY CODE"));
-        assertNull(formatCaseCountryCode(null));
+    public void testFormatCaseCountryCodeFromCountryName() {
+        assertEquals(formatCaseCountryCodeFromCountryName("us"), "US");
+        assertEquals(formatCaseCountryCodeFromCountryName("United States"), "US");
+        assertEquals(formatCaseCountryCodeFromCountryName("US"), "US");
+        assertEquals(formatCaseCountryCodeFromCountryName("INVALID COUNTRY CODE"), "US");
+        assertNull(formatCaseCountryCodeFromCountryName(null));
 
 
     }

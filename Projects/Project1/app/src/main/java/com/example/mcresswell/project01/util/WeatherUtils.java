@@ -3,6 +3,7 @@ package com.example.mcresswell.project01.util;
 import android.util.Log;
 
 import com.example.mcresswell.project01.db.entity.Weather;
+import com.example.mcresswell.project01.util.mapper.CountryCodeMapper;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -10,7 +11,7 @@ import java.net.URL;
 import java.util.Locale;
 
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidCity;
-import static com.example.mcresswell.project01.util.ValidationUtils.isValidCountryCode;
+import static com.example.mcresswell.project01.util.ValidationUtils.isValidCountryName;
 
 public class WeatherUtils {
 
@@ -22,7 +23,7 @@ public class WeatherUtils {
     private static final String API_KEY_QUERY = "&appid=" + OWM_API_KEY;
 
     public static final String DEFAULT_CITY = "SALT LAKE CITY";
-    public static final String DEFAULT_COUNTRY = "US";
+    public static final String DEFAULT_COUNTRY = "United States";
     public static final String INVALID_CITY_URL_JSON_RESPONSE = "{\"cod\":\"404\",\"message\":\"city not found\"}";
 
     private static final String FARENHEIT = " °F";
@@ -31,15 +32,15 @@ public class WeatherUtils {
         return API_BASE_URL + API_ENDPOINT + relativeUrl;
     }
 
-    public static URL buildWeatherApiUrl(String city, String countryCode){
+    public static URL buildWeatherApiUrl(String city, String countryName){
         if (!isValidCity(city)) {
             return buildDefaultWeatherApiUrl();
         }
         URI uri = null;
-        if (!isValidCountryCode(countryCode)) {
+        if (!isValidCountryName(CountryCodeMapper.getCountryCode(countryName))) {
             uri = URI.create(getAbsoluteUrl( city.replace(" ", "+") + API_KEY_QUERY));
         } else {
-            uri = URI.create(getAbsoluteUrl(city.replace(" ", "+") + "," + countryCode + API_KEY_QUERY));
+            uri = URI.create(getAbsoluteUrl(city.replace(" ", "+") + "," + countryName + API_KEY_QUERY));
         }
         Log.d(LOG, "Weather url: " + uri.toString());
         try {
@@ -54,7 +55,7 @@ public class WeatherUtils {
     public static URL buildDefaultWeatherApiUrl() {
         try {
             return URI.create(getAbsoluteUrl(DEFAULT_CITY.replace(" ", "+") + "," +
-                    DEFAULT_COUNTRY + API_KEY_QUERY)).toURL();
+                    CountryCodeMapper.getCountryCode(DEFAULT_COUNTRY) + API_KEY_QUERY)).toURL();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -85,7 +86,7 @@ public class WeatherUtils {
         return String.format(Locale.US,"%.1f", kelvinToFarenheit(tempInKelvin)) + FARENHEIT;
     }
 
-    public static String formatTemp(double farenheitTemp) {
+    public static String formatFarenheitTemp(double farenheitTemp) {
         return String.format(Locale.US, "%.1f", farenheitTemp) + FARENHEIT;
     }
 
@@ -102,7 +103,7 @@ public class WeatherUtils {
         return formattedCity.trim();
     }
 
-    public static String formatCaseCountryCode(String country) {
-        return isValidCountryCode(country) ? country.toUpperCase().trim() : null;
+    public static String formatCaseCountryCodeFromCountryName(String countryName) {
+        return isValidCountryName(countryName) ? CountryCodeMapper.getCountryCode(countryName) : null;
     }
 }

@@ -1,4 +1,4 @@
-package com.example.mcresswell.project01.ViewModels;
+package com.example.mcresswell.project01.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -50,6 +50,9 @@ public class UserViewModel extends AndroidViewModel {
             return false;
         }
         LiveData<User> result = findUser(user.getEmail());
+        if (result.getValue() == null) {
+            return false;
+        }
         return result.getValue().getEmail().equals(user.getEmail()) &&
                 result.getValue().getPassword().equals(user.getPassword());
     }
@@ -66,13 +69,7 @@ public class UserViewModel extends AndroidViewModel {
         m_userRepository.delete(user);
     }
 
-    public LiveData<User> findUser(String email) {
-        LiveData<User> result = m_userRepository.find(email);
-//        if (result.getValue() != null) {
-//            Log.d(LOG, "User found.");
-//        }
-        return result;
-    }
+    public LiveData<User> findUser(String email) { return m_userRepository.find(email); }
 
     public LiveData<User> getUser() {
         return m_observableUser;

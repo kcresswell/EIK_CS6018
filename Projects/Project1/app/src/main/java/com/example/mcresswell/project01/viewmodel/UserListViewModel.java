@@ -1,4 +1,4 @@
-package com.example.mcresswell.project01.ViewModels;
+package com.example.mcresswell.project01.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;

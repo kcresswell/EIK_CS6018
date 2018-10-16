@@ -81,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:ems="10"
-                android:hint="@string/hint_Country"
+                android:hint="@string/hint_country"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="1"

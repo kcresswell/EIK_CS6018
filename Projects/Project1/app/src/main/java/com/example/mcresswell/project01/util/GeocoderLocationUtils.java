@@ -21,7 +21,7 @@ import java.util.Locale;
 import java.util.Scanner;
 
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidCity;
-import static com.example.mcresswell.project01.util.ValidationUtils.isValidCountryCode;
+import static com.example.mcresswell.project01.util.ValidationUtils.isValidCountryName;
 
 public class GeocoderLocationUtils {
 
@@ -36,8 +36,6 @@ public class GeocoderLocationUtils {
 
     private static final String DEFAULT_CITY = "SALT+LAKE+CITY";
     private static final String DEFAULT_COUNTRY = "US";
-    private static final String GOOGLE_API_ERROR_RESPONSE =
-            "{\n" + "    \"results\": [],\n" + "    \"status\": \"ZERO_RESULTS\"\n" + "}";
 
     public static String getCoordinatesFromCityCountry(String city, String countryCode) throws IOException {
         URL apiUrl = buildGeocoderApiUrl(city, countryCode);
@@ -51,12 +49,14 @@ public class GeocoderLocationUtils {
         if (!isValidCity(city)) {
             return buildDefaultGeocoderApiUrl();
         }
-        else if (!isValidCountryCode(countryCode)) { //Country code is not required
+        else if (!isValidCountryName(countryCode)) { //Country code is not required
             uri = URI.create(GEOCODER_API_BASE_URL + cityName + API_KEY_QUERY);
         } else { // City and country are valid
             uri = URI.create(GEOCODER_API_BASE_URL + cityName + "," + countryCode + API_KEY_QUERY);
         }
         Log.d(LOG_TAG, "Google maps Geocoder API url: " + uri.toString());
+        System.out.println("Google maps Geocoder API url: " + uri.toString());
+
         try {
             return uri.toURL();
         } catch (MalformedURLException e) {

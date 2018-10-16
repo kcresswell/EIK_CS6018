@@ -26,14 +26,13 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.mcresswell.project01.R;
-import com.example.mcresswell.project01.ViewModels.FitnessProfileViewModel;
+import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.util.Constants;
 
 import static com.example.mcresswell.project01.util.ValidationUtils.isNotNullOrEmpty;
-import static com.example.mcresswell.project01.util.ValidationUtils.isValidAlphaChars;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidCity;
-import static com.example.mcresswell.project01.util.ValidationUtils.isValidCountryCode;
+import static com.example.mcresswell.project01.util.ValidationUtils.isValidCountryName;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidDobFormat;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidHeight;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidName;
@@ -384,8 +383,8 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
             Toast.makeText(getContext(), "Invalid city.", Toast.LENGTH_SHORT).show();
             return false;
         }
-        else if (!isValidCountryCode(etxt_country.getText().toString())) {
-            Toast.makeText(getContext(), "Please enter a valid 2-character country code.", Toast.LENGTH_SHORT).show();
+        else if (!isValidCountryName(etxt_country.getText().toString())) {
+            Toast.makeText(getContext(), "Please enter a valid 2-letter country code.", Toast.LENGTH_SHORT).show();
             return false;
         }
         else if (!isValidWeight(etxt_weight.getText().toString())) {

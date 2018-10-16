@@ -1,4 +1,4 @@
-package com.example.mcresswell.project01.Activities;
+package com.example.mcresswell.project01.activities;
 
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;

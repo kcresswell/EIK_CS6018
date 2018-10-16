@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static com.example.mcresswell.project01.util.ValidationUtils.isNotNullOrEmpty;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidCity;
-import static com.example.mcresswell.project01.util.ValidationUtils.isValidCountryCode;
+import static com.example.mcresswell.project01.util.ValidationUtils.isValidCountryName;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidDobFormat;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidEmail;
 import static org.junit.Assert.*;
@@ -70,12 +70,15 @@ public class ValidationUtilsUnitTest {
     }
 
     @Test
-    public void isValidCityisValidCountryCode_validInput() {
+    public void isValidCity_validInput() {
         assertTrue(isValidCity("provo"));
         assertTrue(isValidCity("salt lake"));
         assertTrue(isValidCity("NEW YORK CITY"));
-        assertTrue(isValidCountryCode("CA"));
-        assertTrue(isValidCountryCode("us "));
+    }
 
+    @Test
+    public void isValidCountryName_() {
+        assertTrue(isValidCountryName("United States"));
+        assertFalse(isValidCountryName(null));
     }
 }
