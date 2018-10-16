@@ -2,12 +2,8 @@ package com.example.mcresswell.project01.fragments;
 
 
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.mcresswell.project01.R;
-import com.example.mcresswell.project01.ViewModels.FitnessProfileViewModel;
+import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.util.Constants;
 import com.example.mcresswell.project01.util.FitnessProfileUtils;
@@ -25,7 +21,6 @@ import java.util.Locale;
 
 import static com.example.mcresswell.project01.util.Constants.CREATE_VIEW;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateCalories;
-import static com.example.mcresswell.project01.util.FitnessProfileUtils.printUserProfileData;
 
 public class FitnessDetailsFragment extends Fragment {
 

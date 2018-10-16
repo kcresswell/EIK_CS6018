@@ -67,7 +67,7 @@ public class WeatherClient {
             s = new Scanner(connection.getInputStream());
 
             if (connection.getResponseCode() != 200) {
-                System.out.println("Error ResponseCode: " + connection.getResponseCode());
+                Log.d(LOG_TAG,"Error ResponseCode: " + connection.getResponseCode());
                 return response.append(INVALID_CITY_URL_JSON_RESPONSE).toString();
             }
 

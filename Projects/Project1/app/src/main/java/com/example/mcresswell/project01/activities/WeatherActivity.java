@@ -1,4 +1,4 @@
-package com.example.mcresswell.project01.Activities;
+package com.example.mcresswell.project01.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;

@@ -16,7 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.mcresswell.project01.R;
-import com.example.mcresswell.project01.ViewModels.FitnessProfileViewModel;
+import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.util.Constants;
 

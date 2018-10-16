@@ -1,4 +1,4 @@
-package com.example.mcresswell.project01;
+package com.example.mcresswell.project01.ui;
 
 import android.graphics.drawable.Drawable;
 

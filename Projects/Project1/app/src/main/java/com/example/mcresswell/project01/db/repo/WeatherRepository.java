@@ -18,6 +18,8 @@ import java.util.List;
 
 import static com.example.mcresswell.project01.util.WeatherUtils.DEFAULT_CITY;
 import static com.example.mcresswell.project01.util.WeatherUtils.DEFAULT_COUNTRY;
+import static com.example.mcresswell.project01.util.WeatherUtils.formatCaseCity;
+import static com.example.mcresswell.project01.util.WeatherUtils.formatCaseCountryCodeFromCountryName;
 
 /**
  * Repository/model class for the Weather entity that handles all business logic associated
@@ -27,12 +29,11 @@ import static com.example.mcresswell.project01.util.WeatherUtils.DEFAULT_COUNTRY
  * passed to the WeatherViewModel class.
  */
 
-//TODO: MOVE EXISTING BUSINESS LOG_TAGIC FROM WEATHERVIEWMODEL TO WEATHERREPOSITORY
 public class WeatherRepository {
 
     private static final String LOG_TAG = WeatherRepository.class.getSimpleName();
 
-    public static final int DATA_REFRESH_INTERVAL = 5; //If weather data is older than 5 minutes, refetch data
+    public static final long DATA_REFRESH_INTERVAL = 300L; //If weather data is older than 5 minutes, refetch data
 
     private WeatherDao mWeatherDao;
     private InStyleDatabase inStyleDatabase;
@@ -48,7 +49,16 @@ public class WeatherRepository {
 
 //        asyncResetWeatherDatabase();
 
-        asyncInsertWeather(testWeatherDatabaseRecord());
+        //Populate with test data record by direct insertion into database
+        //        asyncInsertWeather(testWeatherDatabaseRecord());
+
+
+        //Retrieve additional data to insert into the database by making API calls to fetch real-time weather
+
+//        asyncFetchWeatherFromApi("Tokyo", "JP", false);
+//        asyncFetchWeatherFromApi("Seoul", "KR", false);
+//        asyncFetchWeatherFromApi("Hong Kong", null, false);
+//        asyncFetchWeatherFromApi("NEW YORK", "US", false);
 
         addLiveDataListenerSources();
 
@@ -98,6 +108,50 @@ public class WeatherRepository {
         return weatherRepository;
     }
 
+    private boolean isWeatherDataExpired(Weather weather) {
+        if (weather == null) {
+            return false;
+        }
+        Instant lastUpdated = weather.getLastUpdated().toInstant();
+        long differential = Instant.now().toEpochMilli() - lastUpdated.toEpochMilli();
+
+        return  differential > DATA_REFRESH_INTERVAL;
+    }
+
+    public void loadWeatherData(String city, String country) {
+        LiveData<Weather> result = findInDatabase(city, country);
+        
+        if (m_observableWeather.getValue() != null) {
+
+            String resultCity = m_observableWeather.getValue().getCity();
+            String resultCountry = m_observableWeather.getValue().getCountryCode();
+//            String resultCity = result.getValue().getCity();
+//            String resultCountry = result.getValue().getCountryCode();
+
+            if ((city.equalsIgnoreCase(resultCity) &&
+                    country.equalsIgnoreCase(resultCountry)) ||
+                    (resultCountry == null &&  city.equalsIgnoreCase(resultCity))) {
+
+                Log.d(LOG_TAG, "loadWeatherData() Weather data was found in database!!!! Now just need to check to see whether weather data is more than 5 minutes old!!!! ");
+
+                if (isWeatherDataExpired(result.getValue())) {
+                    asyncFetchWeatherFromApi(city, country, true);
+
+                    return;
+                }
+
+                //Otherwise do nothing (weather data retrieved from database is less than 5 minutes old)
+
+            } else { //Didn't find a matching record in the database, fetch from API then insert into database
+                Log.d(LOG_TAG, String.format("No existing weather data record for %s, %s exists in the database", city, country));
+
+                Log.d(LOG_TAG, "Fetching data for the first time from OpenWeatherAPI . . .");
+
+                asyncFetchWeatherFromApi(city, country, false);
+            }
+        }
+    }
+
     ////////////////////////// GETTERS /////////////////////////////
 
 
@@ -110,38 +164,85 @@ public class WeatherRepository {
     ////////////////// CRUD Database Operations ////////////////////
 
     public void insert(Weather weather) {
+        weather.setCity(formatCaseCity(weather.getCity()));
+        weather.setCountryCode(formatCaseCountryCodeFromCountryName(weather.getCountryCode()));
+
         asyncInsertWeather(weather);
     }
 
-    public LiveData<Weather> find(String city, String country) {
-        m_observableWeather.addSource(mWeatherDao.findWeatherByLocation(city, country), weather -> {
-            if (weather != null) {
-                Log.d(LOG_TAG, String.format("findWeatherByLocation() for %s,%s LiveData<User> onChanged",
-                        weather.getCity(),
-                        weather.getCountryCode()));
-                if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
-                    Log.d(LOG_TAG, "Broadcasting findWeatherByLocation() result to its observers... ");
-                    m_observableWeather.setValue(weather);
-                }
-            }
-        });
+    public LiveData<Weather> findInDatabase(String city, String country) {
+        String cityScrubbed = formatCaseCity(city);
+        String countryScrubbed = formatCaseCountryCodeFromCountryName(country);
+        m_observableWeather.addSource(
+                mWeatherDao.findWeatherByLocation(cityScrubbed, countryScrubbed), weather -> {
+                    if (weather != null) {
+                        Log.d(LOG_TAG, String.format("findWeatherByLocation() for %s,%s LiveData<User> onChanged",
+                                cityScrubbed,
+                                countryScrubbed));
+                        if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
+                            Log.d(LOG_TAG, "Broadcasting findWeatherByLocation() result to its observers... ");
+                            m_observableWeather.setValue(weather);
+                        }
+                    }
+                });
 
-        asyncLoadWeatherFromDatabase(city, country);
+        asyncLoadWeatherFromDatabase(cityScrubbed, countryScrubbed);
 
         return m_observableWeather;
     }
 
 
     public void update(Weather weather) {
+        weather.setCity(formatCaseCity(weather.getCity()));
+        weather.setCountryCode(formatCaseCountryCodeFromCountryName(weather.getCountryCode()));
+
         asyncUpdateWeather(weather);
     }
 
-    public void delete(Weather weather) {
-        asyncDeleteWeather(weather);
-    }
+//    public void delete(Weather weather) {
+//        weather.setCity(formatCaseCity(weather.getCity()));
+//        weather.setCountryCode(formatCaseCountryCodeFromCountryName(weather.getCountryCode()));
+//
+//        asyncDeleteWeather(weather);
+//    }
 
     public void deleteAll() {
         asyncDeleteAllWeatherDataFromDatabase();
+    }
+
+    ///////////// ASYNC TASKS FOR FETCHING REAL-TIME WEATHER DATA FROM WEATHER API ///////////////
+
+    @SuppressLint("StaticFieldLeak")
+    private void asyncFetchWeatherFromApi(String city, String country, boolean isDataRefresh) {
+        new AsyncTask<String, Void, Weather>() {
+            @Override
+            protected Weather doInBackground(String... params) {
+                String city = params[0];
+                String country = params[1];
+
+                Log.d(LOG_TAG, String.format(
+                        "Fetching real-time weather data from OpenWeatherMap API for %s, %s", city, country));
+
+                Weather weatherData = weatherClient.fetchCurrentWeather(city, country);
+
+
+                Log.d(LOG_TAG, String.format(
+                        "Inserting weather data fetched from OpenWeatherMap API for %s, %s into database", weatherData.getCity(), weatherData.getCountryCode()));
+
+                if (isDataRefresh) { //Update existing data record for previously fetched location
+                    mWeatherDao.updateWeather(weatherData);
+                } else { //Weather data not previously fetched before, insert
+                    mWeatherDao.insertWeather(weatherData);
+                }
+
+                return weatherData;
+            }
+
+            @Override
+            protected void onPostExecute(Weather weather) {
+                m_observableWeather.setValue(weather);
+            }
+        }.execute(city, country);
     }
 
     //////////// ASYNC TASKS FOR A SINGLE WEATHER RECORD /////////////
@@ -228,30 +329,11 @@ public class WeatherRepository {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-//                LiveData<Integer> numRecords = mUserDao.getUserCount();
-//                if (numRecords.getValue() != null && numRecords.getValue() >= MAX_USERS) {
-//                    Log.d(LOG_TAG, "Number of records in User table exceeds max. Resetting database contents");
                 mWeatherDao.deleteAllWeather();
-//                }
+
                 return null;
             }
         }.execute();
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    @SuppressWarnings("unchecked")
-    public void asyncPopulateDatabaseWeatherData(List<Weather> weatherList) {
-        new AsyncTask<List<Weather>, Void, Void>() {
-            @Override
-            protected Void doInBackground(List<Weather>... params) {
-
-                Log.d(LOG_TAG, "Inserting test data into database table to populate.");
-                //Insert randomly generated weather data
-                mWeatherDao.insertAllWeather(params[0]);
-
-                return null;
-            }
-        }.execute(weatherList);
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -292,36 +374,12 @@ public class WeatherRepository {
         }.execute();
     }
 
-    ///////////// ASYNC TASKS FOR FETCHING REAL-TIME WEATHER DATA FROM WEATHER API ///////////////
-
-    @SuppressLint("StaticFieldLeak")
-    private void asyncFetchWeatherFromApi(String city, String country) {
-        new AsyncTask<String, Void, Weather>() {
-            @Override
-            protected Weather doInBackground(String... params) {
-                String city = params[0];
-                String country = params[1];
-
-                Log.d(LOG_TAG, String.format(
-                        "Fetching real-time weather data from OpenWeatherMap API for %s, %s", city, country));
-
-                Weather weatherData = weatherClient.fetchCurrentWeather(city, country);
-                return weatherData;
-            }
-
-            @Override
-            protected void onPostExecute(Weather weather) {
-                m_observableWeather.setValue(weather);
-            }
-        }.execute(city, country);
-    }
-
     /////////////////////////////////////////////////////////////////////////////////////////////
 
     private Weather testWeatherDatabaseRecord() {
         Weather weather = new Weather();
-        weather.setCity(DEFAULT_CITY.replace("+", " "));
-        weather.setCountryCode(DEFAULT_COUNTRY);
+        weather.setCity(formatCaseCity(DEFAULT_CITY));
+        weather.setCountryCode(formatCaseCountryCodeFromCountryName(DEFAULT_COUNTRY));
         weather.setLatitude(Float.parseFloat("40.77"));
         weather.setLongitude(Float.parseFloat("-111.89"));
         weather.setForecastMain("Clouds");

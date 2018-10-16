@@ -1,4 +1,4 @@
-package com.example.mcresswell.project01.ViewModels;
+package com.example.mcresswell.project01.viewmodel;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
@@ -9,7 +9,6 @@ import com.example.mcresswell.project01.db.entity.User;
 import com.example.mcresswell.project01.db.repo.UserRepository;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

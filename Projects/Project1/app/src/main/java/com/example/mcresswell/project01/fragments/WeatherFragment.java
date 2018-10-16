@@ -17,8 +17,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.mcresswell.project01.R;
-import com.example.mcresswell.project01.ViewModels.FitnessProfileViewModel;
-import com.example.mcresswell.project01.ViewModels.WeatherViewModel;
+import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
+import com.example.mcresswell.project01.viewmodel.WeatherViewModel;
 import com.example.mcresswell.project01.db.entity.Weather;
 import com.example.mcresswell.project01.util.Constants;
 import com.example.mcresswell.project01.util.WeatherUtils;
@@ -28,10 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.example.mcresswell.project01.util.WeatherUtils.DEFAULT_CITY;
-import static com.example.mcresswell.project01.util.WeatherUtils.DEFAULT_COUNTRY;
 import static com.example.mcresswell.project01.util.WeatherUtils.convertAndFormatKelvinTemp;
-import static com.example.mcresswell.project01.util.WeatherUtils.formatTemp;
 
 
 /**
@@ -72,24 +69,7 @@ public class WeatherFragment extends ListFragment {
 
         configureViewModels();
 
-        weatherViewModel.findWeather(DEFAULT_CITY, DEFAULT_COUNTRY);
 
-//        weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
-//        weatherViewModel.getWeather().observe(this, weatherObserver);
-//
-//        fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
-//
-//        subscribeToUserProfileModel();
-
-
-//        String city = getActivity().getIntent().getStringExtra("city");
-//        String country = getActivity().getIntent().getStringExtra("country");
-//
-//        dialog = new ProgressDialog(getContext());
-//        dialog.setMessage(String.format("Loading weather for %s, %s...", city.replace("+", " "), country));
-//        dialog.show();
-
-//        loadWeatherData(city, country);
     }
 
     private void configureViewModels() {
@@ -112,7 +92,10 @@ public class WeatherFragment extends ListFragment {
                 Log.d(LOG_TAG, "FitnessProfileViewModel onChanged listener: an update to the value of the fitness" +
                         "profile stored by the view model has occurred");
 
-                weatherViewModel.findWeather(fitnessProfile.getM_city(), fitnessProfile.getM_country());
+                Log.d(LOG_TAG, String.format("Loading weather for user's location of %s, %s",
+                        fitnessProfile.getM_city(), fitnessProfile.getM_country()));
+
+                weatherViewModel.loadWeather(fitnessProfile.getM_city(), fitnessProfile.getM_country());
             }
         });
     }

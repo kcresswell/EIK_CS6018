@@ -13,13 +13,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.mcresswell.project01.Activities.CreateAccountActivity;
-import com.example.mcresswell.project01.Activities.DashboardActivity;
+import com.example.mcresswell.project01.activities.CreateAccountActivity;
+import com.example.mcresswell.project01.activities.DashboardActivity;
 import com.example.mcresswell.project01.R;
-import com.example.mcresswell.project01.ViewModels.UserListViewModel;
-import com.example.mcresswell.project01.ViewModels.UserViewModel;
-import com.example.mcresswell.project01.ViewModels.WeatherListViewModel;
-import com.example.mcresswell.project01.ViewModels.WeatherViewModel;
+import com.example.mcresswell.project01.viewmodel.UserListViewModel;
+import com.example.mcresswell.project01.viewmodel.UserViewModel;
+import com.example.mcresswell.project01.viewmodel.WeatherListViewModel;
+import com.example.mcresswell.project01.viewmodel.WeatherViewModel;
 import com.example.mcresswell.project01.db.entity.User;
 
 import static com.example.mcresswell.project01.util.Constants.CREATE_VIEW;
@@ -46,6 +46,12 @@ public class LoginFragment extends Fragment {
 
         configureViewModels();
 
+        weatherViewModel.loadWeather("TOKYO", "JP");
+//
+        if (weatherViewModel.getWeather().getValue() != null) {
+            Log.d(LOG_TAG, " !!!!!!!!!!!!!!! " + weatherViewModel.getWeather().getValue().getCity() + "\t" + weatherViewModel.getWeather().getValue().getCountryCode() + " !!!!!!!!!!!!!");
+        }
+
     }
 
     private void configureViewModels() {
@@ -55,6 +61,20 @@ public class LoginFragment extends Fragment {
             if (userList != null) {
                 Log.d(LOG_TAG, "Update to user list view model");
                 Log.d(LOG_TAG, "Number of users in User database: " + userList.size());
+
+                Log.d(LOG_TAG, "------------------------------------------");
+
+                Log.d(LOG_TAG, "PRINTING USERS IN USER DATABASE");
+                Log.d(LOG_TAG, "\n");
+
+                userList.forEach(users -> {
+                    Log.d(LOG_TAG, "\nUser data record: " + users.getId() + "\t'" + users.getEmail() + "'\t'" + users.getFirstName() + "'\t'" + users.getLastName() + "'\t'" + users.getJoinDate() + "'\t'" + users.getFitnessProfileId() + "'");
+                });
+
+                Log.d(LOG_TAG, "\n");
+                Log.d(LOG_TAG, "------------------------------------------");
+
+
             }
         });
 
@@ -72,9 +92,16 @@ public class LoginFragment extends Fragment {
                 Log.d(LOG_TAG, "Update to weather list view model");
                 Log.d(LOG_TAG, "Number of weather records in Weather database: " + weatherList.size());
 
+                Log.d(LOG_TAG, "------------------------------------------");
+
+                Log.d(LOG_TAG, "PRINTING WEATHER RECORDS IN WEATHER DATABASE");
+                Log.d(LOG_TAG, "\n");
                 weatherList.forEach(weather -> {
-                    Log.d(LOG_TAG, "Data record:  \t'" + weather.getCity() + "'\t'" + weather.getCountryCode() + "'\t'" + weather.getLastUpdated() + "'");
+                    Log.d(LOG_TAG, "\nWeather Data record: " + weather.getId() + "\t'" + weather.getCity() + "'\t'" + weather.getCountryCode() + "'\t'" + weather.getLastUpdated() + "'");
                 });
+
+                Log.d(LOG_TAG, "\n");
+                Log.d(LOG_TAG, "------------------------------------------");
             }
         });
 
