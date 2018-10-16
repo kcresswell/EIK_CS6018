@@ -21,7 +21,7 @@ public class WeatherUtils {
     private static final String OWM_API_KEY = "718324f1015a96a2369287e867133dd9";
     private static final String API_KEY_QUERY = "&appid=" + OWM_API_KEY;
 
-    public static final String DEFAULT_CITY = "SALT+LAKE+CITY";
+    public static final String DEFAULT_CITY = "SALT LAKE CITY";
     public static final String DEFAULT_COUNTRY = "US";
     public static final String INVALID_CITY_URL_JSON_RESPONSE = "{\"cod\":\"404\",\"message\":\"city not found\"}";
 
@@ -37,9 +37,9 @@ public class WeatherUtils {
         }
         URI uri = null;
         if (!isValidCountryCode(countryCode)) {
-            uri = URI.create(getAbsoluteUrl( city + API_KEY_QUERY));
+            uri = URI.create(getAbsoluteUrl( city.replace(" ", "+") + API_KEY_QUERY));
         } else {
-            uri = URI.create(getAbsoluteUrl(city + "," + countryCode + API_KEY_QUERY));
+            uri = URI.create(getAbsoluteUrl(city.replace(" ", "+") + "," + countryCode + API_KEY_QUERY));
         }
         Log.d(LOG, "Weather url: " + uri.toString());
         try {
@@ -53,7 +53,7 @@ public class WeatherUtils {
 
     public static URL buildDefaultWeatherApiUrl() {
         try {
-            return URI.create(getAbsoluteUrl(DEFAULT_CITY + "," +
+            return URI.create(getAbsoluteUrl(DEFAULT_CITY.replace(" ", "+") + "," +
                     DEFAULT_COUNTRY + API_KEY_QUERY)).toURL();
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -87,5 +87,22 @@ public class WeatherUtils {
 
     public static String formatTemp(double farenheitTemp) {
         return String.format(Locale.US, "%.1f", farenheitTemp) + FARENHEIT;
+    }
+
+    public static String formatCaseCity(String city) {
+        if (!isValidCity(city)) {
+            return null;
+        }
+        String formattedCity = "";
+        String[] cityName = city.split( "\\s+");
+        for (String each : cityName) {
+            String s = each.substring(0,1).toUpperCase() + each.substring(1).toLowerCase();
+            formattedCity  +=  s + " ";
+        }
+        return formattedCity.trim();
+    }
+
+    public static String formatCaseCountryCode(String country) {
+        return isValidCountryCode(country) ? country.toUpperCase().trim() : null;
     }
 }

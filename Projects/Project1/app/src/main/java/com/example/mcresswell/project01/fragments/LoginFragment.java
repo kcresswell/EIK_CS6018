@@ -46,6 +46,12 @@ public class LoginFragment extends Fragment {
 
         configureViewModels();
 
+        weatherViewModel.loadWeather("TOKYO", "JP");
+
+        if (weatherViewModel.getWeather().getValue() != null) {
+            Log.d(LOG_TAG, " !!!!!!!!!!!!!!! " + weatherViewModel.getWeather().getValue().getCity() + "\t" + weatherViewModel.getWeather().getValue().getCountryCode() + " !!!!!!!!!!!!!");
+        }
+
     }
 
     private void configureViewModels() {
@@ -73,7 +79,7 @@ public class LoginFragment extends Fragment {
                 Log.d(LOG_TAG, "Number of weather records in Weather database: " + weatherList.size());
 
                 weatherList.forEach(weather -> {
-                    Log.d(LOG_TAG, "Data record:  \t'" + weather.getCity() + "'\t'" + weather.getCountryCode() + "'\t'" + weather.getLastUpdated() + "'");
+                    Log.d(LOG_TAG, "Weather Data record: " + weather.getId() + "\t'" + weather.getCity() + "'\t'" + weather.getCountryCode() + "'\t'" + weather.getLastUpdated() + "'");
                 });
             }
         });

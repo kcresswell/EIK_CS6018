@@ -72,24 +72,7 @@ public class WeatherFragment extends ListFragment {
 
         configureViewModels();
 
-        weatherViewModel.findWeather(DEFAULT_CITY, DEFAULT_COUNTRY);
 
-//        weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
-//        weatherViewModel.getWeather().observe(this, weatherObserver);
-//
-//        fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
-//
-//        subscribeToUserProfileModel();
-
-
-//        String city = getActivity().getIntent().getStringExtra("city");
-//        String country = getActivity().getIntent().getStringExtra("country");
-//
-//        dialog = new ProgressDialog(getContext());
-//        dialog.setMessage(String.format("Loading weather for %s, %s...", city.replace("+", " "), country));
-//        dialog.show();
-
-//        loadWeatherData(city, country);
     }
 
     private void configureViewModels() {

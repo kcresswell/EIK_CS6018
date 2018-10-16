@@ -1,22 +1,17 @@
 package com.example.mcresswell.project01.ViewModels;
 
-import android.annotation.SuppressLint;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.mcresswell.project01.db.InStyleDatabase;
 import com.example.mcresswell.project01.db.entity.Weather;
 import com.example.mcresswell.project01.db.repo.WeatherRepository;
-import com.example.mcresswell.project01.weather.WeatherClient;
-import com.example.mcresswell.project01.weather.WeatherForecast;
 
-import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Map;
 
@@ -62,23 +57,21 @@ public class WeatherViewModel extends AndroidViewModel {
             m_observableWeather.setValue(data);
         });
     }
+    public void loadWeather(String city, String country) {
+        m_weatherRepository.loadWeatherData(city, country);
+    }
 
     public void deleteAllWeather() {
         m_weatherRepository.deleteAll();
     }
 
-    public void createWeather(Weather weather) {
-        m_weatherRepository.insert(weather);
-    }
 
-    public void updateExpiredWeather(Weather weather) {
-        m_weatherRepository.update(weather);
-    }
 
     public LiveData<Weather> findWeather(String city, String country) {
-        LiveData<Weather> weatherResult = m_weatherRepository.find(city, country);
+        LiveData<Weather> weatherResult = m_weatherRepository.findInDatabase(city, country);
         if (weatherResult.getValue() != null) {
             Log.d(LOG, String.format("Weather record for %s, %s found in repo", city, country));
+
         }
         return weatherResult;
     }
