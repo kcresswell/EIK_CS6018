@@ -1,6 +1,5 @@
 package com.example.mcresswell.project01.activities;
 
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Build;
