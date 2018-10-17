@@ -1,7 +1,6 @@
 package com.example.mcresswell.project01.activities;
 
 import android.app.Activity;
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
@@ -39,7 +38,7 @@ public class DashboardActivity extends AppCompatActivity implements
     private final String LOG = getClass().getSimpleName();
 
     private FragmentTransaction m_fTrans;
-    private MutableLiveData<FitnessProfile> m_fitnessProfile;
+    private FitnessProfile m_fitnessProfile;
     private FitnessProfileViewModel m_fitnessProfileViewModel;
 
     @Override
@@ -51,14 +50,12 @@ public class DashboardActivity extends AppCompatActivity implements
         restoreDefaultDashboardView();
 
         initViewModel();
-
-        m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile();
-
     }
 
     private void initViewModel() {
 //        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile.setValue(fitnessProfile);
-        m_fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
+        m_fitnessProfileViewModel = ViewModelProviders.of(this)
+                .get(FitnessProfileViewModel.class);
 //        m_fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfileObserver);
     }
 
@@ -130,7 +127,7 @@ public class DashboardActivity extends AppCompatActivity implements
             coords = DEFAULT_COORDINATES;
         } else {
             try {
-                coords = getCoordinatesFromCityCountry(m_fitnessProfile.getValue().getM_city(), m_fitnessProfile.getValue().getM_country());
+                coords = getCoordinatesFromCityCountry(m_fitnessProfile.getM_city(), m_fitnessProfile.getM_country());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -157,10 +154,10 @@ public class DashboardActivity extends AppCompatActivity implements
     private void weatherButtonHandler() {
         String city = WeatherUtils.DEFAULT_CITY;
         String country = WeatherUtils.DEFAULT_COUNTRY;
-        if (m_fitnessProfile.getValue() != null) {
+        if (m_fitnessProfile != null) {
             Log.d(LOG, "weatherButtonHandler: at least the user profile object has data ..?");
-            city = m_fitnessProfile.getValue().getM_city();
-            country = m_fitnessProfile.getValue().getM_country();
+            city = m_fitnessProfile.getM_city();
+            country = m_fitnessProfile.getM_country();
         }
 
         if (!isWideDisplay()) { //Load WeatherActivity in mobile
