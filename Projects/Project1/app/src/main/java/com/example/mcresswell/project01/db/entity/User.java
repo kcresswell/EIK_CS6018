@@ -39,8 +39,8 @@ public class User {
     @ColumnInfo(name = "last_name")
     private String lastName;
 
-    @ColumnInfo(name = "profile_id")
-    private int fitnessProfileId; //FK to id of user in FitnessProfile table
+//    @ColumnInfo(name = "profile_id")
+//    private int fitnessProfileId; //FK to id of user in FitnessProfile table
 
     @ColumnInfo(name = "join_date")
     private Date joinDate;
@@ -77,11 +77,11 @@ public class User {
 
     public void setLastName(String lastName) { this.lastName = lastName; }
 
-    public int getFitnessProfileId() {
-        return fitnessProfileId;
-    }
-
-    public void setFitnessProfileId(int fitnessProfileId) { this.fitnessProfileId = fitnessProfileId; }
+//    public int getFitnessProfileId() {
+//        return fitnessProfileId;
+//    }
+//
+//    public void setFitnessProfileId(int fitnessProfileId) { this.fitnessProfileId = fitnessProfileId; }
 
     public Date getJoinDate() {
         return joinDate;
