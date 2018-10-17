@@ -135,21 +135,6 @@
                 app:layout_constraintTop_toTopOf="@+id/txtv_weight2"
                 app:layout_constraintVertical_bias="0.49" />
 
-            <EditText
-                android:id="@+id/txtv_weight2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:ems="10"
-                android:hint="@string/hint_wkly_goal"
-                android:inputType="number"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toStartOf="@+id/txtv_lbs_symbol2"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtv_divider_goal" />
-
             <!--Profile Entry Input Fields-->
 
             <EditText
@@ -282,9 +267,9 @@
                 android:id="@+id/radiogp_lifestyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="@+id/txtv_weight"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -308,6 +293,21 @@
                     android:textSize="18sp" />
 
             </RadioGroup>
+
+            <EditText
+                android:id="@+id/txtv_weight2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:hint="@string/hint_wkly_goal"
+                android:inputType="number"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toStartOf="@+id/txtv_lbs_symbol2"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtv_divider_goal" />
 
             <RadioGroup
                 android:id="@+id/radiogp_weightGoal"

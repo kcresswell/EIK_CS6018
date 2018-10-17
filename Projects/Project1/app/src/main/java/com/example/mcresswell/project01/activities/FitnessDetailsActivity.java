@@ -26,7 +26,6 @@ public class FitnessDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_fitness);
 
         initViewModel();
-        m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile();
 
         //present fragment to display
         m_fTrans = getSupportFragmentManager().beginTransaction();
