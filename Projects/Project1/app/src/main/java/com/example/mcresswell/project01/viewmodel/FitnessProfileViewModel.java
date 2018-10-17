@@ -1,21 +1,12 @@
-package com.example.mcresswell.project01.ViewModels;
+package com.example.mcresswell.project01.viewmodel;
 
-import android.annotation.SuppressLint;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.util.Log;
 
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.db.repo.FitnessProfileRepository;
-
-import static android.support.constraint.Constraints.TAG;
-import static com.example.mcresswell.project01.util.FitnessProfileUtils.printUserProfileData;
 
 public class FitnessProfileViewModel extends AndroidViewModel {
 

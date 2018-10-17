@@ -1,11 +1,9 @@
 package com.example.mcresswell.project01.db.repo;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import com.example.mcresswell.project01.db.InStyleDatabase;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
-import com.example.mcresswell.project01.util.SampleProfileData;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 

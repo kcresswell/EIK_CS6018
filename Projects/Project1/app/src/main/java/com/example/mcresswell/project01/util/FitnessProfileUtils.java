@@ -97,7 +97,6 @@ public class FitnessProfileUtils {
         return feet * 12 + inches;
     }
 
-    //helper functions
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static int calculateAge(String m_dob) {
         DateTimeFormatter dob_format = DateTimeFormatter.ofPattern("MM/dd/yyyy");

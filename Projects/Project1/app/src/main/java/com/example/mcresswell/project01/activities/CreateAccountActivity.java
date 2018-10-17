@@ -1,4 +1,4 @@
-package com.example.mcresswell.project01.Activities;
+package com.example.mcresswell.project01.activities;
 
 import android.content.Intent;
 import android.os.Bundle;

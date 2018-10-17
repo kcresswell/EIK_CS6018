@@ -1,7 +1,6 @@
 package com.example.mcresswell.project01.fragments;
 
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,10 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.example.mcresswell.project01.DashButton;
+import com.example.mcresswell.project01.ui.DashButton;
 import com.example.mcresswell.project01.R;
-import com.example.mcresswell.project01.RV_Adapter;
-import com.example.mcresswell.project01.ViewModels.FitnessProfileViewModel;
+import com.example.mcresswell.project01.ui.RV_Adapter;
+import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 
 import java.util.ArrayList;
 

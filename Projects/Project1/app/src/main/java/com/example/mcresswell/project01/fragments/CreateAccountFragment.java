@@ -13,9 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.mcresswell.project01.Activities.ProfileEntryActivity;
+import com.example.mcresswell.project01.activities.ProfileEntryActivity;
 import com.example.mcresswell.project01.R;
-import com.example.mcresswell.project01.ViewModels.UserViewModel;
+import com.example.mcresswell.project01.viewmodel.UserViewModel;
 import com.example.mcresswell.project01.db.entity.User;
 import com.example.mcresswell.project01.util.Constants;
 

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.CreateAccountActivity">
+    tools:context=".activities.CreateAccountActivity">
 
     <FrameLayout
         android:id="@+id/fl_create_account_nd"

@@ -1,4 +1,4 @@
-package com.example.mcresswell.project01.ViewModels;
+package com.example.mcresswell.project01.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -34,10 +34,6 @@ public class WeatherListViewModel extends AndroidViewModel {
         LiveData<List<Weather>> weatherData = m_weatherRepository.getAllWeather();
 
         m_observableWeatherList.addSource(weatherData, m_observableWeatherList::setValue);
-    }
-
-    public void deleteAlLWeatherDataFromDatabase() {
-        m_weatherRepository.deleteAll();
     }
 
     public LiveData<List<Weather>> getWeatherDataFromDatabase() {

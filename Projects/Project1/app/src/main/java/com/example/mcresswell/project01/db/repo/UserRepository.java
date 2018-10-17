@@ -46,14 +46,17 @@ public class UserRepository {
         mUserDao = inStyleDatabase.userDao();
 
         //Clear out User database
-        asyncResetUserDatabase();
+//        asyncResetUserDatabase();
 
-        asyncInsertTestUser();
+//        asyncInsertTestUser("test@test.com");
+//        asyncInsertTestUser("testtest@test.com");
+//        asyncInsertTestUser("hello@kitty.com");
 
-        List<User> testUsers = UserGenerator.generateUserData(NUM_TEST_USERS);
+
+//        List<User> testUsers = UserGenerator.generateUserData(NUM_TEST_USERS);
 
         //Populate with randomly generated test data
-        asyncPopulateUsers(testUsers);
+//        asyncPopulateUsers(testUsers);
 
         Log.d(LOG_TAG, "Users generated and added to database.");
 
@@ -302,22 +305,21 @@ public class UserRepository {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private void asyncInsertTestUser() {
+    private void asyncInsertTestUser(String email) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
 
-                insertTestUser();
+                insertTestUser(email);
 
-                Log.d(LOG_TAG, "INSERTING TEST USER . . .");
                 return null;
             }
         }.execute();
     }
 
-    private void insertTestUser() {
+    private void insertTestUser(String email) {
         User testUser = new User();
-        testUser.setEmail("test@test.com");
+        testUser.setEmail(email);
         testUser.setPassword("password");
         testUser.setFirstName("Hello");
         testUser.setLastName("Kitty");

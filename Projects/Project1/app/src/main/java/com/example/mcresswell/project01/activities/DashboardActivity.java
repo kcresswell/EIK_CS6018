@@ -1,7 +1,6 @@
-package com.example.mcresswell.project01.Activities;
+package com.example.mcresswell.project01.activities;
 
 import android.app.Activity;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,23 +11,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.mcresswell.project01.R;
-import com.example.mcresswell.project01.RV_Adapter;
-import com.example.mcresswell.project01.ViewModels.FitnessProfileViewModel;
+import com.example.mcresswell.project01.ui.RV_Adapter;
+import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.db.entity.Weather;
 import com.example.mcresswell.project01.fragments.DashboardFragment;
 import com.example.mcresswell.project01.fragments.FitnessDetailsFragment;
-import com.example.mcresswell.project01.fragments.ProfileEntryFragment;
 import com.example.mcresswell.project01.fragments.ProfileSummaryFragment;
-import com.example.mcresswell.project01.util.SampleProfileData;
 import com.example.mcresswell.project01.util.WeatherUtils;
-import com.example.mcresswell.project01.weather.WeatherClient;
-import com.example.mcresswell.project01.weather.WeatherForecast;
 import com.example.mcresswell.project01.fragments.WeatherFragment;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.example.mcresswell.project01.util.GeocoderLocationUtils.DEFAULT_COORDINATES;
 import static com.example.mcresswell.project01.util.GeocoderLocationUtils.getCoordinatesFromCityCountry;

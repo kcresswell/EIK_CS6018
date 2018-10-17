@@ -10,9 +10,8 @@ public class ValidationUtils {
         return isValidAlphaCharsWithSpaces(city);
     }
 
-    public static boolean isValidCountryCode(String countryCode) {
-        return ValidationUtils.isNotNullOrEmpty(countryCode) &&
-                countryCode.trim().length() == 2 && isValidAlphaChars(countryCode);
+    public static boolean isValidCountryName(String countryName) {
+        return ValidationUtils.isNotNullOrEmpty(countryName) && isValidAlphaCharsWithSpaces(countryName);
     }
 
     public static boolean isValidEmail(String input) {
