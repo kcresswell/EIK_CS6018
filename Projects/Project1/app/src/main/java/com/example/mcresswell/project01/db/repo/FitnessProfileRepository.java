@@ -47,7 +47,7 @@ public class FitnessProfileRepository {
 
         m_executor.execute(
                 () -> {
-                  m_db.fitnessProfileDao().updateExistingFitnessProfileData(fitnessProfileData.getValue());
+                  m_db.fitnessProfileDao().updateExistingFitnessProfileData(fitnessProfile);
                 }
         );
     }
