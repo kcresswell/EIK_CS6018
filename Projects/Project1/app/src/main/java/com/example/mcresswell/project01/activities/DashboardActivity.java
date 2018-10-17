@@ -10,6 +10,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.fragments.LoginFragment;
@@ -90,14 +92,20 @@ public class DashboardActivity extends AppCompatActivity implements
     }
     //Logout button goes to login page
     private void logoutButtonHandler() {
-        if (!isWideDisplay()) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivityForResult(intent, Activity.RESULT_OK);
-        } else {
-            m_fTrans.replace(R.id.fl_login_wd, new LoginFragment());
-            m_fTrans.addToBackStack(null);
-            m_fTrans.commit();
-        }
+        Button logoutButton= (Button)findViewById(R.id.btn_logout);
+        logoutButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                if (!isWideDisplay()) {
+//                    Intent intent = new Intent(this, LoginActivity.class);
+//                    startActivityForResult(intent, Activity.RESULT_OK);
+                } else {
+                    m_fTrans.replace(R.id.fl_login_wd, new LoginFragment());
+                    m_fTrans.addToBackStack(null);
+                    m_fTrans.commit();
+                }
+            }
+        });
     }
 
     //btn_settings
