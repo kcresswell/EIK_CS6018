@@ -48,7 +48,7 @@ public interface FitnessProfileDao {
 
     //scenario 3
     @Insert
-    void insertNewUserData(FitnessProfile fitnessProfile);
+    void insertNewFitnessProfile(FitnessProfile fitnessProfile);
 
     //delete fitness profile data from db
     @Delete

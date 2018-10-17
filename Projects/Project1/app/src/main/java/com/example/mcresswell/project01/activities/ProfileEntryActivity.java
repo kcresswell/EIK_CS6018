@@ -1,6 +1,5 @@
 package com.example.mcresswell.project01.activities;
 
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Build;
@@ -24,7 +23,7 @@ public class ProfileEntryActivity extends AppCompatActivity
     private final String LOG = getClass().getSimpleName();
 
     private FragmentTransaction m_fTrans;
-    private MutableLiveData<FitnessProfile> m_fitnessProfile;
+    private FitnessProfile m_fitnessProfile;
     private FitnessProfileViewModel m_fitnessProfileViewModel;
     private boolean m_isLoggedIn = false;
 
@@ -38,8 +37,6 @@ public class ProfileEntryActivity extends AppCompatActivity
         setContentView(R.layout.activity_profile_entry);
 
         initViewModel();
-        m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile();
-
         loadFragment();
     }
 
@@ -50,7 +47,7 @@ public class ProfileEntryActivity extends AppCompatActivity
     }
 
     private void initViewModel() {
-//        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile.setValue(fitnessProfile);
+//        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile = fitnessProfile;
         m_fitnessProfileViewModel = ViewModelProviders.of(this)
                 .get(FitnessProfileViewModel.class);
 //        m_fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfileObserver);

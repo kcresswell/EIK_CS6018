@@ -65,7 +65,33 @@ public class FitnessProfile {
     private double m_bmr;
 //    private Bitmap m_profilePicture;
 
-    public FitnessProfile() { }
+    public FitnessProfile() {
+//        m_fName = "";
+//        m_lName = "";
+//        m_dob = "";
+//        m_sex = "";
+//        m_city = "";
+//        m_country = "";
+//        m_lifestyleSelection = "";
+//        m_weightGoal = "";
+//        m_lbsPerWeek = 0;
+//        m_weightInPounds = 225;
+//        m_heightFeet = 5;
+//        m_heightInches = 6;
+
+        m_fName = "Eric";
+        m_lName = "Test";
+        m_dob = "09/09/1990";
+        m_sex = "M";
+        m_city = "Salt Lake City";
+        m_country = "US";
+        m_lifestyleSelection = "ACTIVE";
+        m_weightGoal = "MAINTAIN";
+        m_lbsPerWeek = 0;
+        m_weightInPounds = 225;
+        m_heightFeet = 5;
+        m_heightInches = 6;
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public FitnessProfile(
