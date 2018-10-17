@@ -38,27 +38,20 @@ public class UserRepository {
     private MediatorLiveData<User> m_observableUser;
 
     private static final int NUM_TEST_USERS = 10; //Number of random test users to generate
-    private static final int MAX_USERS = 100; //Maximum allowable of users in table
+    private static final int MAX_USERS = 1000; //Maximum allowable of users in table
 
 
     private UserRepository(final InStyleDatabase database) {
         inStyleDatabase = database;
         mUserDao = inStyleDatabase.userDao();
 
-        //Clear out User database
-//        asyncResetUserDatabase();
+//        asyncInsertTestUser("test@test.com", "password", "Hello", "Kitty", Date.valueOf("2018-01-01"));
 
-//        asyncInsertTestUser("test@test.com");
-//        asyncInsertTestUser("testtest@test.com");
-//        asyncInsertTestUser("hello@kitty.com");
-
-
-//        List<User> testUsers = UserGenerator.generateUserData(NUM_TEST_USERS);
+//        List<User> testUsers = UserGenerator.generateUserData(50);
 
         //Populate with randomly generated test data
-//        asyncPopulateUsers(testUsers);
-
-        Log.d(LOG_TAG, "Users generated and added to database.");
+//        asyncPopulateWithUserList(testUsers);
+//        Log.d(LOG_TAG, "Users generated and added to database.");
 
         addLiveDataListenerSources();
 
@@ -81,14 +74,14 @@ public class UserRepository {
         m_observableUser.setValue(null);
 
         //Add listener for livedata source for User
-        m_observableUser.addSource(mUserDao.findFirstUserRecord(), user -> { //FIXME: ADDED THIS IN PURELY FOR DEBUGGING, REMOVE THIS LATER
-            if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
-
-                Log.d(LOG_TAG, "Broadcasting updated value of LiveData<User> to observers");
-
-                m_observableUser.setValue(user);
-            }
-        });
+//        m_observableUser.addSource(mUserDao.findFirstUserRecord(), user -> { //FIXME: ADDED THIS IN PURELY FOR DEBUGGING, REMOVE THIS LATER
+//            if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
+//
+//                Log.d(LOG_TAG, "Broadcasting updated value of LiveData<User> to observers");
+//
+//                m_observableUser.setValue(user);
+//            }
+//        });
     }
 
     /**
@@ -236,15 +229,16 @@ public class UserRepository {
 
     @SuppressLint("StaticFieldLeak")
     @SuppressWarnings("unchecked")
-    public void asyncResetUserDatabase() {
+    public void asyncResetUserDatabase(int numRecords) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-//                LiveData<Integer> numRecords = mUserDao.getUserCount();
-//                if (numRecords.getValue() != null && numRecords.getValue() >= MAX_USERS) {
-//                    Log.d(LOG_TAG, "Number of records in User table exceeds max. Resetting database contents");
-                mUserDao.deleteAllUsers();
-//                }
+                if (numRecords > MAX_USERS) {
+                    Log.d(LOG_TAG, String.format("Number of records in User table exceeds max of %d. Resetting database contents", MAX_USERS));
+
+                    mUserDao.deleteAllUsers();
+                }
+
                 return null;
             }
         }.execute();
@@ -252,12 +246,13 @@ public class UserRepository {
 
     @SuppressLint("StaticFieldLeak")
     @SuppressWarnings("unchecked")
-    public void asyncPopulateUsers(List<User> users) {
+    public void asyncPopulateWithUserList(List<User> users) {
         new AsyncTask<List<User>, Void, Void>() {
             @Override
             protected Void doInBackground(List<User>... params) {
 
                 Log.d(LOG_TAG, "Inserting test data into database table to populate.");
+
                 //Insert randomly generated user data
                 mUserDao.insertAllUsers(params[0]);
 
@@ -267,7 +262,7 @@ public class UserRepository {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private void asyncLoadUsers() {
+    private void asyncLoadAllUsers() {
         new AsyncTask<Void, Void, List<User>>() {
             @Override
             protected List<User> doInBackground(Void... params) {
@@ -294,6 +289,9 @@ public class UserRepository {
             protected Void doInBackground(Void... params) {
                 Log.d(LOG_TAG, "Deleting all users from database");
                 mUserDao.deleteAllUsers();
+
+//                asyncInsertTestUser("test@test.com", "password", "Hello", "Kitty", Date.valueOf("2018-01-01"));
+
                 return null;
             }
 
@@ -305,26 +303,29 @@ public class UserRepository {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private void asyncInsertTestUser(String email) {
+    private void asyncInsertTestUser(String email, String pass, String first, String last, Date date) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
 
-                insertTestUser(email);
+                insertTestUser(email, pass, first, last, date);
 
                 return null;
+
             }
         }.execute();
     }
 
-    private void insertTestUser(String email) {
+    private void insertTestUser(String email, String password,
+                                String firstName, String lastName, Date joinDate ) {
         User testUser = new User();
         testUser.setEmail(email);
-        testUser.setPassword("password");
-        testUser.setFirstName("Hello");
-        testUser.setLastName("Kitty");
-        testUser.setJoinDate(Date.valueOf("2018-01-01"));
+        testUser.setPassword(password);
+        testUser.setFirstName(firstName);
+        testUser.setLastName(lastName);
+        testUser.setJoinDate(joinDate);
         mUserDao.insertUser(testUser);
+
         Log.d(LOG_TAG, "GENERIC TEST USER successfully inserted into User database");
     }
 }

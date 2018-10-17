@@ -46,12 +46,6 @@ public class LoginFragment extends Fragment {
 
         configureViewModels();
 
-        weatherViewModel.loadWeather("TOKYO", "JP");
-//
-        if (weatherViewModel.getWeather().getValue() != null) {
-            Log.d(LOG_TAG, " !!!!!!!!!!!!!!! " + weatherViewModel.getWeather().getValue().getCity() + "\t" + weatherViewModel.getWeather().getValue().getCountryCode() + " !!!!!!!!!!!!!");
-        }
-
     }
 
     private void configureViewModels() {
@@ -74,7 +68,7 @@ public class LoginFragment extends Fragment {
                 Log.d(LOG_TAG, "\n");
                 Log.d(LOG_TAG, "------------------------------------------");
 
-
+                userListViewModel.resetUserTable(userList.size());
             }
         });
 
@@ -102,6 +96,8 @@ public class LoginFragment extends Fragment {
 
                 Log.d(LOG_TAG, "\n");
                 Log.d(LOG_TAG, "------------------------------------------");
+
+                weatherViewModel.loadWeather("Tokyo", "Japan");
             }
         });
 
@@ -109,7 +105,7 @@ public class LoginFragment extends Fragment {
         weatherViewModel.getWeather().observe(this, weather -> {
             if (weather != null) {
                 Log.d(LOG_TAG, "Update to weather view model");
-                Log.d(LOG_TAG, String.format("Weather record for %s, %s", weather.getCity(), weather.getCountryCode()));
+                Log.d(LOG_TAG, String.format("Weather record for %s, %s was last retrieved at %s", weather.getCity(), weather.getCountryCode(), weather.getLastUpdated().toString()));
             }
         });
     }
@@ -164,9 +160,10 @@ public class LoginFragment extends Fragment {
         user.setEmail(email);
         user.setPassword(password);
 
-        LiveData<User> lookupResult = userViewModel.findUser(email);
-        if(userViewModel.getUser() != null && userViewModel.getUser().getValue().getEmail().equals(email)) {
-//        if (lookupResult.getValue() != null && userViewModel.authenticateUser(user)) {
+        boolean result = userViewModel.authenticateUser(user);
+//        LiveData<User> lookupResult = userViewModel.findUser(email);
+//        if(userViewModel.getUser().getValue() != null && userViewModel.getUser().getValue().getEmail().equals(email)) {
+        if (userViewModel.getUser().getValue() != null && result) {
             Toast.makeText(getContext(), "Login success", Toast.LENGTH_SHORT).show();
 
             loginSuccessHandler(userViewModel.getUser().getValue().getId());

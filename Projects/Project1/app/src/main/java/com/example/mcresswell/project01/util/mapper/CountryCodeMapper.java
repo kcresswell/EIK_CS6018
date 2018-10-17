@@ -5,9 +5,9 @@ import java.util.Map;
 
 public class CountryCodeMapper {
 
-    private final static Map<String, String> countryCodeMap = new HashMap<>();
+    private final static HashMap<String, String> countryCodeMap = new HashMap<>();
     
-    private CountryCodeMapper() {
+    private static void addCountryData() {
 
         countryCodeMap.put("Andorra, Principality Of", "AD");
         countryCodeMap.put("United Arab Emirates", "AE");
@@ -257,6 +257,12 @@ public class CountryCodeMapper {
     }
 
     public static String getCountryCode(String countryName){
+        addCountryData();
         return countryCodeMap.get(countryName) == null ? "US" : countryCodeMap.get(countryName);
+    }
+
+    public static HashMap<String, String> getMapper() {
+        addCountryData();
+        return countryCodeMap;
     }
 }

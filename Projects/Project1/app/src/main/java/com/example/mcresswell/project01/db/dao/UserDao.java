@@ -30,9 +30,6 @@ import java.util.Optional;
 @Dao
 public interface UserDao {
 
-    @Query("SELECT * FROM User LIMIT 1")
-    LiveData<User> findFirstUserRecord();
-
     @Query("SELECT * FROM User u WHERE u.email LIKE :email")
     LiveData<User> findUserByEmail(String email);
 

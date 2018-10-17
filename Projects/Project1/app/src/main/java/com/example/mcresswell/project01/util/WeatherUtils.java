@@ -12,6 +12,7 @@ import java.util.Locale;
 
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidCity;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidCountryName;
+import static com.example.mcresswell.project01.util.mapper.CountryCodeMapper.getCountryCode;
 
 public class WeatherUtils {
 
@@ -37,10 +38,11 @@ public class WeatherUtils {
             return buildDefaultWeatherApiUrl();
         }
         URI uri = null;
-        if (!isValidCountryName(CountryCodeMapper.getCountryCode(countryName))) {
+        String countryFormatted = formatCaseCountryCodeFromCountryName(countryName);
+        if (countryFormatted == null) {
             uri = URI.create(getAbsoluteUrl( city.replace(" ", "+") + API_KEY_QUERY));
         } else {
-            uri = URI.create(getAbsoluteUrl(city.replace(" ", "+") + "," + countryName + API_KEY_QUERY));
+            uri = URI.create(getAbsoluteUrl(city.replace(" ", "+") + "," + countryFormatted + API_KEY_QUERY));
         }
         Log.d(LOG, "Weather url: " + uri.toString());
         try {
@@ -55,7 +57,7 @@ public class WeatherUtils {
     public static URL buildDefaultWeatherApiUrl() {
         try {
             return URI.create(getAbsoluteUrl(DEFAULT_CITY.replace(" ", "+") + "," +
-                    CountryCodeMapper.getCountryCode(DEFAULT_COUNTRY) + API_KEY_QUERY)).toURL();
+                    getCountryCode(DEFAULT_COUNTRY) + API_KEY_QUERY)).toURL();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -104,6 +106,6 @@ public class WeatherUtils {
     }
 
     public static String formatCaseCountryCodeFromCountryName(String countryName) {
-        return isValidCountryName(countryName) ? CountryCodeMapper.getCountryCode(countryName) : null;
+        return isValidCountryName(countryName) ? getCountryCode(countryName) : null;
     }
 }
