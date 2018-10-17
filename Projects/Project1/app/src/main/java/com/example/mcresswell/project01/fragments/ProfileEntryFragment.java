@@ -63,7 +63,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     private RadioButton gain, maintain, lose;
 
     //Data Elements
-    private FitnessProfile m_fitnessProfile = new FitnessProfile();
+    private FitnessProfile m_fitnessProfile;
     private String lifestyleSelectorString = "Active"; //Default lifestyle selector of 'Active' if no radio button selected
     private String weightGoalString = "Lose"; //Default etxt_weight goal of 'Lose' if no radio button is selected
 
@@ -78,13 +78,16 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d(LOG_TAG, Constants.CREATE);
+
         super.onCreate(savedInstanceState);
 
-        initViewModel();
+        int userID = 1;
+
+        initViewModel(userID);
 
     }
 
-    private void initViewModel() {
+    private void initViewModel(int userID) {
         final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> {
             m_fitnessProfile = fitnessProfile;
             if (m_fitnessProfile != null) {
@@ -94,8 +97,11 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
         m_fitnessProfileViewModel = ViewModelProviders.of(getActivity())
                 .get(FitnessProfileViewModel.class);
-        m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile().getValue();
-        m_fitnessProfileViewModel.getFitnessProfile().observe(getActivity(), fitnessProfileObserver);
+        m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile(userID).getValue();
+//        if (m_fitnessProfile == null) {
+//            m_fitnessProfile = new FitnessProfile();
+//        }
+        m_fitnessProfileViewModel.getFitnessProfile(userID).observe(getActivity(), fitnessProfileObserver);
     }
 
     @Override
@@ -264,21 +270,24 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
                 isNotNullOrEmpty(etxt_heightInches.getText().toString()) ? etxt_heightInches.getText().toString() :
                         String.valueOf(0);
 
-        m_fitnessProfile.setM_fName(etxt_firstName.getText().toString());
-        m_fitnessProfile.setM_lName(etxt_lastName.getText().toString());
-        m_fitnessProfile.setM_dob(etxt_dob.getText().toString());
-        m_fitnessProfile.setM_sex(etxt_sex.getText().toString());
-        m_fitnessProfile.setM_city(etxt_city.getText().toString());
-        m_fitnessProfile.setM_country(etxt_country.getText().toString());
-        m_fitnessProfile.setM_lifestyleSelection(lifestyleSelectorString);
-        m_fitnessProfile.setM_weightGoal(weightGoalString);
-        m_fitnessProfile.setM_lbsPerWeek(Integer.parseInt(etxt_lbsPerWeek.getText().toString()));
-        m_fitnessProfile.setM_weightInPounds(Integer.parseInt(etxt_weight.getText().toString()));
-        m_fitnessProfile.setM_heightFeet(Integer.parseInt(etxt_heightFeet.getText().toString()));
-        m_fitnessProfile.setM_heightInches(Integer.parseInt(heightInchesValue));
+        FitnessProfile tmp_fitnessProfile = new FitnessProfile();
 
-        //TODO: Is this method needed?
-        updateFitnessProfile();
+        tmp_fitnessProfile.setM_fName(etxt_firstName.getText().toString());
+        tmp_fitnessProfile.setM_lName(etxt_lastName.getText().toString());
+        tmp_fitnessProfile.setM_dob(etxt_dob.getText().toString());
+        tmp_fitnessProfile.setM_sex(etxt_sex.getText().toString());
+        tmp_fitnessProfile.setM_city(etxt_city.getText().toString());
+        tmp_fitnessProfile.setM_country(etxt_country.getText().toString());
+        tmp_fitnessProfile.setM_lifestyleSelection(lifestyleSelectorString);
+        tmp_fitnessProfile.setM_weightGoal(weightGoalString);
+        tmp_fitnessProfile.setM_lbsPerWeek(Integer.parseInt(etxt_lbsPerWeek.getText().toString()));
+        tmp_fitnessProfile.setM_weightInPounds(Integer.parseInt(etxt_weight.getText().toString()));
+        tmp_fitnessProfile.setM_heightFeet(Integer.parseInt(etxt_heightFeet.getText().toString()));
+        tmp_fitnessProfile.setM_heightInches(Integer.parseInt(heightInchesValue));
+
+        m_fitnessProfile = tmp_fitnessProfile;
+        //add to database
+        insertNewFitnessProfile();
 
         //send the signal to the ProfileEntryFragment that the button was clicked
         m_dataListener.onProfileEntryDataEntered_DoneButtonOnClick(true);
@@ -407,8 +416,8 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         void onProfileEntryDataEntered_DoneButtonOnClick(boolean isClicked);
     }
 
-    private void updateFitnessProfile(){
+    private void insertNewFitnessProfile(){
         //TODO: This method needs work to update the fitnessProfile data in the database.
-        m_fitnessProfileViewModel.updateFitnessProfile(m_fitnessProfile);
+        m_fitnessProfileViewModel.insertNewFitnessProfile(m_fitnessProfile);
     }
 }

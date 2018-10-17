@@ -67,7 +67,8 @@ public class ProfileSummaryFragment extends Fragment
         Log.d(LOG_TAG, Constants.CREATE);
         super.onCreate(savedInstanceState);
 
-        initViewModel();
+        int userID = 1;
+        initViewModel(userID);
 //        m_photo = getActivity().getIntent().getParcelableExtra("M_IMG_DATA");
     }
 
@@ -86,11 +87,11 @@ public class ProfileSummaryFragment extends Fragment
         return v;
     }
 
-    private void initViewModel() {
+    private void initViewModel(int userID) {
         final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile = fitnessProfile;
         m_fitnessProfileViewModel = ViewModelProviders.of(getActivity())
                 .get(FitnessProfileViewModel.class);
-        m_fitnessProfileViewModel.getFitnessProfile().observe(getActivity(), fitnessProfileObserver);
+        m_fitnessProfileViewModel.getFitnessProfile(userID).observe(getActivity(), fitnessProfileObserver);
     }
 
     private void setDataToViewElements() {

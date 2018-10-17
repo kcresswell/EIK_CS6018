@@ -26,13 +26,13 @@ public class FitnessProfileRepository {
 //      m_fitnessProfile = //TODO: Get data from database.
         //TODO: This is just a sample data until the database is established.
         m_db = InStyleDatabase.getDatabaseInstance(context);
-        fitnessProfileData = getFitnessProfileData();
+//        fitnessProfileData = getFitnessProfileData();
     }
 
     //This is where the Repository gets the data.
-    public LiveData<FitnessProfile> getFitnessProfileData(){
+    public LiveData<FitnessProfile> getFitnessProfileData(int userID){
         //get from database when ready. Number value currently hard coded.
-       return m_db.fitnessProfileDao().findByuserID(1);
+       return m_db.fitnessProfileDao().findByuserID(userID);
 
         //until database is ready, pull from sample data.
 //        return SampleProfileData.getUserProfiles().get(0);
@@ -41,23 +41,14 @@ public class FitnessProfileRepository {
     public void updateFitnessProfile(FitnessProfile fitnessProfile) {
         //This is only used to updated the fitness profile data for the sample data
         //This is not correctly using the pub sub model of the observer and live data
-
-
         m_executor.execute(
-                () -> {
-                  m_db.fitnessProfileDao().updateExistingFitnessProfileData(fitnessProfile);
-                }
+                () -> m_db.fitnessProfileDao().updateExistingFitnessProfileData(fitnessProfile)
         );
     }
 
-    public void addNewFitnessProfile() {
+    public void insertNewFitnessProfile(FitnessProfile fitnessProfile) {
         m_executor.execute(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        m_db.fitnessProfileDao().insertNewUserData(fitnessProfileData.getValue());
-                    }
-                }
+                () -> m_db.fitnessProfileDao().insertNewFitnessProfile(fitnessProfile)
         );
     }
 }

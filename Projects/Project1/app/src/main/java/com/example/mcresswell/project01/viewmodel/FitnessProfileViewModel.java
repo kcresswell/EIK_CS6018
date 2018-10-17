@@ -18,10 +18,10 @@ public class FitnessProfileViewModel extends AndroidViewModel {
     public FitnessProfileViewModel(@NonNull Application application) {
         super(application);
         m_fitnessProfileRepository = FitnessProfileRepository.getInsance(application.getApplicationContext());
-        m_fitnessProfile = m_fitnessProfileRepository.getFitnessProfileData();
     }
 
-    public LiveData<FitnessProfile> getFitnessProfile() {
+    public LiveData<FitnessProfile> getFitnessProfile(int userID) {
+        m_fitnessProfile = m_fitnessProfileRepository.getFitnessProfileData(userID);
         return m_fitnessProfile;
     }
 
@@ -29,5 +29,7 @@ public class FitnessProfileViewModel extends AndroidViewModel {
         m_fitnessProfileRepository.updateFitnessProfile(fitnessProfile);
     }
 
-    public void addNewFitnessProfile() {m_fitnessProfileRepository.addNewFitnessProfile();}
+    public void insertNewFitnessProfile(FitnessProfile fitnessProfile) {
+        m_fitnessProfileRepository.insertNewFitnessProfile(fitnessProfile);
+    }
 }
