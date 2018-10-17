@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.fragments.LoginFragment;
 import com.example.mcresswell.project01.ui.RV_Adapter;
 import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
@@ -81,7 +82,27 @@ public class DashboardActivity extends AppCompatActivity implements
             case 3: //Weather
                 weatherButtonHandler();
                 break;
+            case 4: //Logout
+                logoutButtonHandler();
+            case 5: //Settings
+                settingsButtonHandler();
         }
+    }
+    //Logout button goes to login page
+    private void logoutButtonHandler() {
+        if (!isWideDisplay()) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivityForResult(intent, Activity.RESULT_OK);
+        } else {
+            m_fTrans.replace(R.id.fl_login_wd, new LoginFragment());
+            m_fTrans.addToBackStack(null);
+            m_fTrans.commit();
+        }
+    }
+
+    //btn_settings
+    private void settingsButtonHandler() {
+        //functionality not implemented yet
     }
 
     private void fitnessDetailsButtonHandler() {
