@@ -25,7 +25,7 @@ import java.util.Optional;
 @Dao
 public interface WeatherDao {
 
-    @Query("SELECT * FROM Weather WHERE city=:city AND (country IS NULL OR country LIKE :country)")
+    @Query("SELECT * FROM Weather WHERE city = :city AND (country IS NULL OR country LIKE :country)")
     LiveData<Weather> findWeatherByLocation(String city, String country);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -39,5 +39,8 @@ public interface WeatherDao {
 
     @Query("SELECT * FROM Weather ORDER BY city ASC")
     LiveData<List<Weather>> loadAllWeather();
+
+    @Query("SELECT * FROM Weather where id = :weatherId")
+    LiveData<Weather> findWeatherById(int weatherId);
 
 }

@@ -105,7 +105,6 @@ public class UserViewModelUnitTest {
         user.setEmail("hello@kitty.com");
         user.setPassword("password");
         user.setJoinDate(Date.from(Instant.now()));
-        user.setFitnessProfileId(1);
 
         return user;
     }

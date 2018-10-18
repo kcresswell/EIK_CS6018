@@ -45,7 +45,7 @@ public class UserRepository {
         inStyleDatabase = database;
         mUserDao = inStyleDatabase.userDao();
 
-//        asyncInsertTestUser("test@test.com", "password", "Hello", "Kitty", Date.valueOf("2018-01-01"));
+        asyncInsertTestUser("test@test.com", "password", "Hello", "Kitty", Date.valueOf("2018-01-01"));
 
 //        List<User> testUsers = UserGenerator.generateUserData(50);
 

@@ -11,6 +11,9 @@ import com.example.mcresswell.project01.db.InStyleDatabase;
 import com.example.mcresswell.project01.db.entity.Weather;
 import com.example.mcresswell.project01.db.repo.WeatherRepository;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class WeatherViewModel extends AndroidViewModel {
 
     private static final String LOG = WeatherViewModel.class.getSimpleName();
@@ -46,7 +49,16 @@ public class WeatherViewModel extends AndroidViewModel {
         m_weatherRepository.loadWeatherData(city, country);
     }
 
+
+    public void loadRandomWeather(ArrayList<Integer> weatherIdList) {
+        Random random = new Random();
+        m_weatherRepository.
+                loadRandomWeatherData(weatherIdList.get(random.nextInt(weatherIdList.size())));
+
+    }
+
     public LiveData<Weather> getWeather() {
         return m_observableWeather;
     }
+
 }

@@ -71,7 +71,7 @@ public class WeatherUtils {
         System.out.println("coords: " + weather.getLatitude() + ", " + weather.getLongitude());
         System.out.println("forecast: " + weather.getForecastMain());
         System.out.println("forecast description: " + weather.getForecastDescription());
-        System.out.println("temp: " + convertAndFormatKelvinTemp(weather.getTemperature().temp) + " F");
+        System.out.println("temp: " + (weather.getTemperature().temp) + " F");
         System.out.println("temp_min: " + convertAndFormatKelvinTemp(weather.getTemperature().tempMin) + " F");
         System.out.println("temp_max: " + convertAndFormatKelvinTemp(weather.getTemperature().tempMax) + " F");
         System.out.println("pressure: " + weather.getPressure());

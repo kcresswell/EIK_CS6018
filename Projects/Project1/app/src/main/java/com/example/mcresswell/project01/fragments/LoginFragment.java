@@ -1,6 +1,5 @@
 package com.example.mcresswell.project01.fragments;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,14 +12,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.activities.CreateAccountActivity;
 import com.example.mcresswell.project01.activities.DashboardActivity;
-import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.db.entity.User;
 import com.example.mcresswell.project01.viewmodel.UserListViewModel;
 import com.example.mcresswell.project01.viewmodel.UserViewModel;
 import com.example.mcresswell.project01.viewmodel.WeatherListViewModel;
 import com.example.mcresswell.project01.viewmodel.WeatherViewModel;
-import com.example.mcresswell.project01.db.entity.User;
 
 import static com.example.mcresswell.project01.util.Constants.CREATE_VIEW;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidEmailAndPassword;
@@ -36,7 +35,6 @@ public class LoginFragment extends Fragment {
     private UserViewModel userViewModel;
     private WeatherListViewModel weatherListViewModel;
     private WeatherViewModel weatherViewModel;
-//    private FitnessProfileViewModel fitnessProfileViewModel;
 
     public LoginFragment() { }
 
@@ -62,7 +60,7 @@ public class LoginFragment extends Fragment {
                 Log.d(LOG_TAG, "\n");
 
                 userList.forEach(users -> {
-                    Log.d(LOG_TAG, "\nUser data record: " + users.getId() + "\t'" + users.getEmail() + "'\t'" + users.getFirstName() + "'\t'" + users.getLastName() + "'\t'" + users.getJoinDate() + "'\t'" + users.getFitnessProfileId() + "'");
+                    Log.d(LOG_TAG, "\nUser data record: " + users.getId() + "\t'" + users.getEmail() + "'\t'" + users.getFirstName() + "'\t'" + users.getLastName() + "'\t'" + users.getJoinDate() + "'\t'" + "'");
                 });
 
                 Log.d(LOG_TAG, "\n");
@@ -77,37 +75,38 @@ public class LoginFragment extends Fragment {
             if (user != null) {
                 Log.d(LOG_TAG, "Update to user view model");
                 Log.d(LOG_TAG, String.format("User: %s \t %s", user.getEmail(), user.getPassword()));
+
             }
         });
 
-        weatherListViewModel = ViewModelProviders.of(this).get(WeatherListViewModel.class);
-        weatherListViewModel.getWeatherDataFromDatabase().observe(this, weatherList -> {
-            if (weatherList != null) {
-                Log.d(LOG_TAG, "Update to weather list view model");
-                Log.d(LOG_TAG, "Number of weather records in Weather database: " + weatherList.size());
-
-                Log.d(LOG_TAG, "------------------------------------------");
-
-                Log.d(LOG_TAG, "PRINTING WEATHER RECORDS IN WEATHER DATABASE");
-                Log.d(LOG_TAG, "\n");
-                weatherList.forEach(weather -> {
-                    Log.d(LOG_TAG, "\nWeather Data record: " + weather.getId() + "\t'" + weather.getCity() + "'\t'" + weather.getCountryCode() + "'\t'" + weather.getLastUpdated() + "'");
-                });
-
-                Log.d(LOG_TAG, "\n");
-                Log.d(LOG_TAG, "------------------------------------------");
-
-                weatherViewModel.loadWeather("Tokyo", "Japan");
-            }
-        });
-
-        weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
-        weatherViewModel.getWeather().observe(this, weather -> {
-            if (weather != null) {
-                Log.d(LOG_TAG, "Update to weather view model");
-                Log.d(LOG_TAG, String.format("Weather record for %s, %s was last retrieved at %s", weather.getCity(), weather.getCountryCode(), weather.getLastUpdated().toString()));
-            }
-        });
+//        weatherListViewModel = ViewModelProviders.of(this).get(WeatherListViewModel.class);
+//        weatherListViewModel.getWeatherDataFromDatabase().observe(this, weatherList -> {
+//            if (weatherList != null) {
+//                Log.d(LOG_TAG, "Update to weather list view model");
+//                Log.d(LOG_TAG, "Number of weather records in Weather database: " + weatherList.size());
+//
+//                Log.d(LOG_TAG, "------------------------------------------");
+//
+//                Log.d(LOG_TAG, "PRINTING WEATHER RECORDS IN WEATHER DATABASE");
+//                Log.d(LOG_TAG, "\n");
+//                weatherList.forEach(weather -> {
+//                    Log.d(LOG_TAG, "\nWeather Data record: " + weather.getId() + "\t'" + weather.getCity() + "'\t'" + weather.getCountryCode() + "'\t'" + weather.getLastUpdated() + "'");
+//                });
+//
+//                Log.d(LOG_TAG, "\n");
+//                Log.d(LOG_TAG, "------------------------------------------");
+//
+////                weatherViewModel.loadWeather("Tokyo", "Japan");
+//            }
+//        });
+//
+//        weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
+//        weatherViewModel.getWeather().observe(this, weather -> {
+//            if (weather != null) {
+//                Log.d(LOG_TAG, "Update to weather view model");
+//                Log.d(LOG_TAG, String.format("Weather record for %s, %s was last retrieved at %s", weather.getCity(), weather.getCountryCode(), weather.getLastUpdated().toString()));
+//            }
+//        });
     }
 
     @Override
@@ -160,21 +159,17 @@ public class LoginFragment extends Fragment {
         user.setEmail(email);
         user.setPassword(password);
 
-        boolean result = userViewModel.authenticateUser(user);
-//        LiveData<User> lookupResult = userViewModel.findUser(email);
-//        if(userViewModel.getUser().getValue() != null && userViewModel.getUser().getValue().getEmail().equals(email)) {
-        if (userViewModel.getUser().getValue() != null && result) {
-            Toast.makeText(getContext(), "Login success", Toast.LENGTH_SHORT).show();
+        userViewModel.findUser(email).observe(this, user1 -> {
+            if (user1 != null && user1.getEmail().equals(email) && user1.getPassword().equals(password)) {
+                Toast.makeText(getContext(), "Login success", Toast.LENGTH_SHORT).show();
 
-            loginSuccessHandler(userViewModel.getUser().getValue().getId());
+                loginSuccessHandler(userViewModel.getUser().getValue().getId());
+            } else {
+                Toast.makeText(getContext(), "Invalid login credentials.", Toast.LENGTH_SHORT).show();
 
-            //TODO: use fitnessProfileViewModel to call FitnessProfileRepository to retrieve fitness profile from fitness_profile_id. Either take user to dashboard or take user to ProfileSummaryFragment screen and use the retrieved fitness profile data to display that user's fitness data.
-
-            return;
-        }
-
-        Toast.makeText(getContext(), "Invalid login credentials.", Toast.LENGTH_SHORT).show();
-        m_password.setText("");
+                m_password.setText("");
+            }
+        });
     }
 
     private void createAccountHandler() {
@@ -183,13 +178,13 @@ public class LoginFragment extends Fragment {
         startActivity(intent);
     }
 
-    private void loginSuccessHandler(int fitnessProfileId) {
+    private void loginSuccessHandler(int userId) {
         Intent intent = new Intent(getActivity(), DashboardActivity.class);
 
-        if (Integer.valueOf(fitnessProfileId) != null) { //Have to cast to Integer type to do null check
+        if (Integer.valueOf(userId) != null) { //Have to cast to Integer type to do null check
 
             //The following step passes the fitnessProfileId so that the correct fitness profile can be loaded for the corresponding user that just logged in
-            intent.putExtra("id", fitnessProfileId);
+            intent.putExtra("id", userId);
         }
 
         startActivity(intent);

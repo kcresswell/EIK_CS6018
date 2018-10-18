@@ -2,6 +2,7 @@ package com.example.mcresswell.project01.util.mapper;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class CountryCodeMapper {
 
@@ -125,8 +126,7 @@ public class CountryCodeMapper {
         countryCodeMap.put("Kiribati", "KI");
         countryCodeMap.put("Comoros", "KM");
         countryCodeMap.put("Saint Kitts & Nevis Anguilla", "KN");
-        countryCodeMap.put("North Korea", "KP");
-        countryCodeMap.put("South Korea", "KR");
+        countryCodeMap.put("Korea", "KR");
         countryCodeMap.put("Kuwait", "KW");
         countryCodeMap.put("Cayman Islands", "KY");
         countryCodeMap.put("Kazakhstan", "KZ");
@@ -258,7 +258,20 @@ public class CountryCodeMapper {
 
     public static String getCountryCode(String countryName){
         addCountryData();
-        return countryCodeMap.get(countryName) == null ? "US" : countryCodeMap.get(countryName);
+        return countryCodeMap.getOrDefault(countryName, "US");
+    }
+
+    public static String getCountryName(String countryCode){
+        addCountryData();
+        if (countryCodeMap.containsValue(countryCode)) {
+            for (Map.Entry<String, String> each : countryCodeMap.entrySet()) {
+                if (each.getValue().equals(countryCode)) {
+                    return each.getKey();
+                }
+            }
+        }
+        //Otherwise return default
+        return "United States";
     }
 
     public static HashMap<String, String> getMapper() {
