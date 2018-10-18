@@ -49,10 +49,10 @@ public class FitnessDetailsFragment extends Fragment {
     }
 
     private void initViewModel() {
-        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile = fitnessProfile;
+//        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile = fitnessProfile;
         m_fitnessProfileViewModel = ViewModelProviders.of(getActivity())
                 .get(FitnessProfileViewModel.class);
-        m_fitnessProfileViewModel.getFitnessProfile().observe(getActivity(), fitnessProfileObserver);
+//        m_fitnessProfileViewModel.getFitnessProfile().observe(getActivity(), fitnessProfileObserver);
     }
 
     @Override

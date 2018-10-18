@@ -4,12 +4,15 @@ import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 
 import java.util.List;
+
+import javax.annotation.meta.When;
 
 /**
  * Data Access Object (DAO) for querying FitnessProfile table in database.
@@ -36,6 +39,11 @@ public interface FitnessProfileDao {
 // is working.
 
 
+//    A few things that I need from the database DAO to do is
+
+//2- When I call the database findByuserID (and other queries that return data). I need to have a complete FitnessProfile, or specifically Null.
+//3- When I call the database insert, delete and such, I need a boolean returned to flag if it succeeded or failed.
+
 
     //scenario 1
     @Query("SELECT * FROM FitnessProfile WHERE id = " +
@@ -46,8 +54,8 @@ public interface FitnessProfileDao {
     @Update
     void updateExistingFitnessProfileData(FitnessProfile fitnessProfile);
 
-    //scenario 3
-    @Insert
+    //1- When I call the database insertNewFitnessProfile . I need it to check if the record is there, and then just replace if it exists with the new record changes, or insert it if it does not. There is a database option to do that.
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertNewFitnessProfile(FitnessProfile fitnessProfile);
 
     //delete fitness profile data from db

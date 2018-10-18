@@ -26,6 +26,7 @@ import com.example.mcresswell.project01.fragments.WeatherFragment;
 
 import java.io.IOException;
 
+import static com.example.mcresswell.project01.util.Constants.ON_CLICK;
 import static com.example.mcresswell.project01.util.GeocoderLocationUtils.DEFAULT_COORDINATES;
 import static com.example.mcresswell.project01.util.GeocoderLocationUtils.getCoordinatesFromCityCountry;
 
@@ -81,33 +82,7 @@ public class DashboardActivity extends AppCompatActivity implements
             case 3: //Weather
                 weatherButtonHandler();
                 break;
-            case 4: //Logout
-                logoutButtonHandler();
-            case 5: //Settings
-                settingsButtonHandler();
         }
-    }
-    //Logout button goes to login page
-    private void logoutButtonHandler() {
-        Button logoutButton= (Button)findViewById(R.id.btn_logout);
-        logoutButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                if (!isWideDisplay()) {
-//                    Intent intent = new Intent(this, LoginActivity.class);
-//                    startActivityForResult(intent, Activity.RESULT_OK);
-                } else {
-                    m_fTrans.replace(R.id.fl_login_wd, new LoginFragment());
-                    m_fTrans.addToBackStack(null);
-                    m_fTrans.commit();
-                }
-            }
-        });
-    }
-
-    //btn_settings
-    private void settingsButtonHandler() {
-        //functionality not implemented yet
     }
 
     private void fitnessDetailsButtonHandler() {

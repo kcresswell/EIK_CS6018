@@ -86,18 +86,18 @@ public class WeatherFragment extends ListFragment {
 
         fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
 
-        fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfile -> {
-            //Upon updates to the fitness profile, reload weather data
-            if (fitnessProfile != null) {
-                Log.d(LOG_TAG, "FitnessProfileViewModel onChanged listener: an update to the value of the fitness" +
-                        "profile stored by the view model has occurred");
-
-                Log.d(LOG_TAG, String.format("Loading weather for user's location of %s, %s",
-                        fitnessProfile.getM_city(), fitnessProfile.getM_country()));
-
-                weatherViewModel.loadWeather(fitnessProfile.getM_city(), fitnessProfile.getM_country());
-            }
-        });
+//        fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfile -> {
+//            //Upon updates to the fitness profile, reload weather data
+//            if (fitnessProfile != null) {
+//                Log.d(LOG_TAG, "FitnessProfileViewModel onChanged listener: an update to the value of the fitness" +
+//                        "profile stored by the view model has occurred");
+//
+//                Log.d(LOG_TAG, String.format("Loading weather for user's location of %s, %s",
+//                        fitnessProfile.getM_city(), fitnessProfile.getM_country()));
+//
+//                weatherViewModel.loadWeather(fitnessProfile.getM_city(), fitnessProfile.getM_country());
+//            }
+//        });
     }
 
     private void displayWeatherWidget(Weather weather) {
