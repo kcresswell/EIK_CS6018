@@ -301,6 +301,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         //TODO: Uncomment the code below once the fitness profile view model is working
 //        userViewModel.getUser().observe(this, user -> {
 //            if (user != null) {
+//        Log.d(LOG_TAG, String.format("Inserting new fitness profile with userId value of %d", user.getId()));
 //                //Retrieve the userID from UserViewModel for entering in profile_id field of new fitness profile record
 //                tmp_fitnessProfile.setM_userID(user.getId());
 //                m_fitnessProfileViewModel.insertNewFitnessProfile(tmp_fitnessProfile);
