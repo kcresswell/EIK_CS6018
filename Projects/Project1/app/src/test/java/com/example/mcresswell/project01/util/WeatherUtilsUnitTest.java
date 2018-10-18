@@ -10,14 +10,17 @@ import static org.junit.Assert.*;
 
 public class WeatherUtilsUnitTest {
 
+    private static final double DELTA = 0.0003;
+
     @Test
     public void testKelvinToFarenheit() {
-        assertEquals(kelvinToFarenheit(273.15), 32.0, 0.0003);
+        assertEquals(kelvinToFarenheit(273.15), 32.0, DELTA);
     }
 
     @Test
     public void testConvertAndFormatKelvinTemp() {
         assertEquals(convertAndFormatKelvinTemp(273.15), "32.0 °F");
+        assertEquals(kelvinToFarenheit(273.15), 32.0, DELTA);
     }
 
     @Test
