@@ -55,12 +55,12 @@ public class WeatherRepository {
 
         //Retrieve additional data to insert into the database by making API calls to fetch real-time weather
 //
-//        asyncFetchWeatherFromApi("Tokyo", "Japan", false);
-//        asyncFetchWeatherFromApi("Seoul", "Korea", false);
-//        asyncFetchWeatherFromApi("Hong Kong", "Hong Kong", false);
-//        asyncFetchWeatherFromApi("NEW YORK", "United States", false);
-//        asyncFetchWeatherFromApi("Salt Lake City", "United States", false);
-//        asyncFetchWeatherFromApi("Rome", "Italy", false);
+        asyncFetchWeatherFromApi("Tokyo", "Japan", false);
+        asyncFetchWeatherFromApi("Seoul", "Korea", false);
+        asyncFetchWeatherFromApi("Hong Kong", "Hong Kong", false);
+        asyncFetchWeatherFromApi("NEW YORK", "United States", false);
+        asyncFetchWeatherFromApi("Salt Lake City", "United States", false);
+        asyncFetchWeatherFromApi("Rome", "Italy", false);
 
         addLiveDataListenerSources();
 
