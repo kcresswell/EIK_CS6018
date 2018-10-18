@@ -25,6 +25,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.db.entity.User;
 import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.util.Constants;
@@ -51,7 +52,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
     private OnProfileEntryFragmentListener m_dataListener;
     private FitnessProfileViewModel m_fitnessProfileViewModel;
-    private UserViewModel userViewModel;
+    private UserViewModel m_userViewModel;
 
     //UI Elements
     private EditText etxt_firstName, etxt_lastName, etxt_dob, etxt_sex, etxt_city, etxt_country,
@@ -66,6 +67,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
     //Data Elements
     private FitnessProfile m_fitnessProfile;
+    private User m_user;
     private String lifestyleSelectorString = "Active"; //Default lifestyle selector of 'Active' if no radio button selected
     private String weightGoalString = "Lose"; //Default etxt_weight goal of 'Lose' if no radio button is selected
 
@@ -83,13 +85,20 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
         super.onCreate(savedInstanceState);
 
-        int userID = 1;
-
-        initViewModel(userID);
+        initUserViewModel();
+        initFitnessProfileViewModel();
 
     }
 
-    private void initViewModel(int userID) {
+    private void initUserViewModel() {
+        final Observer<User> userObserver = user -> m_user = user;
+        m_userViewModel = ViewModelProviders.of(this)
+                .get(UserViewModel.class);
+        m_user = m_userViewModel.getUser().getValue();
+        m_userViewModel.getUser().observe(this, userObserver);
+    }
+
+    private void initFitnessProfileViewModel() {
         final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> {
             m_fitnessProfile = fitnessProfile;
             if (m_fitnessProfile != null) {
@@ -99,14 +108,10 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
         m_fitnessProfileViewModel = ViewModelProviders.of(getActivity())
                 .get(FitnessProfileViewModel.class);
-        m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile(userID).getValue();
-//        if (m_fitnessProfile == null) {
-//            m_fitnessProfile = new FitnessProfile();
-//        }
-        m_fitnessProfileViewModel.getFitnessProfile(userID).observe(getActivity(), fitnessProfileObserver);
-
-        //Instantiate the userViewModel so you can retrieve the userID later
-        userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+        if (m_user != null ) {
+            m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile(m_user.getId()).getValue();
+            m_fitnessProfileViewModel.getFitnessProfile(m_user.getId()).observe(getActivity(), fitnessProfileObserver);
+        }
     }
 
     @Override
@@ -299,15 +304,13 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
 
         //TODO: Uncomment the code below once the fitness profile view model is working
-//        userViewModel.getUser().observe(this, user -> {
-//            if (user != null) {
-//                //Retrieve the userID from UserViewModel for entering in profile_id field of new fitness profile record
-//                tmp_fitnessProfile.setM_userID(user.getId());
-//                m_fitnessProfileViewModel.insertNewFitnessProfile(tmp_fitnessProfile);
-//            }
-//        });
-
-
+        m_userViewModel.getUser().observe(this, user -> {
+            if (user != null) {
+                //Retrieve the userID from UserViewModel for entering in profile_id field of new fitness profile record
+                tmp_fitnessProfile.setM_userID(m_user.getId());
+                m_fitnessProfileViewModel.insertNewFitnessProfile(tmp_fitnessProfile);
+            }
+        });
     }
 
     private boolean isUserInputDataValid() {

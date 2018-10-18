@@ -1,7 +1,6 @@
 package com.example.mcresswell.project01.fragments;
 
 
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -17,9 +16,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.db.entity.User;
 import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.util.Constants;
+import com.example.mcresswell.project01.viewmodel.UserViewModel;
 
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateAge;
 
@@ -30,7 +31,9 @@ public class ProfileSummaryFragment extends Fragment
     private Button m_editButton;
     private OnProfileSummaryInteractionListener m_listener;
     private FitnessProfileViewModel m_fitnessProfileViewModel;
+    private UserViewModel m_userViewModel;
     private FitnessProfile m_fitnessProfile;
+    private User m_user;
 //    private Bitmap m_photo;
 //    private ImageButton m_profilePhoto;
 
@@ -46,6 +49,7 @@ public class ProfileSummaryFragment extends Fragment
             m_weight,
             m_activity,
             m_weightGoal;
+
 
     public ProfileSummaryFragment() { }
 
@@ -67,8 +71,8 @@ public class ProfileSummaryFragment extends Fragment
         Log.d(LOG_TAG, Constants.CREATE);
         super.onCreate(savedInstanceState);
 
-        int userID = 1;
-        initViewModel(userID);
+        initUserViewModel();
+        initFitnessProfileViewModel();
 //        m_photo = getActivity().getIntent().getParcelableExtra("M_IMG_DATA");
     }
 
@@ -87,11 +91,19 @@ public class ProfileSummaryFragment extends Fragment
         return v;
     }
 
-    private void initViewModel(int userID) {
+    private void initUserViewModel() {
+        final Observer<User> userObserver = user -> m_user = user;
+        m_userViewModel = ViewModelProviders.of(this)
+                .get(UserViewModel.class);
+        m_user = m_userViewModel.getUser().getValue();
+        m_userViewModel.getUser().observe(this, userObserver);
+    }
+
+    private void initFitnessProfileViewModel() {
         final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile = fitnessProfile;
         m_fitnessProfileViewModel = ViewModelProviders.of(getActivity())
                 .get(FitnessProfileViewModel.class);
-        m_fitnessProfileViewModel.getFitnessProfile(userID).observe(getActivity(), fitnessProfileObserver);
+        m_fitnessProfileViewModel.getFitnessProfile(m_user.getId()).observe(getActivity(), fitnessProfileObserver);
     }
 
     private void setDataToViewElements() {
