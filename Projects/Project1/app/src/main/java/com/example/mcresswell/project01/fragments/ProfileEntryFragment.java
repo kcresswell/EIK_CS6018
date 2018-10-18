@@ -108,8 +108,10 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
         m_fitnessProfileViewModel = ViewModelProviders.of(getActivity())
                 .get(FitnessProfileViewModel.class);
-        m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile(m_user.getId()).getValue();
-        m_fitnessProfileViewModel.getFitnessProfile(m_user.getId()).observe(getActivity(), fitnessProfileObserver);
+        if (m_user != null ) {
+            m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile(m_user.getId()).getValue();
+            m_fitnessProfileViewModel.getFitnessProfile(m_user.getId()).observe(getActivity(), fitnessProfileObserver);
+        }
     }
 
     @Override
@@ -301,73 +303,14 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         m_dataListener.onProfileEntryDataEntered_DoneButtonOnClick(true);
 
 
-//        userEnteredData.put("etxt_firstName", etxt_firstName.getText().toString());
-//        userEnteredData.put("etxt_lastName", etxt_lastName.getText().toString());
-//        userEnteredData.put("etxt_dob", etxt_dob.getText().toString());
-//        userEnteredData.put("etxt_sex", etxt_sex.getText().toString());
-//        userEnteredData.put("etxt_city", etxt_city.getText().toString());
-//        userEnteredData.put("etxt_country", etxt_country.getText().toString());
-//        userEnteredData.put("etxt_weight", etxt_weight.getText().toString());
-//        userEnteredData.put("etxt_heightFeet", etxt_heightFeet.getText().toString());
-//        userEnteredData.put("etxt_heightInches", heightInchesValue);
-//        userEnteredData.put("etxt_lbsPerWeek", etxt_lbsPerWeek.getText().toString());
-//        userEnteredData.put("lifestyle", lifestyleSelectorString);
-//        userEnteredData.put("goal", weightGoalString);
-//
-//        userEnteredData.forEach((k,v)-> {
-//            Log.d(LOG_TAG, "Key: '" + k + "' Value: '" + v + "'");
-//        });
-
-//        FitnessProfile m_fitnessProfile = new FitnessProfile();
-//        m_fitnessProfile.setM_fName(userEnteredData.get("etxt_firstName"));
-//        m_fitnessProfile.setM_lName(userEnteredData.get("etxt_lastName"));
-//        m_fitnessProfile.setM_sex(userEnteredData.get("etxt_sex"));
-//        m_fitnessProfile.setM_dob(userEnteredData.get("etxt_dob"));
-//        m_fitnessProfile.setM_city(userEnteredData.get("etxt_city"));
-//        m_fitnessProfile.setM_country(userEnteredData.get("etxt_country"));
-//        m_fitnessProfile.setM_lbsPerWeek(Integer.parseInt(userEnteredData.get("llbsPerWeek")));
-////        m_fitnessProfile.setM_lbsPerWeek(2);
-//        m_fitnessProfile.setM_lifestyleSelection(userEnteredData.get("lifestyle"));
-//        m_fitnessProfile.setM_weightGoal(userEnteredData.get("goal"));
-//
-//        String userSex = userEnteredData.get("etxt_sex");
-//        int userAge = FitnessProfileUtils.calculateAge(userEnteredData.get("etxt_dob"));
-//        double userWeight = Double.parseDouble(userEnteredData.get("etxt_weight"));
-//        int heightFt = Integer.parseInt(userEnteredData.get("etxt_heightFeet"));
-//        int heightIn = Integer.parseInt(userEnteredData.get("etxt_heightInches"));
-
-//        FitnessProfile fitnessProfile = new FitnessProfile();
-//        fitnessProfile.setM_fName(etxt_firstName.getText().toString());
-//        fitnessProfile.setM_lName(etxt_lastName.getText().toString());
-//        fitnessProfile.setM_sex(etxt_sex.getText().toString());
-//        fitnessProfile.setM_dob(etxt_dob.getText().toString());
-//        fitnessProfile.setM_city(etxt_city.getText().toString());
-//        fitnessProfile.setM_country(etxt_country.getText().toString());
-//        fitnessProfile.setM_lbsPerWeek(Integer.parseInt(etxt_lbsPerWeek.getText().toString()));
-//        fitnessProfile.setM_lifestyleSelection(lifestyleSelectorString);
-//        fitnessProfile.setM_weightGoal(weightGoalString);
-//
-//        int userWeight = Integer.parseInt(etxt_weight.getText().toString());
-//        int heightFt = Integer.parseInt(etxt_heightFeet.getText().toString());
-//        int heightIn = Integer.parseInt(heightInchesValue);
-//        int totalHeightInches = calculateHeightInInches(heightFt, heightIn);
-//        int userAge = calculateAge(fitnessProfile.getM_dob());
-//
-//        fitnessProfile.setM_weightInPounds(userWeight);
-//        fitnessProfile.setM_heightFeet(heightFt);
-//        fitnessProfile.setM_heightInches(heightIn);
-//        fitnessProfile.setM_bmi(calculateBmi(totalHeightInches, userWeight));
-//        fitnessProfile.setM_bmr(calculateBMR(heightFt, heightIn, fitnessProfile.getM_sex(), userWeight, userAge));
-
-//        if (m_fitnessProfileViewModel.getFitnessProfile().getValue() != null){
-//            Log.d(LOG_TAG, "submit button handler, view model has data");
-//            FitnessProfile p = m_fitnessProfileViewModel.getFitnessProfile().getValue();
-//            printUserProfileData(p);
-//            m_dataListener.onProfileEntryDataEntered_DoneButtonOnClick(true);
-//        } else {
-//            Log.d(LOG_TAG, "view model null");
-//            m_dataListener.onProfileEntryDataEntered_DoneButtonOnClick(true);
-//        }
+        //TODO: Uncomment the code below once the fitness profile view model is working
+        m_userViewModel.getUser().observe(this, user -> {
+            if (user != null) {
+                //Retrieve the userID from UserViewModel for entering in profile_id field of new fitness profile record
+                tmp_fitnessProfile.setM_userID(m_user.getId());
+                m_fitnessProfileViewModel.insertNewFitnessProfile(tmp_fitnessProfile);
+            }
+        });
     }
 
     private boolean isUserInputDataValid() {

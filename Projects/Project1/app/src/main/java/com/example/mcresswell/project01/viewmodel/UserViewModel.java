@@ -14,7 +14,7 @@ import com.example.mcresswell.project01.db.repo.UserRepository;
 
 public class UserViewModel extends AndroidViewModel {
 
-    private static final String LOG = UserViewModel.class.getSimpleName();
+    private static final String LOG_TAG = UserViewModel.class.getSimpleName();
 
     private final MediatorLiveData<User> m_observableUser;
 
@@ -35,9 +35,9 @@ public class UserViewModel extends AndroidViewModel {
 
         LiveData<User> userLiveData = m_userRepository.getUser();
         m_observableUser.addSource(userLiveData, user -> {
-            Log.d(LOG, "m_userRepository.getUser() listener onChanged");
+            Log.d(LOG_TAG, "m_userRepository.getUser() listener onChanged");
             if (user == null) {
-                Log.d(LOG, "BUT ALAS IT IS NULL :(");
+                Log.d(LOG_TAG, "BUT ALAS IT IS NULL :(");
                 return;
             }
             m_observableUser.setValue(user);
@@ -49,7 +49,7 @@ public class UserViewModel extends AndroidViewModel {
         if (user == null) {
             return false;
         }
-        LiveData<User> result = findUser(user.getEmail());
+        LiveData<User> result = m_userRepository.find(user.getEmail());
         if (result.getValue() == null) {
             return false;
         }

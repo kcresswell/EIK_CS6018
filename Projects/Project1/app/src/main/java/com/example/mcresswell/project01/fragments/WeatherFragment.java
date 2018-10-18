@@ -17,9 +17,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.mcresswell.project01.R;
-import com.example.mcresswell.project01.db.entity.User;
+import com.example.mcresswell.project01.util.mapper.CountryCodeMapper;
 import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
-import com.example.mcresswell.project01.viewmodel.UserViewModel;
+import com.example.mcresswell.project01.viewmodel.WeatherListViewModel;
 import com.example.mcresswell.project01.viewmodel.WeatherViewModel;
 import com.example.mcresswell.project01.db.entity.Weather;
 import com.example.mcresswell.project01.util.Constants;
@@ -31,6 +31,8 @@ import java.util.Map;
 import java.util.Objects;
 
 import static com.example.mcresswell.project01.util.WeatherUtils.convertAndFormatKelvinTemp;
+import static com.example.mcresswell.project01.util.WeatherUtils.formatFarenheitTemp;
+import static com.example.mcresswell.project01.util.mapper.CountryCodeMapper.getCountryName;
 
 
 /**
@@ -43,14 +45,12 @@ public class WeatherFragment extends ListFragment {
     private OnWeatherDataLoadedListener mListener;
     private WeatherViewModel weatherViewModel;
     private FitnessProfileViewModel fitnessProfileViewModel;
-    private UserViewModel m_userViewModel;
-    private User m_user;
+    private WeatherListViewModel weatherListViewModel;
 
     private TextView location;
     Map<String, String> mapper;
     private ArrayList<String> data;
     private ListView m_listView;
-
 
     public WeatherFragment() {
     }
@@ -65,27 +65,48 @@ public class WeatherFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         Log.d(LOG_TAG, Constants.CREATE);
         super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-////            weatherForecast = getArguments().getParcelable("data");
-//            Log.d(LOG_TAG, "City: " + getArguments().getString("city"));
-//            Log.d(LOG_TAG, "Country: " + getArguments().getString("country"));
-//
-//        }
 
         configureViewModels();
 
 
     }
 
-    private void initUserViewModel() {
-        final Observer<User> userObserver = user -> m_user = user;
-        m_userViewModel = ViewModelProviders.of(this)
-                .get(UserViewModel.class);
-        m_user = m_userViewModel.getUser().getValue();
-        m_userViewModel.getUser().observe(this, userObserver);
-    }
-
     private void configureViewModels() {
+        weatherListViewModel = ViewModelProviders.of(this).get(WeatherListViewModel.class);
+        weatherListViewModel.getWeatherDataFromDatabase().observe(this, weatherList -> {
+            if (weatherList != null) {
+
+                ArrayList<Integer> idList = new ArrayList<>();
+                Log.d(LOG_TAG, "Update to weather list view model");
+                Log.d(LOG_TAG, "Number of weather records in Weather database: " + weatherList.size());
+
+                Log.d(LOG_TAG, "------------------------------------------");
+
+                Log.d(LOG_TAG, "PRINTING WEATHER RECORDS IN WEATHER DATABASE");
+                Log.d(LOG_TAG, "\n");
+                weatherList.forEach(weather -> {
+                    idList.add(weather.getId());
+                    Log.d(LOG_TAG, "\nWeather Data record: " + weather.getId() + "\t'" + weather.getCity() + "'\t'" + weather.getCountryCode() + "'\t'" + weather.getLastUpdated() + "'");
+
+                });
+
+                Log.d(LOG_TAG, "\n");
+                Log.d(LOG_TAG, "------------------------------------------");
+
+                //Once all records in database have been retrieved, now load weather using city/country from user's fitness profile
+                //weatherViewModel.loadWeather(fitnessProfile.getM_city(), fitnessProfile.getM_country());
+
+                weatherViewModel.loadWeather("Tokyo", "Japan");
+
+                //Logic to select a random weather record to display
+//                if (idList.isEmpty()) {
+//                    weatherViewModel.loadWeather("Tokyo", "Japan");
+//                } else {
+//                    weatherViewModel.loadRandomWeather(idList);
+//                }
+            }
+        });
+
         weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
         weatherViewModel.getWeather().observe(this, weather -> {
             if (weather != null) { //Weather data has finished being retrieved
@@ -97,22 +118,20 @@ public class WeatherFragment extends ListFragment {
             }
         });
 
-        initUserViewModel();
+//        fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
 
-        fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
-
-        fitnessProfileViewModel.getFitnessProfile(m_user.getId()).observe(this, fitnessProfile -> {
-            //Upon updates to the fitness profile, reload weather data
-            if (fitnessProfile != null) {
-                Log.d(LOG_TAG, "FitnessProfileViewModel onChanged listener: an update to the value of the fitness" +
-                        "profile stored by the view model has occurred");
-
-                Log.d(LOG_TAG, String.format("Loading weather for user's location of %s, %s",
-                        fitnessProfile.getM_city(), fitnessProfile.getM_country()));
-
-                weatherViewModel.loadWeather(fitnessProfile.getM_city(), fitnessProfile.getM_country());
-            }
-        });
+//        fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfile -> {
+//            //Upon updates to the fitness profile, reload weather data
+//            if (fitnessProfile != null) {
+//                Log.d(LOG_TAG, "FitnessProfileViewModel onChanged listener: an update to the value of the fitness" +
+//                        "profile stored by the view model has occurred");
+//
+//                Log.d(LOG_TAG, String.format("Loading weather for user's location of %s, %s",
+//                        fitnessProfile.getM_city(), fitnessProfile.getM_country()));
+//
+//                weatherViewModel.loadWeather(fitnessProfile.getM_city(), fitnessProfile.getM_country());
+//            }
+//        });
     }
 
     private void displayWeatherWidget(Weather weather) {
@@ -130,7 +149,7 @@ public class WeatherFragment extends ListFragment {
                 data);
         setListAdapter(adapter);
 
-        mListener.onWeatherDataLoaded(weather);
+//        mListener.onWeatherDataLoaded(weather);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -179,37 +198,37 @@ public class WeatherFragment extends ListFragment {
         super.onSaveInstanceState(state);
     }
 
-    final Observer<Weather> weatherObserver = new Observer<Weather>() {
-        @RequiresApi(api = Build.VERSION_CODES.N)
-        @Override
-        public void onChanged(@Nullable final Weather weather) {
-            if (weather != null) { //Weather data has finished being retrieved
-                Log.d(LOG_TAG, "weatherObserver onChanged listener: weather data changed and is not null");
-
-                WeatherUtils.printWeather(weather);
-
-                data = new ArrayList<>();
-                mapper = createObjectMapper(weather);
-                mapper.forEach((key, val) -> {
-                    if (key.equals("location")) { //
-                        location.setText(val);
-                        return;
-                    }
-                    data.add(key + "\t" + val);
-                });
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
-                        R.layout.item_weather_widget,
-                        data);
-                setListAdapter(adapter);
-
-                mListener.onWeatherDataLoaded(weather);
-
-
-            }
-
-
-        }
-    };
+//    final Observer<Weather> weatherObserver = new Observer<Weather>() {
+//        @RequiresApi(api = Build.VERSION_CODES.N)
+//        @Override
+//        public void onChanged(@Nullable final Weather weather) {
+//            if (weather != null) { //Weather data has finished being retrieved
+//                Log.d(LOG_TAG, "weatherObserver onChanged listener: weather data changed and is not null");
+//
+//                WeatherUtils.printWeather(weather);
+//
+//                data = new ArrayList<>();
+//                mapper = createObjectMapper(weather);
+//                mapper.forEach((key, val) -> {
+//                    if (key.equals("location")) { //
+//                        location.setText(val);
+//                        return;
+//                    }
+//                    data.add(key + "\t" + val);
+//                });
+//                ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
+//                        R.layout.item_weather_widget,
+//                        data);
+//                setListAdapter(adapter);
+//
+//                mListener.onWeatherDataLoaded(weather);
+//
+//
+//            }
+//
+//
+//        }
+//    };
 
     //    private void subscribeToUserProfileModel() {
 //        fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfile -> {
@@ -280,13 +299,13 @@ public class WeatherFragment extends ListFragment {
 
     public Map<String, String> createObjectMapper(Weather data) {
         Map<String, String> mapper = new HashMap<String, String>();
-        mapper.put("location", data.getCity().replace("+", " ") + ", " + data.getCountryCode());
+        mapper.put("location", data.getCity().replace("+", " ") + ", " + getCountryName(data.getCountryCode()));
         mapper.put(getResources().getString(R.string.current_conditions_weather_widget), data.getForecastMain());
         mapper.put(getResources().getString(R.string.forecast_detail_weather_widget), data.getForecastDescription());
         mapper.put(getResources().getString(R.string.temp_weather_widget), convertAndFormatKelvinTemp(data.getTemperature().temp));
         mapper.put(getResources().getString(R.string.temp_min_weather_widget), convertAndFormatKelvinTemp(data.getTemperature().tempMin));
         mapper.put(getResources().getString(R.string.temp_max_weather_widget), convertAndFormatKelvinTemp(data.getTemperature().tempMax));
-        mapper.put(getResources().getString(R.string.humidity_weather_widget), String.valueOf(data.getHumidity()));
+        mapper.put(getResources().getString(R.string.humidity_weather_widget), String.valueOf(data.getHumidity() + "%"));
         mapper.put(getResources().getString(R.string.wind_weather_widget), String.valueOf(data.getWindSpeed()));
         mapper.put(getResources().getString(R.string.pressure_weather_widget), String.valueOf(data.getPressure()));
 

@@ -62,7 +62,7 @@ public class WeatherForecast {
 
         this.weather = new Weather();
         this.weather.setTemperature(
-                this.weather.createTemp(kelvinToFarenheit(main.get("temp").getAsDouble()),
+                this.weather.createTemp(main.get("temp").getAsDouble(),
                                         main.get("temp_min").getAsDouble(),
                                         main.get("temp_max").getAsDouble()));
         this.weather.setCity(city);

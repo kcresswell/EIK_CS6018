@@ -3,6 +3,8 @@ package com.example.mcresswell.project01.db.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -12,7 +14,10 @@ import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculat
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateBmi;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateHeightInInches;
 
-@Entity
+@Entity(foreignKeys = @ForeignKey(entity = User.class,
+                            parentColumns = "id",
+                            childColumns = "user_id"),
+        indices = {@Index(value = {"user_id"}, unique = true)})
 public class FitnessProfile {
 
     @PrimaryKey(autoGenerate = true)
@@ -65,19 +70,10 @@ public class FitnessProfile {
     private double m_bmr;
 //    private Bitmap m_profilePicture;
 
+    @ColumnInfo(name = "user_id")
+    private long userId;
+
     public FitnessProfile() {
-//        m_fName = "";
-//        m_lName = "";
-//        m_dob = "";
-//        m_sex = "";
-//        m_city = "";
-//        m_country = "";
-//        m_lifestyleSelection = "";
-//        m_weightGoal = "";
-//        m_lbsPerWeek = 0;
-//        m_weightInPounds = 225;
-//        m_heightFeet = 5;
-//        m_heightInches = 6;
 
         m_fName = "Eric";
         m_lName = "Test";
@@ -256,4 +252,12 @@ public class FitnessProfile {
     public double getM_bmr() { return m_bmr; }
 
     public void setM_bmr(double m_bmr) { this.m_bmr = m_bmr; }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
 }
