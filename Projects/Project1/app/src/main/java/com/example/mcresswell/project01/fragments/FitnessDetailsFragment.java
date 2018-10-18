@@ -1,8 +1,6 @@
 package com.example.mcresswell.project01.fragments;
 
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,10 +11,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.mcresswell.project01.R;
-import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.util.Constants;
 import com.example.mcresswell.project01.util.FitnessProfileUtils;
+import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 
 import java.util.Locale;
 

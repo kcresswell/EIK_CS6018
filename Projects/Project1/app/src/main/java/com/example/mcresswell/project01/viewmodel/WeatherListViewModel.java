@@ -11,6 +11,7 @@ import com.example.mcresswell.project01.db.entity.Weather;
 import com.example.mcresswell.project01.db.repo.WeatherRepository;
 
 import java.util.List;
+import java.util.Random;
 
 public class WeatherListViewModel extends AndroidViewModel {
 

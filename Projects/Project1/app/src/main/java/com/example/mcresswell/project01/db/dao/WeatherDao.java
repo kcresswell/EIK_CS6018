@@ -25,20 +25,11 @@ import java.util.Optional;
 @Dao
 public interface WeatherDao {
 
-    @Query("SELECT * FROM Weather LIMIT 1")
-    LiveData<Weather> findFirstWeatherRecord();
-
-    @Query("SELECT * FROM Weather WHERE city=:city AND (country IS NULL OR country LIKE :country)")
+    @Query("SELECT * FROM Weather WHERE city = :city AND (country IS NULL OR country LIKE :country)")
     LiveData<Weather> findWeatherByLocation(String city, String country);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertWeather(Weather weather);
-
-    @Update
-    void updateWeather(Weather weather);
-
-    @Delete
-    void deleteWeather(Weather weather);
 
     @Insert
     void insertAllWeather(List<Weather> weatherList);
@@ -49,7 +40,7 @@ public interface WeatherDao {
     @Query("SELECT * FROM Weather ORDER BY city ASC")
     LiveData<List<Weather>> loadAllWeather();
 
-    @Query("SELECT COUNT(*) FROM Weather")
-    LiveData<Integer> getWeatherCount();
+    @Query("SELECT * FROM Weather where id = :weatherId")
+    LiveData<Weather> findWeatherById(int weatherId);
 
 }

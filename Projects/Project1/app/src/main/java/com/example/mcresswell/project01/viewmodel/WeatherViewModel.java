@@ -11,11 +11,15 @@ import com.example.mcresswell.project01.db.InStyleDatabase;
 import com.example.mcresswell.project01.db.entity.Weather;
 import com.example.mcresswell.project01.db.repo.WeatherRepository;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class WeatherViewModel extends AndroidViewModel {
 
     private static final String LOG = WeatherViewModel.class.getSimpleName();
 
     private final MediatorLiveData<Weather> m_observableWeather;
+
     private final WeatherRepository m_weatherRepository;
 
     public WeatherViewModel(@NonNull Application application) {
@@ -30,10 +34,7 @@ public class WeatherViewModel extends AndroidViewModel {
 
     private void configureMediatorLiveData() {
         m_observableWeather.setValue(null);
-
-        LiveData<Weather> weatherData = m_weatherRepository.getWeather();
-
-        m_observableWeather.addSource(weatherData, data -> {
+        m_observableWeather.addSource(m_weatherRepository.getWeather(), data -> {
             Log.d(LOG, "m_weatherRepository.getWeather() listener onChanged");
             if (data == null) {
                 Log.d(LOG, "BUT WHY IS THE WEATHER NULL ?????? :(");
@@ -48,7 +49,16 @@ public class WeatherViewModel extends AndroidViewModel {
         m_weatherRepository.loadWeatherData(city, country);
     }
 
+
+    public void loadRandomWeather(ArrayList<Integer> weatherIdList) {
+        Random random = new Random();
+        m_weatherRepository.
+                loadRandomWeatherData(weatherIdList.get(random.nextInt(weatherIdList.size())));
+
+    }
+
     public LiveData<Weather> getWeather() {
         return m_observableWeather;
     }
+
 }

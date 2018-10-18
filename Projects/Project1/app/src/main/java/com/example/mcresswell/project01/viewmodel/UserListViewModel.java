@@ -36,8 +36,8 @@ public class UserListViewModel extends AndroidViewModel {
         m_observableUserList.addSource(users, m_observableUserList::setValue);
     }
 
-    public void deleteAllUsers() {
-        m_userRepository.deleteAll();
+    public void resetUserTable(int numUsers) {
+        m_userRepository.asyncResetUserDatabase(numUsers);
     }
 
     public LiveData<List<User>> getUserList() {

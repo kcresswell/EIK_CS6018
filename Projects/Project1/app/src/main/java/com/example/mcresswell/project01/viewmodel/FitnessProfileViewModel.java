@@ -32,4 +32,6 @@ public class FitnessProfileViewModel extends AndroidViewModel {
     public void insertNewFitnessProfile(FitnessProfile fitnessProfile) {
         m_fitnessProfileRepository.insertNewFitnessProfile(fitnessProfile);
     }
+
+
 }
