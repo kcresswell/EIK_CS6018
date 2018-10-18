@@ -52,7 +52,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
     private OnProfileEntryFragmentListener m_dataListener;
     private FitnessProfileViewModel m_fitnessProfileViewModel;
-    private UserViewModel m_userViewModel;
+    private UserViewModel userViewModel;
 
     //UI Elements
     private EditText etxt_firstName, etxt_lastName, etxt_dob, etxt_sex, etxt_city, etxt_country,
@@ -92,10 +92,10 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
     private void initUserViewModel() {
         final Observer<User> userObserver = user -> m_user = user;
-        m_userViewModel = ViewModelProviders.of(this)
+        userViewModel = ViewModelProviders.of(this)
                 .get(UserViewModel.class);
-        m_user = m_userViewModel.getUser().getValue();
-        m_userViewModel.getUser().observe(this, userObserver);
+        m_user = userViewModel.getUser().getValue();
+        userViewModel.getUser().observe(this, userObserver);
     }
 
     private void initFitnessProfileViewModel() {
@@ -304,7 +304,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
 
         //TODO: Uncomment the code below once the fitness profile view model is working
-        m_userViewModel.getUser().observe(this, user -> {
+        userViewModel.getUser().observe(this, user -> {
             if (user != null) {
                 //Retrieve the userID from UserViewModel for entering in profile_id field of new fitness profile record
                 tmp_fitnessProfile.setM_userID(m_user.getId());
