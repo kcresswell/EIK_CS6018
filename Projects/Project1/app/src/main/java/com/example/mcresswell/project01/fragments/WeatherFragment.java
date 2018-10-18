@@ -17,7 +17,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.db.entity.User;
 import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
+import com.example.mcresswell.project01.viewmodel.UserViewModel;
 import com.example.mcresswell.project01.viewmodel.WeatherViewModel;
 import com.example.mcresswell.project01.db.entity.Weather;
 import com.example.mcresswell.project01.util.Constants;
@@ -41,11 +43,14 @@ public class WeatherFragment extends ListFragment {
     private OnWeatherDataLoadedListener mListener;
     private WeatherViewModel weatherViewModel;
     private FitnessProfileViewModel fitnessProfileViewModel;
+    private UserViewModel m_userViewModel;
+    private User m_user;
 
     private TextView location;
     Map<String, String> mapper;
     private ArrayList<String> data;
     private ListView m_listView;
+
 
     public WeatherFragment() {
     }
@@ -72,6 +77,14 @@ public class WeatherFragment extends ListFragment {
 
     }
 
+    private void initUserViewModel() {
+        final Observer<User> userObserver = user -> m_user = user;
+        m_userViewModel = ViewModelProviders.of(this)
+                .get(UserViewModel.class);
+        m_user = m_userViewModel.getUser().getValue();
+        m_userViewModel.getUser().observe(this, userObserver);
+    }
+
     private void configureViewModels() {
         weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
         weatherViewModel.getWeather().observe(this, weather -> {
@@ -84,9 +97,11 @@ public class WeatherFragment extends ListFragment {
             }
         });
 
+        initUserViewModel();
+
         fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
 
-        fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfile -> {
+        fitnessProfileViewModel.getFitnessProfile(m_user.getId()).observe(this, fitnessProfile -> {
             //Upon updates to the fitness profile, reload weather data
             if (fitnessProfile != null) {
                 Log.d(LOG_TAG, "FitnessProfileViewModel onChanged listener: an update to the value of the fitness" +

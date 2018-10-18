@@ -25,9 +25,11 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.db.entity.User;
 import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.util.Constants;
+import com.example.mcresswell.project01.viewmodel.UserViewModel;
 
 import static com.example.mcresswell.project01.util.ValidationUtils.isNotNullOrEmpty;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidCity;
@@ -50,6 +52,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
     private OnProfileEntryFragmentListener m_dataListener;
     private FitnessProfileViewModel m_fitnessProfileViewModel;
+    private UserViewModel m_userViewModel;
 
     //UI Elements
     private EditText etxt_firstName, etxt_lastName, etxt_dob, etxt_sex, etxt_city, etxt_country,
@@ -64,6 +67,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
     //Data Elements
     private FitnessProfile m_fitnessProfile;
+    private User m_user;
     private String lifestyleSelectorString = "Active"; //Default lifestyle selector of 'Active' if no radio button selected
     private String weightGoalString = "Lose"; //Default etxt_weight goal of 'Lose' if no radio button is selected
 
@@ -81,13 +85,20 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
         super.onCreate(savedInstanceState);
 
-        int userID = 1;
-
-        initViewModel(userID);
+        initUserViewModel();
+        initFitnessProfileViewModel();
 
     }
 
-    private void initViewModel(int userID) {
+    private void initUserViewModel() {
+        final Observer<User> userObserver = user -> m_user = user;
+        m_userViewModel = ViewModelProviders.of(this)
+                .get(UserViewModel.class);
+        m_user = m_userViewModel.getUser().getValue();
+        m_userViewModel.getUser().observe(this, userObserver);
+    }
+
+    private void initFitnessProfileViewModel() {
         final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> {
             m_fitnessProfile = fitnessProfile;
             if (m_fitnessProfile != null) {
@@ -97,11 +108,8 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
         m_fitnessProfileViewModel = ViewModelProviders.of(getActivity())
                 .get(FitnessProfileViewModel.class);
-        m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile(userID).getValue();
-//        if (m_fitnessProfile == null) {
-//            m_fitnessProfile = new FitnessProfile();
-//        }
-        m_fitnessProfileViewModel.getFitnessProfile(userID).observe(getActivity(), fitnessProfileObserver);
+        m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile(m_user.getId()).getValue();
+        m_fitnessProfileViewModel.getFitnessProfile(m_user.getId()).observe(getActivity(), fitnessProfileObserver);
     }
 
     @Override
