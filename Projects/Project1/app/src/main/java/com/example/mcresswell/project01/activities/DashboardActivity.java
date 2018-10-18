@@ -9,8 +9,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.fragments.LoginFragment;
 import com.example.mcresswell.project01.ui.RV_Adapter;
 import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
@@ -23,6 +26,7 @@ import com.example.mcresswell.project01.fragments.WeatherFragment;
 
 import java.io.IOException;
 
+import static com.example.mcresswell.project01.util.Constants.ON_CLICK;
 import static com.example.mcresswell.project01.util.GeocoderLocationUtils.DEFAULT_COORDINATES;
 import static com.example.mcresswell.project01.util.GeocoderLocationUtils.getCoordinatesFromCityCountry;
 
