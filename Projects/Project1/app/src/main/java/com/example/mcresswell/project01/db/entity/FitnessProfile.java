@@ -74,19 +74,6 @@ public class FitnessProfile {
     private long userId;
 
     public FitnessProfile() {
-
-        m_fName = "Eric";
-        m_lName = "Test";
-        m_dob = "09/09/1990";
-        m_sex = "M";
-        m_city = "Salt Lake City";
-        m_country = "US";
-        m_lifestyleSelection = "ACTIVE";
-        m_weightGoal = "MAINTAIN";
-        m_lbsPerWeek = 0;
-        m_weightInPounds = 225;
-        m_heightFeet = 5;
-        m_heightInches = 6;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
