@@ -1,8 +1,11 @@
 package com.example.mcresswell.project01.fragments;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +13,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.example.mcresswell.project01.activities.LoginActivity;
 import com.example.mcresswell.project01.ui.DashButton;
 import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.ui.RV_Adapter;
@@ -19,6 +25,7 @@ import java.util.ArrayList;
 
 import static com.example.mcresswell.project01.util.Constants.CREATE;
 import static com.example.mcresswell.project01.util.Constants.CREATE_VIEW;
+import static com.example.mcresswell.project01.util.Constants.ON_CLICK;
 
 
 /**
@@ -98,6 +105,8 @@ public class DashboardFragment extends Fragment {
 
         m_RecyclerView.setAdapter(m_Adaptor);
 
+        logoutButtonHandler(view);
+
         return view;
     }
 
@@ -106,6 +115,23 @@ public class DashboardFragment extends Fragment {
         m_RecyclerView.getChildAdapterPosition(this.m_RecyclerView);
     }
 
+    //Logout button goes to login page
+    private void logoutButtonHandler(View view) {
+        Button logoutButton= (Button)view.findViewById(R.id.btn_logout);
+        FragmentTransaction m_fTrans = getActivity().getSupportFragmentManager().beginTransaction();
+        logoutButton.setOnClickListener( listener -> {
+                    Log.d(LOG_TAG, ON_CLICK);
+                    if (!getResources().getBoolean(R.bool.isWideDisplay)) {
+                        Intent intent = new Intent(getActivity(), LoginActivity.class);
+                        startActivityForResult(intent, Activity.RESULT_OK);
+                    } else {
+                        m_fTrans.replace(R.id.fl_login_wd, new LoginFragment());
+                        m_fTrans.addToBackStack(null);
+                        m_fTrans.commit();
+                    }
+                }
+        );
+    }
 
 
 }
