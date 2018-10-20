@@ -52,11 +52,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
-        android:text="Create Account"
+        android:text="@string/btn_link_create_account"
         android:textColor="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_login"
-        tools:text="@string/btn_createAccount" />
+        tools:text="@string/btn_link_create_account" />
 
 </android.support.constraint.ConstraintLayout>

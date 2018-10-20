@@ -54,8 +54,11 @@
             android:parentActivityName=".activities.DashboardActivity" />
         <activity
             android:name=".activities.CreateAccountActivity"
-            android:label="@string/title_activity_create_account"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.AccountSettingsActivity"
+            android:label="Account Settings"
+            android:parentActivityName=".activities.DashboardActivity" />
     </application>
 
 </manifest>
