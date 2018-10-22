@@ -96,8 +96,14 @@ public class WeatherFragment extends ListFragment {
                 //Once all records in database have been retrieved, now load weather using city/country from user's fitness profile
                 //weatherViewModel.loadWeather(fitnessProfile.getM_city(), fitnessProfile.getM_country());
 
-                weatherViewModel.loadRandomWeather(idList);
-//                weatherViewModel.loadWeather("Tokyo", "Japan");
+                weatherViewModel.loadWeather("Tokyo", "Japan");
+
+                //Logic to select a random weather record to display
+//                if (idList.isEmpty()) {
+//                    weatherViewModel.loadWeather("Tokyo", "Japan");
+//                } else {
+//                    weatherViewModel.loadRandomWeather(idList);
+//                }
             }
         });
 

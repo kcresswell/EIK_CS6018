@@ -241,7 +241,7 @@
                 android:ems="10"
                 android:hint="@string/hint_country"
                 android:inputType="textPersonName"
-                android:maxLength="2"
+                android:maxLength="35"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="@+id/txtv_city"
                 app:layout_constraintHorizontal_bias="0.0"
