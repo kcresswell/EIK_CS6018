@@ -144,8 +144,8 @@ public class FitnessProfile {
 
     public int getM_userID() { return m_userID; }
 
-    public void setM_userID(int id) {
-        this.m_userID = id;
+    public void setM_userID(int m_userID) {
+        this.m_userID = m_userID;
     }
 
     public String getM_fName() {
