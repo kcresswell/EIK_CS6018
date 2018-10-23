@@ -35,7 +35,7 @@ public class ProfileSummaryFragment extends Fragment
     private FitnessProfile m_fitnessProfile;
     private User m_user;
 
-    private int test_user_num = 1;
+    private int test_user_num = 0;
 //    private Bitmap m_photo;
 //    private ImageButton m_profilePhoto;
 
@@ -87,6 +87,7 @@ public class ProfileSummaryFragment extends Fragment
 
         View v = inflater.inflate(R.layout.fragment_profile_summary, container, false);
         initViewElements(v);
+
         m_editButton.setOnClickListener(this);
         setDataToViewElements();
 
@@ -95,20 +96,25 @@ public class ProfileSummaryFragment extends Fragment
 
     private void initUserViewModel() {
         final Observer<User> userObserver = user -> m_user = user;
-        m_userViewModel = ViewModelProviders.of(this)
+        m_userViewModel = ViewModelProviders.of(getActivity())
                 .get(UserViewModel.class);
         m_user = m_userViewModel.getUser().getValue();
-        m_userViewModel.getUser().observe(this, userObserver);
+        m_userViewModel.getUser().observe(getActivity(), userObserver);
     }
 
     private void initFitnessProfileViewModel() {
-        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile = fitnessProfile;
-        m_fitnessProfileViewModel = ViewModelProviders.of(this)
+        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> {
+            m_fitnessProfile = fitnessProfile;
+            setDataToViewElements();
+        };
+        m_fitnessProfileViewModel = ViewModelProviders.of(getActivity())
                 .get(FitnessProfileViewModel.class);
-        if (m_user != null) {
-            m_fitnessProfileViewModel.getFitnessProfile(m_user.getId()).observe(this, fitnessProfileObserver);
+        if (m_user != null ) {
+            m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile(m_user.getId()).getValue();
+            m_fitnessProfileViewModel.getFitnessProfile(m_user.getId()).observe(getActivity(), fitnessProfileObserver);
         } else {
-            m_fitnessProfileViewModel.getFitnessProfile(test_user_num).observe(this, fitnessProfileObserver);
+            m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile(test_user_num).getValue();
+            m_fitnessProfileViewModel.getFitnessProfile(test_user_num).observe(getActivity(), fitnessProfileObserver);
         }
     }
 

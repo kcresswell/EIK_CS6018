@@ -71,7 +71,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     private String lifestyleSelectorString = "Active"; //Default lifestyle selector of 'Active' if no radio button selected
     private String weightGoalString = "Lose"; //Default etxt_weight goal of 'Lose' if no radio button is selected
 
-    private int test_user_num = 1;
+    private int test_user_num = 0;
 //    private Map<String, String> userEnteredData = new HashMap<>();
 
 
