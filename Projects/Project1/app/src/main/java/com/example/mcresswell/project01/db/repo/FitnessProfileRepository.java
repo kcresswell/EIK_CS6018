@@ -35,9 +35,6 @@ public class FitnessProfileRepository {
     public LiveData<FitnessProfile> getFitnessProfileData(int userID){
         //get from database when ready. Number value currently hard coded.
        return m_db.fitnessProfileDao().findByuserID(userID);
-
-        //until database is ready, pull from sample data.
-//        return SampleProfileData.getUserProfiles().get(0);
     }
 
     public void updateFitnessProfile(FitnessProfile fitnessProfile) {

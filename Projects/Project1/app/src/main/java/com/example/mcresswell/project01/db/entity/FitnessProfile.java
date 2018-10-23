@@ -14,9 +14,9 @@ import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculat
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateBmi;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateHeightInInches;
 
-@Entity(foreignKeys = @ForeignKey(entity = User.class,
+@Entity(/*foreignKeys = @ForeignKey(entity = User.class,
                             parentColumns = "id",
-                            childColumns = "user_id"),
+                            childColumns = "user_id"),*/
         indices = {@Index(value = {"user_id"}, unique = true)})
 public class FitnessProfile {
 
@@ -109,38 +109,6 @@ public class FitnessProfile {
         m_bmr = calculateBMR(m_heightFeet, m_heightInches, m_sex, m_weightInPounds, calculateAge(m_dob));
 //        m_profilePicture = profileImage;
     }
-
-//    //may not need both constructors, this one is just with all data but no id number
-//    public FitnessProfile(
-//            String fName,
-//            String lName,
-//            String dob,
-//            String sex,
-//            String city,
-//            String country,
-//            String lifestyleSelection,
-//            String weightGoal,
-//            int lbsPerWeek,
-//            int weightInPounds,
-//            int heightFeet,
-//            int heightInches) {
-//
-//        m_fName = fName;
-//        m_lName = lName;
-//        m_dob = dob;
-//        m_sex = sex;
-//        m_city = city;
-//        m_country = country;
-//        m_lifestyleSelection = lifestyleSelection;
-//        m_weightGoal = weightGoal;
-//        m_lbsPerWeek = lbsPerWeek;
-//        m_weightInPounds = weightInPounds;
-//        m_heightFeet = heightFeet;
-//        m_heightInches = heightInches;
-//        m_bmi = calculateBmi(calculateHeightInInches(heightFeet, heightInches), weightInPounds);
-//        m_bmr = calculateBMR(heightFeet, heightInches, sex, weightInPounds, calculateAge(dob));
-////        m_profilePicture = profileImage;
-//    }
 
     public int getM_userID() { return m_userID; }
 
