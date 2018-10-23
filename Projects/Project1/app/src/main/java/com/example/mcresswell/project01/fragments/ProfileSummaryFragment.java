@@ -34,6 +34,8 @@ public class ProfileSummaryFragment extends Fragment
     private UserViewModel m_userViewModel;
     private FitnessProfile m_fitnessProfile;
     private User m_user;
+
+    private int test_user_num = 1;
 //    private Bitmap m_photo;
 //    private ImageButton m_profilePhoto;
 
@@ -101,9 +103,13 @@ public class ProfileSummaryFragment extends Fragment
 
     private void initFitnessProfileViewModel() {
         final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile = fitnessProfile;
-        m_fitnessProfileViewModel = ViewModelProviders.of(getActivity())
+        m_fitnessProfileViewModel = ViewModelProviders.of(this)
                 .get(FitnessProfileViewModel.class);
-        m_fitnessProfileViewModel.getFitnessProfile(m_user.getId()).observe(getActivity(), fitnessProfileObserver);
+        if (m_user != null) {
+            m_fitnessProfileViewModel.getFitnessProfile(m_user.getId()).observe(this, fitnessProfileObserver);
+        } else {
+            m_fitnessProfileViewModel.getFitnessProfile(test_user_num).observe(this, fitnessProfileObserver);
+        }
     }
 
     private void setDataToViewElements() {
