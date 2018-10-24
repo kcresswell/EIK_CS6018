@@ -1,19 +1,39 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">In Style</string>
 
-    <!--Application Login-->
+    <!--Application Login/Create Account/Account Settings Screens-->
     <string name="greeting">Hello</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="btn_createAccount">Create Account</string>
     <string name="login">Login</string>
 
+    <!--The string below is used both in the login screen as well as the create account screen-->
+    <string name="btn_link_create_account">Create Account</string>
+
+    <string name="title_activity_create_account">Create a user account to get started creating your fitness profile and tracking your fitness!</string>
+
+    <string name="title_activity_account_settings">Modify your user account details below:</string>
+    <string name="btn_update_account">Update My Account</string>
+    <string name="btn_delete_account">Delete My Account</string>
+
     <!--Main Dashboard-->
-    <string name="calories">Daily Calories Goal</string>
+    <string name="btn_generic">Button</string>
+    <string name="log_out">Log Out</string>
+    <string name="settings">Settings</string>
+
+    <!--Fitness Details-->
+
+    <!--Fitness Details Headers-->
+    <string name="calories">Recommended Daily Caloric Intake</string>
     <string name="bmr">Basal Metabolic Rate (BMR)</string>
     <string name="bmi">Body Mass Index (BMI)</string>
+    <string name="steps">Total Steps Taken Today</string>
 
+    <!--Fitness Details TextView Placeholders-->
+    <string name="tv_bmr">BMR placeholder</string>
+    <string name="tv_calPerDay">Calories placeholder</string>
+    <string name="tv_bmi">BMI placeholder</string>
+    <string name="tv_steps">Steps placeholder</string>
 
 
     <!--Profile entry-->
@@ -30,7 +50,6 @@
     <string name="btn_img_description_profile_image">Take a profile picture</string>
     <string name="hint_dob">DOB</string>
 
-    <!--Fitness Details-->
     <string name="title_activity_fitness">Fitness</string>
     <string name="txtv_ft_symbol">\'</string>
     <string name="txtv_in_symbol">\"</string>
@@ -48,14 +67,10 @@
     <string name="btn_radio_gain">Gain</string>
     <string name="hint_lifestyle">Activity Level</string>
     <string name="hint_wGoal">Weight Goal</string>
-    <string name="btn_edit">Edit</string>
+    <string name="btn_edit_fitness_profile">Edit Fitness Profile</string>
 
     <!--Profile Summary-->
     <string name="hint_wkly_goal">lbs/wk</string>
-    <string name="tv_bmr">BMR</string>
-    <string name="tv_calPerDay">Calories Per Day</string>
-    <string name="tv_bmi">BMI placeholder</string>
-
 
     <!--Hiking-->
     <string name="title_activity_hiking">Hiking</string>
@@ -73,9 +88,4 @@
     <string name="humidity_weather_widget">Humidity: </string>
     <string name="pressure_weather_widget">Pressure: </string>
     <string name="wind_weather_widget">Wind Speed: </string>
-
-
-    <!-- TODO: Clean these up -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="btn_generic">button</string>
 </resources>

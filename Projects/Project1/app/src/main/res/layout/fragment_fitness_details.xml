@@ -10,19 +10,20 @@
     <!--Fitness details headings -->
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/tv_header_fitness_details_calories"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="@string/calories"
         android:textSize="@dimen/dashboard_fitness_details_heading"
         android:textAlignment="center"
+        android:paddingTop="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/tv_header_fitness_details_bmr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -35,7 +36,7 @@
 
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/tv_header_fitness_details_bmi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -44,6 +45,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_BMR" />
+
+    <TextView
+        android:id="@+id/tv_header_fitness_details_steps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/steps"
+        android:textSize="@dimen/dashboard_fitness_details_heading"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_bmi" />
 
 
     <!--Fitness details user data-->
@@ -58,7 +70,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/tv_header_fitness_details_calories"
         tools:text="@string/tv_calPerDay" />
 
     <TextView
@@ -72,10 +84,8 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/tv_header_fitness_details_bmr"
         tools:text="@string/tv_bmr" />
-
-
 
     <TextView
         android:id="@+id/tv_bmi"
@@ -88,7 +98,21 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/tv_header_fitness_details_bmi"
         tools:text="@string/tv_bmi" />
+
+    <TextView
+        android:id="@+id/tv_step_count"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_header_fitness_details_steps"
+        tools:text="@string/tv_steps" />
 
 </android.support.constraint.ConstraintLayout>

@@ -55,18 +55,6 @@ public class ProfileSummaryFragment extends Fragment
 
     public ProfileSummaryFragment() { }
 
-//    public static ProfileSummaryFragment newInstance(FitnessProfile profile) {
-//        Log.d(LOG_TAG, Constants.NEW);
-//        ProfileSummaryFragment fragment = new ProfileSummaryFragment();
-//        Bundle args = new Bundle();
-//        if (profile != null) {
-//            Log.d(LOG_TAG, "newInstance created with existing FitnessProfile data passed");
-////            args.putParcelable("profile", profile);
-//        }
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -157,8 +145,6 @@ public class ProfileSummaryFragment extends Fragment
 //        m_profilePhoto = v.findViewById(R.id.btn_img_takeImage);
     }
 
-    //edit button on click fragment replace with edit fragment
-    //id = btn_edit
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -176,9 +162,8 @@ public class ProfileSummaryFragment extends Fragment
         try {
             m_listener = (OnProfileSummaryInteractionListener) context;
         } catch (ClassCastException cce){
-            throw new ClassCastException(
-                    context.toString()
-                            + " must implement OnProfileSummaryInteractionListener");
+            throw new ClassCastException(context.toString()
+                    + " must implement OnProfileSummaryInteractionListener");
         }
     }
 
