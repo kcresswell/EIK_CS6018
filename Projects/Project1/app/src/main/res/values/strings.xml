@@ -10,7 +10,7 @@
     <!--The string below is used both in the login screen as well as the create account screen-->
     <string name="btn_link_create_account">Create Account</string>
 
-    <string name="title_activity_create_account">Create a new account to get started creating your fitness profile!</string>
+    <string name="title_activity_create_account">Create a user account to get started creating your fitness profile and tracking your fitness!</string>
 
     <string name="title_activity_account_settings">Modify your user account details below:</string>
     <string name="btn_update_account">Update My Account</string>
@@ -22,9 +22,19 @@
     <string name="settings">Settings</string>
 
     <!--Fitness Details-->
+
+    <!--Fitness Details Headers-->
     <string name="calories">Recommended Daily Caloric Intake</string>
     <string name="bmr">Basal Metabolic Rate (BMR)</string>
     <string name="bmi">Body Mass Index (BMI)</string>
+    <string name="steps">Total Steps Taken Today</string>
+
+    <!--Fitness Details TextView Placeholders-->
+    <string name="tv_bmr">BMR placeholder</string>
+    <string name="tv_calPerDay">Calories placeholder</string>
+    <string name="tv_bmi">BMI placeholder</string>
+    <string name="tv_steps">Steps placeholder</string>
+
 
     <!--Profile entry-->
     <string name="hint_fname">First Name</string>
@@ -61,9 +71,6 @@
 
     <!--Profile Summary-->
     <string name="hint_wkly_goal">lbs/wk</string>
-    <string name="tv_bmr">BMR</string>
-    <string name="tv_calPerDay">Calories Per Day</string>
-    <string name="tv_bmi">BMI placeholder</string>
 
     <!--Hiking-->
     <string name="title_activity_hiking">Hiking</string>
