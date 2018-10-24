@@ -2,6 +2,8 @@ package com.example.mcresswell.project01.db.repo;
 
 import android.arch.lifecycle.LiveData;
 import android.content.Context;
+import android.os.AsyncTask;
+
 import com.example.mcresswell.project01.db.InStyleDatabase;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import java.util.concurrent.Executor;
@@ -16,7 +18,7 @@ public class FitnessProfileRepository {
     //make the only call that applies to all accesses of the repository.
     private static FitnessProfileRepository FPR_instance;
     //the only way to access the instance.
-    public static FitnessProfileRepository getInsance(Context context) {
+    public static FitnessProfileRepository getInstance(Context context) {
         if (FPR_instance == null){
              FPR_instance = new FitnessProfileRepository(context);
         }
@@ -33,9 +35,6 @@ public class FitnessProfileRepository {
     public LiveData<FitnessProfile> getFitnessProfileData(int userID){
         //get from database when ready. Number value currently hard coded.
        return m_db.fitnessProfileDao().findByuserID(userID);
-
-        //until database is ready, pull from sample data.
-//        return SampleProfileData.getUserProfiles().get(0);
     }
 
     public void updateFitnessProfile(FitnessProfile fitnessProfile) {
@@ -47,8 +46,21 @@ public class FitnessProfileRepository {
     }
 
     public void insertNewFitnessProfile(FitnessProfile fitnessProfile) {
-        m_executor.execute(
-                () -> m_db.fitnessProfileDao().insertNewFitnessProfile(fitnessProfile)
-        );
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                m_db.fitnessProfileDao().insertNewFitnessProfile(fitnessProfile);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+            }
+        }.execute();
+
+//        m_executor.execute(
+//                () -> m_db.fitnessProfileDao().insertNewFitnessProfile(fitnessProfile)
+//        );
     }
 }

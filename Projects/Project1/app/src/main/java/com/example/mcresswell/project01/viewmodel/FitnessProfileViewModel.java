@@ -17,7 +17,7 @@ public class FitnessProfileViewModel extends AndroidViewModel {
 
     public FitnessProfileViewModel(@NonNull Application application) {
         super(application);
-        m_fitnessProfileRepository = FitnessProfileRepository.getInsance(application.getApplicationContext());
+        m_fitnessProfileRepository = FitnessProfileRepository.getInstance(application.getApplicationContext());
     }
 
     public LiveData<FitnessProfile> getFitnessProfile(int userID) {

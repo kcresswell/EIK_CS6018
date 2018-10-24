@@ -46,8 +46,8 @@ public interface FitnessProfileDao {
 
 
     //scenario 1
-    @Query("SELECT * FROM FitnessProfile fp WHERE fp.user_id = :userID")
-    LiveData<FitnessProfile> findByuserID(int userID);
+    @Query("SELECT * FROM FitnessProfile fp WHERE fp.user_id = :m_userID")
+    LiveData<FitnessProfile> findByuserID(int m_userID);
 
     //scenario 2
     @Update

@@ -71,6 +71,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     private String lifestyleSelectorString = "Active"; //Default lifestyle selector of 'Active' if no radio button selected
     private String weightGoalString = "Lose"; //Default etxt_weight goal of 'Lose' if no radio button is selected
 
+    private int test_user_num = 0;
 //    private Map<String, String> userEnteredData = new HashMap<>();
 
 
@@ -111,6 +112,9 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         if (m_user != null ) {
             m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile(m_user.getId()).getValue();
             m_fitnessProfileViewModel.getFitnessProfile(m_user.getId()).observe(getActivity(), fitnessProfileObserver);
+        } else {
+            m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile(test_user_num).getValue();
+            m_fitnessProfileViewModel.getFitnessProfile(test_user_num).observe(getActivity(), fitnessProfileObserver);
         }
     }
 
