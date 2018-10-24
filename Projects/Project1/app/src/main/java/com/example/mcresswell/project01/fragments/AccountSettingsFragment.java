@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.mcresswell.project01.activities.DashboardActivity;
 import com.example.mcresswell.project01.activities.ProfileEntryActivity;
 import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 import com.example.mcresswell.project01.viewmodel.UserListViewModel;
 import com.example.mcresswell.project01.viewmodel.UserViewModel;
 import com.example.mcresswell.project01.db.entity.User;
@@ -41,6 +42,7 @@ public class AccountSettingsFragment extends Fragment {
     private Button m_btn_updateAccount, m_btn_deleteAccount;
     private EditText m_email, m_password, m_firstName, m_lastName;
     private UserViewModel userViewModel;
+    private FitnessProfileViewModel fitnessProfileViewModel;
     private UserListViewModel userListViewModel;
 
     public AccountSettingsFragment() { }
@@ -113,7 +115,9 @@ public class AccountSettingsFragment extends Fragment {
                     String.format("Deleting user account for the following user (id: %d): %s\t%s\t%s",
                             userToDelete.getId(), userToDelete.getEmail(), userToDelete.getFirstName(), userToDelete.getLastName()));
 
-            userViewModel.deleteUser(userToDelete);
+            Log.d(LOG_TAG, "JUST KIDDING, NOT IMPLEMENTED YET!");
+            //TODO: make call to delete corresponding fitness profile record FIRST, to prevent FK constraint violation!
+//            userViewModel.deleteUser(userToDelete);
         }
 
     }
@@ -157,11 +161,11 @@ public class AccountSettingsFragment extends Fragment {
         if (userResult.getValue() != null && userResult.getValue().getEmail().equals(email)) {
             Log.d(LOG_TAG, "Email is not unique. A user with that email already exists.");
 
-            Log.d(LOG_TAG, "EMAIL: " + userResult.getValue().getEmail());
-            Log.d(LOG_TAG, "PASSOWRD: " + userResult.getValue().getPassword());
-            Log.d(LOG_TAG, "First name: " + userResult.getValue().getFirstName());
-            Log.d(LOG_TAG, "Last Name: " + userResult.getValue().getLastName());
-            Log.d(LOG_TAG, "Date joined: " + userResult.getValue().getJoinDate());
+//            Log.d(LOG_TAG, "EMAIL: " + userResult.getValue().getEmail());
+//            Log.d(LOG_TAG, "PASSOWRD: " + userResult.getValue().getPassword());
+//            Log.d(LOG_TAG, "First name: " + userResult.getValue().getFirstName());
+//            Log.d(LOG_TAG, "Last Name: " + userResult.getValue().getLastName());
+//            Log.d(LOG_TAG, "Date joined: " + userResult.getValue().getJoinDate());
 
             return false;
         }

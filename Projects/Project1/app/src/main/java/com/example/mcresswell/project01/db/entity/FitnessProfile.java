@@ -14,15 +14,15 @@ import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculat
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateBmi;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateHeightInInches;
 
-@Entity(/*foreignKeys = @ForeignKey(entity = User.class,
+@Entity(foreignKeys = @ForeignKey(entity = User.class,
                             parentColumns = "id",
-                            childColumns = "user_id"),*/
+                            childColumns = "user_id"),
         indices = {@Index(value = {"user_id"}, unique = true)})
 public class FitnessProfile {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    private int m_userID;
+    private int m_Id; //THIS IS THE FITNESS PROFILE ID, NOT THE USER ID.
 
     @ColumnInfo(name = "first_name")
     private String m_fName;
@@ -71,7 +71,7 @@ public class FitnessProfile {
 //    private Bitmap m_profilePicture;
 
     @ColumnInfo(name = "user_id")
-    private long userId;
+    private int userId; //THIS IS THE USER ID FOREIGN KEY FIELD.
 
     public FitnessProfile() {
     }
@@ -92,7 +92,7 @@ public class FitnessProfile {
             int m_heightFeet,
             int m_heightInches) {
 
-        m_userID = m_userId;
+        m_Id = m_userId;
         this.m_fName = m_fName;
         this.m_lName = m_lName;
         this.m_dob = m_dob;
@@ -110,10 +110,10 @@ public class FitnessProfile {
 //        m_profilePicture = profileImage;
     }
 
-    public int getM_userID() { return m_userID; }
+    public int getM_Id() { return m_Id; }
 
-    public void setM_userID(int m_userID) {
-        this.m_userID = m_userID;
+    public void setM_Id(int m_Id) {
+        this.m_Id = m_Id;
     }
 
     public String getM_fName() {
@@ -208,11 +208,11 @@ public class FitnessProfile {
 
     public void setM_bmr(double m_bmr) { this.m_bmr = m_bmr; }
 
-    public long getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 }

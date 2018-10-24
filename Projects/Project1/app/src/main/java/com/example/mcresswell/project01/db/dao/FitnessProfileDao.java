@@ -12,8 +12,6 @@ import com.example.mcresswell.project01.db.entity.FitnessProfile;
 
 import java.util.List;
 
-import javax.annotation.meta.When;
-
 /**
  * Data Access Object (DAO) for querying FitnessProfile table in database.
  * Three scenarios exist where the DAO will be used:
@@ -57,16 +55,13 @@ public interface FitnessProfileDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertNewFitnessProfile(FitnessProfile fitnessProfile);
 
-    //delete fitness profile data from db
     @Delete
     void deleteFitnessProfileData(FitnessProfile fitnessProfile);
 
-    //insert a list of fitness profiles into db
     @Insert
     void insertAll(List<FitnessProfile> fitnessProfiles);
 
-    //get all rows in FitnessProfile table
-    @Query("SELECT * FROM FitnessProfile ORDER BY id ASC")
+    @Query("SELECT * FROM FitnessProfile") //YOU DONT NEED TO EXPLICITLY ORDER THIS BY ID, THATS THE DEFAULT ORDERING.
     List<FitnessProfile> getAllFitnessProfileData();
 }
 
