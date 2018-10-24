@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.mcresswell.project01.activities.ProfileEntryActivity;
 import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.viewmodel.UserListViewModel;
 import com.example.mcresswell.project01.viewmodel.UserViewModel;
 import com.example.mcresswell.project01.db.entity.User;
 import com.example.mcresswell.project01.util.Constants;
@@ -38,6 +39,7 @@ public class CreateAccountFragment extends Fragment {
     private Button m_btn_createAccount;
     private EditText m_email, m_password, m_firstName, m_lastName;
     private UserViewModel userViewModel;
+    private UserListViewModel userListViewModel;
 
     public CreateAccountFragment() {
     }
@@ -56,6 +58,10 @@ public class CreateAccountFragment extends Fragment {
         userViewModel.getUser().observe(this, user -> {
             Log.d(LOG_TAG, "UserViewModel observer for getUser()");
         });
+
+
+        userListViewModel = ViewModelProviders.of(this).get(UserListViewModel.class);
+
     }
 
 
@@ -100,6 +106,18 @@ public class CreateAccountFragment extends Fragment {
             newUser.setJoinDate(Date.from(Instant.now()));
             //Add new user to database
             userViewModel.createUser(newUser);
+
+            //Add observer that logs all of the records in the database after this user has been added
+            userListViewModel.getUserList().observe(this, userList -> {
+                if (userList != null) {
+                    userList.forEach(each -> {
+                        Log.d(LOG_TAG, String.format(
+                                "User record: id=%d, email='%s', firstName='%s', lastName='%s'",
+                                each.getId(), each.getEmail(), each.getFirstName(), each.getLastName()));
+                    });
+                }
+            });
+
 
             Intent intent = new Intent(getActivity(), ProfileEntryActivity.class);
             startActivity(intent);

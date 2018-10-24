@@ -30,13 +30,10 @@ import static com.example.mcresswell.project01.util.Constants.ON_CLICK;
 import static com.example.mcresswell.project01.util.GeocoderLocationUtils.DEFAULT_COORDINATES;
 import static com.example.mcresswell.project01.util.GeocoderLocationUtils.getCoordinatesFromCityCountry;
 
-public class DashboardActivity extends AppCompatActivity implements
-//        ProfileSummaryFragment.OnProfileSummaryInteractionListener,
-//        ProfileEntryFragment.OnProfileEntryFragmentListener,
-        RV_Adapter.OnAdapterDataChannel,
+public class DashboardActivity extends AppCompatActivity implements RV_Adapter.OnAdapterDataChannel,
         WeatherFragment.OnWeatherDataLoadedListener {
 
-    private final String LOG = getClass().getSimpleName();
+    private final static String LOG = DashboardActivity.class.getSimpleName();
 
     private FragmentTransaction m_fTrans;
     private FitnessProfile m_fitnessProfile;
@@ -177,11 +174,9 @@ public class DashboardActivity extends AppCompatActivity implements
 
         if (!isWideDisplay()) {
             m_fTrans.replace(R.id.fl_master_nd, frag_dashboard, "v_frag_dashboard");
-//            m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         } else { //Tablet default: master fragment left, detail fragment right
             m_fTrans.replace(R.id.fl_master_wd, frag_dashboard, "v_frag_dashboard");
-//            m_fTrans.replace(R.id.fl_detail_wd, FitnessDetailsFragment.newInstance(m_fitnessProfile.getValue()), "v_frag_fitness");
             m_fTrans.replace(R.id.fl_detail_wd, new FitnessDetailsFragment(), "v_frag_fitness");
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.mcresswell.project01.activities.AccountSettingsActivity;
 import com.example.mcresswell.project01.activities.LoginActivity;
 import com.example.mcresswell.project01.ui.DashButton;
 import com.example.mcresswell.project01.R;
@@ -39,6 +40,7 @@ public class DashboardFragment extends Fragment {
     private RecyclerView.Adapter m_Adaptor;
     private RecyclerView.LayoutManager layoutManager;
     private FitnessProfileViewModel fitnessProfileViewModel;
+    private Button m_logoutButton, m_settingsButton;
 
 
     public DashboardFragment() { }
@@ -105,32 +107,55 @@ public class DashboardFragment extends Fragment {
 
         m_RecyclerView.setAdapter(m_Adaptor);
 
-        logoutButtonHandler(view);
+        initializeFragmentView(view);
+
+        setOnClickListeners();
 
         return view;
     }
 
-    public void getButtonClickedPosition() {
-        notify();
-        m_RecyclerView.getChildAdapterPosition(this.m_RecyclerView);
+    private void initializeFragmentView(View view){
+        m_logoutButton = view.findViewById(R.id.btn_logout);
+        m_settingsButton = view.findViewById(R.id.btn_settings);
     }
 
-    //Logout button goes to login page
-    private void logoutButtonHandler(View view) {
-        Button logoutButton= (Button)view.findViewById(R.id.btn_logout);
+    private void setOnClickListeners() {
+        m_logoutButton.setOnClickListener(listener -> logoutButtonHandler());
+        m_settingsButton.setOnClickListener(listener -> settingsButtonHandler());
+    }
+
+    private void settingsButtonHandler() {
+        Log.d(LOG_TAG, ON_CLICK);
         FragmentTransaction m_fTrans = getActivity().getSupportFragmentManager().beginTransaction();
-        logoutButton.setOnClickListener( listener -> {
-                    Log.d(LOG_TAG, ON_CLICK);
-                    if (!getResources().getBoolean(R.bool.isWideDisplay)) {
-                        Intent intent = new Intent(getActivity(), LoginActivity.class);
-                        startActivityForResult(intent, Activity.RESULT_OK);
-                    } else {
-                        m_fTrans.replace(R.id.fl_login_wd, new LoginFragment());
-                        m_fTrans.addToBackStack(null);
-                        m_fTrans.commit();
-                    }
-                }
-        );
+        if (!getResources().getBoolean(R.bool.isWideDisplay)) {
+            Intent intent = new Intent(getActivity(), AccountSettingsActivity.class);
+            startActivityForResult(intent, Activity.RESULT_OK);
+        } else {
+            m_fTrans.replace(R.id.fl_login_wd, new AccountSettingsFragment());
+            m_fTrans.addToBackStack(null);
+            m_fTrans.commit();
+        }
+    }
+
+
+
+    //Logout button goes to login page
+    private void logoutButtonHandler() {
+        Log.d(LOG_TAG, ON_CLICK);
+        FragmentTransaction m_fTrans = getActivity().getSupportFragmentManager().beginTransaction();
+        if (!getResources().getBoolean(R.bool.isWideDisplay)) {
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivityForResult(intent, Activity.RESULT_OK);
+        } else {
+            m_fTrans.replace(R.id.fl_login_wd, new LoginFragment());
+            m_fTrans.addToBackStack(null);
+            m_fTrans.commit();
+        }
+    }
+
+    private void getButtonClickedPosition() {
+        notify();
+        m_RecyclerView.getChildAdapterPosition(this.m_RecyclerView);
     }
 
 
