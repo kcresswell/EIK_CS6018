@@ -110,7 +110,7 @@ public class FitnessProfileUtils {
 
     public static void printUserProfileData(FitnessProfile fitnessProfile){
         Log.d(LOG_TAG, "printUserProfileData");
-        Log.d(LOG_TAG, "userID: " + fitnessProfile.getM_Id());
+        Log.d(LOG_TAG, "FitnessProfile ID: " + fitnessProfile.getM_Id());
         Log.d(LOG_TAG, "First Name: " + fitnessProfile.getM_fName());
         Log.d(LOG_TAG, "Last Name: " + fitnessProfile.getM_lName());
         Log.d(LOG_TAG, "DOB: " + fitnessProfile.getM_dob());
@@ -128,7 +128,7 @@ public class FitnessProfileUtils {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static FitnessProfile newTestUserProfileInstance() {
         FitnessProfile testUser = new FitnessProfile();
-        testUser.setM_Id(1);
+//        testUser.setM_Id(1);
         testUser.setM_fName("TEST");
         testUser.setM_lName("LASTNAME");
         testUser.setM_dob("01/01/1900");
