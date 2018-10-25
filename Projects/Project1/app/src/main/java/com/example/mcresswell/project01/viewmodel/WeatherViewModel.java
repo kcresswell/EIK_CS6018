@@ -46,7 +46,7 @@ public class WeatherViewModel extends AndroidViewModel {
     }
 
     public void loadWeather(String city, String country) {
-        m_weatherRepository.loadWeatherData(city, country);
+        m_weatherRepository.fetchWeatherDataFromDataSource(city, country);
     }
 
 
@@ -60,5 +60,6 @@ public class WeatherViewModel extends AndroidViewModel {
     public LiveData<Weather> getWeather() {
         return m_observableWeather;
     }
+
 
 }

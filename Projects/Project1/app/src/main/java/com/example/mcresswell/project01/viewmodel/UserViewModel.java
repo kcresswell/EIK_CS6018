@@ -69,7 +69,9 @@ public class UserViewModel extends AndroidViewModel {
         m_userRepository.delete(user);
     }
 
-    public LiveData<User> findUser(String email) { return m_userRepository.find(email); }
+    public LiveData<User> findUser(String email) {
+        return m_userRepository.find(email);
+    }
 
     public LiveData<User> getUser() {
         return m_observableUser;

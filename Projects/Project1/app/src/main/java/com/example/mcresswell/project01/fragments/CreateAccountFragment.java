@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.mcresswell.project01.activities.ProfileEntryActivity;
 import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 import com.example.mcresswell.project01.viewmodel.UserListViewModel;
 import com.example.mcresswell.project01.viewmodel.UserViewModel;
 import com.example.mcresswell.project01.db.entity.User;
@@ -39,6 +40,7 @@ public class CreateAccountFragment extends Fragment {
     private Button m_btn_createAccount;
     private EditText m_email, m_password, m_firstName, m_lastName;
     private UserViewModel userViewModel;
+    private FitnessProfileViewModel fitnessProfileViewModel;
     private UserListViewModel userListViewModel;
 
     public CreateAccountFragment() {
@@ -61,7 +63,7 @@ public class CreateAccountFragment extends Fragment {
 
 
         userListViewModel = ViewModelProviders.of(this).get(UserListViewModel.class);
-
+        fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
     }
 
 

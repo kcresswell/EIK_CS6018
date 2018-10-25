@@ -16,16 +16,10 @@ import com.example.mcresswell.project01.fragments.ProfileEntryFragment;
 import com.example.mcresswell.project01.fragments.ProfileSummaryFragment;
 import com.example.mcresswell.project01.util.Constants;
 
-public class ProfileEntryActivity extends AppCompatActivity
-        implements
-        ProfileEntryFragment.OnProfileEntryFragmentListener
-{
+public class ProfileEntryActivity extends AppCompatActivity {
     private final String LOG = getClass().getSimpleName();
 
     private FragmentTransaction m_fTrans;
-    private FitnessProfile m_fitnessProfile;
-    private FitnessProfileViewModel m_fitnessProfileViewModel;
-    private boolean m_isLoggedIn = false;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -36,22 +30,21 @@ public class ProfileEntryActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_entry);
 
-        initViewModel();
-        loadFragment();
+        loadProfileEntryFragment();
     }
 
-    private void loadFragment() {
+    private void loadProfileEntryFragment() {
         m_fTrans = getSupportFragmentManager().beginTransaction();
         m_fTrans.replace(R.id.fl_activity_profile_entry, new ProfileEntryFragment());
         m_fTrans.commit();
     }
 
-    private void initViewModel() {
-//        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile = fitnessProfile;
-        m_fitnessProfileViewModel = ViewModelProviders.of(this)
-                .get(FitnessProfileViewModel.class);
-//        m_fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfileObserver);
-    }
+//    private void initViewModel() {
+////        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile = fitnessProfile;
+//        m_fitnessProfileViewModel = ViewModelProviders.of(this)
+//                .get(FitnessProfileViewModel.class);
+////        m_fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfileObserver);
+//    }
 
     @Override
     public void onBackPressed() {
@@ -60,19 +53,19 @@ public class ProfileEntryActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-    @Override
-    public void onProfileEntryDataEntered_DoneButtonOnClick(boolean isClicked) {
-        if (isClicked) {
-            if (!isWideDisplay()){
-                Intent intent = new Intent(this, ProfileSummaryActivity.class);
-                startActivity(intent);
-            } else {
-                m_fTrans.replace(R.id.fl_detail_wd, new ProfileSummaryFragment());
-                m_fTrans.addToBackStack(null);
-                m_fTrans.commit();
-            }
-        }
-    }
+//    @Override
+//    public void onProfileEntryDataEntered_DoneButtonOnClick(boolean isClicked) {
+//        if (isClicked) {
+//            if (!isWideDisplay()){
+//                Intent intent = new Intent(this, ProfileSummaryActivity.class);
+//                startActivity(intent);
+//            } else {
+//                m_fTrans.replace(R.id.fl_detail_wd, new ProfileSummaryFragment());
+//                m_fTrans.addToBackStack(null);
+//                m_fTrans.commit();
+//            }
+//        }
+//    }
 
     private boolean isWideDisplay(){
         return getResources().getBoolean(R.bool.isWideDisplay);

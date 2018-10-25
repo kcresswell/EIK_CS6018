@@ -10,8 +10,7 @@ import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.db.entity.Weather;
 import com.example.mcresswell.project01.fragments.WeatherFragment;
 
-public class WeatherActivity extends AppCompatActivity
-        implements WeatherFragment.OnWeatherDataLoadedListener {
+public class WeatherActivity extends AppCompatActivity {
 
     private FragmentManager m_fragmentManager = getSupportFragmentManager();
 
@@ -34,16 +33,16 @@ public class WeatherActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
-    @Override
-    public void onWeatherDataLoaded(Weather weather) {
-        if (!getResources().getBoolean(R.bool.isWideDisplay)) {
-            Log.d(LOG, "onWeatherDataLoaded, mobile");
-
-            FragmentTransaction fragmentTransaction = m_fragmentManager.beginTransaction();
-            WeatherFragment frag_weather = (WeatherFragment) m_fragmentManager.findFragmentById(R.id.fl_activity_weather);
-            fragmentTransaction.replace(R.id.fl_activity_weather, frag_weather);
-            fragmentTransaction.commit();
-
-        }
-    }
+//    @Override
+//    public void onWeatherDataLoaded(Weather weather) {
+//        if (!getResources().getBoolean(R.bool.isWideDisplay)) {
+//            Log.d(LOG, "onWeatherDataLoaded, mobile");
+//
+//            FragmentTransaction fragmentTransaction = m_fragmentManager.beginTransaction();
+//            WeatherFragment frag_weather = (WeatherFragment) m_fragmentManager.findFragmentById(R.id.fl_activity_weather);
+//            fragmentTransaction.replace(R.id.fl_activity_weather, frag_weather);
+//            fragmentTransaction.commit();
+//
+//        }
+//    }
 }

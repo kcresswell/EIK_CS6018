@@ -106,6 +106,6 @@ public class WeatherUtils {
     }
 
     public static String formatCaseCountryCodeFromCountryName(String countryName) {
-        return isValidCountryName(countryName) ? getCountryCode(countryName) : null;
+        return isValidCountryName(countryName) ? getCountryCode(formatCaseCity(countryName)) : null;
     }
 }

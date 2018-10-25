@@ -160,14 +160,17 @@ public class LoginFragment extends Fragment {
         user.setPassword(password);
 
         userViewModel.findUser(email).observe(this, user1 -> {
-            if (user1 != null && user1.getEmail().equals(email) && user1.getPassword().equals(password)) {
-                Toast.makeText(getContext(), "Login success", Toast.LENGTH_SHORT).show();
+            if (user1 != null) {
+                if (!user1.getEmail().equals(email) && user1.getPassword().equals(password)) {
+                    Toast.makeText(getContext(), "Invalid login credentials.", Toast.LENGTH_SHORT).show();
 
-                loginSuccessHandler(userViewModel.getUser().getValue().getId());
-            } else {
-                Toast.makeText(getContext(), "Invalid login credentials.", Toast.LENGTH_SHORT).show();
+                    m_password.setText("");
 
-                m_password.setText("");
+                } else {
+                    Toast.makeText(getContext(), "Login success", Toast.LENGTH_SHORT).show();
+
+                    loginSuccessHandler();
+                }
             }
         });
     }
@@ -178,15 +181,8 @@ public class LoginFragment extends Fragment {
         startActivity(intent);
     }
 
-    private void loginSuccessHandler(int userId) {
+    private void loginSuccessHandler() {
         Intent intent = new Intent(getActivity(), DashboardActivity.class);
-
-        if (Integer.valueOf(userId) != null) { //Have to cast to Integer type to do null check
-
-            //The following step passes the fitnessProfileId so that the correct fitness profile can be loaded for the corresponding user that just logged in
-            intent.putExtra("id", userId);
-        }
-
         startActivity(intent);
     }
 

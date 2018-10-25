@@ -3,6 +3,7 @@ package com.example.mcresswell.project01.viewmodel;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
@@ -18,6 +19,7 @@ public class FitnessProfileViewModel extends AndroidViewModel {
     public FitnessProfileViewModel(@NonNull Application application) {
         super(application);
         m_fitnessProfileRepository = FitnessProfileRepository.getInstance(application.getApplicationContext());
+
     }
 
     public LiveData<FitnessProfile> getFitnessProfile(int userID) {
@@ -33,5 +35,8 @@ public class FitnessProfileViewModel extends AndroidViewModel {
         m_fitnessProfileRepository.insertNewFitnessProfile(fitnessProfile);
     }
 
+//    public LiveData<FitnessProfile> getFitnessProfile() {
+//        return m_fitnessProfile;
+//    }
 
 }

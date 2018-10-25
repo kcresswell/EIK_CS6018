@@ -1,6 +1,10 @@
 package com.example.mcresswell.project01.util;
 
+import com.example.mcresswell.project01.db.entity.FitnessProfile;
+
 import org.junit.Test;
+
+import java.sql.Date;
 
 import static org.junit.Assert.assertTrue;
 
@@ -41,5 +45,18 @@ public class FitnessProfileUtilsUnitTest {
         assertTrue(FitnessProfileUtils.getBmiClassification(35).equals(FitnessProfileUtils.BodyMassIndex.CLINICALLY_OBESE));
         assertTrue(FitnessProfileUtils.getBmiClassification(40).equals(FitnessProfileUtils.BodyMassIndex.CLINICALLY_OBESE));
 
+    }
+
+    @Test
+    public void calculateDailyCaloricIntake() {
+        FitnessProfile fitnessProfile = new FitnessProfile();
+        fitnessProfile.setM_dob("03/15/1993");
+        fitnessProfile.setM_heightInches(10);
+        fitnessProfile.setM_sex("M");
+        fitnessProfile.setM_heightFeet(5);
+        fitnessProfile.setM_weightInPounds(200);
+        fitnessProfile.setM_lifestyleSelection("SEDENTARY");
+        fitnessProfile.setM_lbsPerWeek(0);
+        System.out.println(FitnessProfileUtils.calculateDailyCaloricIntake(fitnessProfile));
     }
 }

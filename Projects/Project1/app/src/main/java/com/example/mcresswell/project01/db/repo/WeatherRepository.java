@@ -121,10 +121,11 @@ public class WeatherRepository {
         return  differential > DATA_REFRESH_INTERVAL;
     }
 
-    public void loadWeatherData(String city, String country) {
+    public void fetchWeatherDataFromDataSource(String city, String country) {
         String cityScrubbed = formatCaseCity(city);
         String countryScrubbed = formatCaseCountryCodeFromCountryName(country);
 
+        //Check weatherListViewModel data records to see if weather for user's location was recently retrieved
         if (m_observableWeatherList.getValue() != null) {
             Log.d(LOG_TAG, String.format("Weather list is not null, searching for weather for %s, %s", cityScrubbed, countryScrubbed));
             for (Weather r : m_observableWeatherList.getValue()) {

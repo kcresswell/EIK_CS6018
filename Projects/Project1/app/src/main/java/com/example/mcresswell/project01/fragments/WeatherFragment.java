@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.util.mapper.CountryCodeMapper;
 import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
+import com.example.mcresswell.project01.viewmodel.UserViewModel;
 import com.example.mcresswell.project01.viewmodel.WeatherListViewModel;
 import com.example.mcresswell.project01.viewmodel.WeatherViewModel;
 import com.example.mcresswell.project01.db.entity.Weather;
@@ -42,10 +43,10 @@ public class WeatherFragment extends ListFragment {
 
     private static final String LOG_TAG = WeatherFragment.class.getSimpleName();
 
-    private OnWeatherDataLoadedListener mListener;
     private WeatherViewModel weatherViewModel;
     private FitnessProfileViewModel fitnessProfileViewModel;
     private WeatherListViewModel weatherListViewModel;
+    private UserViewModel userViewModel;
 
     private TextView location;
     Map<String, String> mapper;
@@ -66,12 +67,11 @@ public class WeatherFragment extends ListFragment {
         Log.d(LOG_TAG, Constants.CREATE);
         super.onCreate(savedInstanceState);
 
-        configureViewModels();
-
+        configureWeatherListViewModel();
 
     }
 
-    private void configureViewModels() {
+    private void configureWeatherListViewModel() {
         weatherListViewModel = ViewModelProviders.of(this).get(WeatherListViewModel.class);
         weatherListViewModel.getWeatherDataFromDatabase().observe(this, weatherList -> {
             if (weatherList != null) {
@@ -92,21 +92,11 @@ public class WeatherFragment extends ListFragment {
 
                 Log.d(LOG_TAG, "\n");
                 Log.d(LOG_TAG, "------------------------------------------");
-
-                //Once all records in database have been retrieved, now load weather using city/country from user's fitness profile
-                //weatherViewModel.loadWeather(fitnessProfile.getM_city(), fitnessProfile.getM_country());
-
-                weatherViewModel.loadWeather("Tokyo", "Japan");
-
-                //Logic to select a random weather record to display
-//                if (idList.isEmpty()) {
-//                    weatherViewModel.loadWeather("Tokyo", "Japan");
-//                } else {
-//                    weatherViewModel.loadRandomWeather(idList);
-//                }
             }
         });
+    }
 
+    private void configureWeatherViewModel(View view) {
         weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
         weatherViewModel.getWeather().observe(this, weather -> {
             if (weather != null) { //Weather data has finished being retrieved
@@ -114,24 +104,34 @@ public class WeatherFragment extends ListFragment {
 
                 WeatherUtils.printWeather(weather);
 
+//                view.setVisibility(View.VISIBLE);
+
                 displayWeatherWidget(weather);
             }
         });
+    }
 
-//        fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
+    private void configureUserAndFitnessProfileViewModels() {
+        userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+        fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
 
-//        fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfile -> {
-//            //Upon updates to the fitness profile, reload weather data
-//            if (fitnessProfile != null) {
-//                Log.d(LOG_TAG, "FitnessProfileViewModel onChanged listener: an update to the value of the fitness" +
-//                        "profile stored by the view model has occurred");
-//
-//                Log.d(LOG_TAG, String.format("Loading weather for user's location of %s, %s",
-//                        fitnessProfile.getM_city(), fitnessProfile.getM_country()));
-//
-//                weatherViewModel.loadWeather(fitnessProfile.getM_city(), fitnessProfile.getM_country());
-//            }
-//        });
+        userViewModel.getUser().observe(this, user -> {
+            if (user != null) {
+                fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
+                    if (fp != null) {
+                        Log.d(LOG_TAG, "OMG OMG OMG FITNESS PROFILE VIEW MODEL IS NOT NULL AND CAN PASS IN CITY/COUNTRY" +
+                                "FOR WEATHER DATA!!!!");
+
+                        Log.d(LOG_TAG, String.format("Loading weather for user's location of %s, %s",
+                                fp.getM_city(), fp.getM_country()));
+
+                        //City and country get scrubbed/sanitized in nested repo call
+                        weatherViewModel.loadWeather(fp.getM_city(), fp.getM_country());
+                    }
+                });
+            }
+        });
+
     }
 
     private void displayWeatherWidget(Weather weather) {
@@ -149,7 +149,6 @@ public class WeatherFragment extends ListFragment {
                 data);
         setListAdapter(adapter);
 
-//        mListener.onWeatherDataLoaded(weather);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -157,11 +156,17 @@ public class WeatherFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(LOG_TAG, Constants.CREATE_VIEW);
+
+
         View view = inflater.inflate(R.layout.fragment_weather, container, false);
+//        view.setVisibility(View.GONE);
 
         location = view.findViewById(R.id.weatherLocation);
         m_listView = view.findViewById(android.R.id.list);
         m_listView.setId(android.R.id.list);
+
+        configureWeatherViewModel(view);
+        configureUserAndFitnessProfileViewModels();
 
         return view;
     }
@@ -177,19 +182,12 @@ public class WeatherFragment extends ListFragment {
         Log.d(LOG_TAG, Constants.ATTACH);
 
         super.onAttach(context);
-        if (context instanceof OnWeatherDataLoadedListener) {
-            mListener = (OnWeatherDataLoadedListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnWeatherDataLoadedListener");
-        }
     }
 
     @Override
     public void onDetach() {
         Log.d(LOG_TAG, Constants.DETACH);
         super.onDetach();
-        mListener = null;
     }
 
     @Override
@@ -236,7 +234,7 @@ public class WeatherFragment extends ListFragment {
 //            if (fitnessProfile != null) {
 //                Log.d(LOG_TAG, "subscribeToUserProfileModel: FitnessProfileViewModel onChanged " +
 //                        "listener, re-fetching current weather based on user city and country");
-//                loadWeatherData(fitnessProfile.getM_city(), fitnessProfile.getM_country());
+//                fetchWeatherDataFromDataSource(fitnessProfile.getM_city(), fitnessProfile.getM_country());
 //                dialog = new ProgressDialog(getContext());
 //                dialog.setMessage(String.format("Loading weather for %s, %s...", fitnessProfile.getM_city(), fitnessProfile.getM_country()));
 //                dialog.show();
@@ -280,7 +278,7 @@ public class WeatherFragment extends ListFragment {
 //            if (fitnessProfile != null) {
 //                Log.d(LOG_TAG, "subscribeToUserProfileModel: FitnessProfileViewModel onChanged " +
 //                        "listener, re-fetching current weather based on user city and country");
-//                loadWeatherData(fitnessProfile.getM_city(), fitnessProfile.getM_country());
+//                fetchWeatherDataFromDataSource(fitnessProfile.getM_city(), fitnessProfile.getM_country());
 //                dialog = new ProgressDialog(getContext());
 //                dialog.setMessage(String.format("Loading weather for %s, %s...", fitnessProfile.getM_city(), fitnessProfile.getM_country()));
 //                dialog.show();
@@ -290,8 +288,8 @@ public class WeatherFragment extends ListFragment {
 
 
 
-//    private void loadWeatherData(String city, String country){
-//        Log.d(LOG_TAG, "loadWeatherData");
+//    private void fetchWeatherDataFromDataSource(String city, String country){
+//        Log.d(LOG_TAG, "fetchWeatherDataFromDataSource");
 //
 //        //pass the location in to the view model
 //        weatherViewModel.setLocation(city, country);
@@ -310,13 +308,5 @@ public class WeatherFragment extends ListFragment {
         mapper.put(getResources().getString(R.string.pressure_weather_widget), String.valueOf(data.getPressure()));
 
         return mapper;
-    }
-
-    /**
-     *  Interface that is implemented by WeatherActivity to allow interactions that occur
-     *  in this fragment to be communicated with its hosting activity.
-     **/
-    public interface OnWeatherDataLoadedListener {
-        void onWeatherDataLoaded(Weather weather);
     }
 }
