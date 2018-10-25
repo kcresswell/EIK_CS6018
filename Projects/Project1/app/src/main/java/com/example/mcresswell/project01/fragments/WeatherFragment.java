@@ -120,7 +120,7 @@ public class WeatherFragment extends ListFragment {
 
 //        fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
 
-//        fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfile -> {
+//        fitnessProfileViewModel.getLDFitnessProfile().observe(this, fitnessProfile -> {
 //            //Upon updates to the fitness profile, reload weather data
 //            if (fitnessProfile != null) {
 //                Log.d(LOG_TAG, "FitnessProfileViewModel onChanged listener: an update to the value of the fitness" +
@@ -231,7 +231,7 @@ public class WeatherFragment extends ListFragment {
 //    };
 
     //    private void subscribeToUserProfileModel() {
-//        fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfile -> {
+//        fitnessProfileViewModel.getLDFitnessProfile().observe(this, fitnessProfile -> {
 //            //Now that valid user profile data has been entered, reload
 //            if (fitnessProfile != null) {
 //                Log.d(LOG_TAG, "subscribeToUserProfileModel: FitnessProfileViewModel onChanged " +
@@ -275,7 +275,7 @@ public class WeatherFragment extends ListFragment {
 //    };
 
 //    private void subscribeToUserProfileModel() {
-//        fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfile -> {
+//        fitnessProfileViewModel.getLDFitnessProfile().observe(this, fitnessProfile -> {
 //            //Now that valid user profile data has been entered, reload
 //            if (fitnessProfile != null) {
 //                Log.d(LOG_TAG, "subscribeToUserProfileModel: FitnessProfileViewModel onChanged " +

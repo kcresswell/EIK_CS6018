@@ -50,7 +50,7 @@ public class ProfileEntryActivity extends AppCompatActivity
 //        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile = fitnessProfile;
         m_fitnessProfileViewModel = ViewModelProviders.of(this)
                 .get(FitnessProfileViewModel.class);
-//        m_fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfileObserver);
+//        m_fitnessProfileViewModel.getLDFitnessProfile().observe(this, fitnessProfileObserver);
     }
 
     @Override

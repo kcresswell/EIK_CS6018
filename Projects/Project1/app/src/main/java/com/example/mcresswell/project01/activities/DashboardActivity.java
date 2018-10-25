@@ -54,7 +54,7 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
 //        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile.setValue(fitnessProfile);
         m_fitnessProfileViewModel = ViewModelProviders.of(this)
                 .get(FitnessProfileViewModel.class);
-//        m_fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfileObserver);
+//        m_fitnessProfileViewModel.getLDFitnessProfile().observe(this, fitnessProfileObserver);
     }
 
     @Override

@@ -58,7 +58,7 @@ public class DashboardFragment extends Fragment {
 //
 //        //TODO: implement call to fitnessProfileViewModel.loadExistingFitnessProfile(int fitnessProfileId) that retrieves existing fitnessProfile for user after they login
 //        fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
-//        fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfile -> {
+//        fitnessProfileViewModel.getLDFitnessProfile().observe(this, fitnessProfile -> {
 //            if (fitnessProfile != null) {
 //                Log.d(LOG_TAG, "Update to fitness profile view model");
 //                Log.d(LOG_TAG, String.format("Fitness profile for %s\t%s:\tDOB:%s\tSEX:%s\tCITY:%s\tCOUNTRY:%s",

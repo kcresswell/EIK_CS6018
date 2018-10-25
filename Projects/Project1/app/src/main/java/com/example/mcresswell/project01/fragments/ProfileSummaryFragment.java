@@ -61,7 +61,7 @@ public class ProfileSummaryFragment extends Fragment
         Log.d(LOG_TAG, Constants.CREATE);
         super.onCreate(savedInstanceState);
 
-        initUserViewModel();
+
         initFitnessProfileViewModel();
 //        m_photo = getActivity().getIntent().getParcelableExtra("M_IMG_DATA");
     }
@@ -76,6 +76,7 @@ public class ProfileSummaryFragment extends Fragment
         View v = inflater.inflate(R.layout.fragment_profile_summary, container, false);
         initViewElements(v);
 
+        initUserViewModel();
         m_editButton.setOnClickListener(this);
         setDataToViewElements();
 
@@ -83,44 +84,54 @@ public class ProfileSummaryFragment extends Fragment
     }
 
     private void initUserViewModel() {
-        final Observer<User> userObserver = user -> m_user = user;
-        m_userViewModel = ViewModelProviders.of(getActivity())
-                .get(UserViewModel.class);
-        m_user = m_userViewModel.getUser().getValue();
-        m_userViewModel.getUser().observe(getActivity(), userObserver);
+//        final Observer<User> userObserver = user -> m_user = user;
+//        m_userViewModel = ViewModelProviders.of(getActivity())
+//                .get(UserViewModel.class);
+//        m_user = m_userViewModel.getUser().getValue();
+//        m_userViewModel.getUser().observe(getActivity(), userObserver);
+        m_userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+
+        m_userViewModel.getUser().observe(this, user -> {
+            Log.d(LOG_TAG, "UserViewModel observer for getUser()");
+
+            if (user != null) {
+                m_fitnessProfileViewModel.setUser(user);
+            }
+        });
     }
 
     private void initFitnessProfileViewModel() {
-        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> {
-            m_fitnessProfile = fitnessProfile;
-            setDataToViewElements();
-        };
         m_fitnessProfileViewModel = ViewModelProviders.of(getActivity())
                 .get(FitnessProfileViewModel.class);
-        if (m_user != null ) {
-            m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile(m_user.getId()).getValue();
-            m_fitnessProfileViewModel.getFitnessProfile(m_user.getId()).observe(getActivity(), fitnessProfileObserver);
-        } else {
-            m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile(test_user_num).getValue();
-            m_fitnessProfileViewModel.getFitnessProfile(test_user_num).observe(getActivity(), fitnessProfileObserver);
+
+        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> {
+            if (fitnessProfile != null){
+                m_fitnessProfileViewModel.setFitnessProfile(fitnessProfile);
+            }
+        };
+
+        User currentUser = m_fitnessProfileViewModel.getUser();
+        if (currentUser != null ) {
+            m_fitnessProfileViewModel.getLDFitnessProfile(currentUser.getId()).observe(getActivity(), fitnessProfileObserver);
         }
     }
 
     private void setDataToViewElements() {
-        if (m_fitnessProfile != null) {
-            m_firstName.setText(m_fitnessProfile.getM_fName());
-            m_lastName.setText(m_fitnessProfile.getM_lName());
-            m_sex.setText(m_fitnessProfile.getM_sex().toUpperCase());
-            m_age.setText(calculateAge(m_fitnessProfile.getM_dob())+ "y");
-            m_heightFeet.setText(String.valueOf(m_fitnessProfile.getM_heightFeet()));
-            m_heightInches.setText(String.valueOf(m_fitnessProfile.getM_heightInches()));
-            m_weight.setText(String.valueOf(m_fitnessProfile.getM_weightInPounds()));
-            m_city.setText(m_fitnessProfile.getM_city());
-            m_country.setText(m_fitnessProfile.getM_country());
-            m_activity.setText(m_fitnessProfile.getM_lifestyleSelection());
+        FitnessProfile fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile();
+        if (fitnessProfile != null) {
+            m_firstName.setText(fitnessProfile.getM_fName());
+            m_lastName.setText(fitnessProfile.getM_lName());
+            m_sex.setText(fitnessProfile.getM_sex().toUpperCase());
+            m_age.setText(calculateAge(fitnessProfile.getM_dob())+ "y");
+            m_heightFeet.setText(String.valueOf(fitnessProfile.getM_heightFeet()));
+            m_heightInches.setText(String.valueOf(fitnessProfile.getM_heightInches()));
+            m_weight.setText(String.valueOf(fitnessProfile.getM_weightInPounds()));
+            m_city.setText(fitnessProfile.getM_city());
+            m_country.setText(fitnessProfile.getM_country());
+            m_activity.setText(fitnessProfile.getM_lifestyleSelection());
             m_weightGoal.setText(String.valueOf(
-                    m_fitnessProfile.getM_weightGoal()
-                    + " " + m_fitnessProfile.getM_lbsPerWeek() + " lbs/week")
+                    fitnessProfile.getM_weightGoal()
+                    + " " + fitnessProfile.getM_lbsPerWeek() + " lbs/week")
             );
 //
 //          if (m_photo != null) {
