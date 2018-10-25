@@ -53,7 +53,8 @@ public interface FitnessProfileDao {
 
     //1- When I call the database insertNewFitnessProfile . I need it to check if the record is there, and then just replace if it exists with the new record changes, or insert it if it does not. There is a database option to do that.
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertNewFitnessProfile(FitnessProfile fitnessProfile);
+//    void insertNewFitnessProfile(FitnessProfile fitnessProfile);
+    long insertNewFitnessProfile(FitnessProfile fitnessProfile);
 
     @Delete
     void deleteFitnessProfileData(FitnessProfile fitnessProfile);
