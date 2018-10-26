@@ -177,8 +177,8 @@ public class UserRepository {
                 Log.d(LOG_TAG, String.format("Retrieving user record with email %s", userToLoad));
 
                 LiveData<User> user = mUserDao.findUserByEmail(userToLoad);
-
-                return user.getValue();
+                User userVal = user.getValue();
+                return userVal;
             }
 
             @Override

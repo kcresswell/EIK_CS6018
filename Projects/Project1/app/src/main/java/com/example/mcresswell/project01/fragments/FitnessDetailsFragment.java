@@ -16,7 +16,6 @@ import com.example.mcresswell.project01.db.entity.User;
 import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.util.Constants;
-import com.example.mcresswell.project01.util.FitnessProfileUtils;
 import com.example.mcresswell.project01.viewmodel.UserViewModel;
 
 import java.util.Locale;
@@ -103,7 +102,7 @@ public class FitnessDetailsFragment extends Fragment {
         m_userViewModel.getUser().observe(this, user -> {
             Log.d(LOG_TAG, "UserViewModel observer for getUser()");
             if (user != null) {
-                m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
+                m_fitnessProfileViewModel.getLDFitnessProfile(user.getId()).observe(this, fp -> {
                     if (fp != null) {
                         int calcAge = calculateAge(fp.getM_dob());
                         double basalMetabolicRate = calculateBMR(fp.getM_heightFeet(),

@@ -14,9 +14,9 @@ import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculat
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateBmi;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateHeightInInches;
 
-@Entity(foreignKeys = @ForeignKey(entity = User.class,
+@Entity(/*foreignKeys = @ForeignKey(entity = User.class,
                             parentColumns = "id",
-                            childColumns = "user_id"),
+                            childColumns = "user_id"),*/
         indices = {@Index(value = {"user_id"}, unique = true)})
 public class FitnessProfile {
 
