@@ -310,7 +310,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:ems="10"
-                android:hint=""
+                android:hint="@string/hint_wkly_goal"
                 android:inputType="number"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toStartOf="@+id/txtv_lbs_symbol2"
