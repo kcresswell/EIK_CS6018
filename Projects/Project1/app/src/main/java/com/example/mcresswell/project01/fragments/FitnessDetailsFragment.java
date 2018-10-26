@@ -94,7 +94,6 @@ public class FitnessDetailsFragment extends Fragment {
     }
 
     private void configureViewModels() {
-        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile = fitnessProfile;
         m_fitnessProfileViewModel = ViewModelProviders.of(getActivity())
                 .get(FitnessProfileViewModel.class);
 

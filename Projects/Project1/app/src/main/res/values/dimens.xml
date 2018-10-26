@@ -5,8 +5,8 @@
     <dimen name="dashboard_button_text_padding">20dp</dimen>
     <dimen name="dashboard_button_horizontal_margin">20dp</dimen>
     <dimen name="dashboard_button_padding">10dp</dimen>
-    <dimen name="dashboard_fitness_details_heading">22sp</dimen>
-    <dimen name="dashboard_fitness_details_data">36sp</dimen>
+    <dimen name="dashboard_fitness_details_heading">20sp</dimen>
+    <dimen name="dashboard_fitness_details_data">24sp</dimen>
 
 
     <dimen name="widget_margin">25dp</dimen>

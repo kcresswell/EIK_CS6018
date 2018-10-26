@@ -123,10 +123,10 @@ public class DashboardFragment extends Fragment {
         ArrayList<DashButton> buttons = new ArrayList<>();
 
         //build image for button
-        buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_img_fitness, null), "Fitness"));
-        buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_img_hike, null), "Hikes"));
-        buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_img_profile, null), "Profile"));
-        buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_img_weather, null), "Weather"));
+        buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_img_fitness, null), "FITNESS"));
+        buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_img_hike, null), "HIKING"));
+        buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_img_profile, null), "PROFILE"));
+        buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_img_weather, null), "WEATHER"));
 
         m_Adaptor = new RV_Adapter(buttons);
 
@@ -153,7 +153,7 @@ public class DashboardFragment extends Fragment {
             Intent intent = new Intent(getActivity(), AccountSettingsActivity.class);
             startActivityForResult(intent, Activity.RESULT_OK);
         } else {
-            m_fTrans.replace(R.id.fl_login_wd, new AccountSettingsFragment());
+            m_fTrans.replace(R.id.fl_detail_wd, new AccountSettingsFragment());
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
@@ -167,7 +167,7 @@ public class DashboardFragment extends Fragment {
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             startActivityForResult(intent, Activity.RESULT_OK);
         } else {
-            m_fTrans.replace(R.id.fl_login_wd, new LoginFragment());
+            m_fTrans.replace(R.id.fl_detail_wd, new LoginFragment());
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }

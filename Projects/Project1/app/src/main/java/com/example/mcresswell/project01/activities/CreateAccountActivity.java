@@ -24,7 +24,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         if(isWideDisplay()){
-            fragmentTransaction.replace(R.id.fl_create_account_wd, new CreateAccountFragment(), "v_frag_dashboard");
+            fragmentTransaction.replace(R.id.fl_detail_wd, new CreateAccountFragment(), "v_frag_dashboard");
             fragmentTransaction.commit();
         } else {
             fragmentTransaction.replace(R.id.fl_create_account_nd, new CreateAccountFragment(), "v_frag_dashboard");

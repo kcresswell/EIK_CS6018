@@ -20,7 +20,7 @@
         app:layout_constraintVertical_bias="0.0">
 
         <android.support.constraint.ConstraintLayout
-            android:id="@+id/linearLayout2"
+            android:id="@+id/constraintLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -90,10 +90,12 @@
 
             <ImageButton
                 android:id="@+id/btn_img_takeImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="145dp"
+                android:layout_height="153dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/btn_img_description_profile_image"
+                android:maxHeight="100dp"
+                android:maxWidth="100dp"
                 android:padding="@dimen/dashboard_button_padding"
                 android:src="@drawable/ic_profile_img_placeholder"
                 app:layout_constraintDimensionRatio="1:1"
@@ -106,9 +108,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:background="@color/colorPrimary"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/colorPrimaryDark"
+                android:background="@drawable/rectshape"
                 android:text="@string/btn_edit_fitness_profile"
-                android:textColor="@android:color/background_light"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -277,7 +280,7 @@
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtv_divider_goal"></TextView>
+                app:layout_constraintTop_toBottomOf="@+id/txtv_divider_goal" />
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

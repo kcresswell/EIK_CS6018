@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--COLOR SCHEME: http://paletton.com/#uid=3331b0kqwnrh7GXm8tCuDfAD05v-->
 <resources>
-    <color name="colorPrimary">#168053</color>
-    <color name="colorPrimaryDark">#001E11</color>
-    <color name="colorAccent">#ddc54e</color>
+    <color name="colorPrimary">#62f1bc</color>
+    <color name="colorPrimaryDark">#1d1d1d</color>
+    <color name="colorAccent">#484848</color>
+    <color name="colorBackgroundLight">#c3c4c4</color>
 
-    <color name="widget_background_color">#d9d9d9</color>
-    <color name="widget_foreground_color"></color>
-    <color name="widget_text_color">#2a7274</color>
+    <color name="widget_background_color">#ffffff</color>
+    <color name="widget_foreground_color">#e6ffffff</color>
+    <color name="widget_text_color">#6edfaa</color>
 
 
 </resources>

@@ -28,6 +28,7 @@ import com.example.mcresswell.project01.util.WeatherUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -67,44 +68,49 @@ public class WeatherFragment extends ListFragment {
         Log.d(LOG_TAG, Constants.CREATE);
         super.onCreate(savedInstanceState);
 
-        configureWeatherListViewModel();
+        configureWeatherViewModels();
+        configureWeatherViewModelForWeatherWidget();
 
     }
 
-    private void configureWeatherListViewModel() {
+    private void configureWeatherViewModels() {
         weatherListViewModel = ViewModelProviders.of(this).get(WeatherListViewModel.class);
+
+        weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
+
         weatherListViewModel.getWeatherDataFromDatabase().observe(this, weatherList -> {
             if (weatherList != null) {
+                logWeatherDataFromDatabase(weatherList);
 
-                ArrayList<Integer> idList = new ArrayList<>();
-                Log.d(LOG_TAG, "Update to weather list view model");
-                Log.d(LOG_TAG, "Number of weather records in Weather database: " + weatherList.size());
-
-                Log.d(LOG_TAG, "------------------------------------------");
-
-                Log.d(LOG_TAG, "PRINTING WEATHER RECORDS IN WEATHER DATABASE");
-                Log.d(LOG_TAG, "\n");
-                weatherList.forEach(weather -> {
-                    idList.add(weather.getId());
-                    Log.d(LOG_TAG, "\nWeather Data record: " + weather.getId() + "\t'" + weather.getCity() + "'\t'" + weather.getCountryCode() + "'\t'" + weather.getLastUpdated() + "'");
-
-                });
-
-                Log.d(LOG_TAG, "\n");
-                Log.d(LOG_TAG, "------------------------------------------");
+                if(weatherList.isEmpty()) {
+                    //If empty, populate a single weather data record to display while other data loads
+                    weatherViewModel.loadDummyWeather();
+                }
             }
         });
     }
 
-    private void configureWeatherViewModel(View view) {
-        weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
+    private void logWeatherDataFromDatabase(List<Weather> weatherList) {
+        ArrayList<Integer> idList = new ArrayList<>();
+        Log.d(LOG_TAG, "Update to weather list view model");
+        Log.d(LOG_TAG, "Number of weather records in Weather database: " + weatherList.size());
+        Log.d(LOG_TAG, "------------------------------------------");
+        Log.d(LOG_TAG, "PRINTING WEATHER RECORDS IN WEATHER DATABASE");
+        Log.d(LOG_TAG, "\n");
+        weatherList.forEach(weather -> {
+            idList.add(weather.getId());
+            Log.d(LOG_TAG, "\nWeather Data record: " + weather.getId() + "\t'" + weather.getCity() + "'\t'" + weather.getCountryCode() + "'\t'" + weather.getLastUpdated() + "'");
+        });
+        Log.d(LOG_TAG, "\n");
+        Log.d(LOG_TAG, "------------------------------------------");
+    }
+
+    private void configureWeatherViewModelForWeatherWidget() {
         weatherViewModel.getWeather().observe(this, weather -> {
             if (weather != null) { //Weather data has finished being retrieved
                 Log.d(LOG_TAG, "weatherObserver onChanged listener: weather data changed and is not null");
 
                 WeatherUtils.printWeather(weather);
-
-//                view.setVisibility(View.VISIBLE);
 
                 displayWeatherWidget(weather);
             }
@@ -159,13 +165,11 @@ public class WeatherFragment extends ListFragment {
 
 
         View view = inflater.inflate(R.layout.fragment_weather, container, false);
-//        view.setVisibility(View.GONE);
 
         location = view.findViewById(R.id.weatherLocation);
         m_listView = view.findViewById(android.R.id.list);
         m_listView.setId(android.R.id.list);
 
-        configureWeatherViewModel(view);
         configureUserAndFitnessProfileViewModels();
 
         return view;

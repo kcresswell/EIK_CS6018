@@ -36,17 +36,19 @@ public class WeatherViewModel extends AndroidViewModel {
         m_observableWeather.setValue(null);
         m_observableWeather.addSource(m_weatherRepository.getWeather(), data -> {
             Log.d(LOG, "m_weatherRepository.getWeather() listener onChanged");
-            if (data == null) {
-                Log.d(LOG, "BUT WHY IS THE WEATHER NULL ?????? :(");
-                return;
+            if (data != null) {
+                m_observableWeather.setValue(data);
             }
 
-            m_observableWeather.setValue(data);
         });
     }
 
     public void loadWeather(String city, String country) {
         m_weatherRepository.fetchWeatherDataFromDataSource(city, country);
+    }
+
+    public void loadDummyWeather() {
+        m_weatherRepository.fetchPlaceholderWeatherData();
     }
 
 

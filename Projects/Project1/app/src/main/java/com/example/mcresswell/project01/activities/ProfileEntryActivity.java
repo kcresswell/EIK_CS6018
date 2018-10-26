@@ -17,10 +17,10 @@ import com.example.mcresswell.project01.fragments.ProfileSummaryFragment;
 import com.example.mcresswell.project01.util.Constants;
 
 public class ProfileEntryActivity extends AppCompatActivity {
+
     private final String LOG = getClass().getSimpleName();
 
     private FragmentTransaction m_fTrans;
-
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -49,8 +49,12 @@ public class ProfileEntryActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Log.d(LOG, "onBackPressed");
-        Intent intent = new Intent(this, DashboardActivity.class);
-        startActivity(intent);
+        if (getResources().getBoolean(R.bool.isWideDisplay)) {
+            loadProfileEntryFragment();
+        } else {
+            Intent intent = new Intent(this, DashboardActivity.class);
+            startActivity(intent);
+        }
     }
 
 //    @Override

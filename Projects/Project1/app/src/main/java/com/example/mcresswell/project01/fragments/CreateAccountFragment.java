@@ -4,7 +4,9 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -100,12 +102,7 @@ public class CreateAccountFragment extends Fragment {
                         Toast.LENGTH_SHORT).show();
                 return;
             }
-            User newUser = new User();
-            newUser.setEmail(m_email.getText().toString());
-            newUser.setPassword(m_password.getText().toString());
-            newUser.setFirstName(m_firstName.getText().toString());
-            newUser.setLastName(m_lastName.getText().toString());
-            newUser.setJoinDate(Date.from(Instant.now()));
+            User newUser = createNewUser();
             //Add new user to database
             userViewModel.createUser(newUser);
 
@@ -120,10 +117,27 @@ public class CreateAccountFragment extends Fragment {
                 }
             });
 
-
-            Intent intent = new Intent(getActivity(), ProfileEntryActivity.class);
-            startActivity(intent);
+            if (getResources().getBoolean(R.bool.isWideDisplay)) {
+                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fl_detail_wd, new ProfileEntryFragment());
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            } else {
+                Intent intent = new Intent(getActivity(), ProfileEntryActivity.class);
+                startActivity(intent);
+            }
         }
+    }
+
+    @NonNull
+    private User createNewUser() {
+        User newUser = new User();
+        newUser.setEmail(m_email.getText().toString());
+        newUser.setPassword(m_password.getText().toString());
+        newUser.setFirstName(m_firstName.getText().toString());
+        newUser.setLastName(m_lastName.getText().toString());
+        newUser.setJoinDate(Date.from(Instant.now()));
+        return newUser;
     }
 
     private boolean isUniqueUserLogin(String email) {

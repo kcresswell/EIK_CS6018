@@ -194,16 +194,5 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
         return getResources().getBoolean(R.bool.isWideDisplay);
     }
 
-    private void screenLayoutChanges(Fragment fragment, Activity activityClass, int tabletDetailId) {
-        if (!isWideDisplay()) {
-            Intent intent = new Intent(this, activityClass.getClass());
-            startActivity(intent);
-        } else { //Tablet
-                m_fTrans.replace(tabletDetailId, fragment);
-
-            m_fTrans.addToBackStack(null);
-            m_fTrans.commit();
-        }
-    }
 
 }

@@ -17,9 +17,9 @@
 
     <application
         android:name=".InStyleApp"
+        android:label="INSTYLE"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
@@ -36,28 +36,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.DashboardActivity" />
+        <activity
+            android:name=".activities.DashboardActivity"
+            android:label="@string/app_name" />
         <activity
             android:name=".activities.ProfileEntryActivity"
+            android:label="@string/app_name"
             android:parentActivityName=".activities.DashboardActivity" />
         <activity
             android:name=".activities.WeatherActivity"
-            android:label="Weather"
+            android:label="@string/app_name"
             android:parentActivityName=".activities.DashboardActivity" />
         <activity
             android:name=".activities.ProfileSummaryActivity"
-            android:label="Profile"
+            android:label="@string/app_name"
             android:parentActivityName=".activities.DashboardActivity" />
         <activity
             android:name=".activities.FitnessDetailsActivity"
-            android:label="Fitness"
+            android:label="@string/app_name"
             android:parentActivityName=".activities.DashboardActivity" />
         <activity
             android:name=".activities.CreateAccountActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".activities.DashboardActivity" />
         <activity
             android:name=".activities.AccountSettingsActivity"
-            android:label="Account Settings"
+            android:label="@string/app_name"
             android:parentActivityName=".activities.DashboardActivity" />
     </application>
 

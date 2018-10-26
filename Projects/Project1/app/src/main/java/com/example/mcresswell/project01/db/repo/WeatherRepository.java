@@ -34,6 +34,8 @@ public class WeatherRepository {
     private static final String LOG_TAG = WeatherRepository.class.getSimpleName();
 
     public static final long DATA_REFRESH_INTERVAL = 300_000L; //If weather data is older than 5 minutes, refetch data
+    private static final String DUMMY_CITY = "SALT LAKE CITY";
+    private static final String DUMMY_COUNTRY = "United States";
 
     private WeatherDao mWeatherDao;
     private InStyleDatabase inStyleDatabase;
@@ -66,15 +68,23 @@ public class WeatherRepository {
 
     }
 
+    public void fetchPlaceholderWeatherData() {
+        //If weather database is empty, fetch dummy data to display while other data is being retrieved
+        asyncFetchWeatherFromApi(DUMMY_CITY, DUMMY_COUNTRY, false);
+    }
+
     private void addLiveDataListenerSources() {
         m_observableWeatherList = new MediatorLiveData<>();
         m_observableWeatherList.setValue(null);
 
         m_observableWeatherList.addSource(mWeatherDao.loadAllWeather(),
                 weatherList -> {
-                    Log.d(LOG_TAG, "LiveData<List<<Weather>> loadAllWeather() onChanged");
-                    if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
-                        m_observableWeatherList.setValue(weatherList);
+                    if (weatherList != null) {
+                        Log.d(LOG_TAG, "LiveData<List<<Weather>> loadAllWeather() onChanged");
+                        if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
+                            m_observableWeatherList.setValue(weatherList);
+
+                        }
                     }
                 });
 
