@@ -95,27 +95,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_first_name_update_account" />
 
-    <Button
-        android:id="@+id/btn_update_account"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:layout_marginHorizontal="32dp"
-        android:padding="8dp"
-        android:text="@string/btn_update_account"
-        android:backgroundTint="@color/colorPrimary"
-        android:textColor="@color/colorPrimaryDark"
-        android:elevation="8dp"
-        android:textSize="16sp"
-        android:background="@drawable/rectshape"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_last_name_update_account"
-        tools:text="@string/btn_update_account" />
+        <Button
+            android:id="@+id/btn_update_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_marginHorizontal="32dp"
+            android:background="@drawable/rectshape"
+            android:backgroundTint="@color/colorPrimary"
+            android:elevation="8dp"
+            android:padding="8dp"
+            android:text="@string/btn_update_account"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_last_name_update_account"
+            tools:text="@string/btn_update_account" />
 
     <Button
         android:id="@+id/btn_delete_account"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:layout_marginHorizontal="32dp"

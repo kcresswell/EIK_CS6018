@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">I   N   S   T   Y   L   E</string>
+    <string name="app_name">I    N    S    T    Y    L    E</string>
 
     <!--Application Login/Create Account/Account Settings Screens-->
     <string name="greeting">Hello</string>
@@ -24,10 +24,10 @@
     <!--Fitness Details-->
 
     <!--Fitness Details Headers-->
-    <string name="calories">Recommended Daily Caloric Intake</string>
+    <string name="calories">Recommended Caloric Intake</string>
     <string name="bmr">Basal Metabolic Rate (BMR)</string>
     <string name="bmi">Body Mass Index (BMI)</string>
-    <string name="steps">Total Steps Taken Today</string>
+    <string name="steps">Daily Step Count</string>
 
     <!--Fitness Details TextView Placeholders-->
     <string name="tv_bmr">BMR placeholder</string>
@@ -40,32 +40,35 @@
     <string name="hint_fname">FIRST NAME</string>
     <string name="hint_lname">LAST NAME</string>
     <string name="hint_sex">SEX</string>
-    <string name="hint_feet">FT</string>
-    <string name="hint_inches">IN</string>
-    <string name="hint_weight">WEIGHT</string>
+    <string name="hint_feet">Ft</string>
+    <string name="hint_inches">In</string>
+    <string name="hint_weight">lbs</string>
     <string name="hint_city">CITY NAME</string>
     <string name="hint_country">COUNTRY NAME</string>
     <string name="btn_done">Done</string>
     <string name="btn_img_description_profile_image">Take a profile picture</string>
     <string name="hint_dob">DOB</string>
+    <string name="hint_lifestyle">ACTIVITY LEVEL</string>
+    <string name="hint_wGoal">WEIGHT GOAL</string>
 
-    <string name="title_activity_fitness">Fitness</string>
+    <string name="title_activity_fitness">FITNESS</string>
     <string name="txtv_ft_symbol">ft</string>
     <string name="txtv_in_symbol">in</string>
     <string name="txtv_lbs_symbol">lbs</string>
-    <string name="txtv_label_location">LOCATION</string>
-    <string name="txtv_label_fitness">CURRENT WEIGHT</string>
-    <string name="txtv_label_lifestyle">LIFESTYLE</string>
-    <string name="txtv_label_goal">WEIGHT GOAL</string>
+
+    <!--Green Headers on Profile Entry/Summary Pages-->
+    <string name="txtv_label_location">Location</string>
+    <string name="txtv_label_fitness">Current Weight</string>
+    <string name="txtv_label_lifestyle">Lifestyle</string>
+    <string name="txtv_label_goal">Weight Goals</string>
+
     <string name="btn_radio_sedentary">SEDENTARY</string>
     <string name="btn_radio_active">ACTIVE</string>
-    <string name="btn_radio_moderate">Moderate</string>
-
+    <string name="btn_radio_moderate">MODERATE</string>
     <string name="btn_radio_maintain">MAINTAIN</string>
     <string name="btn_radio_loose">LOSE</string>
     <string name="btn_radio_gain">GAIN</string>
-    <string name="hint_lifestyle">ACTIVITY LEVEL</string>
-    <string name="hint_wGoal">WEIGHT GOAL</string>
+
     <string name="btn_edit_fitness_profile">EDIT FITNESS PROFILE</string>
 
     <!--Profile Summary-->

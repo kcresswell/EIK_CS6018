@@ -9,7 +9,8 @@
         <item name="android:fontFamily">@font/lato</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/colorPrimaryDark</item>
-
+        <item name="android:titleTextColor">@color/colorPrimaryDark</item>
+        <item name="android:labelTextSize">80sp</item>
 
     </style>
 
@@ -22,5 +23,13 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="AppTheme" parent="BaseAppTheme" />
+    <style name="AppTheme" parent="BaseAppTheme">
+
+        <item name="actionBarSize">80dp</item>
+        <item name="android:labelTextSize">80dp</item>
+        <item name="android:titleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title</item>
+
+
+    </style>
+
 </resources>

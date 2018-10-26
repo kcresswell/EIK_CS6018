@@ -122,7 +122,9 @@ public class WeatherFragment extends ListFragment {
         fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
 
         userViewModel.getUser().observe(this, user -> {
-            if (user != null) {
+            if (user == null) {
+                weatherViewModel.loadDummyWeather();
+            } else {
                 fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
                     if (fp != null) {
                         Log.d(LOG_TAG, "OMG OMG OMG FITNESS PROFILE VIEW MODEL IS NOT NULL AND CAN PASS IN CITY/COUNTRY" +

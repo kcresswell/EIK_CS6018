@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import java.sql.Timestamp;
 import java.util.concurrent.TimeUnit;
 
-import androidx.work.ListenableWorker;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.Worker;

@@ -26,6 +26,7 @@ import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculat
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateBMR;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateBmi;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateCalories;
+import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateDailyCaloricIntake;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateHeightInInches;
 
 public class FitnessDetailsFragment extends Fragment {
@@ -114,7 +115,7 @@ public class FitnessDetailsFragment extends Fragment {
                                 fp.getM_heightFeet(),
                                 fp.getM_heightInches()),
                                 fp.getM_weightInPounds());
-                        m_tvcalsToEat.setText(String.format(Locale.US, DOUBLE_FORMAT + CALORIC_INTAKE, calculateCalories(fp)));
+                        m_tvcalsToEat.setText(String.format(Locale.US, DOUBLE_FORMAT + CALORIC_INTAKE, calculateDailyCaloricIntake(fp)));
                         m_tvBMR.setText(String.format(Locale.US, DOUBLE_FORMAT + BMR, basalMetabolicRate));
                         m_bodyMassIndex.setText(String.format(Locale.US, DOUBLE_FORMAT, bodyMassIndex));
                         m_stepCount.setText(String.format(Locale.US, INT_FORMAT + STEPS, STEP_COUNT_PLACEHOLDER));
