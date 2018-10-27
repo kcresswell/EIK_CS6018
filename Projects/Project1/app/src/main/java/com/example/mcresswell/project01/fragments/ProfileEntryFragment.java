@@ -18,20 +18,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.activities.ProfileSummaryActivity;
 import com.example.mcresswell.project01.db.entity.User;
+import com.example.mcresswell.project01.util.mapper.CountryCodeMapper;
 import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.util.Constants;
 import com.example.mcresswell.project01.viewmodel.UserViewModel;
+
+import java.util.ArrayList;
+import java.util.Objects;
 
 import static com.example.mcresswell.project01.util.ValidationUtils.isNotNullOrEmpty;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidCity;
@@ -42,11 +49,12 @@ import static com.example.mcresswell.project01.util.ValidationUtils.isValidName;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidSex;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidWeight;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidWeightPlan;
+import static com.example.mcresswell.project01.util.mapper.CountryCodeMapper.getCountryNames;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ProfileEntryFragment extends Fragment implements View.OnClickListener {
-
     private static final String LOG_TAG = ProfileEntryFragment.class.getSimpleName();
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -63,6 +71,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     private RadioButton activeLifestyle, sedentaryLifestyle;
     private RadioGroup weightGoal;
     private RadioButton gain, maintain, lose;
+    private Spinner countrySpinner;
 
     //Data Elements
     private FitnessProfile m_fitnessProfile; //FIXME: YOU DONT NEED MEMBER VARIABLES FOR THE FITNESS PROFILE OR THE USER, THEY WONT SURVIVE CONFIGURATION CHANGES. THATS THE WHOLE POINT OF THE VIEW MODELS.
@@ -221,7 +230,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         etxt_dob = view.findViewById(R.id.txtv_dob);
         etxt_sex = view.findViewById(R.id.txtv_sex);
         etxt_city = view.findViewById(R.id.txtv_city);
-        etxt_country = view.findViewById(R.id.txtv_country);
+//        etxt_country = view.findViewById(R.id.txtv_country);
         etxt_weight = view.findViewById(R.id.txtv_weight);
         etxt_heightFeet = view.findViewById(R.id.txtv_feet);
         etxt_heightInches = view.findViewById(R.id.txtv_inches);
@@ -238,6 +247,16 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
         profileEntryButton = view.findViewById(R.id.btn_submit);
         takeProfileImageButton = view.findViewById(R.id.btn_img_takeImage);
+
+        countrySpinner = view.findViewById(R.id.spinner_country);
+
+        ArrayList<String> countryOptions = getCountryNames();
+        countryOptions.add(0, "United States");
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
+                android.R.layout.simple_spinner_item,
+                countryOptions);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        countrySpinner.setAdapter(adapter);
     }
 
     private void autofillExistingFitnessProfileData(FitnessProfile fp) {
@@ -250,7 +269,9 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         etxt_heightFeet.setText(String.valueOf(fp.getM_heightFeet()));
         etxt_heightInches.setText(String.valueOf(fp.getM_heightInches()));
         etxt_city.setText(fp.getM_city());
-        etxt_country.setText(fp.getM_country());
+        int pos = getCountryNames().indexOf(fp.getM_country());
+        countrySpinner.setSelection(pos);
+//        etxt_country.setText(fp.getM_country());
         etxt_weight.setText(String.valueOf(fp.getM_weightInPounds()));
         etxt_lbsPerWeek.setText(String.valueOf(fp.getM_lbsPerWeek()));
 
@@ -331,7 +352,8 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         tempFitnessProfile.setM_dob(etxt_dob.getText().toString());
         tempFitnessProfile.setM_sex(etxt_sex.getText().toString());
         tempFitnessProfile.setM_city(etxt_city.getText().toString());
-        tempFitnessProfile.setM_country(etxt_country.getText().toString());
+
+        tempFitnessProfile.setM_country(getCountryNames().get(countrySpinner.getSelectedItemPosition()));
         tempFitnessProfile.setM_lifestyleSelection(lifestyleSelectorString);
         tempFitnessProfile.setM_weightGoal(weightGoalString);
         tempFitnessProfile.setM_weightInPounds(Integer.parseInt(etxt_weight.getText().toString()));
@@ -387,10 +409,10 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
             Toast.makeText(getContext(), "Invalid city.", Toast.LENGTH_SHORT).show();
             return false;
         }
-        else if (!isValidCountryName(etxt_country.getText().toString())) {
-            Toast.makeText(getContext(), "Please enter a valid 2-letter country code.", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+//        else if (!isValidCountryName(etxt_country.getText().toString())) {
+//            Toast.makeText(getContext(), "Please select a country.", Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
         else if (!isValidWeight(etxt_weight.getText().toString())) {
             Toast.makeText(getContext(), "Invalid weight.", Toast.LENGTH_SHORT).show();
             return false;
@@ -410,4 +432,5 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     public void onAttach(Context context) {
         super.onAttach(context);
     }
+
 }

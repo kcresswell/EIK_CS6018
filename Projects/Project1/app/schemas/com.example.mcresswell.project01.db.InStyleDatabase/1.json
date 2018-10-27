@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "df75e8018763eea001e06da6829dbe84",
+    "identityHash": "1f029a504f5deaebb7d53e1f0d16975d",
     "entities": [
       {
         "tableName": "User",
@@ -65,7 +65,7 @@
       },
       {
         "tableName": "FitnessProfile",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `first_name` TEXT, `last_name` TEXT, `city` TEXT, `country` TEXT, `dob` TEXT, `sex` TEXT, `weight_lbs` INTEGER NOT NULL, `height_ft` INTEGER NOT NULL, `height_in` INTEGER NOT NULL, `lifestyle` TEXT, `weight_goal` TEXT, `lbs_per_week` INTEGER NOT NULL, `bmi` REAL NOT NULL, `bmr` REAL NOT NULL, `user_id` INTEGER NOT NULL, FOREIGN KEY(`user_id`) REFERENCES `User`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `first_name` TEXT, `last_name` TEXT, `city` TEXT, `country` TEXT, `dob` TEXT, `sex` TEXT, `weight_lbs` INTEGER NOT NULL, `height_ft` INTEGER NOT NULL, `height_in` INTEGER NOT NULL, `lifestyle` TEXT, `weight_goal` TEXT, `lbs_per_week` INTEGER NOT NULL, `bmi` REAL NOT NULL, `bmr` REAL NOT NULL, `user_id` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "m_Id",
@@ -180,19 +180,7 @@
             "createSql": "CREATE UNIQUE INDEX `index_FitnessProfile_user_id` ON `${TABLE_NAME}` (`user_id`)"
           }
         ],
-        "foreignKeys": [
-          {
-            "table": "User",
-            "onDelete": "NO ACTION",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "user_id"
-            ],
-            "referencedColumns": [
-              "id"
-            ]
-          }
-        ]
+        "foreignKeys": []
       },
       {
         "tableName": "Weather",
@@ -305,7 +293,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"df75e8018763eea001e06da6829dbe84\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"1f029a504f5deaebb7d53e1f0d16975d\")"
     ]
   }
 }

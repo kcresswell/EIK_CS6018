@@ -1,5 +1,7 @@
 package com.example.mcresswell.project01.util.mapper;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -7,9 +9,9 @@ import java.util.Set;
 public class CountryCodeMapper {
 
     private final static HashMap<String, String> countryCodeMap = new HashMap<>();
-    
-    private static void addCountryData() {
+    private static ArrayList<String> countryKeys = new ArrayList<>();
 
+    public CountryCodeMapper() {
         countryCodeMap.put("Andorra, Principality Of", "AD");
         countryCodeMap.put("United Arab Emirates", "AE");
         countryCodeMap.put("Afghanistan, Islamic State Of", "AF");
@@ -254,15 +256,21 @@ public class CountryCodeMapper {
         countryCodeMap.put("Zaire", "ZR");
         countryCodeMap.put("Zimbabwe", "ZW");
 
+        countryKeys.addAll(countryCodeMap.keySet());
+        Collections.sort(countryKeys);
     }
 
     public static String getCountryCode(String countryName){
-        addCountryData();
-        return countryCodeMap.getOrDefault(countryName, "US");
+        if (countryCodeMap.isEmpty()) {
+            CountryCodeMapper mapper = new CountryCodeMapper();
+        }
+        return countryCodeMap.getOrDefault(countryName, null);
     }
 
     public static String getCountryName(String countryCode){
-        addCountryData();
+        if (countryCodeMap.isEmpty()) {
+            CountryCodeMapper mapper = new CountryCodeMapper();
+        }
         if (countryCodeMap.containsValue(countryCode)) {
             for (Map.Entry<String, String> each : countryCodeMap.entrySet()) {
                 if (each.getValue().equals(countryCode)) {
@@ -271,11 +279,20 @@ public class CountryCodeMapper {
             }
         }
         //Otherwise return default
-        return "United States";
+        return null;
     }
 
     public static HashMap<String, String> getMapper() {
-        addCountryData();
+        if (countryCodeMap.isEmpty()) {
+            CountryCodeMapper mapper = new CountryCodeMapper();
+        }
         return countryCodeMap;
+    }
+
+    public static ArrayList<String> getCountryNames() {
+        if (countryKeys.isEmpty()) {
+            CountryCodeMapper mapper = new CountryCodeMapper();
+        }
+        return countryKeys;
     }
 }
