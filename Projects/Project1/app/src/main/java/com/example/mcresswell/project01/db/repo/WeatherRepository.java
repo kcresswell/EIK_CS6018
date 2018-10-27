@@ -63,7 +63,9 @@ public class WeatherRepository {
 
         addLiveDataListenerSources();
 
-        loadWeatherDataInDatabase();
+        addWeatherListViewModelSource();
+
+        asyncLoadWeatherDataFromDatabase();
 
     }
 
@@ -81,7 +83,6 @@ public class WeatherRepository {
 //                        }
 //                    }
 //                });
-
 
         m_observableWeather = new MediatorLiveData<>();
         m_observableWeather.setValue(null);
@@ -105,13 +106,13 @@ public class WeatherRepository {
         return weatherRepository;
     }
 
-    private LiveData<List<Weather>> loadWeatherDataInDatabase() {
+    private void addWeatherListViewModelSource() {
         m_observableWeatherList.addSource(mWeatherDao.loadAllWeather(), weatherList -> {
             if (weatherList != null) {
                 if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
                     List<String> weatherCities = new ArrayList<>();
                     Log.d(LOG_TAG, "Weather REPOSITORY HAS FINISHED LOADING WEATHER DATA FROM DATABASE");
-                    Log.d(LOG_TAG, "Number of records in Weather database: " + weatherCities.size());
+                    Log.d(LOG_TAG, "Number of records in Weather database: " + weatherList.size());
 
                     Log.d(LOG_TAG, "------------------------------------------");
                     Log.d(LOG_TAG, "------------------------------------------");
@@ -138,9 +139,6 @@ public class WeatherRepository {
             }
         });
 
-        asyncLoadWeatherDataFromDatabase();
-
-        return m_observableWeatherList;
     }
 
     private boolean isWeatherDataExpired(Weather weather) {
@@ -159,6 +157,7 @@ public class WeatherRepository {
         String countryScrubbed = formatCaseCountryCodeFromCountryName(country);
 
         //Check weatherListViewModel data records to see if weather for user's location was recently retrieved
+//        m_observableWeatherList.addSource();
         if (m_observableWeatherList.getValue() != null) {
             Log.d(LOG_TAG, String.format("Weather list is not null, searching for weather for %s, %s", cityScrubbed, countryScrubbed));
             for (Weather r : m_observableWeatherList.getValue()) {
@@ -182,6 +181,7 @@ public class WeatherRepository {
                     return;
                 }
             }
+        } else {
             //Didn't find a matching record in the database, fetch from API then insert into database
             Log.d(LOG_TAG, String.format("No existing weather data record for %s, %s exists in the database", cityScrubbed, countryScrubbed));
 

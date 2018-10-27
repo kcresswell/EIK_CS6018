@@ -78,6 +78,12 @@ public class WeatherFragment extends ListFragment {
 
         weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
 
+        weatherViewModel.getWeather().observe(this, weather ->  {
+            if (weather != null) {
+                Log.d(LOG_TAG, "Weather view model not null");
+            }
+        });
+
         weatherListViewModel.getWeatherDataFromDatabase().observe(this, weatherList -> {
             if (weatherList != null) {
                 Log.d(LOG_TAG, "Change to weather data list in database:");
