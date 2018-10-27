@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.example.mcresswell.project01.db.repo.WeatherRepository.createTempWeatherDatabaseRecord;
 import static com.example.mcresswell.project01.util.WeatherUtils.convertAndFormatKelvinTemp;
 import static com.example.mcresswell.project01.util.WeatherUtils.formatFarenheitTemp;
 import static com.example.mcresswell.project01.util.mapper.CountryCodeMapper.getCountryName;
@@ -78,16 +79,28 @@ public class WeatherFragment extends ListFragment {
 
         weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
 
-        weatherListViewModel.getWeatherDataFromDatabase().observe(this, weatherList -> {
-            if (weatherList != null) {
-                logWeatherDataFromDatabase(weatherList);
-
-                if(weatherList.isEmpty()) {
-                    //If empty, populate a single weather data record to display while other data loads
-                    weatherViewModel.loadDummyWeather();
-                }
+        weatherViewModel.getWeather().observe(this, weather ->  {
+            if (weather != null) {
+                Log.d(LOG_TAG, "Weather view model not null");
             }
         });
+
+        weatherListViewModel.getWeatherDataFromDatabase().observe(this, weatherList -> {
+            if (weatherList != null) {
+                Log.d(LOG_TAG, "Change to weather data list in database:");
+                logWeatherDataFromDatabase(weatherList);
+            }
+        });
+//        weatherListViewModel.getWeatherDataFromDatabase().observe(this, weatherList -> {
+//            if (weatherList != null) {
+//                logWeatherDataFromDatabase(weatherList);
+//
+//                if(weatherList.isEmpty()) {
+//                    //If empty, populate a single weather data record to display while other data loads
+//                    weatherViewModel.loadDummyWeather();
+//                }
+//            }
+//        });
     }
 
     private void logWeatherDataFromDatabase(List<Weather> weatherList) {
@@ -113,6 +126,8 @@ public class WeatherFragment extends ListFragment {
                 WeatherUtils.printWeather(weather);
 
                 displayWeatherWidget(weather);
+            } else {
+                displayWeatherWidget(createTempWeatherDatabaseRecord());
             }
         });
     }
@@ -122,9 +137,7 @@ public class WeatherFragment extends ListFragment {
         fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
 
         userViewModel.getUser().observe(this, user -> {
-            if (user == null) {
-                weatherViewModel.loadDummyWeather();
-            } else {
+            if(user != null) {
                 fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
                     if (fp != null) {
                         Log.d(LOG_TAG, "OMG OMG OMG FITNESS PROFILE VIEW MODEL IS NOT NULL AND CAN PASS IN CITY/COUNTRY" +

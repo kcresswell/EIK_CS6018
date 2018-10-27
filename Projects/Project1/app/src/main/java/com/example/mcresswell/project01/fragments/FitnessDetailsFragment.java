@@ -102,7 +102,7 @@ public class FitnessDetailsFragment extends Fragment {
         m_userViewModel.getUser().observe(this, user -> {
             Log.d(LOG_TAG, "UserViewModel observer for getUser()");
             if (user != null) {
-                m_fitnessProfileViewModel.getLDFitnessProfile(user.getId()).observe(this, fp -> {
+                m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
                     if (fp != null) {
                         int calcAge = calculateAge(fp.getM_dob());
                         double basalMetabolicRate = calculateBMR(fp.getM_heightFeet(),

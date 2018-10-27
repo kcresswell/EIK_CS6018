@@ -52,55 +52,26 @@ public class LoginFragment extends Fragment {
         userListViewModel = ViewModelProviders.of(this).get(UserListViewModel.class);
         userListViewModel.getUserList().observe(this, userList -> {
             if (userList != null) {
-                Log.d(LOG_TAG, "Update to user list view model");
-                Log.d(LOG_TAG, "Number of users in User database: " + userList.size());
-
-                Log.d(LOG_TAG, "------------------------------------------");
-
-                Log.d(LOG_TAG, "PRINTING USERS IN USER DATABASE");
-                Log.d(LOG_TAG, "\n");
-
-                userList.forEach(users -> {
-                    Log.d(LOG_TAG, "\nUser data record: " + users.getId() + "\t'" + users.getEmail() + "'\t'" + users.getFirstName() + "'\t'" + users.getLastName() + "'\t'" + users.getJoinDate() + "'\t'" + "'");
-                });
-
-                Log.d(LOG_TAG, "\n");
-                Log.d(LOG_TAG, "------------------------------------------");
-
-                userListViewModel.resetUserTable(userList.size());
+                Log.d(LOG_TAG, "LOGIN FRAGMENT userListViewModel user list changed and isnt null ");
             }
         });
 
         userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
-        userViewModel.getUser().observe(this, user -> {
-            if (user != null) {
-                Log.d(LOG_TAG, "Update to user view model");
-                Log.d(LOG_TAG, String.format("User: %s \t %s", user.getEmail(), user.getPassword()));
-
+//        userViewModel.getUser().observe(this, user -> {
+//            if (user != null) {
+//                Log.d(LOG_TAG, "Update to user view model, no longer null");
+//                Log.d(LOG_TAG, String.format("User: %s \t %s \t %s", user.getEmail(), user.getFirstName(), user.getLastName()));
+//
+//            }
+//        });
+        weatherListViewModel = ViewModelProviders.of(this).get(WeatherListViewModel.class);
+        weatherListViewModel.getWeatherDataFromDatabase().observe(this, weatherList -> {
+            if (weatherList != null) {
+                Log.d(LOG_TAG, "Weather list view model has changed and isnt null");
             }
         });
 
-//        weatherListViewModel = ViewModelProviders.of(this).get(WeatherListViewModel.class);
-//        weatherListViewModel.getWeatherDataFromDatabase().observe(this, weatherList -> {
-//            if (weatherList != null) {
-//                Log.d(LOG_TAG, "Update to weather list view model");
-//                Log.d(LOG_TAG, "Number of weather records in Weather database: " + weatherList.size());
-//
-//                Log.d(LOG_TAG, "------------------------------------------");
-//
-//                Log.d(LOG_TAG, "PRINTING WEATHER RECORDS IN WEATHER DATABASE");
-//                Log.d(LOG_TAG, "\n");
-//                weatherList.forEach(weather -> {
-//                    Log.d(LOG_TAG, "\nWeather Data record: " + weather.getId() + "\t'" + weather.getCity() + "'\t'" + weather.getCountryCode() + "'\t'" + weather.getLastUpdated() + "'");
-//                });
-//
-//                Log.d(LOG_TAG, "\n");
-//                Log.d(LOG_TAG, "------------------------------------------");
-//
-////                weatherViewModel.loadWeather("Tokyo", "Japan");
-//            }
-//        });
-//
+
 //        weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
 //        weatherViewModel.getWeather().observe(this, weather -> {
 //            if (weather != null) {
@@ -156,13 +127,9 @@ public class LoginFragment extends Fragment {
     }
 
     private void authenticateUserLoginCredentials(String email, String password) {
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(password);
-
-        userViewModel.findUser(email).observe(this, user1 -> {
+        userViewModel.getUser().observe(this, user1 -> {
             if (user1 != null) {
-                if (!user1.getEmail().equals(email) && user1.getPassword().equals(password)) {
+                if (!(user1.getEmail().equals(email) && user1.getPassword().equals(password))) {
                     Toast.makeText(getContext(), "Invalid login credentials.", Toast.LENGTH_SHORT).show();
 
                     m_password.setText("");
@@ -174,6 +141,8 @@ public class LoginFragment extends Fragment {
                 }
             }
         });
+
+        userViewModel.findUser(email);
     }
 
     private void createAccountHandler() {
