@@ -8,7 +8,7 @@
     tools:context=".activities.AccountSettingsActivity">
 
     <FrameLayout
-        android:id="@+id/fl_create_account_nd"
+        android:id="@+id/fl_account_settings_nd"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="16dp"

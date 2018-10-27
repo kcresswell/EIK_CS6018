@@ -5,39 +5,38 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 
 import com.example.mcresswell.project01.R;
-import com.example.mcresswell.project01.fragments.LoginFragment;
 import com.example.mcresswell.project01.ui.RV_Adapter;
+import com.example.mcresswell.project01.util.GeocoderLocationUtils;
 import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
-import com.example.mcresswell.project01.db.entity.Weather;
 import com.example.mcresswell.project01.fragments.DashboardFragment;
 import com.example.mcresswell.project01.fragments.FitnessDetailsFragment;
 import com.example.mcresswell.project01.fragments.ProfileSummaryFragment;
-import com.example.mcresswell.project01.util.WeatherUtils;
 import com.example.mcresswell.project01.fragments.WeatherFragment;
-
-import java.io.IOException;
+import com.example.mcresswell.project01.viewmodel.UserViewModel;
+import com.example.mcresswell.project01.viewmodel.WeatherViewModel;
 
 import static com.example.mcresswell.project01.util.Constants.ON_CLICK;
 import static com.example.mcresswell.project01.util.GeocoderLocationUtils.DEFAULT_COORDINATES;
-import static com.example.mcresswell.project01.util.GeocoderLocationUtils.getCoordinatesFromCityCountry;
+import static com.example.mcresswell.project01.util.ValidationUtils.isNotNullOrEmpty;
 
-public class DashboardActivity extends AppCompatActivity implements RV_Adapter.OnAdapterDataChannel,
-        WeatherFragment.OnWeatherDataLoadedListener {
+public class DashboardActivity extends AppCompatActivity implements RV_Adapter.OnAdapterDataChannel
+{
 
     private final static String LOG = DashboardActivity.class.getSimpleName();
 
     private FragmentTransaction m_fTrans;
     private FitnessProfile m_fitnessProfile;
     private FitnessProfileViewModel m_fitnessProfileViewModel;
+    private WeatherViewModel weatherViewModel;
+    private UserViewModel userViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +46,27 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
 
         restoreDefaultDashboardView();
 
-        initViewModel();
+        initializeViewModels();
+
     }
 
-    private void initViewModel() {
-//        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile.setValue(fitnessProfile);
-        m_fitnessProfileViewModel = ViewModelProviders.of(this)
-                .get(FitnessProfileViewModel.class);
-//        m_fitnessProfileViewModel.getLDFitnessProfile().observe(this, fitnessProfileObserver);
+    private void initializeViewModels() {
+        m_fitnessProfileViewModel =
+                ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
+        weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
+        userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+        userViewModel.getUser().observe(this, user -> {
+            if (user != null) {
+                m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
+                    if (fp != null) {
+
+                        Log.d(LOG, String.format("Loading weather for %s, %s", fp.getM_city(), fp.getM_country()));
+
+                        weatherViewModel.loadWeather(fp.getM_city(), fp.getM_country());
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -74,7 +86,7 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
                 hikingButtonHandler();
                 break;
             case 2: //User Profile
-                profileButtonHandler();
+                fitnessProfileButtonHandler();
                 break;
             case 3: //Weather
                 weatherButtonHandler();
@@ -94,26 +106,29 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
     }
 
     private void hikingButtonHandler() {
-        String coords = null;
-        if (m_fitnessProfile == null) {
-            coords = DEFAULT_COORDINATES;
-        } else {
-            try {
-                coords = getCoordinatesFromCityCountry(m_fitnessProfile.getM_city(), m_fitnessProfile.getM_country());
-            } catch (IOException e) {
-                e.printStackTrace();
+        userViewModel.getUser().observe(this, user -> {
+            if (user != null) {
+                m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
+                    if (fp != null) {
+                        String coords = GeocoderLocationUtils.asyncFetchCoordinatesFromApi(fp.getM_city(), fp.getM_country());
+                        if (!isNotNullOrEmpty(coords)) {
+                            coords = DEFAULT_COORDINATES;
+                        }
+                        Uri searchUri = Uri.parse("geo:" + coords + "?q=hikes");
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, searchUri);
+                        if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                            startActivity(mapIntent);
+                        }
+                    }
+                });
             }
-        }
-
-        Uri searchUri = Uri.parse("geo:" + coords + "?q=hikes");
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, searchUri);
-        if (mapIntent.resolveActivity(getPackageManager()) != null) {
-            startActivity(mapIntent);
-        }
+        });
     }
 
-    private void profileButtonHandler() {
-        if (!isWideDisplay()) { //mobile
+    private void fitnessProfileButtonHandler() {
+        Log.d(LOG, ON_CLICK);
+
+        if (!isWideDisplay()) {
             Intent intent = new Intent(this, ProfileSummaryActivity.class);
             startActivity(intent);
         } else { //Tablet
@@ -121,45 +136,31 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
+
+
+
     }
 
     private void weatherButtonHandler() {
-        String city = WeatherUtils.DEFAULT_CITY;
-        String country = WeatherUtils.DEFAULT_COUNTRY;
-        if (m_fitnessProfile != null) {
-            Log.d(LOG, "weatherButtonHandler: at least the user profile object has data ..?");
-            city = m_fitnessProfile.getM_city();
-            country = m_fitnessProfile.getM_country();
-        }
+        Log.d(LOG, ON_CLICK);
 
-        if (!isWideDisplay()) { //Load WeatherActivity in mobile
+        if (!isWideDisplay()) {
             Log.d(LOG, "weatherButtonHandler mobileView");
             Intent intent = new Intent(this, WeatherActivity.class);
-            intent.putExtra("city", city);
-            intent.putExtra("country", country);
-            startActivityForResult(intent, Activity.RESULT_OK);
+            startActivity(intent);
+
         } else { //Tablet
             Log.d(LOG, "weatherButtonHandler tabletView");
-
-            WeatherFragment weatherFragment = WeatherFragment.newInstance();
-
-            m_fTrans = getSupportFragmentManager().beginTransaction();
-            m_fTrans.replace(R.id.fl_detail_wd, weatherFragment).setTransition(5);
-            m_fTrans.addToBackStack(null);
-            m_fTrans.commit();
-        }
-    }
-
-    @Override
-    public void onWeatherDataLoaded(Weather forecast) {
-        Log.d(LOG, "onWeatherDataLoaded");
-        if (isWideDisplay()) {
             FragmentManager manager = getSupportFragmentManager();
             m_fTrans = manager.beginTransaction();
             WeatherFragment fragment = (WeatherFragment) manager.findFragmentById(R.id.fl_detail_wd);
-            m_fTrans.replace(R.id.fl_detail_wd, fragment).setTransition(10);
+
+            m_fTrans.replace(R.id.fl_detail_wd,
+                    fragment == null ? WeatherFragment.newInstance() : fragment).setTransition(15);
+//                    m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
+
     }
 
     /**
@@ -192,5 +193,6 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
     private boolean isWideDisplay() {
         return getResources().getBoolean(R.bool.isWideDisplay);
     }
+
 
 }

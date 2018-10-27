@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -160,14 +161,17 @@ public class LoginFragment extends Fragment {
         user.setPassword(password);
 
         userViewModel.findUser(email).observe(this, user1 -> {
-            if (user1 != null && user1.getEmail().equals(email) && user1.getPassword().equals(password)) {
-                Toast.makeText(getContext(), "Login success", Toast.LENGTH_SHORT).show();
+            if (user1 != null) {
+                if (!user1.getEmail().equals(email) && user1.getPassword().equals(password)) {
+                    Toast.makeText(getContext(), "Invalid login credentials.", Toast.LENGTH_SHORT).show();
 
-                loginSuccessHandler(userViewModel.getUser().getValue().getId());
-            } else {
-                Toast.makeText(getContext(), "Invalid login credentials.", Toast.LENGTH_SHORT).show();
+                    m_password.setText("");
 
-                m_password.setText("");
+                } else {
+                    Toast.makeText(getContext(), "Login success", Toast.LENGTH_SHORT).show();
+
+                    loginSuccessHandler();
+                }
             }
         });
     }
@@ -178,16 +182,18 @@ public class LoginFragment extends Fragment {
         startActivity(intent);
     }
 
-    private void loginSuccessHandler(int userId) {
-        Intent intent = new Intent(getActivity(), DashboardActivity.class);
+    private void loginSuccessHandler() {
 
-        if (Integer.valueOf(userId) != null) { //Have to cast to Integer type to do null check
-
-            //The following step passes the fitnessProfileId so that the correct fitness profile can be loaded for the corresponding user that just logged in
-            intent.putExtra("id", userId);
+        if (!getResources().getBoolean(R.bool.isWideDisplay)) {
+            Intent intent = new Intent(getActivity(), DashboardActivity.class);
+            startActivity(intent);
+        } else {
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fl_master_wd, new DashboardFragment());
+            fragmentTransaction.replace(R.id.fl_detail_wd, new FitnessDetailsFragment());
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
         }
-
-        startActivity(intent);
     }
 
 }

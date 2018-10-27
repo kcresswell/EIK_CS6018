@@ -1,5 +1,6 @@
 package com.example.mcresswell.project01.db.repo;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -45,6 +46,7 @@ public class FitnessProfileRepository {
         );
     }
 
+    @SuppressLint("StaticFieldLeak")
     public void insertNewFitnessProfile(FitnessProfile fitnessProfile) {
         new AsyncTask<Void, Void, Void>() {
             @Override

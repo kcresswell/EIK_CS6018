@@ -2,7 +2,6 @@ package com.example.mcresswell.project01.fragments;
 
 
 import android.annotation.TargetApi;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
@@ -10,9 +9,11 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.activities.ProfileSummaryActivity;
 import com.example.mcresswell.project01.db.entity.User;
 import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
@@ -47,16 +49,13 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
     private static final String LOG_TAG = ProfileEntryFragment.class.getSimpleName();
 
-    //request code for camera
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-
-    private OnProfileEntryFragmentListener m_dataListener;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private FitnessProfileViewModel m_fitnessProfileViewModel;
     private UserViewModel userViewModel;
 
     //UI Elements
     private EditText etxt_firstName, etxt_lastName, etxt_dob, etxt_sex, etxt_city, etxt_country,
-            etxt_weight, etxt_heightFeet, etxt_heightInches, etxt_lbsPerWeek;
+                     etxt_weight, etxt_heightFeet, etxt_heightInches, etxt_lbsPerWeek;
     private Button profileEntryButton;
     private ImageButton takeProfileImageButton;
     private Bitmap profileImage;
@@ -66,8 +65,8 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     private RadioButton gain, maintain, lose;
 
     //Data Elements
-//    private FitnessProfile m_fitnessProfile; //FIXME: YOU DONT NEED MEMBER VARIABLES FOR THE FITNESS PROFILE OR THE USER, THEY WONT SURVIVE CONFIGURATION CHANGES. THATS THE WHOLE POINT OF THE VIEW MODELS.
-//    private User m_user; //FIXME: YOU DONT NEED MEMBER VARIABLES FOR THE FITNESS PROFILE OR THE USER, THEY WONT SURVIVE CONFIGURATION CHANGES. THATS THE WHOLE POINT OF THE VIEW MODELS.
+    private FitnessProfile m_fitnessProfile; //FIXME: YOU DONT NEED MEMBER VARIABLES FOR THE FITNESS PROFILE OR THE USER, THEY WONT SURVIVE CONFIGURATION CHANGES. THATS THE WHOLE POINT OF THE VIEW MODELS.
+    private User m_user; //FIXME: YOU DONT NEED MEMBER VARIABLES FOR THE FITNESS PROFILE OR THE USER, THEY WONT SURVIVE CONFIGURATION CHANGES. THATS THE WHOLE POINT OF THE VIEW MODELS.
     private String lifestyleSelectorString = "Active"; //Default lifestyle selector of 'Active' if no radio button selected
     private String weightGoalString = "Lose"; //Default weight goal of 'Lose' if no radio button is selected
 
@@ -77,34 +76,25 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     public void onCreate(Bundle savedInstanceState) {
         Log.d(LOG_TAG, Constants.CREATE);
         super.onCreate(savedInstanceState);
-
-        initFitnessProfileViewModel();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(LOG_TAG, Constants.CREATE_VIEW);
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile_entry, container, false);
 
-        initializeProfileEntryUIElements(view);
-        setButtonListeners();
+        initializeViewElements(view);
 
-//        if (m_fitnessProfile != null) { //If FitnessProfile has existing data, autopopulate fields
-        if (m_fitnessProfileViewModel.getFitnessProfile() != null){
-            autofillExistingUserProfileData();
-        }
+        setOnClickListeners();
 
-        //Moved initUserViewModel to here so that it can autofill fields ONLY AFTER UIElements have been initialized
-        initUserViewModel();
-        autofillExistingUserProfileData();
+        configureViewModels();
 
         return view;
     }
 
-    private void setButtonListeners() {
+    private void setOnClickListeners() {
         profileEntryButton.setOnClickListener(this);
         takeProfileImageButton.setOnClickListener(this);
         activeLifestyle.setOnClickListener(this);
@@ -114,34 +104,49 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         lose.setOnClickListener(this);
     }
 
-    private void initUserViewModel() {
+    private void configureViewModels() {
         userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+        m_fitnessProfileViewModel =
+                ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
 
         userViewModel.getUser().observe(this, user -> {
             Log.d(LOG_TAG, "UserViewModel observer for getUser()");
-
             if (user != null) { //Autofill first and last name passed from create account page
-                m_fitnessProfileViewModel.setUser(user);
                 etxt_firstName.setText(user.getFirstName());
                 etxt_lastName.setText(user.getLastName());
+
+                observeFitnessProfileViewModel(user);
+
+            }
+        });
+
+    }
+
+    private void observeFitnessProfileViewModel(User user) {
+        m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
+            if (fp != null) {
+                autofillExistingFitnessProfileData(fp);
+
             }
         });
     }
 
     private void initFitnessProfileViewModel() {
-        m_fitnessProfileViewModel = ViewModelProviders.of(getActivity())
-                .get(FitnessProfileViewModel.class);
-
-        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> {
-            if (fitnessProfile != null){
-                m_fitnessProfileViewModel.setFitnessProfile(fitnessProfile);
-            }
-        };
-
-        User currentUser = m_fitnessProfileViewModel.getUser();
-        if (currentUser != null ) {
-            m_fitnessProfileViewModel.getLDFitnessProfile(currentUser.getId()).observe(getActivity(), fitnessProfileObserver);
-        }
+//        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> {
+//            m_fitnessProfile = fitnessProfile;
+//            if (m_fitnessProfile != null) {
+//                autofillExistingUserProfileData();
+//            }
+//        };
+//        if (m_user != null ) {
+        //FIXME: We don't want to call .getFitnessProfile() until AFTER the user has entered all of their data (ie when they click the submit button on this page)
+        //FIXME: If you call it at this point when you're initializing the profileEntryFragment, it will almost certainly be null because you are trying to retrieve a record in the database that hasn't been created yet.
+//            m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile(m_user.getId()).getValue();
+//            m_fitnessProfileViewModel.getFitnessProfile(m_user.getId()).observe(getActivity(), fitnessProfileObserver);
+//        } else {
+//            m_fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile(test_user_num).getValue();
+//            m_fitnessProfileViewModel.getFitnessProfile(test_user_num).observe(getActivity(), fitnessProfileObserver);
+//        }
     }
 
 
@@ -186,13 +191,11 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode==REQUEST_IMAGE_CAPTURE && resultCode == getActivity().RESULT_OK){
-            Bundle extras = data.getExtras();
-            if (extras != null) {
-                profileImage = (Bitmap) extras.get("data");
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == getActivity().RESULT_OK){
+            if (intent != null && intent.getExtras() != null) {
+                profileImage = (Bitmap) intent.getExtras().get("data");
             }
             if (profileImage != null) {
                 takeProfileImageButton.setImageBitmap(profileImage);
@@ -203,15 +206,16 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     @Override
     public void onViewStateRestored (Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onViewStateRestored");
+
         super.onViewStateRestored(savedInstanceState);
-        //retrieve data
+
         if(savedInstanceState != null) {
             profileImage = savedInstanceState.getParcelable("M_IMG_DATA");
             takeProfileImageButton.setImageBitmap(profileImage);
         }
     }
 
-    private void initializeProfileEntryUIElements(View view) {
+    private void initializeViewElements(View view) {
         etxt_firstName = view.findViewById(R.id.txtv_fname);
         etxt_lastName = view.findViewById(R.id.txtv_lname);
         etxt_dob = view.findViewById(R.id.txtv_dob);
@@ -223,7 +227,6 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         etxt_heightInches = view.findViewById(R.id.txtv_inches);
         etxt_lbsPerWeek = view.findViewById(R.id.txtv_weight2);
 
-        //Radio Buttons
         lifestyleSelector = view.findViewById(R.id.radiogp_lifestyle);
         weightGoal = view.findViewById(R.id.radiogp_weightGoal);
 
@@ -233,39 +236,45 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         maintain = view.findViewById(R.id.btn_radio_maintain);
         lose = view.findViewById(R.id.btn_radio_lose);
 
-        //--get submit and image buttons--//
         profileEntryButton = view.findViewById(R.id.btn_submit);
         takeProfileImageButton = view.findViewById(R.id.btn_img_takeImage);
     }
 
-    private void autofillExistingUserProfileData() {
-        FitnessProfile currentFitnessProfile = m_fitnessProfileViewModel.getFitnessProfile();
-        if (currentFitnessProfile != null ) {
-            Log.d(LOG_TAG, "Autofilling existing FitnessProfile data");
-            etxt_firstName.setText(currentFitnessProfile.getM_fName());
-            etxt_lastName.setText(currentFitnessProfile.getM_lName());
-            etxt_dob.setText(currentFitnessProfile.getM_dob());
-            etxt_sex.setText(currentFitnessProfile.getM_sex());
-            etxt_heightFeet.setText(String.valueOf(currentFitnessProfile.getM_heightFeet()));
-            etxt_heightInches.setText(String.valueOf(currentFitnessProfile.getM_heightInches()));
-            etxt_city.setText(currentFitnessProfile.getM_city());
-            etxt_country.setText(currentFitnessProfile.getM_country());
-            etxt_weight.setText(String.valueOf(currentFitnessProfile.getM_weightInPounds()));
-            etxt_lbsPerWeek.setText(String.valueOf(currentFitnessProfile.getM_lbsPerWeek()));
+    private void autofillExistingFitnessProfileData(FitnessProfile fp) {
+        Log.d(LOG_TAG, "Autofilling existing FitnessProfile data");
 
-            if (currentFitnessProfile.getM_lifestyleSelection().equalsIgnoreCase("ACTIVE")) {
-                lifestyleSelector.check(R.id.btn_radio_active);
-            } else {
-                lifestyleSelector.check(R.id.btn_radio_sedentary);
-            }
+        etxt_firstName.setText(fp.getM_fName());
+        etxt_lastName.setText(fp.getM_lName());
+        etxt_dob.setText(fp.getM_dob());
+        etxt_sex.setText(fp.getM_sex());
+        etxt_heightFeet.setText(String.valueOf(fp.getM_heightFeet()));
+        etxt_heightInches.setText(String.valueOf(fp.getM_heightInches()));
+        etxt_city.setText(fp.getM_city());
+        etxt_country.setText(fp.getM_country());
+        etxt_weight.setText(String.valueOf(fp.getM_weightInPounds()));
+        etxt_lbsPerWeek.setText(String.valueOf(fp.getM_lbsPerWeek()));
 
-            if (currentFitnessProfile.getM_weightGoal().equalsIgnoreCase("GAIN")) {
-                weightGoal.check(R.id.btn_radio_gain);
-            } else if (currentFitnessProfile.getM_weightGoal().equalsIgnoreCase("MAINTAIN")) {
-                weightGoal.check(R.id.btn_radio_maintain);
-            } else {
-                weightGoal.check(R.id.btn_radio_lose);
-            }
+        restoreRadioButtonSelections(fp);
+    }
+
+    private void restoreRadioButtonSelections(FitnessProfile fp) {
+        if (fp.getM_lifestyleSelection().equalsIgnoreCase("ACTIVE")) {
+            lifestyleSelector.check(R.id.btn_radio_active);
+        } else {
+            lifestyleSelector.check(R.id.btn_radio_sedentary);
+        }
+
+        if (fp.getM_lbsPerWeek() > 0) {
+            assert(fp.getM_weightGoal().equalsIgnoreCase("GAIN"));
+            weightGoal.check(R.id.btn_radio_gain);
+        }
+        else if (fp.getM_lbsPerWeek() == 0) {
+            assert(fp.getM_weightGoal().equalsIgnoreCase("MAINTAIN"));
+            weightGoal.check(R.id.btn_radio_maintain);
+        } else {
+            assert(fp.getM_weightGoal().equalsIgnoreCase("LOSE"));
+            weightGoal.check(R.id.btn_radio_lose);
+            etxt_lbsPerWeek.setText(String.valueOf(Math.abs(fp.getM_lbsPerWeek())));
         }
     }
 
@@ -276,58 +285,85 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
         if (!isUserInputDataValid()) {
             Log.d(LOG_TAG, "invalid user data input");
+
             return;
         }
 
-        String heightInchesValue =
-                isNotNullOrEmpty(etxt_heightInches.getText().toString()) ? etxt_heightInches.getText().toString() :
-                        String.valueOf(0);
-
-        FitnessProfile tmp_fitnessProfile = new FitnessProfile();
-
-        tmp_fitnessProfile.setM_fName(etxt_firstName.getText().toString());
-        tmp_fitnessProfile.setM_lName(etxt_lastName.getText().toString());
-        tmp_fitnessProfile.setM_dob(etxt_dob.getText().toString());
-        tmp_fitnessProfile.setM_sex(etxt_sex.getText().toString());
-        tmp_fitnessProfile.setM_city(etxt_city.getText().toString());
-        tmp_fitnessProfile.setM_country(etxt_country.getText().toString());
-        tmp_fitnessProfile.setM_lifestyleSelection(lifestyleSelectorString);
-        tmp_fitnessProfile.setM_weightGoal(weightGoalString);
-
-        final int lbsPerWeek = Integer.parseInt(etxt_lbsPerWeek.getText().toString());
-
-        if (weightGoalString.equalsIgnoreCase("Maintain")) {
-            tmp_fitnessProfile.setM_lbsPerWeek(0); //If they're trying to maintain, ignore the lbs/week field, this should be 0
-        }
-        else if (weightGoalString.equalsIgnoreCase("Lose")) { //If they're trying to lose weight, set this to be negative
-            tmp_fitnessProfile.setM_lbsPerWeek(-1 * lbsPerWeek);
-        }
-        else {
-            tmp_fitnessProfile.setM_lbsPerWeek(lbsPerWeek);
-        }
-
-        tmp_fitnessProfile.setM_weightInPounds(Integer.parseInt(etxt_weight.getText().toString()));
-        tmp_fitnessProfile.setM_heightFeet(Integer.parseInt(etxt_heightFeet.getText().toString()));
-        tmp_fitnessProfile.setM_heightInches(Integer.parseInt(heightInchesValue));
-
-//        m_fitnessProfile = tmp_fitnessProfile;
-
-
-
-        //send the signal to the ProfileEntryFragment that the button was clicked
-        m_dataListener.onProfileEntryDataEntered_DoneButtonOnClick(true);
+        FitnessProfile tempFitnessProfile = instantiateFitnessProfile();
 
         //TODO: Uncomment the code below once the fitness profile view model is working
         userViewModel.getUser().observe(this, user -> {
             if (user != null) {
-                //Retrieve the userID from UserViewModel for entering in profile_id field of new fitness profile record
-                tmp_fitnessProfile.setM_Id(user.getId());
-                tmp_fitnessProfile.setUserId(user.getId());
-                m_fitnessProfileViewModel.setFitnessProfile(tmp_fitnessProfile);
-                m_fitnessProfileViewModel.insertNewFitnessProfile(tmp_fitnessProfile);
+                Log.d(LOG_TAG, String.format(
+                        "HURRAH, WE CAN NOW CREATE THE FITNESS PROFILE RECORD WITH THE " +
+                                "CORRECT VALUE OF THE USER ID, USER ID = %d", user.getId()));
+
+                tempFitnessProfile.setUserId(user.getId());
+
+                m_fitnessProfileViewModel.insertNewFitnessProfile(tempFitnessProfile);
+
+                //Verify that the fitnessProfile record for the user was successfully inserted into the database table
+                m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fitnessProfile -> {
+                    if (fitnessProfile != null) {
+                        Log.d(LOG_TAG, "Successfully retrieved fitness profile after insertion into database");
+                        Log.d(LOG_TAG, "Fitness profile data:");
+                        Log.d(LOG_TAG, "First name: " + fitnessProfile.getM_fName());
+                        Log.d(LOG_TAG, "Last name: " + fitnessProfile.getM_lName());
+                        Log.d(LOG_TAG, "User id: " + fitnessProfile.getUserId());
+                        Log.d(LOG_TAG, "Sex: '" + fitnessProfile.getM_sex() + "'");
+                        Log.d(LOG_TAG, "Height: " + fitnessProfile.getM_heightFeet() + "Ft " + fitnessProfile.getM_heightInches() + " Inches");
+
+                    }
+                });
+
 
             }
         });
+
+        viewTransitionHandler();
+    }
+
+    @NonNull
+    private FitnessProfile instantiateFitnessProfile() {
+        FitnessProfile tempFitnessProfile = new FitnessProfile();
+        tempFitnessProfile.setM_fName(etxt_firstName.getText().toString());
+        tempFitnessProfile.setM_lName(etxt_lastName.getText().toString());
+        tempFitnessProfile.setM_dob(etxt_dob.getText().toString());
+        tempFitnessProfile.setM_sex(etxt_sex.getText().toString());
+        tempFitnessProfile.setM_city(etxt_city.getText().toString());
+        tempFitnessProfile.setM_country(etxt_country.getText().toString());
+        tempFitnessProfile.setM_lifestyleSelection(lifestyleSelectorString);
+        tempFitnessProfile.setM_weightGoal(weightGoalString);
+        tempFitnessProfile.setM_weightInPounds(Integer.parseInt(etxt_weight.getText().toString()));
+        tempFitnessProfile.setM_heightFeet(Integer.parseInt(etxt_heightFeet.getText().toString()));
+
+        String heightInches = etxt_heightInches.getText().toString();
+        tempFitnessProfile.setM_heightInches(!isNotNullOrEmpty(heightInches) ? 0 : Integer.parseInt(heightInches));
+
+        final int lbsPerWeek = Integer.parseInt(etxt_lbsPerWeek.getText().toString());
+
+        if (weightGoalString.equalsIgnoreCase("Maintain")) {
+            tempFitnessProfile.setM_lbsPerWeek(0); //If they're trying to maintain, ignore the lbs/week field, this should be 0
+        }
+        else if (weightGoalString.equalsIgnoreCase("Lose")) { //If they're trying to lose weight, set this to be negative
+            tempFitnessProfile.setM_lbsPerWeek(-1 * lbsPerWeek);
+        }
+        else {
+            tempFitnessProfile.setM_lbsPerWeek(lbsPerWeek);
+        }
+        return tempFitnessProfile;
+    }
+
+    private void viewTransitionHandler() {
+        if (!getResources().getBoolean(R.bool.isWideDisplay)){
+            Intent intent = new Intent(getContext(), ProfileSummaryActivity.class);
+            startActivity(intent);
+        } else {
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fl_detail_wd, new ProfileSummaryFragment());
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
     }
 
     private boolean isUserInputDataValid() {
@@ -373,20 +409,5 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        try {
-            m_dataListener = (OnProfileEntryFragmentListener) context;
-        } catch (ClassCastException cce) {
-            throw new ClassCastException(context.toString() + " must implement OnProfileEntryFragmentListener");
-        }
-    }
-
-    public interface OnProfileEntryFragmentListener {
-        void onProfileEntryDataEntered_DoneButtonOnClick(boolean isClicked);
-    }
-
-    private void insertNewFitnessProfile(){
-        //TODO: This method needs work to update the fitnessProfile data in the database.
-        FitnessProfile fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile();
-        m_fitnessProfileViewModel.insertNewFitnessProfile(fitnessProfile);
     }
 }

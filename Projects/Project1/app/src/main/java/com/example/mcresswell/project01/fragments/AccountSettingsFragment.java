@@ -71,9 +71,12 @@ public class AccountSettingsFragment extends Fragment {
                 m_password.setText(user.getPassword());
                 m_firstName.setText(user.getFirstName());
                 m_lastName.setText(user.getLastName());
-                
+
             }
         });
+
+        fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
+
     }
 
 
@@ -112,12 +115,17 @@ public class AccountSettingsFragment extends Fragment {
             User userToDelete = userViewModel.getUser().getValue();
 
             Log.d(LOG_TAG,
-                    String.format("Deleting user account for the following user (id: %d): %s\t%s\t%s",
+                    String.format("Deleting user data for the following user (id: %d): %s\t%s\t%s",
                             userToDelete.getId(), userToDelete.getEmail(), userToDelete.getFirstName(), userToDelete.getLastName()));
 
-            Log.d(LOG_TAG, "JUST KIDDING, NOT IMPLEMENTED YET!");
             //TODO: make call to delete corresponding fitness profile record FIRST, to prevent FK constraint violation!
-//            userViewModel.deleteUser(userToDelete);
+            Log.d(LOG_TAG, "Deleting FitnessProfile record for user");
+
+//            fitnessProfileViewModel.deleteFitnessProfile(userToDelete.getId());
+
+            Log.d(LOG_TAG, "Deleting User account record for user");
+
+            userViewModel.deleteUser(userToDelete);
         }
 
     }

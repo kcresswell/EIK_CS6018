@@ -23,7 +23,7 @@ public class FitnessDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fitness);
+        setContentView(R.layout.activity_fitness_details);
 
         initViewModel();
 
