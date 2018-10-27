@@ -60,7 +60,7 @@
     <string name="txtv_label_location">Location</string>
     <string name="txtv_label_fitness">Current Weight</string>
     <string name="txtv_label_lifestyle">Lifestyle</string>
-    <string name="txtv_label_goal">Weight Goals</string>
+    <string name="txtv_label_goal">Weight Management</string>
 
     <string name="btn_radio_sedentary">SEDENTARY</string>
     <string name="btn_radio_active">ACTIVE</string>

@@ -7,33 +7,32 @@
     android:layout_height="match_parent"
     tools:context=".fragments.ProfileEntryFragment">
 
-        <ScrollView
-            android:id="@+id/scrollV_profile"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+    <ScrollView
+        android:id="@+id/scrollV_profile"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:maxWidth="650dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!--Profile entry Page Accent Green Headings-->
+
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraintLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:maxWidth="650dp"
+            android:minWidth="300dp"
+            android:padding="16dp"
+            android:layout_margin="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <!--Profile entry Page Accent Green Headings-->
-
-
-            <android.support.constraint.ConstraintLayout
-                android:id="@+id/constraintLayout2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxWidth="650dp"
-                android:minWidth="300dp"
-
-                android:padding="16dp"
-                android:layout_margin="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
 
             <TextView
                 android:id="@+id/txtv_divider_goal"
@@ -72,7 +71,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/radiogp_lifestyle"
-                app:layout_constraintTop_toBottomOf="@+id/txtv_country" />
+                app:layout_constraintTop_toBottomOf="@+id/spinner_country" />
 
             <TextView
                 android:id="@+id/txtv_divider_fitness"
@@ -85,7 +84,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/txtv_divider_lifestyle"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtv_country" />
+                app:layout_constraintTop_toBottomOf="@+id/spinner_country" />
 
             <!--Profile entry input field grey units text-->
 
@@ -243,21 +242,31 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtv_divider_location" />
 
-            <EditText
-                android:id="@+id/txtv_country"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:ems="10"
-                android:hint="@string/hint_country"
-                android:inputType="textPersonName"
-                android:maxLength="35"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="@+id/txtv_city"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtv_city" />
+            <!--<EditText-->
+            <!--android:id="@+id/txtv_country"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:ems="10"-->
+            <!--android:hint="@string/hint_country"-->
+            <!--android:inputType="textPersonName"-->
+            <!--android:maxLength="35"-->
+            <!--android:textSize="18sp"-->
+            <!--app:layout_constraintEnd_toEndOf="@+id/txtv_city"-->
+            <!--app:layout_constraintHorizontal_bias="0.0"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/txtv_city" />-->
 
+            <Spinner
+                android:id="@+id/spinner_country"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxHeight="20dp"
+                android:background="@android:drawable/btn_dropdown"
+                android:spinnerMode="dropdown"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtv_city"/>
             <EditText
                 android:id="@+id/txtv_weight"
                 android:layout_width="0dp"
@@ -386,7 +395,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/txtv_fname"
                 app:layout_constraintTop_toTopOf="parent" />
-            </android.support.constraint.ConstraintLayout>
-        </ScrollView>
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
 
 </android.support.constraint.ConstraintLayout>

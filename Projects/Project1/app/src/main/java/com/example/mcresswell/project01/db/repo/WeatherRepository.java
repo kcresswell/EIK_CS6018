@@ -13,6 +13,7 @@ import com.example.mcresswell.project01.weather.WeatherClient;
 
 import java.sql.Date;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class WeatherRepository {
     private static final String LOG_TAG = WeatherRepository.class.getSimpleName();
 
     public static final long DATA_REFRESH_INTERVAL = 300_000L; //If weather data is older than 5 minutes, refetch data
-    private static final String DUMMY_CITY = "SALT LAKE CITY";
+    private static final String DUMMY_CITY = "Salt Lake City";
     private static final String DUMMY_COUNTRY = "United States";
 
     private WeatherDao mWeatherDao;
@@ -51,10 +52,6 @@ public class WeatherRepository {
 
 //        asyncResetWeatherDatabase();
 
-        //Populate with test data record by direct insertion into database
-        //        asyncInsertWeather(testWeatherDatabaseRecord());
-
-
         //Retrieve additional data to insert into the database by making API calls to fetch real-time weather
 //
 //        asyncFetchWeatherFromApi("Tokyo", "Japan", false);
@@ -66,41 +63,29 @@ public class WeatherRepository {
 
         addLiveDataListenerSources();
 
-    }
+        loadWeatherDataInDatabase();
 
-    public void fetchPlaceholderWeatherData() {
-        //If weather database is empty, fetch dummy data to display while other data is being retrieved
-        asyncFetchWeatherFromApi(DUMMY_CITY, DUMMY_COUNTRY, false);
     }
 
     private void addLiveDataListenerSources() {
         m_observableWeatherList = new MediatorLiveData<>();
         m_observableWeatherList.setValue(null);
 
-        m_observableWeatherList.addSource(mWeatherDao.loadAllWeather(),
-                weatherList -> {
-                    if (weatherList != null) {
-                        Log.d(LOG_TAG, "LiveData<List<<Weather>> loadAllWeather() onChanged");
-                        if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
-                            m_observableWeatherList.setValue(weatherList);
-
-                        }
-                    }
-                });
+//        m_observableWeatherList.addSource(mWeatherDao.loadAllWeather(),
+//                weatherList -> {
+//                    if (weatherList != null) {
+//                        Log.d(LOG_TAG, "LiveData<List<<Weather>> loadAllWeather() onChanged");
+//                        if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
+//                            m_observableWeatherList.setValue(weatherList);
+//
+//                        }
+//                    }
+//                });
 
 
         m_observableWeather = new MediatorLiveData<>();
         m_observableWeather.setValue(null);
 
-//        m_observableWeather.addSource(mWeatherDao.findFirstWeatherRecord(), weather -> { //FIXME: ADDED THIS IN PURELY FOR DEBUGGING, REMOVE THIS LATER
-//            if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
-//                Log.d(LOG_TAG, "update to mWeatherDao.findFirstWeatherRecord() detected by mediator " +
-//                        "live data");
-//                Log.d(LOG_TAG, "Broadcasting updated value of LiveData<Weather> to observers");
-//
-//                m_observableWeather.setValue(weather);
-//            }
-//        });
     }
 
 
@@ -118,6 +103,44 @@ public class WeatherRepository {
             }
         }
         return weatherRepository;
+    }
+
+    private LiveData<List<Weather>> loadWeatherDataInDatabase() {
+        m_observableWeatherList.addSource(mWeatherDao.loadAllWeather(), weatherList -> {
+            if (weatherList != null) {
+                if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
+                    List<String> weatherCities = new ArrayList<>();
+                    Log.d(LOG_TAG, "Weather REPOSITORY HAS FINISHED LOADING WEATHER DATA FROM DATABASE");
+                    Log.d(LOG_TAG, "Number of records in Weather database: " + weatherCities.size());
+
+                    Log.d(LOG_TAG, "------------------------------------------");
+                    Log.d(LOG_TAG, "------------------------------------------");
+
+                    Log.d(LOG_TAG, "PRINTING WEATHER IN WEATHER DATABASE");
+                    Log.d(LOG_TAG, "\n");
+
+                    weatherList.forEach(w -> {
+                        weatherCities.add(w.getCity());
+                        Log.d(LOG_TAG, "\nWeather data record: " + w.getId() + "\t'" + w.getCity() + "'\t'" + w.getCountryCode() + "'\t'" + w.getLastUpdated() + "'\t'" + "'");
+                    });
+
+                    Log.d(LOG_TAG, "\n");
+                    Log.d(LOG_TAG, "------------------------------------------");
+                    Log.d(LOG_TAG, "------------------------------------------");
+
+                    if (!weatherCities.contains(DUMMY_CITY)) {
+                        Log.d(LOG_TAG, "Adding dummy weather data");
+                        asyncFetchWeatherFromApi(DUMMY_CITY, DUMMY_COUNTRY, false);
+                    }
+
+
+                }
+            }
+        });
+
+        asyncLoadWeatherDataFromDatabase();
+
+        return m_observableWeatherList;
     }
 
     private boolean isWeatherDataExpired(Weather weather) {

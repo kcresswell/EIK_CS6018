@@ -47,10 +47,6 @@ public class WeatherViewModel extends AndroidViewModel {
         m_weatherRepository.fetchWeatherDataFromDataSource(city, country);
     }
 
-    public void loadDummyWeather() {
-        m_weatherRepository.fetchPlaceholderWeatherData();
-    }
-
 
     public void loadRandomWeather(ArrayList<Integer> weatherIdList) {
         Random random = new Random();
