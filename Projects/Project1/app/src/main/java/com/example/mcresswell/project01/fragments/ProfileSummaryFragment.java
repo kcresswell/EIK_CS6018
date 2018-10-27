@@ -1,13 +1,14 @@
 package com.example.mcresswell.project01.fragments;
 
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,42 +17,29 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.mcresswell.project01.R;
-import com.example.mcresswell.project01.db.entity.User;
-import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
-import com.example.mcresswell.project01.db.entity.FitnessProfile;
+import com.example.mcresswell.project01.activities.ProfileEntryActivity;
 import com.example.mcresswell.project01.util.Constants;
+import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 import com.example.mcresswell.project01.viewmodel.UserViewModel;
 
+import java.util.Locale;
+
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateAge;
+import static com.example.mcresswell.project01.util.WeatherUtils.formatCaseCity;
 
 public class ProfileSummaryFragment extends Fragment
         implements View.OnClickListener {
 
     private static final String LOG_TAG = ProfileSummaryFragment.class.getSimpleName();
-    private Button m_editButton;
-    private OnProfileSummaryInteractionListener m_listener;
-    private FitnessProfileViewModel m_fitnessProfileViewModel;
+
     private UserViewModel m_userViewModel;
-    private FitnessProfile m_fitnessProfile;
-    private User m_user;
-
-    private int test_user_num = 0;
-//    private Bitmap m_photo;
-//    private ImageButton m_profilePhoto;
-
+    private FitnessProfileViewModel m_fitnessProfileViewModel;
     //UI Elements
-    private TextView m_firstName,
-            m_lastName,
-            m_sex,
-            m_age,
-            m_heightFeet,
-            m_heightInches,
-            m_city,
-            m_country,
-            m_weight,
-            m_activity,
-            m_weightGoal;
-
+    private Button m_editButton;
+    //    private Bitmap m_photo;
+//    private ImageButton m_profilePhoto;
+    private TextView m_firstName, m_lastName, m_sex, m_age, m_heightFeet, m_heightInches, m_city,
+            m_country, m_weight, m_activity, m_weightGoal;
 
     public ProfileSummaryFragment() { }
 
@@ -61,8 +49,6 @@ public class ProfileSummaryFragment extends Fragment
         Log.d(LOG_TAG, Constants.CREATE);
         super.onCreate(savedInstanceState);
 
-
-        initFitnessProfileViewModel();
 //        m_photo = getActivity().getIntent().getParcelableExtra("M_IMG_DATA");
     }
 
@@ -73,71 +59,10 @@ public class ProfileSummaryFragment extends Fragment
                              Bundle savedInstanceState) {
         Log.d(LOG_TAG, Constants.CREATE_VIEW);
 
-        View v = inflater.inflate(R.layout.fragment_profile_summary, container, false);
-        initViewElements(v);
-
-        initUserViewModel();
-        m_editButton.setOnClickListener(this);
-        setDataToViewElements();
-
-        return v;
-    }
-
-    private void initUserViewModel() {
-//        final Observer<User> userObserver = user -> m_user = user;
-//        m_userViewModel = ViewModelProviders.of(getActivity())
-//                .get(UserViewModel.class);
-//        m_user = m_userViewModel.getUser().getValue();
-//        m_userViewModel.getUser().observe(getActivity(), userObserver);
-        m_userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
-
-        m_userViewModel.getUser().observe(this, user -> {
-            Log.d(LOG_TAG, "UserViewModel observer for getUser()");
-
-            if (user != null) {
-                m_fitnessProfileViewModel.setUser(user);
-            }
-        });
-    }
-
-    private void initFitnessProfileViewModel() {
-        m_fitnessProfileViewModel = ViewModelProviders.of(getActivity())
-                .get(FitnessProfileViewModel.class);
-
-        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> {
-            if (fitnessProfile != null){
-                m_fitnessProfileViewModel.setFitnessProfile(fitnessProfile);
-            }
-        };
-
-        User currentUser = m_fitnessProfileViewModel.getUser();
-        if (currentUser != null ) {
-            m_fitnessProfileViewModel.getLDFitnessProfile(currentUser.getId()).observe(getActivity(), fitnessProfileObserver);
-        }
-    }
-
-    private void setDataToViewElements() {
-        FitnessProfile fitnessProfile = m_fitnessProfileViewModel.getFitnessProfile();
-        if (fitnessProfile != null) {
-            m_firstName.setText(fitnessProfile.getM_fName());
-            m_lastName.setText(fitnessProfile.getM_lName());
-            m_sex.setText(fitnessProfile.getM_sex().toUpperCase());
-            m_age.setText(calculateAge(fitnessProfile.getM_dob())+ "y");
-            m_heightFeet.setText(String.valueOf(fitnessProfile.getM_heightFeet()));
-            m_heightInches.setText(String.valueOf(fitnessProfile.getM_heightInches()));
-            m_weight.setText(String.valueOf(fitnessProfile.getM_weightInPounds()));
-            m_city.setText(fitnessProfile.getM_city());
-            m_country.setText(fitnessProfile.getM_country());
-            m_activity.setText(fitnessProfile.getM_lifestyleSelection());
-            m_weightGoal.setText(String.valueOf(
-                    fitnessProfile.getM_weightGoal()
-                    + " " + fitnessProfile.getM_lbsPerWeek() + " lbs/week")
-            );
-//
-//          if (m_photo != null) {
-//            m_profilePhoto.setImageBitmap(m_photo);
-//          }
-        }
+        View view = inflater.inflate(R.layout.fragment_profile_summary, container, false);
+        initViewElements(view);
+        configureViewModels();
+        return view;
     }
 
     private void initViewElements(View v) {
@@ -154,15 +79,70 @@ public class ProfileSummaryFragment extends Fragment
         m_weightGoal = v.findViewById(R.id.radiogp_weightGoal);
         m_editButton = v.findViewById(R.id.btn_edit);
 //        m_profilePhoto = v.findViewById(R.id.btn_img_takeImage);
+
+        m_editButton.setOnClickListener(this);
+
     }
+
+    private void configureViewModels() {
+        m_userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+        m_fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
+
+        m_userViewModel.getUser().observe(this, user -> {
+            if (user != null) {
+                m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
+                    if (fp != null) {
+                        m_firstName.setText(formatCaseCity(fp.getM_fName()));
+                        m_lastName.setText(formatCaseCity(fp.getM_lName()));
+                        m_sex.setText(fp.getM_sex().toUpperCase());
+                        m_age.setText(String.format(Locale.US, "%dy", calculateAge(fp.getM_dob())));
+                        m_heightFeet.setText(String.format(Locale.US, "%d ft.,", fp.getM_heightFeet()));
+                        m_heightInches.setText(String.format(Locale.US, " %d in.", fp.getM_heightInches()));
+                        m_weight.setText(String.format(Locale.US, "%d ", fp.getM_weightInPounds()));
+                        m_city.setText(String.format(Locale.US, "%s, %s",
+                                formatCaseCity(fp.getM_city()), formatCaseCity(fp.getM_country())));
+                        m_country.setText("");
+                        m_activity.setText(String.format("Activity Level: ", fp.getM_lifestyleSelection().toLowerCase()));
+                        m_weightGoal.setText(String.format(Locale.US, "Fitness Goal: %s %d lbs/week",
+                                fp.getM_weightGoal(), Math.abs(fp.getM_lbsPerWeek())));
+                    }
+                });
+            }
+        });
+    }
+
+//    private void initFitnessProfileViewModel() {
+//        m_fitnessProfileViewModel.getFitnessProfile().observe(this, fp -> {
+//            if (fp != null) {
+//                m_firstName.setText(formatCaseCity(fp.getM_fName()));
+//                m_lastName.setText(formatCaseCity(fp.getM_lName()));
+//                m_sex.setText(fp.getM_sex().toUpperCase());
+//                m_age.setText(String.format(Locale.US, "%dy",calculateAge(fp.getM_dob())));
+//                m_heightFeet.setText(String.format(Locale.US, "%d ft.,",fp.getM_heightFeet()));
+//                m_heightInches.setText(String.format(Locale.US, " %d in.",fp.getM_heightInches()));
+//                m_weight.setText(String.format(Locale.US, "%d",fp.getM_weightInPounds()));
+//                m_city.setText(String.format(Locale.US, "%s, %s",
+//                        formatCaseCity(fp.getM_city()), formatCaseCity(fp.getM_country())));
+//                m_country.setText("");
+//                m_activity.setText(String.format("Activity Level: ", fp.getM_lifestyleSelection().toLowerCase()));
+//                m_weightGoal.setText(String.format(Locale.US, "Fitness Goal: %s %d lbs/week",
+//                        fp.getM_weightGoal(), Math.abs(fp.getM_lbsPerWeek())));
+//            }
+//        });
+//    }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btn_edit: {
-                Log.d(LOG_TAG, "Edit button onClick");
-                m_listener.onProfileSummary_EditButton(true);
-            }
+        Log.d(LOG_TAG, "Edit button onClick");
+
+        if (!getResources().getBoolean(R.bool.isWideDisplay)) {
+            Log.d(LOG_TAG, "onProfileSummary_EditButton listener");
+            Intent intent = new Intent(getContext(), ProfileEntryActivity.class);
+            startActivity(intent);
+        } else {
+            FragmentTransaction m_fTrans = getActivity().getSupportFragmentManager().beginTransaction();
+            m_fTrans.replace(R.id.fl_activity_profile_details, new ProfileEntryFragment(), "v_frag_profile");
+            m_fTrans.commit();
         }
     }
 
@@ -170,15 +150,6 @@ public class ProfileSummaryFragment extends Fragment
     public void onAttach(Context context) {
         Log.d(LOG_TAG, Constants.ATTACH);
         super.onAttach(context);
-        try {
-            m_listener = (OnProfileSummaryInteractionListener) context;
-        } catch (ClassCastException cce){
-            throw new ClassCastException(context.toString()
-                    + " must implement OnProfileSummaryInteractionListener");
-        }
     }
 
-    public interface OnProfileSummaryInteractionListener {
-        void onProfileSummary_EditButton(boolean isClicked);
-    }
 }

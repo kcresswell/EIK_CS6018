@@ -25,10 +25,10 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
         m_fTrans = getSupportFragmentManager().beginTransaction();
         if(isWideDisplay()){
-            m_fTrans.replace(R.id.fl_create_account_wd, new AccountSettingsFragment(), "v_frag_dashboard");
+            m_fTrans.replace(R.id.fl_detail_wd, new AccountSettingsFragment(), "v_frag_dashboard");
             m_fTrans.commit();
         } else {
-            m_fTrans.replace(R.id.fl_create_account_nd, new AccountSettingsFragment(), "v_frag_dashboard");
+            m_fTrans.replace(R.id.fl_account_settings_nd, new AccountSettingsFragment(), "v_frag_dashboard");
             m_fTrans.commit();
         }
     }

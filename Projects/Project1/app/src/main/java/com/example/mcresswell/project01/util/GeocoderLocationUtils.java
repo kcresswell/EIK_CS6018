@@ -1,12 +1,15 @@
 package com.example.mcresswell.project01.util;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.mcresswell.project01.fragments.DashboardFragment;
+import com.example.mcresswell.project01.util.mapper.CountryCodeMapper;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -19,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
 
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidCity;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidCountryName;
@@ -37,7 +41,39 @@ public class GeocoderLocationUtils {
     private static final String DEFAULT_CITY = "SALT+LAKE+CITY";
     private static final String DEFAULT_COUNTRY = "US";
 
-    public static String getCoordinatesFromCityCountry(String city, String countryCode) throws IOException {
+    public static String asyncFetchCoordinatesFromApi(String city, String country) {
+        try {
+            return new AsyncTask<String, Void, String>() {
+                @Override
+                protected String doInBackground(String... params) {
+                    String city = params[0];
+                    String country = params[1];
+
+                    Log.d(LOG_TAG, String.format(
+                            "Fetching coordinates using the Google Geocoder API for %s, %s", city, country));
+                    String countryCode = CountryCodeMapper.getCountryCode(country);
+                    try {
+                        return getCoordinatesFromCityAndCountryCode(city, countryCode);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+
+    //            @Override
+    //            protected void onPostExecute(String coordinates) {
+    //                Log.d(LOG_TAG, "Coordinates: '" + coordinates + "'");
+    //            }
+            }.execute(city, country).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String getCoordinatesFromCityAndCountryCode(String city, String countryCode) throws IOException {
         URL apiUrl = buildGeocoderApiUrl(city, countryCode);
         String response = retrieveGeocoderApiResponseFromUrl(apiUrl);
         return extractCoordinatesFromGeocoderResponse(response);

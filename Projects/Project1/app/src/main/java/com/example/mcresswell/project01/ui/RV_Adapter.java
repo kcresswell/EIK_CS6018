@@ -53,7 +53,7 @@ public class RV_Adapter extends RecyclerView.Adapter<RV_Adapter.ViewHolder> {
         try {
             m_dataListener = (OnAdapterDataChannel) m_Context;
         } catch (ClassCastException cce) {
-            throw new ClassCastException(m_Context.toString() + " must implement OnProfileEntryFragmentListener");
+            throw new ClassCastException(m_Context.toString() + " must implement OnAdapterDataPass");
         }
 
         //set values of the button.

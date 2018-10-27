@@ -9,9 +9,9 @@ import android.util.Log;
 import com.example.mcresswell.project01.db.InStyleDatabase;
 import com.example.mcresswell.project01.db.dao.UserDao;
 import com.example.mcresswell.project01.db.entity.User;
-import com.example.mcresswell.project01.util.UserGenerator;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,6 +29,7 @@ import javax.inject.Singleton;
 public class UserRepository {
     private static final String LOG_TAG = UserRepository.class.getSimpleName();
 
+    private static final String TEST_EMAIL = "test@test.com";
     private final UserDao mUserDao;
 
     private InStyleDatabase inStyleDatabase;
@@ -45,7 +46,6 @@ public class UserRepository {
         inStyleDatabase = database;
         mUserDao = inStyleDatabase.userDao();
 
-        asyncInsertTestUser("test@test.com", "password", "Hello", "Kitty", Date.valueOf("2018-01-01"));
 
 //        List<User> testUsers = UserGenerator.generateUserData(50);
 
@@ -55,6 +55,8 @@ public class UserRepository {
 
         addLiveDataListenerSources();
 
+        loadUsersInDatabase();
+
     }
 
     private void addLiveDataListenerSources() {
@@ -62,26 +64,25 @@ public class UserRepository {
         m_observableUserList.setValue(null);
 
         //Add listener for livedata source for List<User>
-        m_observableUserList.addSource(mUserDao.loadAllUsers(),
-                users -> {
-                    Log.d(LOG_TAG, "LiveData<List<<User>> loadAllUsers onChanged");
-                    if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
-                        m_observableUserList.setValue(users);
-                    }
-                });
+//        m_observableUserList.addSource(mUserDao.loadAllUsers(),
+//                users -> {
+//                    Log.d(LOG_TAG, "LiveData<List<<User>> loadAllUsers onChanged");
+//                    if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
+//                        m_observableUserList.setValue(users);
+//
+////                        if (users.isEmpty()) {
+////                            //Only insert test record if database was cleared/reset
+////                            asyncInsertTestUser("test@test.com",
+////                                    "password", "Hello",
+////                                    "Kitty", Date.valueOf("2018-01-01"));
+////
+////                        }
+//                    }
+//                });
 
         m_observableUser = new MediatorLiveData<>();
         m_observableUser.setValue(null);
 
-        //Add listener for livedata source for User
-//        m_observableUser.addSource(mUserDao.findFirstUserRecord(), user -> { //FIXME: ADDED THIS IN PURELY FOR DEBUGGING, REMOVE THIS LATER
-//            if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
-//
-//                Log.d(LOG_TAG, "Broadcasting updated value of LiveData<User> to observers");
-//
-//                m_observableUser.setValue(user);
-//            }
-//        });
     }
 
     /**
@@ -121,7 +122,7 @@ public class UserRepository {
             if (user != null) {
                 Log.d(LOG_TAG, String.format("findUserByEmail() for email  %s LiveData<User> onChanged", user.getEmail()));
                 if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
-                    Log.d(LOG_TAG, "Broadcasting findUserByEmail() result to observers... ");
+//                    Log.d(LOG_TAG, "Broadcasting findUserByEmail() result to observers... ");
                     m_observableUser.setValue(user);
                 }
             }
@@ -142,6 +143,46 @@ public class UserRepository {
 
     public void deleteAll() {
         asyncDeleteAllUsers();
+    }
+
+    public LiveData<List<User>> loadUsersInDatabase() {
+        m_observableUserList.addSource(mUserDao.loadAllUsers(), userList -> {
+            if (userList != null) {
+                if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
+                    List<String> emailList = new ArrayList<>();
+                    Log.d(LOG_TAG, "USER REPOSITORY HAS FINISHED LOADING USERS FROM DATABASE");
+                    Log.d(LOG_TAG, "Number of users in User database: " + userList.size());
+
+                    Log.d(LOG_TAG, "------------------------------------------");
+                    Log.d(LOG_TAG, "------------------------------------------");
+
+                    Log.d(LOG_TAG, "PRINTING USERS IN USER DATABASE");
+                    Log.d(LOG_TAG, "\n");
+
+                    userList.forEach(users -> {
+                        emailList.add(users.getEmail());
+                        Log.d(LOG_TAG, "\nUser data record: " + users.getId() + "\t'" + users.getEmail() + "'\t'" + users.getFirstName() + "'\t'" + users.getLastName() + "'\t'" + users.getJoinDate() + "'\t'" + "'");
+                    });
+
+                    Log.d(LOG_TAG, "\n");
+                    Log.d(LOG_TAG, "------------------------------------------");
+                    Log.d(LOG_TAG, "------------------------------------------");
+
+                    if (!emailList.contains(TEST_EMAIL)) {
+                        Log.d(LOG_TAG, "Testing user account test@test.com does not exist in database, adding to User table.");
+                        asyncInsertTestUser("test@test.com",
+                                "password", "Hello",
+                                "Kitty", Date.valueOf("2018-01-01"));
+                    }
+
+
+                }
+            }
+        });
+
+        asyncLoadAllUsers();
+
+        return m_observableUserList;
     }
 
     public boolean authenticateUser(User user) {
@@ -170,7 +211,10 @@ public class UserRepository {
 
             @Override
             protected void onPostExecute(User user) {
-                m_observableUser.setValue(user);
+                //A null check here does not work to check if the user is contained in the database.
+                //For some reason, even though this method is supposed to be called after doInBackground()
+                //Completes, it is always still initially null briefly while a valid existing user is being fetched.
+                    m_observableUser.setValue(user);
             }
         }.execute(email);
     }
@@ -277,7 +321,11 @@ public class UserRepository {
 
             @Override
             protected void onPostExecute(List<User> userList) {
-                m_observableUserList.setValue(userList);
+                //A null check here does not work to check if User database table is empty.
+                //For some reason, even though this method is supposed to be called after doInBackground()
+                //Completes, it is always still initially null briefly while the list is being retrieved.
+                //Aka it appears to execute while the database operation is still in progress
+                    m_observableUserList.setValue(userList);
             }
         }.execute();
     }
@@ -289,9 +337,6 @@ public class UserRepository {
             protected Void doInBackground(Void... params) {
                 Log.d(LOG_TAG, "Deleting all users from database");
                 mUserDao.deleteAllUsers();
-
-//                asyncInsertTestUser("test@test.com", "password", "Hello", "Kitty", Date.valueOf("2018-01-01"));
-
                 return null;
             }
 
@@ -326,6 +371,5 @@ public class UserRepository {
         testUser.setJoinDate(joinDate);
         mUserDao.insertUser(testUser);
 
-        Log.d(LOG_TAG, "GENERIC TEST USER successfully inserted into User database");
     }
 }

@@ -17,7 +17,7 @@ public class GeocoderLocationUtilsUnitTest {
         String coordinates = null;
         try {
             coordinates = GeocoderLocationUtils.
-                    getCoordinatesFromCityCountry(DEFAULT_CITY, DEFAULT_COUNTRY);
+                    getCoordinatesFromCityAndCountryCode(DEFAULT_CITY, DEFAULT_COUNTRY);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -30,7 +30,7 @@ public class GeocoderLocationUtilsUnitTest {
         String coordinates = null;
         try {
             coordinates = GeocoderLocationUtils.
-                    getCoordinatesFromCityCountry("welisasdeqewjglisej", "US");
+                    getCoordinatesFromCityAndCountryCode("welisasdeqewjglisej", "US");
         } catch (IOException e) {
             e.printStackTrace();
         }
