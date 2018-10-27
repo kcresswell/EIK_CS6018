@@ -23,7 +23,7 @@ public class FitnessDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fitness);
+        setContentView(R.layout.activity_fitness_details);
 
         initViewModel();
 
@@ -37,7 +37,7 @@ public class FitnessDetailsActivity extends AppCompatActivity {
 //        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile.setValue(fitnessProfile);
         m_fitnessProfileViewModel = ViewModelProviders.of(this)
                 .get(FitnessProfileViewModel.class);
-//        m_fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfileObserver);
+//        m_fitnessProfileViewModel.getLDFitnessProfile().observe(this, fitnessProfileObserver);
     }
 
     @Override

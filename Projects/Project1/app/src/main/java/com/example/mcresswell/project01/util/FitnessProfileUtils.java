@@ -14,6 +14,12 @@ import java.util.Locale;
 public class FitnessProfileUtils {
 
     private static final String LOG_TAG = FitnessProfileUtils.class.getSimpleName();
+    private static final int CALORIES_PER_POUND = 3500;
+    private static final double POUND_PER_KG = 2.2;
+    private static final double CM_PER_INCH = 2.54;
+
+
+
 
     public enum BodyMassIndex {
         UNDERWEIGHT,
@@ -43,22 +49,47 @@ public class FitnessProfileUtils {
 
     public static double calculateBMR(int heightFeet, int heightInches,
                                       String sex, int weightInPounds, int age) {
-        double BMR = 0.0;
-        double totalHeightInInches = (heightFeet * 12.0) + heightInches;
 
-        //calculate BMR based on sex of user
-        if(sex.equalsIgnoreCase("F")){
-            //user is female, s = -161
-            BMR = (9.99 * weightInPounds) +
-                    (6.25 * totalHeightInInches) - 4.92 * age - 161;
+        int totalHeightInInches = calculateHeightInInches(heightFeet, heightInches);
+
+        if (sex.equalsIgnoreCase("F")){
+
+            return calculateFemaleBmr(weightInPounds, totalHeightInInches, age);
         }
-        else if (sex.equalsIgnoreCase("M")) {
-            //user is male, s = 5
-            BMR = (9.99 * weightInPounds) +
-                    (6.25 * totalHeightInInches) - 4.92 * age + 5;
-        }
-        return BMR;
+
+        return calculateMaleBmr(weightInPounds, totalHeightInInches, age);
     }
+
+    private static double calculateFemaleBmr(int weightLbs, int heightInches, int age) {
+        return 655 + (4.35 * weightLbs) + (4.7 * heightInches) - (4.7 * age);
+    }
+
+    private static double calculateMaleBmr(int weightLbs, int heightInches, int age) {
+        return 66 + (6.23 * weightLbs) + (12.7 * heightInches) - (6.8 * age);
+    }
+
+    public static double calculateDailyCaloricIntake(FitnessProfile fp) {
+
+        final double BMR_FACTOR_SEDENTRY = 1.2;
+        final double BMR_FACTOR_MODERATE = 1.55;
+        final double BMR_FACTOR_ACTIVE = 1.725;
+
+        final double CALORIC_DIFFERENCE_DAILY = fp.getM_lbsPerWeek() * CALORIES_PER_POUND / 7;
+
+        double calculatedBmr = calculateBMR(fp.getM_heightFeet(),
+                                            fp.getM_heightInches(),
+                                            fp.getM_sex(),
+                                            fp.getM_weightInPounds(),
+                                            calculateAge(fp.getM_dob()));
+
+        double BASELINE_CALORIC_INTAKE =
+                fp.getM_lifestyleSelection().equalsIgnoreCase("SEDENTARY") ?
+                        calculatedBmr * BMR_FACTOR_SEDENTRY : calculatedBmr * BMR_FACTOR_ACTIVE;
+
+        return BASELINE_CALORIC_INTAKE + CALORIC_DIFFERENCE_DAILY;
+
+    }
+
 
     //http://www.bmrcalculator.org
     //You exercise moderately (3-5 days per week)	Calories Burned a Day = BMR x 1.55
@@ -110,7 +141,7 @@ public class FitnessProfileUtils {
 
     public static void printUserProfileData(FitnessProfile fitnessProfile){
         Log.d(LOG_TAG, "printUserProfileData");
-        Log.d(LOG_TAG, "userID: " + fitnessProfile.getM_userID());
+        Log.d(LOG_TAG, "FitnessProfile ID: " + fitnessProfile.getM_Id());
         Log.d(LOG_TAG, "First Name: " + fitnessProfile.getM_fName());
         Log.d(LOG_TAG, "Last Name: " + fitnessProfile.getM_lName());
         Log.d(LOG_TAG, "DOB: " + fitnessProfile.getM_dob());
@@ -128,7 +159,7 @@ public class FitnessProfileUtils {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static FitnessProfile newTestUserProfileInstance() {
         FitnessProfile testUser = new FitnessProfile();
-        testUser.setM_userID(1);
+//        testUser.setM_Id(1);
         testUser.setM_fName("TEST");
         testUser.setM_lName("LASTNAME");
         testUser.setM_dob("01/01/1900");

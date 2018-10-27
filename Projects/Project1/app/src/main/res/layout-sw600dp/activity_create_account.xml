@@ -5,10 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.LoginActivity">
+    tools:context=".activities.CreateAccountActivity">
 
     <!--<FrameLayout-->
-        <!--android:id="@+id/fl_login_wd"-->
+        <!--android:id="@+id/fl_create_account_wd"-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="match_parent"-->
         <!--android:layout_marginStart="16dp"-->
@@ -21,7 +21,6 @@
         <!--app:layout_constraintTop_toTopOf="parent">-->
 
     <!--</FrameLayout>-->
-
     <FrameLayout
         android:id="@+id/fl_master_wd"
         android:layout_width="wrap_content"

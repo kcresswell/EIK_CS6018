@@ -14,15 +14,15 @@ import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculat
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateBmi;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateHeightInInches;
 
-@Entity(foreignKeys = @ForeignKey(entity = User.class,
+@Entity(/*foreignKeys = @ForeignKey(entity = User.class,
                             parentColumns = "id",
-                            childColumns = "user_id"),
+                            childColumns = "user_id"),*/
         indices = {@Index(value = {"user_id"}, unique = true)})
 public class FitnessProfile {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    private int m_userID;
+    private int m_Id; //THIS IS THE FITNESS PROFILE ID, NOT THE USER ID.
 
     @ColumnInfo(name = "first_name")
     private String m_fName;
@@ -71,94 +71,49 @@ public class FitnessProfile {
 //    private Bitmap m_profilePicture;
 
     @ColumnInfo(name = "user_id")
-    private long userId;
+    private int userId; //THIS IS THE USER ID FOREIGN KEY FIELD.
 
     public FitnessProfile() {
-
-        m_fName = "Eric";
-        m_lName = "Test";
-        m_dob = "09/09/1990";
-        m_sex = "M";
-        m_city = "Salt Lake City";
-        m_country = "US";
-        m_lifestyleSelection = "ACTIVE";
-        m_weightGoal = "MAINTAIN";
-        m_lbsPerWeek = 0;
-        m_weightInPounds = 225;
-        m_heightFeet = 5;
-        m_heightInches = 6;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public FitnessProfile(
-            int userId,
-            String fName,
-            String lName,
-            String dob,
-            String sex,
-            String city,
-            String country,
-            String lifestyleSelection,
-            String weightGoal,
-            int lbsPerWeek,
-            int weightInPounds,
-            int heightFeet,
-            int heightInches) {
+            int m_userId,
+            String m_fName,
+            String m_lName,
+            String m_dob,
+            String m_sex,
+            String m_city,
+            String m_country,
+            String m_lifestyleSelection,
+            String m_weightGoal,
+            int m_lbsPerWeek,
+            int m_weightInPounds,
+            int m_heightFeet,
+            int m_heightInches) {
 
-        m_userID = userId;
-        m_fName = fName;
-        m_lName = lName;
-        m_dob = dob;
-        m_sex = sex;
-        m_city = city;
-        m_country = country;
-        m_lifestyleSelection = lifestyleSelection;
-        m_weightGoal = weightGoal;
-        m_lbsPerWeek = lbsPerWeek;
-        m_weightInPounds = weightInPounds;
-        m_heightFeet = heightFeet;
-        m_heightInches = heightInches;
-        m_bmi = calculateBmi(calculateHeightInInches(heightFeet, heightInches), weightInPounds);
-        m_bmr = calculateBMR(heightFeet, heightInches, sex, weightInPounds, calculateAge(dob));
+        m_Id = m_userId;
+        this.m_fName = m_fName;
+        this.m_lName = m_lName;
+        this.m_dob = m_dob;
+        this.m_sex = m_sex;
+        this.m_city = m_city;
+        this.m_country = m_country;
+        this.m_lifestyleSelection = m_lifestyleSelection;
+        this.m_weightGoal = m_weightGoal;
+        this.m_lbsPerWeek = m_lbsPerWeek;
+        this.m_weightInPounds = m_weightInPounds;
+        this.m_heightFeet = m_heightFeet;
+        this.m_heightInches = m_heightInches;
+        m_bmi = calculateBmi(calculateHeightInInches(m_heightFeet, m_heightInches), m_weightInPounds);
+        m_bmr = calculateBMR(m_heightFeet, m_heightInches, m_sex, m_weightInPounds, calculateAge(m_dob));
 //        m_profilePicture = profileImage;
     }
 
-    //may not need both constructors, this one is just with all data but no id number
-    public FitnessProfile(
-            String fName,
-            String lName,
-            String dob,
-            String sex,
-            String city,
-            String country,
-            String lifestyleSelection,
-            String weightGoal,
-            int lbsPerWeek,
-            int weightInPounds,
-            int heightFeet,
-            int heightInches) {
+    public int getM_Id() { return m_Id; }
 
-        m_fName = fName;
-        m_lName = lName;
-        m_dob = dob;
-        m_sex = sex;
-        m_city = city;
-        m_country = country;
-        m_lifestyleSelection = lifestyleSelection;
-        m_weightGoal = weightGoal;
-        m_lbsPerWeek = lbsPerWeek;
-        m_weightInPounds = weightInPounds;
-        m_heightFeet = heightFeet;
-        m_heightInches = heightInches;
-        m_bmi = calculateBmi(calculateHeightInInches(heightFeet, heightInches), weightInPounds);
-        m_bmr = calculateBMR(heightFeet, heightInches, sex, weightInPounds, calculateAge(dob));
-//        m_profilePicture = profileImage;
-    }
-
-    public int getM_userID() { return m_userID; }
-
-    public void setM_userID(int m_userID) {
-        this.m_userID = m_userID;
+    public void setM_Id(int m_Id) {
+        this.m_Id = m_Id;
     }
 
     public String getM_fName() {
@@ -253,11 +208,11 @@ public class FitnessProfile {
 
     public void setM_bmr(double m_bmr) { this.m_bmr = m_bmr; }
 
-    public long getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 }

@@ -7,24 +7,34 @@
     android:layout_height="match_parent"
     tools:context=".fragments.ProfileEntryFragment">
 
-    <ScrollView
-        android:id="@+id/scrollV_profile"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
-
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        <ScrollView
+            android:id="@+id/scrollV_profile"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:maxWidth="650dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <!--Profile entry Page Accent Green Headings-->
+
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraintLayout2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="650dp"
+                android:minWidth="300dp"
+
+                android:padding="16dp"
+                android:layout_margin="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0">
+
             <TextView
                 android:id="@+id/txtv_divider_goal"
                 android:layout_width="wrap_content"
@@ -80,7 +90,7 @@
             <!--Profile entry input field grey units text-->
 
             <TextView
-                android:id="@+id/txtv_ft_symble"
+                android:id="@+id/txtv_ft_symbol"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -200,7 +210,7 @@
                 android:hint="@string/hint_feet"
                 android:inputType="number"
                 android:textSize="18sp"
-                app:layout_constraintEnd_toStartOf="@+id/txtv_ft_symble"
+                app:layout_constraintEnd_toStartOf="@+id/txtv_ft_symbol"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtv_dob" />
 
@@ -215,7 +225,7 @@
                 android:textSize="18sp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/txtv_feet"
                 app:layout_constraintEnd_toStartOf="@+id/txtv_in_symbol"
-                app:layout_constraintStart_toEndOf="@+id/txtv_ft_symble" />
+                app:layout_constraintStart_toEndOf="@+id/txtv_ft_symbol" />
 
 
             <EditText
@@ -254,7 +264,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:ems="10"
-                android:hint="@string/hint_weight"
+                android:hint=""
                 android:inputType="number"
                 android:textSize="18sp"
                 app:layout_constraintDimensionRatio="w,2:1"
@@ -353,9 +363,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:background="@color/colorPrimary"
                 android:text="@string/btn_done"
-                android:textColor="@android:color/background_light"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/colorPrimaryDark"
+                android:background="@drawable/rectshape"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -364,16 +375,18 @@
 
             <ImageButton
                 android:id="@+id/btn_img_takeImage"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_width="147dp"
+                android:layout_height="134dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/btn_img_description_profile_image"
+                android:maxHeight="100dp"
+                android:maxWidth="100dp"
                 android:src="@drawable/ic_profile_img_placeholder"
                 app:layout_constraintBottom_toBottomOf="@+id/txtv_inches"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/txtv_fname"
                 app:layout_constraintTop_toTopOf="parent" />
+            </android.support.constraint.ConstraintLayout>
+        </ScrollView>
 
-        </android.support.constraint.ConstraintLayout>
-    </ScrollView>
 </android.support.constraint.ConstraintLayout>

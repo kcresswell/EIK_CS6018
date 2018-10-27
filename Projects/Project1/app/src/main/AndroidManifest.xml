@@ -3,23 +3,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.mcresswell.project01">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!--<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
 
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".InStyleApp"
         android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
@@ -27,7 +30,6 @@
         tools:targetApi="m">
         <activity
             android:name=".activities.LoginActivity"
-            android:label="@string/app_name"
             android:launchMode="singleTop"
             android:noHistory="true">
             <intent-filter>
@@ -36,26 +38,32 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.DashboardActivity" />
+        <activity
+            android:name=".activities.DashboardActivity" />
         <activity
             android:name=".activities.ProfileEntryActivity"
             android:parentActivityName=".activities.DashboardActivity" />
         <activity
             android:name=".activities.WeatherActivity"
-            android:label="Weather"
             android:parentActivityName=".activities.DashboardActivity" />
         <activity
             android:name=".activities.ProfileSummaryActivity"
-            android:label="Profile"
             android:parentActivityName=".activities.DashboardActivity" />
         <activity
             android:name=".activities.FitnessDetailsActivity"
-            android:label="Fitness"
             android:parentActivityName=".activities.DashboardActivity" />
         <activity
             android:name=".activities.CreateAccountActivity"
-            android:label="@string/title_activity_create_account"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".activities.DashboardActivity" />
+        <activity
+            android:name=".activities.AccountSettingsActivity"
+            android:parentActivityName=".activities.DashboardActivity" />
+
+        <service
+            android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
+            android:enabled="true" />
+
     </application>
 
 </manifest>

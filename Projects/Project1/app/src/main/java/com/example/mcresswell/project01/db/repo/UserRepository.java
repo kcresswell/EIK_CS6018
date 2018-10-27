@@ -45,13 +45,18 @@ public class UserRepository {
         inStyleDatabase = database;
         mUserDao = inStyleDatabase.userDao();
 
-        asyncInsertTestUser("test@test.com", "password", "Hello", "Kitty", Date.valueOf("2018-01-01"));
 
 //        List<User> testUsers = UserGenerator.generateUserData(50);
 
         //Populate with randomly generated test data
 //        asyncPopulateWithUserList(testUsers);
 //        Log.d(LOG_TAG, "Users generated and added to database.");
+
+
+        asyncInsertTestUser("test@test.com",
+                "password", "Hello",
+                "Kitty", Date.valueOf("2018-01-01"));
+
 
         addLiveDataListenerSources();
 
@@ -67,6 +72,14 @@ public class UserRepository {
                     Log.d(LOG_TAG, "LiveData<List<<User>> loadAllUsers onChanged");
                     if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
                         m_observableUserList.setValue(users);
+
+//                        if (users.isEmpty()) {
+//                            //Only insert test record if database was cleared/reset
+//                            asyncInsertTestUser("test@test.com",
+//                                    "password", "Hello",
+//                                    "Kitty", Date.valueOf("2018-01-01"));
+//
+//                        }
                     }
                 });
 
@@ -164,8 +177,8 @@ public class UserRepository {
                 Log.d(LOG_TAG, String.format("Retrieving user record with email %s", userToLoad));
 
                 LiveData<User> user = mUserDao.findUserByEmail(userToLoad);
-
-                return user.getValue();
+                User userVal = user.getValue();
+                return userVal;
             }
 
             @Override
@@ -289,9 +302,6 @@ public class UserRepository {
             protected Void doInBackground(Void... params) {
                 Log.d(LOG_TAG, "Deleting all users from database");
                 mUserDao.deleteAllUsers();
-
-//                asyncInsertTestUser("test@test.com", "password", "Hello", "Kitty", Date.valueOf("2018-01-01"));
-
                 return null;
             }
 

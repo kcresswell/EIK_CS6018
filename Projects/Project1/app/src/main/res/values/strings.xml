@@ -1,85 +1,93 @@
 <resources>
-    <string name="app_name">In Style</string>
+    <string name="app_name">I    N    S    T    Y    L    E</string>
 
-    <!--Application Login-->
+    <!--Application Login/Create Account/Account Settings Screens-->
     <string name="greeting">Hello</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
-    <string name="btn_createAccount">Create Account</string>
+    <string name="email">EMAIL</string>
+    <string name="password">PASSWORD</string>
     <string name="login">Login</string>
 
+    <!--The string below is used both in the login screen as well as the create account screen-->
+    <string name="btn_link_create_account">Create Account</string>
+
+    <string name="title_activity_create_account">Create a user account to get started creating your fitness profile and tracking your fitness!</string>
+
+    <string name="title_activity_account_settings">Manage your user account data below:</string>
+    <string name="btn_update_account">Update Account</string>
+    <string name="btn_delete_account">Delete Account</string>
+
     <!--Main Dashboard-->
-    <string name="calories">Recommended Daily Caloric Intake</string>
+    <string name="btn_generic">Button</string>
+    <string name="log_out">Log Out</string>
+    <string name="settings">Settings</string>
+
+    <!--Fitness Details-->
+
+    <!--Fitness Details Headers-->
+    <string name="calories">Recommended Caloric Intake</string>
     <string name="bmr">Basal Metabolic Rate (BMR)</string>
     <string name="bmi">Body Mass Index (BMI)</string>
+    <string name="steps">Daily Step Count</string>
+
+    <!--Fitness Details TextView Placeholders-->
+    <string name="tv_bmr">BMR placeholder</string>
+    <string name="tv_calPerDay">Calories placeholder</string>
+    <string name="tv_bmi">BMI placeholder</string>
+    <string name="tv_steps">Steps placeholder</string>
 
 
     <!--Profile entry-->
-    <string name="hint_fname">First Name</string>
-    <string name="hint_lname">Last Name</string>
-    <string name="hint_sex">Sex</string>
-    <string name="hint_age">Age</string>
-    <string name="hint_feet">Feet</string>
-    <string name="hint_inches">Inches</string>
-    <string name="hint_weight">Weight</string>
-    <string name="hint_city">City</string>
-    <string name="hint_country">Country Name</string>
+    <string name="hint_fname">FIRST NAME</string>
+    <string name="hint_lname">LAST NAME</string>
+    <string name="hint_sex">SEX</string>
+    <string name="hint_feet">Ft</string>
+    <string name="hint_inches">In</string>
+    <string name="hint_weight">lbs</string>
+    <string name="hint_city">CITY NAME</string>
+    <string name="hint_country">COUNTRY NAME</string>
     <string name="btn_done">Done</string>
     <string name="btn_img_description_profile_image">Take a profile picture</string>
     <string name="hint_dob">DOB</string>
+    <string name="hint_lifestyle">ACTIVITY LEVEL</string>
+    <string name="hint_wGoal">WEIGHT GOAL</string>
 
-    <!--Fitness Details-->
-    <string name="title_activity_fitness">Fitness</string>
-    <string name="txtv_ft_symbol">\'</string>
-    <string name="txtv_in_symbol">\"</string>
+    <string name="title_activity_fitness">FITNESS</string>
+    <string name="txtv_ft_symbol">ft</string>
+    <string name="txtv_in_symbol">in</string>
     <string name="txtv_lbs_symbol">lbs</string>
+
+    <!--Green Headers on Profile Entry/Summary Pages-->
     <string name="txtv_label_location">Location</string>
     <string name="txtv_label_fitness">Current Weight</string>
     <string name="txtv_label_lifestyle">Lifestyle</string>
-    <string name="txtv_label_goal">Weight Goal</string>
-    <string name="btn_radio_sedentary">Sedentary</string>
-    <string name="btn_radio_active">Active</string>
-    <string name="btn_radio_moderate">Moderate</string>
+    <string name="txtv_label_goal">Weight Goals</string>
 
-    <string name="btn_radio_maintain">Maintain</string>
-    <string name="btn_radio_loose">Lose</string>
-    <string name="btn_radio_gain">Gain</string>
-    <string name="hint_lifestyle">Activity Level</string>
-    <string name="hint_wGoal">Weight Goal</string>
-    <string name="btn_edit">Edit</string>
+    <string name="btn_radio_sedentary">SEDENTARY</string>
+    <string name="btn_radio_active">ACTIVE</string>
+    <string name="btn_radio_moderate">MODERATE</string>
+    <string name="btn_radio_maintain">MAINTAIN</string>
+    <string name="btn_radio_loose">LOSE</string>
+    <string name="btn_radio_gain">GAIN</string>
+
+    <string name="btn_edit_fitness_profile">EDIT FITNESS PROFILE</string>
 
     <!--Profile Summary-->
     <string name="hint_wkly_goal">lbs/wk</string>
-    <string name="tv_bmr">BMR</string>
-    <string name="tv_calPerDay">Calories Per Day</string>
-    <string name="tv_bmi">BMI placeholder</string>
-
 
     <!--Hiking-->
     <string name="title_activity_hiking">Hiking</string>
     <string name="hiking_current_location">Location</string>
 
     <!--Weather-->
-    <string name="title_activity_weather">Local Weather</string>
-    <string name="title_weather_widget">Current Forecast</string>
-    <string name="current_conditions_weather_widget">Current Conditions:</string>
-    <string name="forecast_detail_weather_widget">Forecast: </string>
+    <string name="title_activity_weather">LOCAL WEATHER</string>
+    <string name="title_weather_widget">CURRENT FORECAST</string>
+    <string name="current_conditions_weather_widget">CURRENT CONDITIONS: </string>
+    <string name="forecast_detail_weather_widget">FORECAST: </string>
 
-    <string name="temp_weather_widget">Temperature: </string>
-    <string name="temp_min_weather_widget">Min Temp: </string>
-    <string name="temp_max_weather_widget">Max Temp: </string>
-    <string name="humidity_weather_widget">Humidity: </string>
-    <string name="pressure_weather_widget">Pressure: </string>
-    <string name="wind_weather_widget">Wind Speed: </string>
-
-
-    <!-- TODO: Clean these up -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="btn_generic">button</string>
-    <string name="title_activity_create_account">Create a new account to get started creating your fitness profile!</string>
-    <string name="action_settings">Settings</string>
-    <string name="log_out">Log Out</string>
-    <string name="settings">Settings</string>
-
-
+    <string name="temp_weather_widget">TEMPERATURE: </string>
+    <string name="temp_min_weather_widget">MIN: </string>
+    <string name="temp_max_weather_widget">MAX: </string>
+    <string name="humidity_weather_widget">HUMIDITY: </string>
+    <string name="pressure_weather_widget">PRESSURE: </string>
+    <string name="wind_weather_widget">WIND SPEED: </string>
 </resources>

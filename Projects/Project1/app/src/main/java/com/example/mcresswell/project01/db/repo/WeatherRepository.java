@@ -34,6 +34,8 @@ public class WeatherRepository {
     private static final String LOG_TAG = WeatherRepository.class.getSimpleName();
 
     public static final long DATA_REFRESH_INTERVAL = 300_000L; //If weather data is older than 5 minutes, refetch data
+    private static final String DUMMY_CITY = "SALT LAKE CITY";
+    private static final String DUMMY_COUNTRY = "United States";
 
     private WeatherDao mWeatherDao;
     private InStyleDatabase inStyleDatabase;
@@ -55,15 +57,20 @@ public class WeatherRepository {
 
         //Retrieve additional data to insert into the database by making API calls to fetch real-time weather
 //
-        asyncFetchWeatherFromApi("Tokyo", "Japan", false);
-        asyncFetchWeatherFromApi("Seoul", "Korea", false);
-        asyncFetchWeatherFromApi("Hong Kong", "Hong Kong", false);
-        asyncFetchWeatherFromApi("NEW YORK", "United States", false);
-        asyncFetchWeatherFromApi("Salt Lake City", "United States", false);
-        asyncFetchWeatherFromApi("Rome", "Italy", false);
+//        asyncFetchWeatherFromApi("Tokyo", "Japan", false);
+//        asyncFetchWeatherFromApi("Seoul", "Korea", false);
+//        asyncFetchWeatherFromApi("Hong Kong", "Hong Kong", false);
+//        asyncFetchWeatherFromApi("NEW YORK", "United States", false);
+//        asyncFetchWeatherFromApi("Salt Lake City", "United States", false);
+//        asyncFetchWeatherFromApi("Rome", "Italy", false);
 
         addLiveDataListenerSources();
 
+    }
+
+    public void fetchPlaceholderWeatherData() {
+        //If weather database is empty, fetch dummy data to display while other data is being retrieved
+        asyncFetchWeatherFromApi(DUMMY_CITY, DUMMY_COUNTRY, false);
     }
 
     private void addLiveDataListenerSources() {
@@ -72,9 +79,12 @@ public class WeatherRepository {
 
         m_observableWeatherList.addSource(mWeatherDao.loadAllWeather(),
                 weatherList -> {
-                    Log.d(LOG_TAG, "LiveData<List<<Weather>> loadAllWeather() onChanged");
-                    if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
-                        m_observableWeatherList.setValue(weatherList);
+                    if (weatherList != null) {
+                        Log.d(LOG_TAG, "LiveData<List<<Weather>> loadAllWeather() onChanged");
+                        if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
+                            m_observableWeatherList.setValue(weatherList);
+
+                        }
                     }
                 });
 
@@ -121,10 +131,11 @@ public class WeatherRepository {
         return  differential > DATA_REFRESH_INTERVAL;
     }
 
-    public void loadWeatherData(String city, String country) {
+    public void fetchWeatherDataFromDataSource(String city, String country) {
         String cityScrubbed = formatCaseCity(city);
         String countryScrubbed = formatCaseCountryCodeFromCountryName(country);
 
+        //Check weatherListViewModel data records to see if weather for user's location was recently retrieved
         if (m_observableWeatherList.getValue() != null) {
             Log.d(LOG_TAG, String.format("Weather list is not null, searching for weather for %s, %s", cityScrubbed, countryScrubbed));
             for (Weather r : m_observableWeatherList.getValue()) {

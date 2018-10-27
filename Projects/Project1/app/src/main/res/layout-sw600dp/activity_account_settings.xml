@@ -5,10 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.LoginActivity">
+    tools:context=".activities.AccountSettingsActivity">
 
     <!--<FrameLayout-->
-        <!--android:id="@+id/fl_login_wd"-->
+        <!--android:id="@+id/fl_account_settings_wd"-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="match_parent"-->
         <!--android:layout_marginStart="16dp"-->
@@ -56,4 +56,5 @@
         app:layout_constraintVertical_bias="0.0">
 
     </FrameLayout>
+
 </android.support.constraint.ConstraintLayout>

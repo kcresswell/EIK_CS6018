@@ -12,10 +12,7 @@ import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.fragments.ProfileSummaryFragment;
 import com.example.mcresswell.project01.util.Constants;
 
-public class ProfileSummaryActivity extends AppCompatActivity
-    implements
-        ProfileSummaryFragment.OnProfileSummaryInteractionListener
-{
+public class ProfileSummaryActivity extends AppCompatActivity {
 
     private final String LOG = getClass().getSimpleName();
 
@@ -45,19 +42,17 @@ public class ProfileSummaryActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-    @Override
-    public void onProfileSummary_EditButton(boolean isClicked) {
-        if (isClicked){
-            if (!isWideDisplay()) {
-                Log.d(LOG, "onProfileSummary_EditButton listener");
-                Intent intent = new Intent(this, ProfileEntryActivity.class);
-                startActivity(intent);
-            }
-        }
-    }
-
-    private boolean isWideDisplay(){
-        return getResources().getBoolean(R.bool.isWideDisplay);
-    }
+//    @Override
+//    public void onProfileSummary_EditButton() {
+//            if (!getResources().getBoolean(R.bool.isWideDisplay)) {
+//                Log.d(LOG, "onProfileSummary_EditButton listener");
+//                Intent intent = new Intent(this, ProfileEntryActivity.class);
+//                startActivity(intent);
+//            } else {
+//                m_fTrans = getSupportFragmentManager().beginTransaction();
+//                m_fTrans.replace(R.id.fl_activity_profile_details, new ProfileEntryFragment(), "v_frag_profile");
+//                m_fTrans.commit();
+//            }
+//    }
 
 }
