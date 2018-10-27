@@ -432,7 +432,7 @@ public class WeatherRepository {
 
     /////////////////////////////////////////////////////////////////////////////////////////////
 
-    private Weather testWeatherDatabaseRecord() {
+    public static Weather createTempWeatherDatabaseRecord() {
         Weather weather = new Weather();
         weather.setCity(formatCaseCity(DEFAULT_CITY));
         weather.setCountryCode(formatCaseCountryCodeFromCountryName(DEFAULT_COUNTRY));

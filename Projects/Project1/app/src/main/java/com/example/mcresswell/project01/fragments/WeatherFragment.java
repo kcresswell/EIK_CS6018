@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.example.mcresswell.project01.db.repo.WeatherRepository.createTempWeatherDatabaseRecord;
 import static com.example.mcresswell.project01.util.WeatherUtils.convertAndFormatKelvinTemp;
 import static com.example.mcresswell.project01.util.WeatherUtils.formatFarenheitTemp;
 import static com.example.mcresswell.project01.util.mapper.CountryCodeMapper.getCountryName;
@@ -125,6 +126,8 @@ public class WeatherFragment extends ListFragment {
                 WeatherUtils.printWeather(weather);
 
                 displayWeatherWidget(weather);
+            } else {
+                displayWeatherWidget(createTempWeatherDatabaseRecord());
             }
         });
     }
