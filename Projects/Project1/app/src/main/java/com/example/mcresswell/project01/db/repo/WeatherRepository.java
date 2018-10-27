@@ -21,6 +21,7 @@ import static com.example.mcresswell.project01.util.WeatherUtils.DEFAULT_CITY;
 import static com.example.mcresswell.project01.util.WeatherUtils.DEFAULT_COUNTRY;
 import static com.example.mcresswell.project01.util.WeatherUtils.formatCaseCity;
 import static com.example.mcresswell.project01.util.WeatherUtils.formatCaseCountryCodeFromCountryName;
+import static com.example.mcresswell.project01.weather.WeatherClient.fetchCurrentWeather;
 
 /**
  * Repository/model class for the Weather entity that handles all business logic associated
@@ -63,7 +64,7 @@ public class WeatherRepository {
 
         addLiveDataListenerSources();
 
-        addWeatherListViewModelSource();
+//        addWeatherListViewModelSource();
 
         asyncLoadWeatherDataFromDatabase();
 
@@ -73,19 +74,42 @@ public class WeatherRepository {
         m_observableWeatherList = new MediatorLiveData<>();
         m_observableWeatherList.setValue(null);
 
-//        m_observableWeatherList.addSource(mWeatherDao.loadAllWeather(),
-//                weatherList -> {
-//                    if (weatherList != null) {
-//                        Log.d(LOG_TAG, "LiveData<List<<Weather>> loadAllWeather() onChanged");
-//                        if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
-//                            m_observableWeatherList.setValue(weatherList);
-//
-//                        }
-//                    }
-//                });
-
         m_observableWeather = new MediatorLiveData<>();
         m_observableWeather.setValue(null);
+
+        m_observableWeatherList.addSource(mWeatherDao.loadAllWeather(),
+                weatherList -> {
+                    if (weatherList != null) {
+                        if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
+                            List<String> weatherCities = new ArrayList<>();
+                            Log.d(LOG_TAG, "Weather REPOSITORY HAS FINISHED LOADING WEATHER DATA FROM DATABASE");
+                            Log.d(LOG_TAG, "Number of records in Weather database: " + weatherList.size());
+
+                            Log.d(LOG_TAG, "------------------------------------------");
+                            Log.d(LOG_TAG, "------------------------------------------");
+
+                            Log.d(LOG_TAG, "PRINTING WEATHER IN WEATHER DATABASE");
+                            Log.d(LOG_TAG, "\n");
+
+                            weatherList.forEach(w -> {
+                                weatherCities.add(w.getCity());
+                                Log.d(LOG_TAG, "\nWeather data record: " + w.getId() + "\t'" + w.getCity() + "'\t'" + w.getCountryCode() + "'\t'" + w.getLastUpdated() + "'\t'" + "'");
+                            });
+
+                            Log.d(LOG_TAG, "\n");
+                            Log.d(LOG_TAG, "------------------------------------------");
+                            Log.d(LOG_TAG, "------------------------------------------");
+
+                            if (!weatherCities.contains(DUMMY_CITY)) {
+                                Log.d(LOG_TAG, "Adding dummy weather data");
+                                asyncFetchWeatherFromApi(DUMMY_CITY, DUMMY_COUNTRY, false);
+                            }
+                        }
+
+                    }
+                });
+
+
 
     }
 
@@ -139,6 +163,7 @@ public class WeatherRepository {
             }
         });
 
+
     }
 
     private boolean isWeatherDataExpired(Weather weather) {
@@ -155,33 +180,41 @@ public class WeatherRepository {
     public void fetchWeatherDataFromDataSource(String city, String country) {
         String cityScrubbed = formatCaseCity(city);
         String countryScrubbed = formatCaseCountryCodeFromCountryName(country);
+//
 
-        //Check weatherListViewModel data records to see if weather for user's location was recently retrieved
-//        m_observableWeatherList.addSource();
-        if (m_observableWeatherList.getValue() != null) {
-            Log.d(LOG_TAG, String.format("Weather list is not null, searching for weather for %s, %s", cityScrubbed, countryScrubbed));
-            for (Weather r : m_observableWeatherList.getValue()) {
+        findInDatabase(city, country);
 
-                if ((r.getCity().equals(cityScrubbed) &&
-                        r.getCountryCode().equals(countryScrubbed)) ||
-                        (r.getCountryCode() == null && r.getCity().equals(cityScrubbed))) {
-                    Log.d(LOG_TAG, String.format("Existing weather data was found in database for %s, %s. " +
-                            "Now just need to check to see whether weather data is more than 5 minutes old. ", cityScrubbed, countryScrubbed));
-                    if (isWeatherDataExpired(r)) {
-                        Log.d(LOG_TAG, "WEATHER DATA IS EXPIRED");
+        if (m_observableWeather.getValue() != null) { //Then record was found in database, check expiration
 
-                        asyncFetchWeatherFromApi(city, country, true);
-                    } else { //Weather data is in database and is not expired yet
+            //Check weatherListViewModel data records to see if weather for user's location was recently retrieved
+//        if (m_observableWeatherList.getValue() != null) {
+//            Log.d(LOG_TAG, String.format("Weather list is not null, searching for weather for %s, %s", cityScrubbed, countryScrubbed));
+//            for (Weather r : m_observableWeatherList.getValue()) {
 
-                        Log.d(LOG_TAG, "WEATHER DATA IS STILL VALID");
+//                if ((m_observableWeather.getValue().getCity().equals(cityScrubbed) &&
+//                        m_observableWeather.getValue().getCountryCode().equals(countryScrubbed)) ||
+//                        (m_observableWeather.getValue().getCountryCode() == null && m_observableWeather.getValue().getCity().equals(cityScrubbed))) {
+            Log.d(LOG_TAG, String.format("Existing weather data was found in database for %s, %s. " +
+                    "Now just need to check to see whether weather data is more than 5 minutes old. ", cityScrubbed, countryScrubbed));
+            if (isWeatherDataExpired(m_observableWeather.getValue())) {
+                Log.d(LOG_TAG, "WEATHER DATA IS EXPIRED");
 
-                        m_observableWeather.setValue(r);
+                asyncFetchWeatherFromApi(cityScrubbed, countryScrubbed, true);
+            } else { //Weather data is in database and is not expired yet
 
-                    }
-                    return;
-                }
+                Log.d(LOG_TAG, "WEATHER DATA IS STILL VALID");
+
+                //No need to do anything
+//                        m_observableWeather.setValue(m);
+
             }
-        } else {
+//        }
+//                    return;
+//                }
+//            }
+
+
+    } else {
             //Didn't find a matching record in the database, fetch from API then insert into database
             Log.d(LOG_TAG, String.format("No existing weather data record for %s, %s exists in the database", cityScrubbed, countryScrubbed));
 
@@ -191,7 +224,7 @@ public class WeatherRepository {
         }
     }
 
-//            if (r.getValue() != null) {
+    //            if (r.getValue() != null) {
 //                Log.d(LOG_TAG, String.format("Database query result is not null, searching for weather for %s, %s", cityScrubbed, countryScrubbed));
 //                Log.d(LOG_TAG, "Weather record result: \t" + r.getValue().getId() +"\t" + r.getValue().getCity() + "\t" + r.getValue().getCountryCode() + "\t" + r.getValue().getLastUpdated());
 //                if ((r.getValue().getCity().equals(cityScrubbed) &&
@@ -275,7 +308,7 @@ public class WeatherRepository {
                 Log.d(LOG_TAG, String.format(
                         "Fetching real-time weather data from OpenWeatherMap API for %s, %s", city, country));
 
-                Weather weatherData = weatherClient.fetchCurrentWeather(city, country);
+                Weather weatherData = fetchCurrentWeather(city, country);
 
                 if (isDataRefresh) { //Update existing data record for previously fetched location
                     Log.d(LOG_TAG, String.format(
@@ -348,13 +381,11 @@ public class WeatherRepository {
         new AsyncTask<Void, Void, List<Weather>>() {
             @Override
             protected List<Weather> doInBackground(Void... params) {
-                Log.d(LOG_TAG, "Loading users from database");
+                Log.d(LOG_TAG, "Loading weather from database");
                 LiveData<List<Weather>> listLiveData = mWeatherDao.loadAllWeather();
 
-                if (listLiveData.getValue() != null) {
-                    return listLiveData.getValue();
-                }
-                return null;
+
+                return listLiveData.getValue();
             }
 
             @Override
@@ -369,7 +400,7 @@ public class WeatherRepository {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                Log.d(LOG_TAG, "Deleting all users from database");
+                Log.d(LOG_TAG, "Deleting all weather from database");
                 mWeatherDao.deleteAllWeather();
                 return null;
             }

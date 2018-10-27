@@ -261,10 +261,16 @@ public class CountryCodeMapper {
     }
 
     public static String getCountryCode(String countryName){
+        if (countryCodeMap.isEmpty()) {
+            CountryCodeMapper mapper = new CountryCodeMapper();
+        }
         return countryCodeMap.getOrDefault(countryName, null);
     }
 
     public static String getCountryName(String countryCode){
+        if (countryCodeMap.isEmpty()) {
+            CountryCodeMapper mapper = new CountryCodeMapper();
+        }
         if (countryCodeMap.containsValue(countryCode)) {
             for (Map.Entry<String, String> each : countryCodeMap.entrySet()) {
                 if (each.getValue().equals(countryCode)) {

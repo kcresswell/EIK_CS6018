@@ -55,18 +55,18 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
                 ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
         weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
         userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
-        userViewModel.getUser().observe(this, user -> {
-            if (user != null) {
-                m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
-                    if (fp != null) {
-
-                        Log.d(LOG, String.format("Loading weather for %s, %s", fp.getM_city(), fp.getM_country()));
-
-                        weatherViewModel.loadWeather(fp.getM_city(), fp.getM_country());
-                    }
-                });
-            }
-        });
+//        userViewModel.getUser().observe(this, user -> {
+//            if (user != null) {
+//                m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
+//                    if (fp != null) {
+//
+//                        Log.d(LOG, String.format("Loading weather for %s, %s", fp.getM_city(), fp.getM_country()));
+//
+//                        weatherViewModel.loadWeather(fp.getM_city(), fp.getM_country());
+//                    }
+//                });
+//            }
+//        });
     }
 
     @Override
