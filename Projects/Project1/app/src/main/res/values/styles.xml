@@ -26,6 +26,7 @@
         <item name="actionBarSize">80dp</item>
         <item name="android:labelTextSize">80dp</item>
         <item name="android:titleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title</item>
+        <item name="spinnerStyle">@style/Widget.AppCompat.Spinner</item>
 
     </style>
 

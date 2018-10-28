@@ -1,5 +1,6 @@
 package com.example.mcresswell.project01.fragments;
 
+import android.app.AlertDialog;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -14,7 +15,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.mcresswell.project01.activities.DashboardActivity;
-import com.example.mcresswell.project01.activities.ProfileEntryActivity;
 import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 import com.example.mcresswell.project01.viewmodel.UserListViewModel;
@@ -22,10 +22,9 @@ import com.example.mcresswell.project01.viewmodel.UserViewModel;
 import com.example.mcresswell.project01.db.entity.User;
 import com.example.mcresswell.project01.util.Constants;
 
-import java.time.Instant;
-import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.example.mcresswell.project01.util.Constants.BACK_PRESSED;
 import static com.example.mcresswell.project01.util.Constants.SAVE_INSTANCE_STATE;
 import static com.example.mcresswell.project01.util.Constants.VIEW_STATE_RESTORED;
 import static com.example.mcresswell.project01.util.ValidationUtils.isNotNullOrEmpty;
@@ -60,6 +59,7 @@ public class AccountSettingsFragment extends Fragment {
         userListViewModel.getUserList().observe(this, userList -> {
             if (userList != null) {
                 Log.d(LOG_TAG, "UserListViewModel observer for getUserList() now contains userList data");
+                userListViewModel.getUserList().removeObservers(this);
             }
         });
 
@@ -112,28 +112,30 @@ public class AccountSettingsFragment extends Fragment {
 
     private void deleteAccountHandler() {
         Log.d(LOG_TAG, "delete account button pressed");
-        if (userViewModel.getUser().getValue() != null) {
-            User userToDelete = userViewModel.getUser().getValue();
 
-            Log.d(LOG_TAG,
-                    String.format("Deleting user data for the following user (id: %d): %s\t%s\t%s",
-                            userToDelete.getId(), userToDelete.getEmail(), userToDelete.getFirstName(), userToDelete.getLastName()));
-
-            //TODO: make call to delete corresponding fitness profile record FIRST, to prevent FK constraint violation!
-            Log.d(LOG_TAG, "Deleting FitnessProfile record for user");
-
-//            fitnessProfileViewModel.deleteFitnessProfile(userToDelete.getId());
-
-            Log.d(LOG_TAG, "Deleting User account record for user");
-
-            userViewModel.deleteUser(userToDelete);
-        }
+        displayConfirmDeleteAccountAlertDialog();
+//        if (userViewModel.getUser().getValue() != null) {
+//            User userToDelete = userViewModel.getUser().getValue();
+//
+//            Log.d(LOG_TAG,
+//                    String.format("Deleting user data for the following user (id: %d): %s\t%s\t%s",
+//                            userToDelete.getId(), userToDelete.getEmail(), userToDelete.getFirstName(), userToDelete.getLastName()));
+//
+//            //TODO: make call to delete corresponding fitness profile record FIRST, to prevent FK constraint violation!
+//            Log.d(LOG_TAG, "Deleting FitnessProfile record for user");
+//
+////            fitnessProfileViewModel.deleteFitnessProfile(userToDelete.getId());
+//
+//            Log.d(LOG_TAG, "Deleting User account record for user");
+//
+//            userViewModel.deleteUser(userToDelete);
+//        }
 
     }
 
     private void updateAccountHandler() {
         if (isAccountDataValid()) {
-            if (!isUniqueUserLogin(m_email.getText().toString())) {
+            if (!isUniqueUserLogin(m_email.getText().toString()).get()) {
                 Toast.makeText(getContext(), "A user account with that email already exists.",
                         Toast.LENGTH_SHORT).show();
                 return;
@@ -165,20 +167,33 @@ public class AccountSettingsFragment extends Fragment {
         }
     }
 
-    private boolean isUniqueUserLogin(String email) {
-        LiveData<User> userResult = userViewModel.findUser(email);
-        if (userResult.getValue() != null && userResult.getValue().getEmail().equals(email)) {
-            Log.d(LOG_TAG, "Email is not unique. A user with that email already exists.");
+    private void displayConfirmDeleteAccountAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.delete_account_dialog_title);
+        builder.setMessage(R.string.delete_account_dialog_message);
+        builder.setIcon(R.drawable.ic_directions_run);
 
-//            Log.d(LOG_TAG, "EMAIL: " + userResult.getValue().getEmail());
-//            Log.d(LOG_TAG, "PASSOWRD: " + userResult.getValue().getPassword());
-//            Log.d(LOG_TAG, "First name: " + userResult.getValue().getFirstName());
-//            Log.d(LOG_TAG, "Last Name: " + userResult.getValue().getLastName());
-//            Log.d(LOG_TAG, "Date joined: " + userResult.getValue().getJoinDate());
+        builder.setPositiveButton(R.string.ok, (dialog, id) -> Log.d(LOG_TAG, "Dialog OK button clicked"));
+        builder.setNegativeButton(R.string.cancel, (dialog, id) -> Log.d(LOG_TAG, "Dialog cancel button clicked"));
 
-            return false;
-        }
-        return true;
+        builder.create().show();
+    }
+
+
+
+    private AtomicBoolean isUniqueUserLogin(String email) {
+        AtomicBoolean isUniqueEmail = new AtomicBoolean(true);
+        LiveData<User> userResult = userViewModel.findUser(email); //Check if email is taken
+        userViewModel.getUser().observe(this, r-> {
+
+            if (r != null && r.getEmail().equals(email)) {
+                Log.d(LOG_TAG, String.format(Locale.US, "Email '%s' is not unique. A user with that email already exists.", email));
+
+                isUniqueEmail.set(false);
+            }
+        });
+        return isUniqueEmail;
+
     }
 
     private boolean isAccountDataValid () {

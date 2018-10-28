@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:id="@+id/fragment_weather"
     android:elevation="12dp"
-    android:background="@drawable/rectshape"
+    android:background="@drawable/gradient_button"
     android:backgroundTint="@color/widget_background_color"
     tools:context=".fragments.WeatherFragment">
 

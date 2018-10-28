@@ -1,8 +1,10 @@
 package com.example.mcresswell.project01.fragments;
 
 
+import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -91,7 +93,7 @@ public class ProfileSummaryFragment extends Fragment
         m_userViewModel.getUser().observe(this, user -> {
             if (user != null) {
                 m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
-                    if (fp != null) {
+                    if (fp != null && user.getFirstName().equals(fp.getM_fName()) && user.getLastName().equals(fp.getM_lName())) {
                         m_firstName.setText(formatCaseCity(fp.getM_fName()));
                         m_lastName.setText(formatCaseCity(fp.getM_lName()));
                         m_sex.setText(fp.getM_sex().toUpperCase());
@@ -105,10 +107,36 @@ public class ProfileSummaryFragment extends Fragment
                         m_activity.setText(String.format("Activity Level: ", fp.getM_lifestyleSelection().toLowerCase()));
                         m_weightGoal.setText(String.format(Locale.US, "Fitness Goal: %s %d lbs/week",
                                 fp.getM_weightGoal(), Math.abs(fp.getM_lbsPerWeek())));
+                    } else {
+                        Log.d(LOG_TAG, "FitnessProfileViewModel is null, display dialog");
+                        displayNoExistingFitnessProfileAlertDialog();
                     }
                 });
             }
         });
+    }
+
+
+    private void displayNoExistingFitnessProfileAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.dialog_title);
+        builder.setMessage(R.string.dialog_message);
+        builder.setIcon(R.drawable.ic_directions_run);
+
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Log.d(LOG_TAG, "Dialog OK button clicked");
+                viewTransitionHandler();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+               Log.d(LOG_TAG, "Dialog cancel button clicked");
+               //Do nothing
+            }
+        });
+
+        builder.create().show();
     }
 
 //    private void initFitnessProfileViewModel() {
@@ -135,13 +163,16 @@ public class ProfileSummaryFragment extends Fragment
     public void onClick(View v) {
         Log.d(LOG_TAG, "Edit button onClick");
 
+        viewTransitionHandler();
+    }
+
+    private void viewTransitionHandler() {
         if (!getResources().getBoolean(R.bool.isWideDisplay)) {
-            Log.d(LOG_TAG, "onProfileSummary_EditButton listener");
             Intent intent = new Intent(getContext(), ProfileEntryActivity.class);
             startActivity(intent);
         } else {
             FragmentTransaction m_fTrans = getActivity().getSupportFragmentManager().beginTransaction();
-            m_fTrans.replace(R.id.fl_activity_profile_details, new ProfileEntryFragment(), "v_frag_profile");
+            m_fTrans.replace(R.id.fl_activity_profile_summary, new ProfileEntryFragment(), "v_frag_profile");
             m_fTrans.commit();
         }
     }

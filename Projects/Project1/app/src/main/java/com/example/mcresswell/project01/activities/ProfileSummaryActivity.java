@@ -32,7 +32,7 @@ public class ProfileSummaryActivity extends AppCompatActivity {
 
     private void loadProfileSummaryFragment() {
         m_fTrans = getSupportFragmentManager().beginTransaction();
-        m_fTrans.replace(R.id.fl_activity_profile_details, new ProfileSummaryFragment(), "v_frag_profile");
+        m_fTrans.replace(R.id.fl_activity_profile_summary, new ProfileSummaryFragment(), "v_frag_profile");
         m_fTrans.commit();
     }
 

@@ -7,7 +7,7 @@
     tools:context=".activities.FitnessDetailsActivity">
 
     <FrameLayout
-        android:id="@+id/fl_master_nd_activity_fitness"
+        android:id="@+id/fl_master_nd_activity_fitness_details"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="16dp"

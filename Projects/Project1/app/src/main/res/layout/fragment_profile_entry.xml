@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:maxWidth="650dp"
             android:minWidth="300dp"
-            android:padding="16dp"
+            android:padding="8dp"
             android:layout_margin="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -38,48 +38,45 @@
                 android:id="@+id/txtv_divider_goal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="0dp"
                 android:text="@string/txtv_label_goal"
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtv_weight" />
+                app:layout_constraintTop_toBottomOf="@+id/slider_lifestyle" />
 
             <TextView
                 android:id="@+id/txtv_divider_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_margin="0dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/txtv_label_location"
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtv_sex" />
+                app:layout_constraintTop_toBottomOf="@+id/txtv_dob" />
 
             <TextView
                 android:id="@+id/txtv_divider_lifestyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:text="@string/txtv_label_lifestyle"
+                android:layout_margin="0dp"
                 android:textColor="@color/colorPrimary"
-                app:layout_constraintStart_toEndOf="@id/txtv_divider_fitness"
-                app:layout_constraintTop_toBottomOf="@+id/txtv_inches"
-                tools:layout_editor_absoluteX="205dp" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtv_weight" />
 
             <TextView
                 android:id="@+id/txtv_divider_fitness"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_margin="0dp"
                 android:text="@string/txtv_label_fitness"
                 android:textColor="@color/colorPrimary"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/spinner_country" />
 
             <!--Profile entry input field grey units text-->
@@ -88,9 +85,8 @@
                 android:id="@+id/txtv_ft_symbol"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:text="@string/txtv_ft_symbol"
-                android:textSize="25sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/txtv_feet"
                 app:layout_constraintEnd_toStartOf="@+id/txtv_inches"
@@ -101,9 +97,8 @@
                 android:id="@+id/txtv_in_symbol"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:text="@string/txtv_in_symbol"
-                android:textSize="25sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/txtv_inches"
                 app:layout_constraintEnd_toEndOf="@+id/txtv_dob"
@@ -116,8 +111,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:layout_marginTop="8dp"
                 android:text="@string/txtv_lbs_symbol"
+                android:textStyle="bold"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@+id/txtv_weight"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -127,18 +122,16 @@
 
 
             <TextView
-                android:id="@+id/txtv_lbs_symbol2"
+                android:id="@+id/txtv_lbs_per_week_symbol"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="8dp"
                 android:text="@string/hint_wkly_goal"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="@+id/txtv_weight2"
-                app:layout_constraintEnd_toStartOf="@+id/radiogp_weightGoal"
-                app:layout_constraintStart_toEndOf="@+id/txtv_weight2"
-                app:layout_constraintTop_toTopOf="@+id/txtv_weight2"
+                app:layout_constraintBottom_toBottomOf="@+id/txtv_weight_goal_weekly"
+                app:layout_constraintEnd_toStartOf="@+id/slider_weight_goal"
+                app:layout_constraintStart_toEndOf="@+id/txtv_weight_goal_weekly"
+                app:layout_constraintTop_toTopOf="@+id/txtv_weight_goal_weekly"
                 app:layout_constraintVertical_bias="0.49" />
 
             <!--Profile Entry Input Fields-->
@@ -148,7 +141,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
                 android:ems="10"
                 android:hint="@string/hint_fname"
                 android:inputType="textPersonName"
@@ -160,7 +152,6 @@
                 android:id="@+id/txtv_lname"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:ems="10"
                 android:hint="@string/hint_lname"
                 android:inputType="textPersonName"
@@ -188,7 +179,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:ems="10"
                 android:hint="@string/hint_dob"
                 android:inputType="date"
@@ -205,29 +195,28 @@
                 android:ems="10"
                 android:hint="@string/hint_city"
                 android:maxLength="35"
+                android:layout_marginEnd="8dp"
                 android:inputType="textPersonName"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtv_divider_location" />
 
             <Spinner
                 android:id="@+id/spinner_country"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxHeight="20dp"
-                android:background="@android:drawable/btn_dropdown"
+                android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+                android:maxHeight="50dp"
                 android:spinnerMode="dropdown"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtv_city"/>
+                app:layout_constraintTop_toBottomOf="@+id/txtv_city" />
 
             <EditText
                 android:id="@+id/txtv_feet"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:ems="10"
                 android:hint="@string/hint_feet"
                 android:inputType="number"
@@ -263,89 +252,208 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/txtv_in_symbol" />
 
-            <RadioGroup
-                android:id="@+id/radiogp_lifestyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:layout_gravity="fill"
                 android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@id/slider_lifestyle"
+                app:layout_constraintTop_toBottomOf="@id/txtv_divider_lifestyle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
+                <TextView
+                    android:id="@+id/tv_sedentary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@id/slider_lifestyle"
+                    android:text="SEDENTARY"
+                    android:layout_marginHorizontal="20dp"
+                    android:paddingHorizontal="8dp"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_moderate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@id/slider_lifestyle"
+                    android:text="MODERATE"
+                    android:layout_marginHorizontal="20dp"
+                    android:textSize="12sp"
+                    android:paddingHorizontal="8dp"
+
+                    app:layout_constraintEnd_toStartOf="@id/tv_active"
+                    app:layout_constraintStart_toEndOf="@id/tv_sedentary" />
+
+                <TextView
+                    android:id="@+id/tv_active"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@id/slider_lifestyle"
+                    android:text="ACTIVE"
+                    android:layout_marginHorizontal="20dp"
+                    android:textSize="12sp"
+                    android:paddingHorizontal="8dp"
+
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_moderate" />
+            </LinearLayout>
+
+
+            <SeekBar
+                android:id="@+id/slider_lifestyle"
+                android:max="2"
+                android:progress="1"
+                android:progressTint="@android:color/transparent"
+                android:thumb="@drawable/seekbar_thumb"
+                android:tickMark="@color/colorPrimaryDark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/txtv_divider_lifestyle"
-                app:layout_constraintTop_toBottomOf="@+id/txtv_inches">
-
-                <RadioButton
-                    android:id="@+id/btn_radio_active"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/btn_radio_active"
-                    android:textSize="14sp" />
-
-                <RadioButton
-                    android:id="@+id/btn_radio_sedentary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/btn_radio_sedentary"
-                    android:textSize="14sp" />
-
-            </RadioGroup>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtv_divider_lifestyle" />
 
             <EditText
-                android:id="@+id/txtv_weight2"
-                android:layout_width="0dp"
+                android:id="@+id/txtv_weight_goal_weekly"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:ems="10"
                 android:hint="@string/hint_wkly_goal"
                 android:inputType="number"
                 android:textSize="18sp"
-                app:layout_constraintEnd_toStartOf="@+id/txtv_lbs_symbol2"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintEnd_toStartOf="@+id/txtv_lbs_per_week_symbol"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtv_divider_goal" />
 
-            <RadioGroup
-                android:id="@+id/radiogp_weightGoal"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_weight="1"
+            <!--<RadioGroup-->
+                <!--android:id="@+id/radiogp_lifestyle"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginStart="8dp"-->
+                <!--android:orientation="horizontal"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/txtv_divider_lifestyle">-->
+
+                <!--<RadioButton-->
+                    <!--android:id="@+id/btn_radio_active"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text="@string/btn_radio_active"-->
+                    <!--android:textSize="14sp" />-->
+
+                <!--<RadioButton-->
+                    <!--android:id="@+id/btn_radio_sedentary"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text="@string/btn_radio_sedentary"-->
+                    <!--android:textSize="14sp" />-->
+
+            <!--</RadioGroup>-->
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="15dp"
                 android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="@+id/txtv_weight2"
+                app:layout_constraintBottom_toTopOf="@id/slider_weight_goal"
+                app:layout_constraintTop_toBottomOf="@id/txtv_divider_goal"
+                app:layout_constraintStart_toEndOf="@id/txtv_lbs_per_week_symbol"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_lose"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@id/slider_weight_goal"
+                    android:text="LOSE"
+                    android:layout_weight="1"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_maintain"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@id/slider_weight_goal"
+                    android:text="MAINTAIN"
+                    android:layout_weight="1"
+
+                    android:textSize="12sp"
+
+                    app:layout_constraintEnd_toStartOf="@id/tv_gain"
+                    app:layout_constraintStart_toEndOf="@id/tv_lose" />
+
+                <TextView
+                    android:id="@+id/tv_gain"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@id/slider_weight_goal"
+                    android:text="GAIN"
+                    android:layout_weight="1"
+
+                    android:textSize="12sp"
+
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_maintain" />
+            </LinearLayout>
+
+
+            <SeekBar
+                android:id="@+id/slider_weight_goal"
+                android:max="2"
+                android:progress="1"
+                android:progressTint="@android:color/transparent"
+                android:thumb="@drawable/seekbar_thumb"
+                android:tickMark="@color/colorPrimaryDark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="4"
-                app:layout_constraintStart_toEndOf="@+id/txtv_lbs_symbol2"
-                app:layout_constraintTop_toBottomOf="@id/radiogp_lifestyle" >
+                app:layout_constraintStart_toEndOf="@id/txtv_lbs_per_week_symbol"
+                app:layout_constraintTop_toBottomOf="@id/txtv_divider_goal" />
 
-                <RadioButton
-                    android:id="@+id/btn_radio_maintain"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/btn_radio_maintain"
-                    android:textSize="14sp" />
+            <!--<RadioGroup-->
+                <!--android:id="@+id/radiogp_weightGoal"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:orientation="horizontal"-->
+                <!--app:layout_constraintBottom_toTopOf="@id/btn_submit"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintHorizontal_weight="4"-->
+                <!--app:layout_constraintStart_toEndOf="@+id/txtv_lbs_per_week_symbol"-->
+                <!--app:layout_constraintTop_toBottomOf="@id/radiogp_lifestyle" >-->
 
-                <RadioButton
-                    android:id="@+id/btn_radio_lose"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/btn_radio_loose"
-                    android:textSize="14sp" />
+                <!--<RadioButton-->
+                    <!--android:id="@+id/btn_radio_maintain"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text="@string/btn_radio_maintain"-->
+                    <!--android:textSize="14sp" />-->
 
-                <RadioButton
-                    android:id="@+id/btn_radio_gain"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/btn_radio_gain"
-                    android:textSize="14sp" />
-            </RadioGroup>
+                <!--<RadioButton-->
+                    <!--android:id="@+id/btn_radio_lose"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text="@string/btn_radio_loose"-->
+                    <!--android:textSize="14sp" />-->
+
+                <!--<RadioButton-->
+                    <!--android:id="@+id/btn_radio_gain"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text="@string/btn_radio_gain"-->
+                    <!--android:textSize="14sp" />-->
+            <!--</RadioGroup>-->
 
             <Button
                 android:id="@+id/btn_submit"
@@ -353,16 +461,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="24dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="24dp"
                 android:text="@string/btn_done"
                 android:elevation="12dp"
                 android:textColor="@color/colorPrimaryDark"
-                android:background="@drawable/rectshape"
+                android:background="@drawable/gradient_button"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtv_weight2" />
+                app:layout_constraintTop_toBottomOf="@+id/slider_weight_goal" />
 
             <ImageButton
                 android:id="@+id/btn_img_takeImage"
@@ -372,7 +480,8 @@
                 android:contentDescription="@string/btn_img_description_profile_image"
                 android:maxHeight="100dp"
                 android:maxWidth="100dp"
-                android:src="@drawable/ic_profile_img_placeholder"
+                android:padding="20dp"
+                android:src="@drawable/ic_launcher_camera"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/txtv_fname"
                 app:layout_constraintTop_toTopOf="parent" />

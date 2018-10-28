@@ -24,7 +24,7 @@ public class FitnessDetailsActivity extends AppCompatActivity {
 
     private void loadFitnessDetailsFragment() {
         m_fTrans = getSupportFragmentManager().beginTransaction();
-        m_fTrans.replace(R.id.fl_activity_profile_entry, new FitnessDetailsFragment());
+        m_fTrans.replace(R.id.fl_master_nd_activity_fitness_details, new FitnessDetailsFragment());
         m_fTrans.commit();
     }
 

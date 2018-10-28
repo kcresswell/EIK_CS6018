@@ -274,7 +274,7 @@
                 android:layout_marginTop="8dp"
                 android:elevation="12dp"
                 android:textColor="@color/colorPrimaryDark"
-                android:background="@drawable/rectshape"
+                android:background="@drawable/gradient_button"
                 android:text="@string/btn_edit_fitness_profile"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
