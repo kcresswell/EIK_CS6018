@@ -23,17 +23,13 @@ public class CreateAccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_account);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        if(isWideDisplay()){
-            fragmentTransaction.replace(R.id.fl_detail_wd, new CreateAccountFragment(), "v_frag_dashboard");
+        if(getResources().getBoolean(R.bool.isWideDisplay)){
+            fragmentTransaction.replace(R.id.fl_detail_wd, new CreateAccountFragment());
             fragmentTransaction.commit();
         } else {
-            fragmentTransaction.replace(R.id.fl_create_account_nd, new CreateAccountFragment(), "v_frag_dashboard");
+            fragmentTransaction.replace(R.id.fl_create_account_nd, new CreateAccountFragment());
             fragmentTransaction.commit();
         }
-    }
-
-    private boolean isWideDisplay(){
-        return getResources().getBoolean(R.bool.isWideDisplay);
     }
 
     @Override
@@ -41,7 +37,6 @@ public class CreateAccountActivity extends AppCompatActivity {
         Log.d(LOG_TAG, BACK_PRESSED);
 
         Intent intent = new Intent(this, LoginActivity.class);
-
         startActivity(intent);
     }
 

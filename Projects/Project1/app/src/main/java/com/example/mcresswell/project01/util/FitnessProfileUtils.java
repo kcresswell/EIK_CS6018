@@ -82,11 +82,13 @@ public class FitnessProfileUtils {
                                             fp.getM_weightInPounds(),
                                             calculateAge(fp.getM_dob()));
 
-        double BASELINE_CALORIC_INTAKE =
+        double baselineCalories =
                 fp.getM_lifestyleSelection().equalsIgnoreCase("SEDENTARY") ?
                         calculatedBmr * BMR_FACTOR_SEDENTRY : calculatedBmr * BMR_FACTOR_ACTIVE;
 
-        return BASELINE_CALORIC_INTAKE + CALORIC_DIFFERENCE_DAILY;
+        double total = baselineCalories + CALORIC_DIFFERENCE_DAILY;
+
+        return total < 0 ? 0 : total;
 
     }
 

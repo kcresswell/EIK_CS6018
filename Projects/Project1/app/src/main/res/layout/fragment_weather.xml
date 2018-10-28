@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/fragment_weather"
-    android:elevation="8dp"
+    android:elevation="12dp"
     android:background="@drawable/rectshape"
     android:backgroundTint="@color/widget_background_color"
     tools:context=".fragments.WeatherFragment">

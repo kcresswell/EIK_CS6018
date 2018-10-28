@@ -1,7 +1,7 @@
 package com.example.mcresswell.project01;
 
 import android.app.Application;
-import android.util.Log;
+import android.content.Intent;
 
 import com.example.mcresswell.project01.db.InStyleDatabase;
 import com.example.mcresswell.project01.db.repo.FitnessProfileRepository;
@@ -20,16 +20,14 @@ public class InStyleApp extends Application {
         super.onCreate();
 
         getDatabase();
-        getUserRepository();
-        getWeatherRepository();
+
+//        getUserRepository();
+//        getWeatherRepository();
 //        getFitnessProfileRepository();
     }
 
     public InStyleDatabase getDatabase() {
-
-        InStyleDatabase db = InStyleDatabase.getDatabaseInstance(this);
-
-        return db;
+        return InStyleDatabase.getDatabaseInstance(this);
     }
 
     public UserRepository getUserRepository() {

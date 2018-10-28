@@ -103,21 +103,6 @@
                 app:layout_constraintStart_toEndOf="@+id/txtv_fname"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/btn_edit"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:backgroundTint="@color/colorPrimary"
-                android:textColor="@color/colorPrimaryDark"
-                android:background="@drawable/rectshape"
-                android:text="@string/btn_edit_fitness_profile"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/radiogp_weightGoal" />
-
             <TextView
                 android:id="@+id/txtv_lbs_symbol"
                 android:layout_width="wrap_content"
@@ -281,6 +266,20 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtv_divider_goal" />
+
+            <Button
+                android:id="@+id/btn_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:elevation="12dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:background="@drawable/rectshape"
+                android:text="@string/btn_edit_fitness_profile"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/radiogp_weightGoal" />
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

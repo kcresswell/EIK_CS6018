@@ -152,17 +152,16 @@ public class LoginFragment extends Fragment {
     }
 
     private void loginSuccessHandler() {
-
-        if (!getResources().getBoolean(R.bool.isWideDisplay)) {
+//        if (!getResources().getBoolean(R.bool.isWideDisplay)) {
             Intent intent = new Intent(getActivity(), DashboardActivity.class);
             startActivity(intent);
-        } else {
-            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fl_master_wd, new DashboardFragment());
-            fragmentTransaction.replace(R.id.fl_detail_wd, new FitnessDetailsFragment());
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-        }
+//        } else {
+//            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+//            fragmentTransaction.replace(R.id.fl_master_wd, new DashboardFragment());
+//            fragmentTransaction.replace(R.id.fl_detail_wd, new FitnessDetailsFragment());
+//            fragmentTransaction.addToBackStack(null);
+//            fragmentTransaction.commit();
+//        }
     }
 
 }

@@ -22,6 +22,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    buildTypes.each {
+        it.buildConfigField 'String', 'AWS_API_KEY', AWSApiKey
+        it.buildConfigField 'String', 'AWS_API_SECRET', AWSApiSecret
+
+    }
     testOptions {
         unitTests.returnDefaultValues = true
     }

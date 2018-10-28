@@ -12,37 +12,18 @@ import com.example.mcresswell.project01.fragments.WeatherFragment;
 
 public class WeatherActivity extends AppCompatActivity {
 
-    private FragmentManager m_fragmentManager = getSupportFragmentManager();
-
-    private static final String LOG = WeatherActivity.class.getSimpleName();
-//    private AtomicBoolean fragmentExists = new AtomicBoolean(false);
+    private static final String LOG_TAG = WeatherActivity.class.getSimpleName();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d(LOG, "onCreate");
+        Log.d(LOG_TAG, "onCreate");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
 
-//        String city = getIntent().getStringExtra("city");
-//        String country = getIntent().getStringExtra("country");
-
-        FragmentTransaction fragmentTransaction = m_fragmentManager.beginTransaction();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         WeatherFragment frag_weather = WeatherFragment.newInstance();
         fragmentTransaction.add(R.id.fl_activity_weather, frag_weather);
         fragmentTransaction.commit();
     }
-
-//    @Override
-//    public void onWeatherDataLoaded(Weather weather) {
-//        if (!getResources().getBoolean(R.bool.isWideDisplay)) {
-//            Log.d(LOG, "onWeatherDataLoaded, mobile");
-//
-//            FragmentTransaction fragmentTransaction = m_fragmentManager.beginTransaction();
-//            WeatherFragment frag_weather = (WeatherFragment) m_fragmentManager.findFragmentById(R.id.fl_activity_weather);
-//            fragmentTransaction.replace(R.id.fl_activity_weather, frag_weather);
-//            fragmentTransaction.commit();
-//
-//        }
-//    }
 }

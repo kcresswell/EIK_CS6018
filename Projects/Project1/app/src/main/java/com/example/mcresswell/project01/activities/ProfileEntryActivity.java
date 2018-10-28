@@ -39,13 +39,6 @@ public class ProfileEntryActivity extends AppCompatActivity {
         m_fTrans.commit();
     }
 
-//    private void initViewModel() {
-////        final Observer<FitnessProfile> fitnessProfileObserver = fitnessProfile -> m_fitnessProfile = fitnessProfile;
-//        m_fitnessProfileViewModel = ViewModelProviders.of(this)
-//                .get(FitnessProfileViewModel.class);
-////        m_fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfileObserver);
-//    }
-
     @Override
     public void onBackPressed() {
         Log.d(LOG, "onBackPressed");
@@ -55,23 +48,5 @@ public class ProfileEntryActivity extends AppCompatActivity {
             Intent intent = new Intent(this, DashboardActivity.class);
             startActivity(intent);
         }
-    }
-
-//    @Override
-//    public void onProfileEntryDataEntered_DoneButtonOnClick(boolean isClicked) {
-//        if (isClicked) {
-//            if (!isWideDisplay()){
-//                Intent intent = new Intent(this, ProfileSummaryActivity.class);
-//                startActivity(intent);
-//            } else {
-//                m_fTrans.replace(R.id.fl_detail_wd, new ProfileSummaryFragment());
-//                m_fTrans.addToBackStack(null);
-//                m_fTrans.commit();
-//            }
-//        }
-//    }
-
-    private boolean isWideDisplay(){
-        return getResources().getBoolean(R.bool.isWideDisplay);
     }
 }

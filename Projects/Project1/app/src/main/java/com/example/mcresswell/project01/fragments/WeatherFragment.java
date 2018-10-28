@@ -89,6 +89,7 @@ public class WeatherFragment extends ListFragment {
             if (weatherList != null) {
                 Log.d(LOG_TAG, "Change to weather data list in database:");
                 logWeatherDataFromDatabase(weatherList);
+                weatherListViewModel.getWeatherDataFromDatabase().removeObservers(this);
             }
         });
 //        weatherListViewModel.getWeatherDataFromDatabase().observe(this, weatherList -> {
