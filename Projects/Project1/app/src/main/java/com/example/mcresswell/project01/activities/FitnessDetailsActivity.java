@@ -3,10 +3,13 @@ package com.example.mcresswell.project01.activities;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Intent;
 import android.arch.lifecycle.ViewModelProviders;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
@@ -19,6 +22,7 @@ public class FitnessDetailsActivity extends AppCompatActivity {
     private FragmentTransaction m_fTrans;
     private FitnessProfileViewModel m_fitnessProfileViewModel;
     private MutableLiveData<FitnessProfile> m_fitnessProfile;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
