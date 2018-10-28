@@ -2,7 +2,6 @@ package com.example.mcresswell.project01.fragments;
 
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -58,6 +57,7 @@ public class FitnessDetailsFragment extends Fragment {
 
     private SensorManager mSensorManager;
     private Sensor mStepCounter;
+    private String m_numberOfSteps = "";
 
 
     public FitnessDetailsFragment() {
@@ -74,6 +74,7 @@ public class FitnessDetailsFragment extends Fragment {
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
             m_tvstepCount.setText("" + String.valueOf(sensorEvent.values[0]));
+            m_numberOfSteps = String.valueOf(sensorEvent.values[0]);
         }
 
         @Override
@@ -83,7 +84,7 @@ public class FitnessDetailsFragment extends Fragment {
     };
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         if(mStepCounter!=null){
             mSensorManager.registerListener(mListener,mStepCounter,SensorManager.SENSOR_DELAY_NORMAL);
@@ -91,7 +92,7 @@ public class FitnessDetailsFragment extends Fragment {
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         if(mStepCounter!=null){
             mSensorManager.unregisterListener(mListener);
@@ -115,12 +116,9 @@ public class FitnessDetailsFragment extends Fragment {
             m_tvBMR.setText(String.format(Locale.US, DOUBLE_FORMAT + BMR, DEFAULT_BMR));
             m_bodyMassIndex.setText(String.format(Locale.US, DOUBLE_FORMAT, DEFAULT_BMI));
 
-            mSensorManager = (SensorManager) FitnessDetailsActivity.getSystemService(Context.SENSOR_SERVICE);
+            mSensorManager = (SensorManager) getActivity().getSystemService(getActivity().SENSOR_SERVICE);
             mStepCounter = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-
-            //rather than the placeholder need to figure out how to show the onSensorChanged value from line
-            //75 above
-            m_tvstepCount.setText(String.format(Locale.US, INT_FORMAT + STEPS, STEP_COUNT_PLACEHOLDER));
+            m_tvstepCount.setText(String.format(Locale.US, INT_FORMAT + STEPS, m_numberOfSteps));
         } else {
             double caloricIntake = calculateCalories(m_fitnessProfile);
             m_tvcalsToEat.setText(String.format(Locale.US,"%.1f calories", caloricIntake));
@@ -158,7 +156,7 @@ public class FitnessDetailsFragment extends Fragment {
                         m_tvcalsToEat.setText(String.format(Locale.US, DOUBLE_FORMAT + CALORIC_INTAKE, calculateDailyCaloricIntake(fp)));
                         m_tvBMR.setText(String.format(Locale.US, DOUBLE_FORMAT + BMR, basalMetabolicRate));
                         m_bodyMassIndex.setText(String.format(Locale.US, DOUBLE_FORMAT, bodyMassIndex));
-                        m_tvstepCount.setText(String.format(Locale.US, INT_FORMAT + STEPS, STEP_COUNT_PLACEHOLDER));
+                        m_tvstepCount.setText(String.format(Locale.US, INT_FORMAT + STEPS, m_numberOfSteps));
                     }
                 });
 
