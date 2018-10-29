@@ -6,8 +6,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -17,9 +15,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.mcresswell.project01.R;
-import com.example.mcresswell.project01.activities.FitnessDetailsActivity;
-import com.example.mcresswell.project01.db.entity.User;
-import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.util.Constants;
 import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
@@ -126,7 +121,6 @@ public class FitnessDetailsFragment extends Fragment {
 
         configureViewModels();
 
-
         return view;
     }
 
@@ -160,6 +154,5 @@ public class FitnessDetailsFragment extends Fragment {
 
             }
         });
-
     }
 }
