@@ -44,7 +44,7 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
     private FitnessProfileViewModel m_fitnessProfileViewModel;
     private WeatherViewModel weatherViewModel;
     private UserViewModel userViewModel;
-    private final double m_threashold = 0.2;
+    private final double m_threashold = 0.8;
     private Sensor m_sensorAccel;
     private SensorManager m_sensorManager;
 
@@ -72,10 +72,10 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
     private SensorEventListener m_AccelListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
-            double y = event.values[1];
+            double x = event.values[0];
             double z = event.values[2];
 
-            if (y > m_threashold || z > m_threashold) {
+            if (x > m_threashold || z > m_threashold) {
                 //TODO: Fill in behavior
                 fitnessDetailsButtonHandler();
 
