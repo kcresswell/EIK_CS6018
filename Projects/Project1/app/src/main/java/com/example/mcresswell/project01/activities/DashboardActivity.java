@@ -2,7 +2,12 @@ package com.example.mcresswell.project01.activities;
 
 import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,6 +28,8 @@ import com.example.mcresswell.project01.fragments.WeatherFragment;
 import com.example.mcresswell.project01.viewmodel.UserViewModel;
 import com.example.mcresswell.project01.viewmodel.WeatherViewModel;
 
+import java.util.Random;
+
 import static com.example.mcresswell.project01.util.Constants.ON_CLICK;
 import static com.example.mcresswell.project01.util.GeocoderLocationUtils.DEFAULT_COORDINATES;
 import static com.example.mcresswell.project01.util.ValidationUtils.isNotNullOrEmpty;
@@ -37,6 +44,9 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
     private FitnessProfileViewModel m_fitnessProfileViewModel;
     private WeatherViewModel weatherViewModel;
     private UserViewModel userViewModel;
+    private final double m_threashold = 0.8;
+    private Sensor m_sensorAccel;
+    private SensorManager m_sensorManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +58,50 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
 
         initializeViewModels();
 
+        setSensors();
+
+    }
+
+    private void setSensors() {
+        m_sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        m_sensorAccel = m_sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        Log.d("Accel: ", "The sensor: " + m_sensorAccel.getStringType());
+    }
+
+    private SensorEventListener m_AccelListener = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            double x = event.values[0];
+            double z = event.values[2];
+
+            if (x > m_threashold || z > m_threashold) {
+                //TODO: Fill in behavior
+                fitnessDetailsButtonHandler();
+
+            }
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (m_sensorAccel != null){
+            m_sensorManager.registerListener(m_AccelListener, m_sensorAccel, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        if (m_AccelListener != null){
+            m_sensorManager.unregisterListener(m_AccelListener);
+        }
     }
 
     private void initializeViewModels() {
