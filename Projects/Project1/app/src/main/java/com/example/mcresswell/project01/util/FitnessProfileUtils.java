@@ -1,5 +1,6 @@
 package com.example.mcresswell.project01.util;
 
+import android.hardware.SensorManager;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
@@ -17,8 +18,6 @@ public class FitnessProfileUtils {
     private static final int CALORIES_PER_POUND = 3500;
     private static final double POUND_PER_KG = 2.2;
     private static final double CM_PER_INCH = 2.54;
-
-
 
 
     public enum BodyMassIndex {
