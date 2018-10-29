@@ -57,7 +57,7 @@ public class FitnessDetailsFragment extends Fragment {
 
     private SensorManager mSensorManager;
     private Sensor mStepCounter;
-    private String m_numberOfSteps = "";
+    private String m_numberOfSteps;
 
 
     public FitnessDetailsFragment() {
