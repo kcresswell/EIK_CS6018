@@ -1,12 +1,16 @@
 package com.example.mcresswell.project01.fragments;
 
 
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -118,7 +122,13 @@ public class FitnessDetailsFragment extends Fragment {
 
             mSensorManager = (SensorManager) getActivity().getSystemService(getActivity().SENSOR_SERVICE);
             mStepCounter = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-            m_tvstepCount.setText(String.format(Locale.US, INT_FORMAT + STEPS, m_numberOfSteps));
+
+            //null check for sensor count
+            if(m_numberOfSteps == null) {
+                m_tvstepCount.setText(String.format(Locale.US, INT_FORMAT + STEPS, 0));
+            } else {
+                m_tvstepCount.setText(String.format(Locale.US, INT_FORMAT + STEPS, m_numberOfSteps));
+            }
         } else {
             double caloricIntake = calculateCalories(m_fitnessProfile);
             m_tvcalsToEat.setText(String.format(Locale.US,"%.1f calories", caloricIntake));
