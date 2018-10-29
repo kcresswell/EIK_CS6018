@@ -2,6 +2,12 @@ package com.example.mcresswell.project01.fragments;
 
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -11,6 +17,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.activities.FitnessDetailsActivity;
+import com.example.mcresswell.project01.db.entity.User;
+import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.util.Constants;
 import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
@@ -47,13 +56,45 @@ public class FitnessDetailsFragment extends Fragment {
     private UserViewModel m_userViewModel;
     private FitnessProfile fitnessProfile;
 
+    private SensorManager mSensorManager;
+    private Sensor mStepCounter;
+    private String m_numberOfSteps;
+
     public FitnessDetailsFragment() { }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d(LOG_TAG, Constants.CREATE);
         super.onCreate(savedInstanceState);
+    }
 
+    private SensorEventListener mListener = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent sensorEvent) {
+            m_stepCount.setText("" + String.valueOf(sensorEvent.values[0]));
+            m_numberOfSteps = String.valueOf(sensorEvent.values[0]);
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int i) {
+
+        }
+    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mStepCounter!=null){
+            mSensorManager.registerListener(mListener,mStepCounter,SensorManager.SENSOR_DELAY_NORMAL);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(mStepCounter!=null){
+            mSensorManager.unregisterListener(mListener);
+        }
     }
 
     @Override
@@ -72,7 +113,10 @@ public class FitnessDetailsFragment extends Fragment {
             m_tvcalsToEat.setText(String.format(Locale.US, DOUBLE_FORMAT + CALORIC_INTAKE, DEFAULT_CALS));
             m_tvBMR.setText(String.format(Locale.US, DOUBLE_FORMAT + BMR, DEFAULT_BMR));
             m_bodyMassIndex.setText(String.format(Locale.US, DOUBLE_FORMAT, DEFAULT_BMI));
-            m_stepCount.setText(String.format(Locale.US, INT_FORMAT + STEPS, STEP_COUNT_PLACEHOLDER));
+
+            mSensorManager = (SensorManager) getActivity().getSystemService(getActivity().SENSOR_SERVICE);
+            mStepCounter = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+            m_stepCount.setText(String.format(Locale.US, INT_FORMAT + STEPS, m_numberOfSteps));
         } else {
             double caloricIntake = calculateDailyCaloricIntake(fitnessProfile);
             m_tvcalsToEat.setText(String.format(Locale.US, "%.1f calories", caloricIntake));
@@ -110,7 +154,7 @@ public class FitnessDetailsFragment extends Fragment {
                         m_tvcalsToEat.setText(String.format(Locale.US, DOUBLE_FORMAT + CALORIC_INTAKE, calculateDailyCaloricIntake(fp)));
                         m_tvBMR.setText(String.format(Locale.US, DOUBLE_FORMAT + BMR, basalMetabolicRate));
                         m_bodyMassIndex.setText(String.format(Locale.US, DOUBLE_FORMAT, bodyMassIndex));
-                        m_stepCount.setText(String.format(Locale.US, INT_FORMAT + STEPS, STEP_COUNT_PLACEHOLDER));
+                        m_stepCount.setText(String.format(Locale.US, INT_FORMAT + STEPS, m_numberOfSteps));
                     }
                 });
 
