@@ -56,7 +56,7 @@ public class StartupActivity extends AppCompatActivity {
 
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
         executorService.scheduleAtFixedRate(
-                databaseBackupTask(transferUtility), 1, 30, TimeUnit.MINUTES);
+                databaseBackupTask(transferUtility), 1, 60, TimeUnit.MINUTES);
 
     }
 

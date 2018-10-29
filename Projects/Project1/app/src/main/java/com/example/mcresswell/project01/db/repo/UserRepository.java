@@ -126,6 +126,8 @@ public class UserRepository {
                     m_observableUser.setValue(user);
                 }
             }
+//            m_observableUser.removeSource(mUserDao.findUserByEmail(userEmail));
+
         });
         asyncLoadUser(userEmail);
 
@@ -178,6 +180,8 @@ public class UserRepository {
 
                 }
             }
+//            m_observableUserList.removeSource(mUserDao.loadAllUsers());
+
         });
 
         asyncLoadAllUsers();

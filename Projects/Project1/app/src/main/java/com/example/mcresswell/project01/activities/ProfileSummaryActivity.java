@@ -1,6 +1,5 @@
 package com.example.mcresswell.project01.activities;
 
-import android.arch.lifecycle.MutableLiveData;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -8,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.mcresswell.project01.R;
-import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.fragments.ProfileSummaryFragment;
 import com.example.mcresswell.project01.util.Constants;
 
@@ -19,7 +17,6 @@ public class ProfileSummaryActivity extends AppCompatActivity {
     private final String LOG = getClass().getSimpleName();
 
     private FragmentTransaction m_fTrans;
-    private MutableLiveData<FitnessProfile> m_fitnessProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

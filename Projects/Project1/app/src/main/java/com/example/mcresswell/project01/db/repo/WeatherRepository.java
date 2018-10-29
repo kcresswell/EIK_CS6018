@@ -79,7 +79,6 @@ public class WeatherRepository {
                 weatherList -> {
                     if (weatherList != null) {
                         if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
-
                             m_observableWeatherList.removeSource(mWeatherDao.loadAllWeather());
 
                             List<String> weatherCities = new ArrayList<>();
@@ -148,30 +147,29 @@ public class WeatherRepository {
 
         LiveData<Weather> result = findInDatabase(city, country);
 
-        m_observableWeather.addSource(result, r -> {
-
+        m_observableWeather.addSource(result, r-> {
             m_observableWeather.removeSource(result);
 
-            if (result.getValue() != null && result.getValue().getCity().equals(cityScrubbed) && result.getValue().getCountryCode().equals(countryScrubbed)) {
-                Log.d(LOG_TAG, String.format("Existing weather data was found in database for %s, %s. " +
-                        "Now just need to check to see whether weather data is more than 5 minutes old. ", cityScrubbed, countryScrubbed));
-                if (isWeatherDataExpired(result.getValue())) {
-                    Log.d(LOG_TAG, "WEATHER DATA IN DATABASE IS EXPIRED");
+                if (result.getValue() != null && result.getValue().getCity().equals(cityScrubbed) && result.getValue().getCountryCode().equals(countryScrubbed)) {
+                    Log.d(LOG_TAG, String.format("Existing weather data was found in database for %s, %s. " +
+                            "Now just need to check to see whether weather data is more than 5 minutes old. ", cityScrubbed, countryScrubbed));
+                    if (isWeatherDataExpired(result.getValue())) {
+                        Log.d(LOG_TAG, "WEATHER DATA IN DATABASE IS EXPIRED");
 
-                    asyncFetchWeatherFromApi(cityScrubbed, countryScrubbed, true);
-                } else { //Weather data is in database and is not expired yet
+                        asyncFetchWeatherFromApi(city, country, true);
+                    } else { //Weather data is in database and is not expired yet
 
-                    Log.d(LOG_TAG, "WEATHER DATA IS STILL VALID");
-                    //No need to do anything
+                        Log.d(LOG_TAG, "WEATHER DATA IS STILL VALID");
+                        //No need to do anything
 
+                    }
+                } else {
+                    Log.d(LOG_TAG, String.format("No existing weather data record for %s, %s exists in the database", cityScrubbed, countryScrubbed));
+
+                    Log.d(LOG_TAG, "Fetching data for the first time from OpenWeatherAPI . . .");
+
+                    asyncFetchWeatherFromApi(city, country, false);
                 }
-            } else {
-                Log.d(LOG_TAG, String.format("No existing weather data record for %s, %s exists in the database", cityScrubbed, countryScrubbed));
-
-                Log.d(LOG_TAG, "Fetching data for the first time from OpenWeatherAPI . . .");
-
-                asyncFetchWeatherFromApi(city, country, false);
-            }
         });
 
     }

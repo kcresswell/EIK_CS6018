@@ -6,6 +6,8 @@
     <string name="email">EMAIL</string>
     <string name="password">PASSWORD</string>
     <string name="login">Login</string>
+    <string name="delete_account_dialog_title">DELETE YOUR ACCOUNT?</string>
+    <string name="delete_account_dialog_message">Click OK to permanently delete your user account and all fitness data.</string>
 
     <!--The string below is used both in the login screen as well as the create account screen-->
     <string name="btn_link_create_account">Create Account</string>

@@ -23,6 +23,8 @@ import com.example.mcresswell.project01.fragments.WeatherFragment;
 import com.example.mcresswell.project01.viewmodel.UserViewModel;
 import com.example.mcresswell.project01.viewmodel.WeatherViewModel;
 
+import java.util.Locale;
+
 import static com.example.mcresswell.project01.util.Constants.ON_CLICK;
 import static com.example.mcresswell.project01.util.GeocoderLocationUtils.DEFAULT_COORDINATES;
 import static com.example.mcresswell.project01.util.ValidationUtils.isNotNullOrEmpty;
@@ -55,18 +57,25 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
                 ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
         weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
         userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
-//        userViewModel.getUser().observe(this, user -> {
-//            if (user != null) {
-//                m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
-//                    if (fp != null) {
-//
-//                        Log.d(LOG_TAG, String.format("Loading weather for %s, %s", fp.getM_city(), fp.getM_country()));
-//
-//                        weatherViewModel.loadWeather(fp.getM_city(), fp.getM_country());
-//                    }
-//                });
-//            }
-//        });
+        userViewModel.getUser().observe(this, user -> {
+            if (user != null) {
+                m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
+                    if (fp != null) {
+
+                        Log.d(LOG_TAG, "USER IS ASSOCIATED WITH A FITNESS PROFILE RECORD");
+                        Log.d(LOG_TAG, String.format(Locale.US, "USER: '%d' '%s' '%s' '%s'", user.getId(), user.getFirstName(), user.getLastName(), user.getEmail()));
+                        Log.d(LOG_TAG, String.format(Locale.US, "FITNESS PROFILE RECORD: userid(FK):%d' '%s' '%s' '%s, %s' ", fp.getUserId(), fp.getM_fName(), fp.getM_lName(), fp.getM_city(), fp.getM_country()));
+
+                    } else {
+                        Log.d(LOG_TAG, "fitness profile view model is null");
+                    }
+                    m_fitnessProfileViewModel.getFitnessProfile(user.getId()).removeObservers(this);
+                });
+            } else {
+                Log.d(LOG_TAG, "user view model is null");
+            }
+            userViewModel.getUser().removeObservers(this);
+        });
     }
 
     @Override

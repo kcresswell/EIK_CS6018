@@ -75,18 +75,8 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     private Button profileEntryButton;
     private ImageButton takeProfileImageButton;
     private Bitmap profileImage;
-    private RadioGroup lifestyleSelector;
-    private RadioButton activeLifestyle, sedentaryLifestyle;
-    private RadioGroup weightGoal;
-    private RadioButton gain, maintain, lose;
     private Spinner countrySpinner;
     private SeekBar lifestyleSlider, weightGoalSlider;
-
-    //Data Elements
-    private FitnessProfile m_fitnessProfile; //FIXME: YOU DONT NEED MEMBER VARIABLES FOR THE FITNESS PROFILE OR THE USER, THEY WONT SURVIVE CONFIGURATION CHANGES. THATS THE WHOLE POINT OF THE VIEW MODELS.
-    private User m_user; //FIXME: YOU DONT NEED MEMBER VARIABLES FOR THE FITNESS PROFILE OR THE USER, THEY WONT SURVIVE CONFIGURATION CHANGES. THATS THE WHOLE POINT OF THE VIEW MODELS.
-    private String lifestyleSelectorString = "Active"; //Default lifestyle selector of 'Active' if no radio button selected
-    private String weightGoalString = "Lose"; //Default weight goal of 'Lose' if no radio button is selected
 
     public ProfileEntryFragment() { }
 
@@ -115,11 +105,6 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     private void setOnClickListeners() {
         profileEntryButton.setOnClickListener(this);
         takeProfileImageButton.setOnClickListener(this);
-        activeLifestyle.setOnClickListener(this);
-        sedentaryLifestyle.setOnClickListener(this);
-        gain.setOnClickListener(this);
-        maintain.setOnClickListener(this);
-        lose.setOnClickListener(this);
         etxt_dob.setOnClickListener(l->displayDatePickerDialog());
     }
 
@@ -137,6 +122,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
                 observeFitnessProfileViewModel(user);
 
             }
+            userViewModel.getUser().removeObservers(this);
         });
 
     }
@@ -144,8 +130,11 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     private void observeFitnessProfileViewModel(User user) {
         m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
             if (fp != null && fp.getUserId() == user.getId()) {
+
                 autofillExistingFitnessProfileData(fp);
             }
+            m_fitnessProfileViewModel.getFitnessProfile(user.getId()).removeObservers(this);
+
         });
     }
 
@@ -164,26 +153,6 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
             }
             case R.id.btn_submit: {
                 userProfileSubmitButtonHandler();
-                break;
-            }
-            case R.id.btn_radio_active: {
-                lifestyleSelectorString = "Active";
-                break;
-            }
-            case R.id.btn_radio_sedentary: {
-                lifestyleSelectorString = "Sedentary";
-                break;
-            }
-            case R.id.btn_radio_gain: {
-                weightGoalString = "Gain";
-                break;
-            }
-            case R.id.btn_radio_maintain: {
-                weightGoalString = "Maintain";
-                break;
-            }
-            case R.id.btn_radio_lose: {
-                weightGoalString = "Lose";
                 break;
             }
             case R.id.txtv_dob: {
@@ -222,239 +191,234 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         dialog.show();
-        }
+    }
 
-        @Override
-        public void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
-            super.onActivityResult(requestCode, resultCode, intent);
-            if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == getActivity().RESULT_OK){
-                if (intent != null && intent.getExtras() != null) {
-                    profileImage = (Bitmap) intent.getExtras().get("data");
-                }
-                if (profileImage != null) {
-                    takeProfileImageButton.setImageBitmap(profileImage);
-                }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == getActivity().RESULT_OK){
+            if (intent != null && intent.getExtras() != null) {
+                profileImage = (Bitmap) intent.getExtras().get("data");
             }
-        }
-
-        @Override
-        public void onViewStateRestored (Bundle savedInstanceState) {
-            Log.d(LOG_TAG, "onViewStateRestored");
-
-            super.onViewStateRestored(savedInstanceState);
-
-            if(savedInstanceState != null) {
-                profileImage = savedInstanceState.getParcelable("M_IMG_DATA");
+            if (profileImage != null) {
                 takeProfileImageButton.setImageBitmap(profileImage);
             }
         }
-
-        private void initializeViewElements(View view) {
-            etxt_firstName = view.findViewById(R.id.txtv_fname);
-            etxt_lastName = view.findViewById(R.id.txtv_lname);
-            etxt_dob = view.findViewById(R.id.txtv_dob);
-            etxt_sex = view.findViewById(R.id.txtv_sex);
-            etxt_city = view.findViewById(R.id.txtv_city);
-            etxt_weight = view.findViewById(R.id.txtv_weight);
-            etxt_heightFeet = view.findViewById(R.id.txtv_feet);
-            etxt_heightInches = view.findViewById(R.id.txtv_inches);
-            etxt_lbsPerWeek = view.findViewById(R.id.txtv_weight_weekly_goal);
-
-            lifestyleSelector = view.findViewById(R.id.radiogp_lifestyle);
-            weightGoal = view.findViewById(R.id.radiogp_weightGoal);
-
-            activeLifestyle = view.findViewById(R.id.btn_radio_active);
-            sedentaryLifestyle = view.findViewById(R.id.btn_radio_sedentary);
-            gain = view.findViewById(R.id.btn_radio_gain);
-            maintain = view.findViewById(R.id.btn_radio_maintain);
-            lose = view.findViewById(R.id.btn_radio_lose);
-
-            profileEntryButton = view.findViewById(R.id.btn_submit);
-            takeProfileImageButton = view.findViewById(R.id.btn_img_takeImage);
-
-            countrySpinner = view.findViewById(R.id.spinner_country);
-
-            ArrayList<String> countryOptions = getCountryNames();
-            countryOptions.add(0, "United States");
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
-                    android.R.layout.simple_spinner_item,
-                    countryOptions);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            countrySpinner.setAdapter(adapter);
-
-            lifestyleSlider = view.findViewById(R.id.slider_lifestyle);
-            lifestyleSlider.setMin(0);
-            lifestyleSlider.setMax(2);
-        }
-
-        private void autofillExistingFitnessProfileData(FitnessProfile fp) {
-            Log.d(LOG_TAG, "Autofilling existing FitnessProfile data");
-
-            etxt_firstName.setText(fp.getM_fName());
-            etxt_lastName.setText(fp.getM_lName());
-            etxt_dob.setText(fp.getM_dob());
-            etxt_sex.setText(fp.getM_sex());
-            etxt_heightFeet.setText(String.valueOf(fp.getM_heightFeet()));
-            etxt_heightInches.setText(String.valueOf(fp.getM_heightInches()));
-            etxt_city.setText(fp.getM_city());
-
-            int pos = getCountryNames().indexOf(fp.getM_country());
-            countrySpinner.setSelection(pos);
-
-            etxt_weight.setText(String.valueOf(fp.getM_weightInPounds()));
-            etxt_lbsPerWeek.setText(String.valueOf(fp.getM_lbsPerWeek()));
-
-            restoreRadioButtonSelections(fp);
-        }
-
-        private void restoreRadioButtonSelections(FitnessProfile fp) {
-            if (fp.getM_lifestyleSelection().equalsIgnoreCase("ACTIVE")) {
-                lifestyleSelector.check(R.id.btn_radio_active);
-            } else {
-                lifestyleSelector.check(R.id.btn_radio_sedentary);
-            }
-
-            if (fp.getM_lbsPerWeek() > 0) {
-                assert(fp.getM_weightGoal().equalsIgnoreCase("GAIN"));
-                weightGoal.check(R.id.btn_radio_gain);
-            }
-            else if (fp.getM_lbsPerWeek() == 0) {
-                assert(fp.getM_weightGoal().equalsIgnoreCase("MAINTAIN"));
-                weightGoal.check(R.id.btn_radio_maintain);
-            } else {
-                assert(fp.getM_weightGoal().equalsIgnoreCase("LOSE"));
-                weightGoal.check(R.id.btn_radio_lose);
-                etxt_lbsPerWeek.setText(String.valueOf(Math.abs(fp.getM_lbsPerWeek())));
-            }
-        }
-
-        @TargetApi(Build.VERSION_CODES.O)
-        @RequiresApi(api = Build.VERSION_CODES.N)
-        private void userProfileSubmitButtonHandler() {
-            Log.d(LOG_TAG, "User Profile Entry Done Button clicked");
-
-            if (!isUserInputDataValid()) {
-                Log.d(LOG_TAG, "invalid user data input");
-
-                return;
-            }
-
-            FitnessProfile tempFitnessProfile = instantiateFitnessProfile();
-
-            userViewModel.getUser().observe(this, user -> {
-                if (user != null) {
-                    Log.d(LOG_TAG, String.format(
-                            "HURRAH, WE CAN NOW CREATE THE FITNESS PROFILE RECORD WITH THE " +
-                                    "CORRECT VALUE OF THE USER ID, USER ID = %d", user.getId()));
-
-                    tempFitnessProfile.setUserId(user.getId());
-
-                    m_fitnessProfileViewModel.insertNewFitnessProfile(tempFitnessProfile);
-
-                    //Verify that the fitnessProfile record for the user was successfully inserted into the database table
-                    m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fitnessProfile -> {
-                        if (fitnessProfile != null) {
-                            Log.d(LOG_TAG, "Successfully retrieved fitness profile after insertion into database");
-                            Log.d(LOG_TAG, "Fitness profile data:");
-                            Log.d(LOG_TAG, "First name: " + fitnessProfile.getM_fName());
-                            Log.d(LOG_TAG, "Last name: " + fitnessProfile.getM_lName());
-                            Log.d(LOG_TAG, "User id: " + fitnessProfile.getUserId());
-                            Log.d(LOG_TAG, "Sex: '" + fitnessProfile.getM_sex() + "'");
-                            Log.d(LOG_TAG, "Height: " + fitnessProfile.getM_heightFeet() + "Ft " + fitnessProfile.getM_heightInches() + " Inches");
-
-                        }
-                    });
-
-
-                }
-            });
-
-            viewTransitionHandler();
-        }
-
-        @NonNull
-        private FitnessProfile instantiateFitnessProfile() {
-            FitnessProfile tempFitnessProfile = new FitnessProfile();
-            tempFitnessProfile.setM_fName(etxt_firstName.getText().toString());
-            tempFitnessProfile.setM_lName(etxt_lastName.getText().toString());
-            tempFitnessProfile.setM_dob(etxt_dob.getText().toString());
-            tempFitnessProfile.setM_sex(etxt_sex.getText().toString());
-            tempFitnessProfile.setM_city(etxt_city.getText().toString());
-
-            tempFitnessProfile.setM_country(getCountryNames().get(countrySpinner.getSelectedItemPosition()));
-            tempFitnessProfile.setM_lifestyleSelection(lifestyleSelectorString);
-            tempFitnessProfile.setM_weightGoal(weightGoalString);
-            tempFitnessProfile.setM_weightInPounds(Integer.parseInt(etxt_weight.getText().toString()));
-            tempFitnessProfile.setM_heightFeet(Integer.parseInt(etxt_heightFeet.getText().toString()));
-
-            String heightInches = etxt_heightInches.getText().toString();
-            tempFitnessProfile.setM_heightInches(!isNotNullOrEmpty(heightInches) ? 0 : Integer.parseInt(heightInches));
-
-            final int lbsPerWeek = Integer.parseInt(etxt_lbsPerWeek.getText().toString());
-
-            if (weightGoalString.equalsIgnoreCase("Maintain")) {
-                tempFitnessProfile.setM_lbsPerWeek(0); //If they're trying to maintain, ignore the lbs/week field, this should be 0
-            }
-            else if (weightGoalString.equalsIgnoreCase("Lose")) { //If they're trying to lose weight, set this to be negative
-                tempFitnessProfile.setM_lbsPerWeek(-1 * lbsPerWeek);
-            }
-            else {
-                tempFitnessProfile.setM_lbsPerWeek(lbsPerWeek);
-            }
-            return tempFitnessProfile;
-        }
-
-        private void viewTransitionHandler() {
-            if (!getResources().getBoolean(R.bool.isWideDisplay)){
-                Intent intent = new Intent(getContext(), ProfileSummaryActivity.class);
-                startActivity(intent);
-            } else {
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fl_detail_wd, new ProfileSummaryFragment());
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
-        }
-
-        private boolean isUserInputDataValid() {
-            if (!isValidName(etxt_firstName.getText().toString())) {
-                Toast.makeText(getContext(), "Invalid first name.", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-            else if (!isValidName(etxt_lastName.getText().toString())) {
-                Toast.makeText(getContext(), "Invalid last name.", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-            else if (!isValidDobFormat(etxt_dob.getText().toString())) {
-                Toast.makeText(getContext(), "Invalid date of birth.", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-            else if (!isValidSex(etxt_sex.getText().toString())) {
-                Toast.makeText(getContext(), "Invalid sex.", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-            else if (!isValidCity(etxt_city.getText().toString())) {
-                Toast.makeText(getContext(), "Invalid city.", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-            else if (!isValidWeight(etxt_weight.getText().toString())) {
-                Toast.makeText(getContext(), "Invalid weight.", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-            else if (!isValidHeight(etxt_heightFeet.getText().toString(), etxt_heightInches.getText().toString())) {
-                Toast.makeText(getContext(), "Please enter a valid height in feet/inches.", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-            else if (!isValidWeightPlan(etxt_lbsPerWeek.getText().toString())) {
-                Toast.makeText(getContext(), "Please enter a valid weekly weight goal (i.e., a maximum weight management change of 5lbs/week)", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-            return true;
-        }
-
-        @Override
-        public void onAttach(Context context) {
-            super.onAttach(context);
-        }
-
     }
+
+    @Override
+    public void onViewStateRestored (Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "onViewStateRestored");
+
+        super.onViewStateRestored(savedInstanceState);
+
+        if(savedInstanceState != null) {
+            profileImage = savedInstanceState.getParcelable("M_IMG_DATA");
+            takeProfileImageButton.setImageBitmap(profileImage);
+        }
+    }
+
+    private void initializeViewElements(View view) {
+        etxt_firstName = view.findViewById(R.id.txtv_fname);
+        etxt_lastName = view.findViewById(R.id.txtv_lname);
+        etxt_dob = view.findViewById(R.id.txtv_dob);
+        etxt_sex = view.findViewById(R.id.txtv_sex);
+        etxt_city = view.findViewById(R.id.txtv_city);
+        etxt_weight = view.findViewById(R.id.txtv_weight);
+        etxt_heightFeet = view.findViewById(R.id.txtv_feet);
+        etxt_heightInches = view.findViewById(R.id.txtv_inches);
+        etxt_lbsPerWeek = view.findViewById(R.id.txtv_weight_goal_weekly);
+
+        profileEntryButton = view.findViewById(R.id.btn_submit);
+        takeProfileImageButton = view.findViewById(R.id.btn_img_takeImage);
+
+        countrySpinner = view.findViewById(R.id.spinner_country);
+
+        ArrayList<String> countryOptions = getCountryNames();
+        countryOptions.add(0, "United States");
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
+                android.R.layout.simple_spinner_item,
+                countryOptions);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        countrySpinner.setAdapter(adapter);
+
+        lifestyleSlider = view.findViewById(R.id.slider_lifestyle);
+        lifestyleSlider.setProgress(1); //Default slider position to 'moderate'
+        weightGoalSlider = view.findViewById(R.id.slider_weight_goal);
+        lifestyleSlider.setProgress(0); //Default slide position to 'lose'
+    }
+
+    private void autofillExistingFitnessProfileData(FitnessProfile fp) {
+        Log.d(LOG_TAG, "Autofilling existing FitnessProfile data");
+
+        etxt_firstName.setText(fp.getM_fName());
+        etxt_lastName.setText(fp.getM_lName());
+        etxt_dob.setText(fp.getM_dob());
+        etxt_sex.setText(fp.getM_sex());
+        etxt_heightFeet.setText(String.valueOf(fp.getM_heightFeet()));
+        etxt_heightInches.setText(String.valueOf(fp.getM_heightInches()));
+        etxt_city.setText(fp.getM_city());
+
+        int pos = getCountryNames().indexOf(fp.getM_country());
+        countrySpinner.setSelection(pos);
+
+        etxt_weight.setText(String.valueOf(fp.getM_weightInPounds()));
+        etxt_lbsPerWeek.setText(String.valueOf(Math.abs(fp.getM_lbsPerWeek())));
+
+        restoreSliderPositions(fp);
+    }
+
+    private void restoreSliderPositions(FitnessProfile fp) {
+        if (fp.getM_lifestyleSelection().equalsIgnoreCase("ACTIVE")) {
+            lifestyleSlider.setProgress(2);
+        }
+        else if (fp.getM_lifestyleSelection().equalsIgnoreCase("MODERATE")) {
+            lifestyleSlider.setProgress(1);
+        } else {
+            lifestyleSlider.setProgress(0);
+        }
+        if (fp.getM_weightGoal().equalsIgnoreCase("GAIN")) {
+            weightGoalSlider.setProgress(2);
+        }
+        else if (fp.getM_weightGoal().equalsIgnoreCase("MAINTAIN")) {
+            weightGoalSlider.setProgress(1);
+        } else {
+            assert(fp.getM_weightGoal().equalsIgnoreCase("LOSE"));
+            weightGoalSlider.setProgress(0);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.O)
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void userProfileSubmitButtonHandler() {
+        if (!isUserInputDataValid()) {
+            Log.d(LOG_TAG, "invalid user data input");
+
+            return;
+        }
+
+        FitnessProfile tempFitnessProfile = instantiateFitnessProfile();
+
+
+        userViewModel.getUser().observe(this, user -> {
+            if (user != null) {
+                Log.d(LOG_TAG, String.format(
+                        "HURRAH, WE CAN NOW CREATE THE FITNESS PROFILE RECORD WITH THE " +
+                                "CORRECT VALUE OF THE USER ID, USER ID = %d", user.getId()));
+
+                tempFitnessProfile.setUserId(user.getId());
+
+                m_fitnessProfileViewModel.insertNewFitnessProfile(tempFitnessProfile);
+
+                //Verify that the fitnessProfile record for the user was successfully inserted into the database table
+                m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fitnessProfile -> {
+//                        m_fitnessProfileViewModel.getFitnessProfile(user.getId()).removeObservers(this);
+                    if (fitnessProfile != null) {
+                        Log.d(LOG_TAG, "Successfully retrieved fitness profile after insertion into database");
+                        Log.d(LOG_TAG, "Fitness profile data:");
+                        Log.d(LOG_TAG, "First name: " + fitnessProfile.getM_fName());
+                        Log.d(LOG_TAG, "Last name: " + fitnessProfile.getM_lName());
+                        Log.d(LOG_TAG, "User id: " + fitnessProfile.getUserId());
+                        Log.d(LOG_TAG, "Sex: '" + fitnessProfile.getM_sex() + "'");
+                        Log.d(LOG_TAG, "Height: " + fitnessProfile.getM_heightFeet() + "Ft " + fitnessProfile.getM_heightInches() + " Inches");
+
+                    }
+                    m_fitnessProfileViewModel.getFitnessProfile(user.getId()).removeObservers(this);
+                });
+
+
+            }
+            userViewModel.getUser().removeObservers(this);
+        });
+
+        viewTransitionHandler();
+    }
+
+    @NonNull
+    private FitnessProfile instantiateFitnessProfile() {
+        FitnessProfile tempFitnessProfile = new FitnessProfile();
+        tempFitnessProfile.setM_fName(etxt_firstName.getText().toString());
+        tempFitnessProfile.setM_lName(etxt_lastName.getText().toString());
+        tempFitnessProfile.setM_dob(etxt_dob.getText().toString());
+        tempFitnessProfile.setM_sex(etxt_sex.getText().toString());
+        tempFitnessProfile.setM_city(etxt_city.getText().toString());
+        tempFitnessProfile.setM_lifestyleSelection(
+                lifestyleSlider.getProgress() == 2 ? "ACTIVE" : lifestyleSlider.getProgress() == 1 ? "MODERATE" : "SEDENTARY");
+
+        tempFitnessProfile.setM_weightGoal(weightGoalSlider.getProgress() == 2 ?
+                "GAIN" : weightGoalSlider.getProgress() == 1 ? "MAINTAIN" : "LOSE");
+        tempFitnessProfile.setM_country(getCountryNames().get(countrySpinner.getSelectedItemPosition()));
+        tempFitnessProfile.setM_weightInPounds(Integer.parseInt(etxt_weight.getText().toString()));
+        tempFitnessProfile.setM_heightFeet(Integer.parseInt(etxt_heightFeet.getText().toString()));
+
+        String heightInches = etxt_heightInches.getText().toString();
+        tempFitnessProfile.setM_heightInches(!isNotNullOrEmpty(heightInches) ? 0 : Integer.parseInt(heightInches));
+
+        final int lbsPerWeek = Integer.parseInt(etxt_lbsPerWeek.getText().toString());
+
+        if (tempFitnessProfile.getM_weightGoal().equalsIgnoreCase("Maintain")) {
+            tempFitnessProfile.setM_lbsPerWeek(0); //If they're trying to maintain, ignore the lbs/week field, this should be 0
+        }
+        else if (tempFitnessProfile.getM_weightGoal().equalsIgnoreCase("Lose")) { //If they're trying to lose weight, set this to be negative
+            tempFitnessProfile.setM_lbsPerWeek(-1 * lbsPerWeek);
+        }
+        else {
+            tempFitnessProfile.setM_lbsPerWeek(lbsPerWeek);
+        }
+        return tempFitnessProfile;
+    }
+
+    private void viewTransitionHandler() {
+        if (!getResources().getBoolean(R.bool.isWideDisplay)){
+            Intent intent = new Intent(getContext(), ProfileSummaryActivity.class);
+            startActivity(intent);
+        } else {
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fl_detail_wd, new ProfileSummaryFragment());
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+    }
+
+    private boolean isUserInputDataValid() {
+        if (!isValidName(etxt_firstName.getText().toString())) {
+            Toast.makeText(getContext(), "Invalid first name.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (!isValidName(etxt_lastName.getText().toString())) {
+            Toast.makeText(getContext(), "Invalid last name.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (!isValidDobFormat(etxt_dob.getText().toString())) {
+            Toast.makeText(getContext(), "Invalid date of birth.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (!isValidSex(etxt_sex.getText().toString())) {
+            Toast.makeText(getContext(), "Invalid sex.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (!isValidCity(etxt_city.getText().toString())) {
+            Toast.makeText(getContext(), "Invalid city.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (!isValidWeight(etxt_weight.getText().toString())) {
+            Toast.makeText(getContext(), "Invalid weight.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (!isValidHeight(etxt_heightFeet.getText().toString(), etxt_heightInches.getText().toString())) {
+            Toast.makeText(getContext(), "Please enter a valid height in feet/inches.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (!isValidWeightPlan(etxt_lbsPerWeek.getText().toString())) {
+            Toast.makeText(getContext(), "Please enter a valid weekly weight goal (i.e., a maximum weight management change of 5lbs/week)", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+}

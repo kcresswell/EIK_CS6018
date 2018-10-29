@@ -92,26 +92,39 @@ public class ProfileSummaryFragment extends Fragment
 
         m_userViewModel.getUser().observe(this, user -> {
             if (user != null) {
+                m_userViewModel.getUser().removeObservers(this);
+                Log.d(LOG_TAG, "User view model not null, now looking up fitness profile from user id");
+
                 m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
-                    if (fp != null && user.getFirstName().equals(fp.getM_fName()) && user.getLastName().equals(fp.getM_lName())) {
-                        m_firstName.setText(formatCaseCity(fp.getM_fName()));
-                        m_lastName.setText(formatCaseCity(fp.getM_lName()));
-                        m_sex.setText(fp.getM_sex().toUpperCase());
-                        m_age.setText(String.format(Locale.US, "%dy", calculateAge(fp.getM_dob())));
-                        m_heightFeet.setText(String.format(Locale.US, "%d ft.,", fp.getM_heightFeet()));
-                        m_heightInches.setText(String.format(Locale.US, " %d in.", fp.getM_heightInches()));
-                        m_weight.setText(String.format(Locale.US, "%d ", fp.getM_weightInPounds()));
-                        m_city.setText(String.format(Locale.US, "%s, %s",
-                                formatCaseCity(fp.getM_city()), formatCaseCity(fp.getM_country())));
-                        m_country.setText("");
-                        m_activity.setText(String.format("Activity Level: ", fp.getM_lifestyleSelection().toLowerCase()));
-                        m_weightGoal.setText(String.format(Locale.US, "Fitness Goal: %s %d lbs/week",
-                                fp.getM_weightGoal(), Math.abs(fp.getM_lbsPerWeek())));
+                    if (fp != null) {
+                        m_userViewModel.getUser().removeObservers(this);
+
+                        if (user.getFirstName().equals(fp.getM_fName()) && user.getLastName().equals(fp.getM_lName())) {
+                            m_firstName.setText(formatCaseCity(fp.getM_fName()));
+                            m_lastName.setText(formatCaseCity(fp.getM_lName()));
+                            m_sex.setText(fp.getM_sex().toUpperCase());
+                            m_age.setText(String.format(Locale.US, "%dy", calculateAge(fp.getM_dob())));
+                            m_heightFeet.setText(String.format(Locale.US, "%d ft.,", fp.getM_heightFeet()));
+                            m_heightInches.setText(String.format(Locale.US, " %d in.", fp.getM_heightInches()));
+                            m_weight.setText(String.format(Locale.US, "%d ", fp.getM_weightInPounds()));
+                            m_city.setText(String.format(Locale.US, "%s, %s",
+                                    formatCaseCity(fp.getM_city()), formatCaseCity(fp.getM_country())));
+                            m_country.setText("");
+                            m_activity.setText(String.format("Activity Level: ", fp.getM_lifestyleSelection().toLowerCase()));
+                            m_weightGoal.setText(String.format(Locale.US, "Fitness Goal: %s %d lbs/week",
+                                    fp.getM_weightGoal(), Math.abs(fp.getM_lbsPerWeek())));
+                        } else {
+                            Log.d(LOG_TAG, "Fitness profile is not null but user first/last name doesnt match fitness profile first/last name");
+                            Log.d(LOG_TAG, String.format(Locale.US, "Name of fitness profile in view model: '%s' '%s'", fp.getM_fName(), fp.getM_lName()));
+                        }
                     } else {
                         Log.d(LOG_TAG, "FitnessProfileViewModel is null, display dialog");
                         displayNoExistingFitnessProfileAlertDialog();
                     }
                 });
+            } else {
+                Log.d(LOG_TAG, "UserViewModel is null, display dialog");
+                displayNoExistingFitnessProfileAlertDialog();
             }
         });
     }
@@ -138,26 +151,6 @@ public class ProfileSummaryFragment extends Fragment
 
         builder.create().show();
     }
-
-//    private void initFitnessProfileViewModel() {
-//        m_fitnessProfileViewModel.getFitnessProfile().observe(this, fp -> {
-//            if (fp != null) {
-//                m_firstName.setText(formatCaseCity(fp.getM_fName()));
-//                m_lastName.setText(formatCaseCity(fp.getM_lName()));
-//                m_sex.setText(fp.getM_sex().toUpperCase());
-//                m_age.setText(String.format(Locale.US, "%dy",calculateAge(fp.getM_dob())));
-//                m_heightFeet.setText(String.format(Locale.US, "%d ft.,",fp.getM_heightFeet()));
-//                m_heightInches.setText(String.format(Locale.US, " %d in.",fp.getM_heightInches()));
-//                m_weight.setText(String.format(Locale.US, "%d",fp.getM_weightInPounds()));
-//                m_city.setText(String.format(Locale.US, "%s, %s",
-//                        formatCaseCity(fp.getM_city()), formatCaseCity(fp.getM_country())));
-//                m_country.setText("");
-//                m_activity.setText(String.format("Activity Level: ", fp.getM_lifestyleSelection().toLowerCase()));
-//                m_weightGoal.setText(String.format(Locale.US, "Fitness Goal: %s %d lbs/week",
-//                        fp.getM_weightGoal(), Math.abs(fp.getM_lbsPerWeek())));
-//            }
-//        });
-//    }
 
     @Override
     public void onClick(View v) {
