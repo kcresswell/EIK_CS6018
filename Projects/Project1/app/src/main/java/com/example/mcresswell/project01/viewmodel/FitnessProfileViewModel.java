@@ -8,6 +8,11 @@ import android.support.annotation.NonNull;
 
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.db.repo.FitnessProfileRepository;
+import com.example.mcresswell.project01.fragments.FitnessDetailsFragment;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 public class FitnessProfileViewModel extends AndroidViewModel {
 
@@ -27,6 +32,12 @@ public class FitnessProfileViewModel extends AndroidViewModel {
 
     public void updateFitnessProfile(FitnessProfile fitnessProfile){
         m_fitnessProfileRepository.updateFitnessProfile(fitnessProfile);
+    }
+
+    public void setStepCount(Float m_numberOfSteps) {
+        m_fitnessProfile.getValue().setM_stepCount(m_numberOfSteps);
+        m_fitnessProfile.getValue().setM_dateLastUpdated(new Date(2018, 10, 31));
+        insertNewFitnessProfile(m_fitnessProfile.getValue());
     }
 
     public void insertNewFitnessProfile(FitnessProfile fitnessProfile) {

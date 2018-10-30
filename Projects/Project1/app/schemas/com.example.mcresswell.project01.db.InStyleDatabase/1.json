@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "1f029a504f5deaebb7d53e1f0d16975d",
+    "identityHash": "9c6ec9d735c75e012836ab13fd6ee04f",
     "entities": [
       {
         "tableName": "User",
@@ -65,7 +65,7 @@
       },
       {
         "tableName": "FitnessProfile",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `first_name` TEXT, `last_name` TEXT, `city` TEXT, `country` TEXT, `dob` TEXT, `sex` TEXT, `weight_lbs` INTEGER NOT NULL, `height_ft` INTEGER NOT NULL, `height_in` INTEGER NOT NULL, `lifestyle` TEXT, `weight_goal` TEXT, `lbs_per_week` INTEGER NOT NULL, `bmi` REAL NOT NULL, `bmr` REAL NOT NULL, `user_id` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `first_name` TEXT, `last_name` TEXT, `city` TEXT, `country` TEXT, `dob` TEXT, `sex` TEXT, `weight_lbs` INTEGER NOT NULL, `height_ft` INTEGER NOT NULL, `height_in` INTEGER NOT NULL, `stepCount` REAL NOT NULL, `dateLastUpdated` INTEGER, `lifestyle` TEXT, `weight_goal` TEXT, `lbs_per_week` INTEGER NOT NULL, `bmi` REAL NOT NULL, `bmr` REAL NOT NULL, `user_id` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "m_Id",
@@ -126,6 +126,18 @@
             "columnName": "height_in",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "m_stepCount",
+            "columnName": "stepCount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "m_dateLastUpdated",
+            "columnName": "dateLastUpdated",
+            "affinity": "INTEGER",
+            "notNull": false
           },
           {
             "fieldPath": "m_lifestyleSelection",
@@ -293,7 +305,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"1f029a504f5deaebb7d53e1f0d16975d\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"9c6ec9d735c75e012836ab13fd6ee04f\")"
     ]
   }
 }

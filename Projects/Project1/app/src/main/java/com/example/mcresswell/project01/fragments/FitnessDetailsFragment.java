@@ -3,6 +3,10 @@ package com.example.mcresswell.project01.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
+import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +15,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -30,10 +35,13 @@ import com.example.mcresswell.project01.viewmodel.UserViewModel;
 
 import java.util.Locale;
 
+import retrofit2.http.HEAD;
+
 import static com.example.mcresswell.project01.util.Constants.CREATE_VIEW;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateAge;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateBMR;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateBmi;
+import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateCalories;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateDailyCaloricIntake;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateHeightInInches;
 
@@ -53,15 +61,14 @@ public class FitnessDetailsFragment extends Fragment {
     private static final String BMR = " calories/day";
     private static final String STEPS = " steps";
 
-    private TextView m_tvcalsToEat, m_tvBMR, m_bodyMassIndex, m_stepCount;
-    private TextView m_tvbmiClassification; //Implement this later when the fitness profile is working
+    private TextView m_tvcalsToEat, m_tvBMR, m_bodyMassIndex, m_tvstepCount;
+    private TextView  m_tvbmiClassification; //Implement this later when the fitness profile is working
     private FitnessProfileViewModel m_fitnessProfileViewModel;
     private UserViewModel m_userViewModel;
-    private FitnessProfile fitnessProfile;
 
     private SensorManager mSensorManager;
     private Sensor mStepCounter;
-    private int m_numberOfSteps;
+    private float m_numberOfSteps;
 
     public FitnessDetailsFragment() { }
 
@@ -74,12 +81,10 @@ public class FitnessDetailsFragment extends Fragment {
     private final SensorEventListener mListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
-            Log.d(LOG_TAG, "onSensorChanged");
             m_numberOfSteps = (int) sensorEvent.values[0];
-
             Log.d(LOG_TAG, String.format(Locale.US, "Total step count: %d steps", m_numberOfSteps));
-            m_stepCount.setText(String.format(Locale.US, "%d %s", m_numberOfSteps, STEPS));
-
+            m_tvstepCount.setText(String.format(Locale.US, "%d %s", m_numberOfSteps, STEPS));
+            m_fitnessProfileViewModel.setStepCount(m_numberOfSteps);
         }
 
         @Override
@@ -115,7 +120,7 @@ public class FitnessDetailsFragment extends Fragment {
         m_tvcalsToEat = view.findViewById(R.id.tv_calPerDay);
         m_tvBMR = view.findViewById(R.id.tv_BMR);
         m_bodyMassIndex = view.findViewById(R.id.tv_bmi);
-        m_stepCount = view.findViewById(R.id.tv_step_count);
+        m_tvstepCount = view.findViewById(R.id.tv_step_count);
 
         m_tvcalsToEat.setText(String.format(Locale.US, DOUBLE_FORMAT + CALORIC_INTAKE, DEFAULT_CALS));
         m_tvBMR.setText(String.format(Locale.US, DOUBLE_FORMAT + BMR, DEFAULT_BMR));
@@ -124,7 +129,8 @@ public class FitnessDetailsFragment extends Fragment {
         mSensorManager = (SensorManager) getActivity().getSystemService(Activity.SENSOR_SERVICE);
         mStepCounter = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
-        m_stepCount.setText(String.format(Locale.US, "%s %s", m_numberOfSteps, STEPS));
+        m_numberOfSteps = Float.valueOf(m_numberOfSteps) == null ? 0 : m_numberOfSteps;
+        m_tvstepCount.setText(String.format(Locale.US, "%s %s", m_numberOfSteps, STEPS));
 
 
         configureViewModels();
@@ -133,7 +139,7 @@ public class FitnessDetailsFragment extends Fragment {
     }
 
     private void configureViewModels() {
-        m_fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
+        m_fitnessProfileViewModel = ViewModelProviders.of(getActivity()).get(FitnessProfileViewModel.class);
 
         m_userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
 
@@ -142,6 +148,8 @@ public class FitnessDetailsFragment extends Fragment {
             if (user != null) {
                 m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
                     if (fp != null) {
+                        //testing if writing to database
+//                        m_fitnessProfileViewModel.setStepCount(8.0f);
                         int calcAge = calculateAge(fp.getM_dob());
                         double basalMetabolicRate = calculateBMR(fp.getM_heightFeet(),
                                 fp.getM_heightInches(),
@@ -152,10 +160,11 @@ public class FitnessDetailsFragment extends Fragment {
                                 fp.getM_heightFeet(),
                                 fp.getM_heightInches()),
                                 fp.getM_weightInPounds());
+                        m_numberOfSteps = fp.getM_stepCount();
                         m_tvcalsToEat.setText(String.format(Locale.US, DOUBLE_FORMAT + CALORIC_INTAKE, calculateDailyCaloricIntake(fp)));
                         m_tvBMR.setText(String.format(Locale.US, DOUBLE_FORMAT + BMR, basalMetabolicRate));
                         m_bodyMassIndex.setText(String.format(Locale.US, DOUBLE_FORMAT, bodyMassIndex));
-                        m_stepCount.setText(String.format(Locale.US, "%s %s",m_numberOfSteps, STEPS));
+                        m_tvstepCount.setText(String.format(Locale.US, "%s %s",m_numberOfSteps, STEPS));
                     } else {
                         displayNoExistingFitnessProfileAlertDialog();
                     }
