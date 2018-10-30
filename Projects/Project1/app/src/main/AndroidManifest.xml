@@ -20,9 +20,6 @@
         android:name="android.hardware.sensor.stepcounter"
         android:required="true"/>
 
-    <uses-feature android:name="android.hardware.sensor.stepcounter" />
-
-
     <application
         android:name=".InStyleApp"
         android:allowBackup="true"
