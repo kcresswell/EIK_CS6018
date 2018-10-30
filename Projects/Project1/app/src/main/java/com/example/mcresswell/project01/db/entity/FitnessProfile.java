@@ -53,7 +53,6 @@ public class FitnessProfile {
     @ColumnInfo(name = "height_in")
     private int m_heightInches;
 
-    //fitness details
     @ColumnInfo(name = "lifestyle")
     private String m_lifestyleSelection;
 
@@ -68,7 +67,6 @@ public class FitnessProfile {
 
     @ColumnInfo(name = "bmr")
     private double m_bmr;
-//    private Bitmap m_profilePicture;
 
     @ColumnInfo(name = "user_id")
     private int userId;
@@ -82,8 +80,7 @@ public class FitnessProfile {
     @ColumnInfo(name = "profile_image")
     private String m_profileImage;
 
-    public FitnessProfile() {
-    }
+    public FitnessProfile() { }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public FitnessProfile(
@@ -121,7 +118,6 @@ public class FitnessProfile {
 
         m_bmi = calculateBmi(calculateHeightInInches(m_heightFeet, m_heightInches), m_weightInPounds);
         m_bmr = calculateBMR(m_heightFeet, m_heightInches, m_sex, m_weightInPounds, calculateAge(m_dob));
-//        m_profilePicture = profileImage;
     }
 
     public int getM_Id() { return m_Id; }
@@ -154,7 +150,9 @@ public class FitnessProfile {
 
     public String getM_lifestyleSelection() { return m_lifestyleSelection; }
 
-    public void setM_lifestyleSelection(String m_lifestyleSelection) { this.m_lifestyleSelection = m_lifestyleSelection; }
+    public void setM_lifestyleSelection(String m_lifestyleSelection) {
+        this.m_lifestyleSelection = m_lifestyleSelection;
+    }
 
     public String getM_weightGoal() { return m_weightGoal; }
 
@@ -190,9 +188,13 @@ public class FitnessProfile {
 
     public float getM_stepCount() {return m_stepCount; }
 
-    public void setM_stepCount(Float m_stepCount) {this.m_stepCount = m_stepCount; }
+    public void setM_stepCount(float m_stepCount) {this.m_stepCount = m_stepCount; }
 
     public Date getM_dateLastUpdated() {return m_dateLastUpdated; }
 
     public void setM_dateLastUpdated(Date m_dateLastUpdated) {this.m_dateLastUpdated = m_dateLastUpdated; }
+
+    public String getM_profileImage() { return m_profileImage; }
+
+    public void setM_profileImage(String m_profileImage) { this.m_profileImage = m_profileImage; }
 }
