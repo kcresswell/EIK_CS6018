@@ -28,6 +28,8 @@ import com.example.mcresswell.project01.viewmodel.UserViewModel;
 
 import java.util.Locale;
 
+import retrofit2.http.HEAD;
+
 import static com.example.mcresswell.project01.util.Constants.CREATE_VIEW;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateAge;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateBMR;
@@ -61,7 +63,7 @@ public class FitnessDetailsFragment extends Fragment {
 
     private SensorManager mSensorManager;
     private Sensor mStepCounter;
-    private String m_numberOfSteps;
+    private float m_numberOfSteps;
 
 
     public FitnessDetailsFragment() {
@@ -78,7 +80,8 @@ public class FitnessDetailsFragment extends Fragment {
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
             m_tvstepCount.setText("" + String.valueOf(sensorEvent.values[0]));
-            m_numberOfSteps = String.valueOf(sensorEvent.values[0]);
+            m_numberOfSteps = sensorEvent.values[0];
+            m_fitnessProfileViewModel.setStepCount(m_numberOfSteps);
         }
 
         @Override
@@ -124,10 +127,11 @@ public class FitnessDetailsFragment extends Fragment {
             mStepCounter = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
             //null check for sensor count
-            if(m_numberOfSteps == null) {
-                m_tvstepCount.setText(String.format(Locale.US, INT_FORMAT + STEPS, 0));
+            if(Float.valueOf(m_numberOfSteps) == null) {
+//                m_tvstepCount.setText(String.format(Locale.US, INT_FORMAT + STEPS, 0));
+                m_numberOfSteps = 0;
             } else {
-                m_tvstepCount.setText(String.format(Locale.US, INT_FORMAT + STEPS, m_numberOfSteps));
+                m_tvstepCount.setText(String.format(Locale.US, DOUBLE_FORMAT + STEPS, m_numberOfSteps));
             }
         } else {
             double caloricIntake = calculateCalories(m_fitnessProfile);
@@ -153,6 +157,8 @@ public class FitnessDetailsFragment extends Fragment {
             if (user != null) {
                 m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
                     if (fp != null) {
+                        //testing if writing to database
+//                        m_fitnessProfileViewModel.setStepCount(8.0f);
                         int calcAge = calculateAge(fp.getM_dob());
                         double basalMetabolicRate = calculateBMR(fp.getM_heightFeet(),
                                 fp.getM_heightInches(),
@@ -163,10 +169,12 @@ public class FitnessDetailsFragment extends Fragment {
                                 fp.getM_heightFeet(),
                                 fp.getM_heightInches()),
                                 fp.getM_weightInPounds());
+                        m_numberOfSteps = fp.getM_stepCount();
                         m_tvcalsToEat.setText(String.format(Locale.US, DOUBLE_FORMAT + CALORIC_INTAKE, calculateDailyCaloricIntake(fp)));
                         m_tvBMR.setText(String.format(Locale.US, DOUBLE_FORMAT + BMR, basalMetabolicRate));
                         m_bodyMassIndex.setText(String.format(Locale.US, DOUBLE_FORMAT, bodyMassIndex));
-                        m_tvstepCount.setText(String.format(Locale.US, INT_FORMAT + STEPS, m_numberOfSteps));
+                        m_tvstepCount.setText(String.format(Locale.US, DOUBLE_FORMAT + STEPS, m_numberOfSteps));
+
                     }
                 });
 

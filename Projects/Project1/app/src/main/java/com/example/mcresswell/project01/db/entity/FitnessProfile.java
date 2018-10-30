@@ -9,6 +9,9 @@ import android.arch.persistence.room.PrimaryKey;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
+
+import java.util.Date;
+
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateAge;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateBMR;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateBmi;
@@ -53,6 +56,12 @@ public class FitnessProfile {
     @ColumnInfo(name = "height_in")
     private int m_heightInches;
 
+    @ColumnInfo(name = "stepCount")
+    private float m_stepCount;
+
+    @ColumnInfo(name = "dateLastUpdated")
+    private Date m_dateLastUpdated;
+
     //fitness details
     @ColumnInfo(name = "lifestyle")
     private String m_lifestyleSelection;
@@ -73,6 +82,7 @@ public class FitnessProfile {
     @ColumnInfo(name = "user_id")
     private int userId; //THIS IS THE USER ID FOREIGN KEY FIELD.
 
+
     public FitnessProfile() {
     }
 
@@ -90,7 +100,9 @@ public class FitnessProfile {
             int m_lbsPerWeek,
             int m_weightInPounds,
             int m_heightFeet,
-            int m_heightInches) {
+            int m_heightInches,
+            float m_stepCount,
+            Date m_dateLastUpdated) {
 
         m_Id = m_userId;
         this.m_fName = m_fName;
@@ -105,6 +117,9 @@ public class FitnessProfile {
         this.m_weightInPounds = m_weightInPounds;
         this.m_heightFeet = m_heightFeet;
         this.m_heightInches = m_heightInches;
+        this.m_stepCount = m_stepCount;
+        this.m_dateLastUpdated = m_dateLastUpdated;
+
         m_bmi = calculateBmi(calculateHeightInInches(m_heightFeet, m_heightInches), m_weightInPounds);
         m_bmr = calculateBMR(m_heightFeet, m_heightInches, m_sex, m_weightInPounds, calculateAge(m_dob));
 //        m_profilePicture = profileImage;
@@ -199,6 +214,14 @@ public class FitnessProfile {
     public int getM_heightInches() { return m_heightInches; }
 
     public void setM_heightInches(int m_heightInches) { this.m_heightInches = m_heightInches; }
+
+    public float getM_stepCount() {return m_stepCount; }
+
+    public void setM_stepCount(Float m_stepCount) {this.m_stepCount = m_stepCount; }
+
+    public Date getM_dateLastUpdated() {return m_dateLastUpdated; }
+
+    public void setM_dateLastUpdated(Date m_dateLastUpdated) {this.m_dateLastUpdated = m_dateLastUpdated; }
 
     public double getM_bmi() { return m_bmi; }
 
