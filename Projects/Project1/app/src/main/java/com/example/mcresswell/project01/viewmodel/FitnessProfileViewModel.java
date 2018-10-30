@@ -10,13 +10,16 @@ import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.db.repo.FitnessProfileRepository;
 import com.example.mcresswell.project01.fragments.FitnessDetailsFragment;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
+
 public class FitnessProfileViewModel extends AndroidViewModel {
 
     private static final String LOG = FitnessProfileViewModel.class.getSimpleName();
 
     private LiveData<FitnessProfile> m_fitnessProfile;
     private FitnessProfileRepository m_fitnessProfileRepository;
-    private Float m_numberOfSteps;
 
     public FitnessProfileViewModel(@NonNull Application application) {
         super(application);
@@ -35,6 +38,7 @@ public class FitnessProfileViewModel extends AndroidViewModel {
 
     public void setStepCount(Float m_numberOfSteps) {
         m_fitnessProfile.getValue().setM_stepCount(m_numberOfSteps);
+        m_fitnessProfile.getValue().setM_dateLastUpdated(new Date(2018, 10, 31));
         insertNewFitnessProfile(m_fitnessProfile.getValue());
     }
 

@@ -126,7 +126,8 @@ public class FitnessDetailsFragment extends Fragment {
 
             //null check for sensor count
             if(Float.valueOf(m_numberOfSteps) == null) {
-                m_tvstepCount.setText(String.format(Locale.US, INT_FORMAT + STEPS, 0));
+//                m_tvstepCount.setText(String.format(Locale.US, INT_FORMAT + STEPS, 0));
+                m_numberOfSteps = 0;
             } else {
                 m_tvstepCount.setText(String.format(Locale.US, DOUBLE_FORMAT + STEPS, m_numberOfSteps));
             }
@@ -154,6 +155,8 @@ public class FitnessDetailsFragment extends Fragment {
             if (user != null) {
                 m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
                     if (fp != null) {
+                        //testing if writing to database
+//                        m_fitnessProfileViewModel.setStepCount(8.0f);
                         int calcAge = calculateAge(fp.getM_dob());
                         double basalMetabolicRate = calculateBMR(fp.getM_heightFeet(),
                                 fp.getM_heightInches(),
@@ -164,10 +167,12 @@ public class FitnessDetailsFragment extends Fragment {
                                 fp.getM_heightFeet(),
                                 fp.getM_heightInches()),
                                 fp.getM_weightInPounds());
+                        m_numberOfSteps = fp.getM_stepCount();
                         m_tvcalsToEat.setText(String.format(Locale.US, DOUBLE_FORMAT + CALORIC_INTAKE, calculateDailyCaloricIntake(fp)));
                         m_tvBMR.setText(String.format(Locale.US, DOUBLE_FORMAT + BMR, basalMetabolicRate));
                         m_bodyMassIndex.setText(String.format(Locale.US, DOUBLE_FORMAT, bodyMassIndex));
-                        m_tvstepCount.setText(String.format(Locale.US, INT_FORMAT + STEPS, m_numberOfSteps));
+                        m_tvstepCount.setText(String.format(Locale.US, DOUBLE_FORMAT + STEPS, m_numberOfSteps));
+
                     }
                 });
 
