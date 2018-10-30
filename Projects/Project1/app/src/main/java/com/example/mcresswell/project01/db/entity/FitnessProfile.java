@@ -14,9 +14,9 @@ import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculat
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateBmi;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateHeightInInches;
 
-@Entity(/*foreignKeys = @ForeignKey(entity = User.class,
+@Entity(foreignKeys = @ForeignKey(entity = User.class,
                             parentColumns = "id",
-                            childColumns = "user_id"),*/
+                            childColumns = "user_id"),
         indices = {@Index(value = {"user_id"}, unique = true)})
 public class FitnessProfile {
 
@@ -30,14 +30,12 @@ public class FitnessProfile {
     @ColumnInfo(name = "last_name")
     private String m_lName;
 
-    //location
     @ColumnInfo(name = "city")
     private String m_city;
 
     @ColumnInfo(name = "country")
     private String m_country;
 
-    //physical profile
     @ColumnInfo(name = "dob")
     private String m_dob;
 
@@ -53,7 +51,6 @@ public class FitnessProfile {
     @ColumnInfo(name = "height_in")
     private int m_heightInches;
 
-    //fitness details
     @ColumnInfo(name = "lifestyle")
     private String m_lifestyleSelection;
 
@@ -71,7 +68,7 @@ public class FitnessProfile {
 //    private Bitmap m_profilePicture;
 
     @ColumnInfo(name = "user_id")
-    private int userId; //THIS IS THE USER ID FOREIGN KEY FIELD.
+    private int userId;
 
     public FitnessProfile() {
     }

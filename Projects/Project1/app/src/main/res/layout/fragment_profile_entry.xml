@@ -13,12 +13,14 @@
         android:layout_height="0dp"
         android:maxWidth="650dp"
         android:elevation="12dp"
-        android:background="@android:color/white"
+        android:fadeScrollbars="true"
+        android:scrollbarAlwaysDrawVerticalTrack="false"
+        android:scrollIndicators="none"
+        android:background="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
         <!--Profile entry Page Accent Green Headings-->
 
 
@@ -413,9 +415,9 @@
                 android:layout_width="147dp"
                 android:layout_height="134dp"
                 android:background="@android:color/transparent"
-                android:maxHeight="100dp"
-                android:maxWidth="100dp"
-                android:padding="20dp"
+                android:maxHeight="200dp"
+                android:maxWidth="200dp"
+                android:padding="12dp"
                 android:src="@drawable/ic_launcher_camera"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/txtv_fname"

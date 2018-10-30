@@ -23,9 +23,8 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="AppTheme" parent="BaseAppTheme">
-        <item name="actionBarSize">80dp</item>
+        <item name="actionBarSize">60dp</item>
         <item name="android:labelTextSize">80dp</item>
-        <item name="android:titleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title</item>
         <item name="spinnerStyle">@style/Widget.AppCompat.Spinner</item>
 
     </style>

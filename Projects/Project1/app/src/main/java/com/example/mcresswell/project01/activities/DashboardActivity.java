@@ -1,6 +1,7 @@
 package com.example.mcresswell.project01.activities;
 
 import android.app.Activity;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -17,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.db.entity.User;
 import com.example.mcresswell.project01.ui.RV_Adapter;
 import com.example.mcresswell.project01.util.GeocoderLocationUtils;
 import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
@@ -111,25 +114,47 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
                 ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
         weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
         userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
-        userViewModel.getUser().observe(this, user -> {
-            if (user != null) {
-                m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
-                    if (fp != null) {
 
-                        Log.d(LOG_TAG, "USER IS ASSOCIATED WITH A FITNESS PROFILE RECORD");
-                        Log.d(LOG_TAG, String.format(Locale.US, "USER: '%d' '%s' '%s' '%s'", user.getId(), user.getFirstName(), user.getLastName(), user.getEmail()));
-                        Log.d(LOG_TAG, String.format(Locale.US, "FITNESS PROFILE RECORD: userid(FK):%d' '%s' '%s' '%s, %s' ", fp.getUserId(), fp.getM_fName(), fp.getM_lName(), fp.getM_city(), fp.getM_country()));
+        observeUserViewModel();
+    }
+    private void observeUserViewModel() {
+        Observer userObserver = new Observer<User>() {
+            @Override
+            public void onChanged(@Nullable User user) {
+                if (user != null) {
+                    userViewModel.getUser().removeObserver(this);
+                    Log.d(LOG_TAG, "User view model not null, now looking up fitness profile from user id");
 
-                    } else {
-                        Log.d(LOG_TAG, "fitness profile view model is null");
-                    }
-                    m_fitnessProfileViewModel.getFitnessProfile(user.getId()).removeObservers(this);
-                });
-            } else {
-                Log.d(LOG_TAG, "user view model is null");
+                    observeFitnessProfileViewModel(user);
+
+                } else {
+                    Log.d(LOG_TAG, "user view model is null");
+
+                }
             }
-            userViewModel.getUser().removeObservers(this);
-        });
+        };
+
+        userViewModel.getUser().observe(this, userObserver);
+    }
+
+    private void observeFitnessProfileViewModel(User user) {
+        Observer fpObserver = new Observer<FitnessProfile>() {
+            @Override
+            public void onChanged(@Nullable FitnessProfile fitnessProfile) {
+                if (fitnessProfile != null) {
+                    m_fitnessProfileViewModel.getFitnessProfile(user.getId()).removeObserver(this);
+
+                    Log.d(LOG_TAG, "USER IS ASSOCIATED WITH A FITNESS PROFILE RECORD");
+                    Log.d(LOG_TAG, String.format(Locale.US, "USER: '%d' '%s' '%s' '%s'", user.getId(), user.getFirstName(), user.getLastName(), user.getEmail()));
+                    Log.d(LOG_TAG, String.format(Locale.US, "FITNESS PROFILE RECORD: " +
+                            "userid(FK):%d' '%s' '%s' '%s, %s' ", fitnessProfile.getUserId(), fitnessProfile.getM_fName(), fitnessProfile.getM_lName(), fitnessProfile.getM_city(), fitnessProfile.getM_country()));
+
+                } else {
+                    Log.d(LOG_TAG, "fitness profile view model is null");
+                }
+            }
+        };
+        m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fpObserver);
     }
 
     @Override

@@ -18,6 +18,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.db.entity.FitnessProfile;
+import com.example.mcresswell.project01.db.entity.User;
 import com.example.mcresswell.project01.util.mapper.CountryCodeMapper;
 import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 import com.example.mcresswell.project01.viewmodel.UserViewModel;
@@ -73,35 +75,46 @@ public class WeatherFragment extends ListFragment {
         super.onCreate(savedInstanceState);
 
         configureWeatherViewModels();
-        configureWeatherViewModelForWeatherWidget();
 
     }
 
     private void configureWeatherViewModels() {
-        weatherListViewModel = ViewModelProviders.of(this).get(WeatherListViewModel.class);
+        weatherListViewModel = ViewModelProviders.of(getActivity()).get(WeatherListViewModel.class);
 
-        weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
+        weatherViewModel = ViewModelProviders.of(getActivity()).get(WeatherViewModel.class);
 
-        weatherViewModel.getWeather().observe(this, weather ->  {
-            if (weather != null) {
+        Observer weatherObserver = new Observer <Weather>() {
+            @Override
+            public void onChanged(@Nullable Weather weather) {
+                if(weather != null) {
+                    Log.d(LOG_TAG, "Weather view model has changed and isnt null");
+                    weatherViewModel.getWeather().removeObserver(this);
+                    displayWeatherWidget(weather);
 
-                Log.d(LOG_TAG, "Weather view model not null");
-
+                    return;
+                } else {
+                    Log.d(LOG_TAG, "weather view model is still null");
+                    displayWeatherWidget(createTempWeatherDatabaseRecord());
+                }
             }
+        };
 
-        });
+        weatherViewModel.getWeather().observe(this, weatherObserver);
 
-        weatherListViewModel.getWeatherDataFromDatabase().observe(this, weatherList -> {
-            if (weatherList != null) {
+        Observer weatherListObserver = new Observer <List<Weather>>() {
+            @Override
+            public void onChanged(@Nullable List<Weather> weatherList) {
+                if(weatherList != null) {
+                    Log.d(LOG_TAG, "Weather list view model has changed and isnt null");
+                    weatherListViewModel.getWeatherDataFromDatabase().removeObserver(this);
+                    logWeatherDataFromDatabase(weatherList);
 
-
-                Log.d(LOG_TAG, "Change to weather data list in database:");
-                logWeatherDataFromDatabase(weatherList);
-                weatherListViewModel.getWeatherDataFromDatabase().removeObservers(this);
-
+                    return;
+                }
             }
+        };
 
-        });
+        weatherListViewModel.getWeatherDataFromDatabase().observe(this, weatherListObserver);
     }
 
     private void logWeatherDataFromDatabase(List<Weather> weatherList) {
@@ -119,56 +132,46 @@ public class WeatherFragment extends ListFragment {
         Log.d(LOG_TAG, "------------------------------------------");
     }
 
-    private void configureWeatherViewModelForWeatherWidget() {
-        weatherViewModel.getWeather().observe(this, weather -> {
-            if (weather != null) { //Weather data has finished being retrieved
-//                weatherViewModel.getWeather().removeObservers(this);
-
-//                if (weather.getCity().equalsIgnoreCase(cityName)) {
-//                    && weather.getCountryCode().equals(formatCaseCountryCodeFromCountryName(countryName)
-
-                    WeatherUtils.printWeather(weather);
-
-                    displayWeatherWidget(weather);
-//                } else {
-//                    Log.d(LOG_TAG, String.format(Locale.US,"Weather view model is not null but " +
-//                            "city name of view model ('%s') doesn't match '%s'", weather.getCity(),cityName));
-//                }
-            } else {
-                Log.d(LOG_TAG, "weather view model is still null");
-                displayWeatherWidget(createTempWeatherDatabaseRecord());
-            }
-
-        });
-    }
     private void configureUserAndFitnessProfileViewModels() {
         userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
         fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
 
-        userViewModel.getUser().observe(this, user -> {
-            if(user != null) {
+        Observer userObserver = new Observer<User>() {
+            @Override
+            public void onChanged(@Nullable User user) {
+                if (user != null) {
+                    userViewModel.getUser().removeObserver(this);
 
-//                userViewModel.getUser().removeObservers(this);
+                    observeFitnessProfileViewModel(user);
 
-                fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
-
-                    if (fp != null) {
-//                        fitnessProfileViewModel.getFitnessProfile(user.getId()).removeObservers(this);
-
-                        Log.d(LOG_TAG, "OMG OMG OMG FITNESS PROFILE VIEW MODEL IS NOT NULL AND CAN PASS IN CITY/COUNTRY" +
-                                "FOR WEATHER DATA!!!!");
-
-                        Log.d(LOG_TAG, String.format("Loading weather for user's location of %s, %s",
-                                fp.getM_city(), fp.getM_country()));
-
-                        //City and country get scrubbed/sanitized in nested repo call
-                        weatherViewModel.loadWeather(fp.getM_city(), fp.getM_country());
-                    }
-
-                });
+                }
             }
-        });
 
+        };
+        userViewModel.getUser().observe(this, userObserver);
+    }
+
+    private void observeFitnessProfileViewModel(User user) {
+
+        Observer fitnessProfileObserver = new Observer<FitnessProfile>() {
+            @Override
+            public void onChanged(@Nullable FitnessProfile fitnessProfile) {
+                if (fitnessProfile != null) {
+                    fitnessProfileViewModel.getFitnessProfile(user.getId()).removeObserver(this);
+                    Log.d(LOG_TAG, "OMG OMG OMG FITNESS PROFILE VIEW MODEL IS NOT NULL AND CAN PASS IN CITY/COUNTRY" +
+                            "FOR WEATHER DATA!!!!");
+
+                    Log.d(LOG_TAG, String.format("Loading weather for user's location of %s, %s",
+                            fitnessProfile.getM_city(), fitnessProfile.getM_country()));
+
+                    //City and country get scrubbed/sanitized in nested repo call
+                    weatherViewModel.loadWeather(fitnessProfile.getM_city(), fitnessProfile.getM_country());
+
+                }
+            }
+        };
+
+        fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fitnessProfileObserver);
     }
 
     private void displayWeatherWidget(Weather weather) {
@@ -263,7 +266,7 @@ public class WeatherFragment extends ListFragment {
 //        }
 //    };
 
-    //    private void subscribeToUserProfileModel() {
+//    private void subscribeToUserProfileModel() {
 //        fitnessProfileViewModel.getFitnessProfile().observe(this, fitnessProfile -> {
 //            //Now that valid user profile data has been entered, reload
 //            if (fitnessProfile != null) {

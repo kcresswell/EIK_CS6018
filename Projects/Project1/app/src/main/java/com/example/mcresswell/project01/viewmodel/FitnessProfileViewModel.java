@@ -11,8 +11,6 @@ import com.example.mcresswell.project01.db.repo.FitnessProfileRepository;
 
 public class FitnessProfileViewModel extends AndroidViewModel {
 
-    private static final String LOG = FitnessProfileViewModel.class.getSimpleName();
-
     private LiveData<FitnessProfile> m_fitnessProfile;
     private FitnessProfileRepository m_fitnessProfileRepository;
 

@@ -18,7 +18,7 @@
         android:textSize="@dimen/dashboard_fitness_details_heading"
         android:textAlignment="center"
         android:textAllCaps="true"
-        android:paddingTop="50dp"
+        android:paddingTop="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

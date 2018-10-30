@@ -80,6 +80,7 @@ public class WeatherRepository {
                     if (weatherList != null) {
                         if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
                             m_observableWeatherList.removeSource(mWeatherDao.loadAllWeather());
+                            m_observableWeatherList.setValue(weatherList);
 
                             List<String> weatherCities = new ArrayList<>();
                             Log.d(LOG_TAG, "Weather REPOSITORY HAS FINISHED LOADING WEATHER DATA FROM DATABASE");

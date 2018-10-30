@@ -3,14 +3,23 @@ package com.example.mcresswell.project01.fragments;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,8 +35,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -40,6 +47,9 @@ import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.util.Constants;
 import com.example.mcresswell.project01.viewmodel.UserViewModel;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileDescriptor;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -66,6 +76,11 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     private static final String LOG_TAG = ProfileEntryFragment.class.getSimpleName();
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int READ_REQUEST_CODE = 42;
+    private static final int WIDE_DISPLAY_IMG_DIM = 600;
+    private static final int MOBILE_IMG_DIM = 300;
+
+
     private FitnessProfileViewModel m_fitnessProfileViewModel;
     private UserViewModel userViewModel;
 
@@ -77,6 +92,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     private Bitmap profileImage;
     private Spinner countrySpinner;
     private SeekBar lifestyleSlider, weightGoalSlider;
+    private String imageUriString;
 
     public ProfileEntryFragment() { }
 
@@ -109,33 +125,46 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     }
 
     private void configureViewModels() {
-        userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+        userViewModel = ViewModelProviders.of(getActivity()).get(UserViewModel.class);
         m_fitnessProfileViewModel =
-                ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
+                ViewModelProviders.of(getActivity()).get(FitnessProfileViewModel.class);
 
-        userViewModel.getUser().observe(this, user -> {
-            Log.d(LOG_TAG, "UserViewModel observer for getUser()");
-            if (user != null) { //Autofill first and last name passed from create account page
-                etxt_firstName.setText(user.getFirstName());
-                etxt_lastName.setText(user.getLastName());
-
-                observeFitnessProfileViewModel(user);
-
-            }
-            userViewModel.getUser().removeObservers(this);
-        });
+        observeUserViewModel();
 
     }
 
-    private void observeFitnessProfileViewModel(User user) {
-        m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
-            if (fp != null && fp.getUserId() == user.getId()) {
+    private void observeUserViewModel() {
+        Observer userObserver = new Observer<User>() {
+            @Override
+            public void onChanged(@Nullable User user) {
+                if (user != null) {
+                    userViewModel.getUser().removeObserver(this);
 
-                autofillExistingFitnessProfileData(fp);
+                    etxt_firstName.setText(user.getFirstName());
+                    etxt_lastName.setText(user.getLastName());
+
+                    observeFitnessProfileViewModel(user);
+
+                }
             }
-            m_fitnessProfileViewModel.getFitnessProfile(user.getId()).removeObservers(this);
+        };
+        userViewModel.getUser().observe(this, userObserver);
+    }
 
-        });
+    private void observeFitnessProfileViewModel(User user) {
+        Observer fpObserver = new Observer<FitnessProfile>() {
+            @Override
+            public void onChanged(@Nullable FitnessProfile fitnessProfile) {
+                if (fitnessProfile != null) {
+                    m_fitnessProfileViewModel.getFitnessProfile(user.getId()).removeObserver(this);
+
+                    if (fitnessProfile.getUserId() == user.getId()) {
+                        autofillExistingFitnessProfileData(fitnessProfile);
+                    }
+                }
+            }
+        };
+        m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fpObserver);
     }
 
 
@@ -145,10 +174,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         Log.d(LOG_TAG, "onClick");
         switch (view.getId()){
             case R.id.btn_img_takeImage: {
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if(cameraIntent.resolveActivity(getActivity().getPackageManager()) != null){
-                    startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
-                }
+                profileImageButtonHandler();
                 break;
             }
             case R.id.btn_submit: {
@@ -164,7 +190,6 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
 
     @SuppressLint("SimpleDateFormat")
     private void displayDatePickerDialog() {
-        Log.d(LOG_TAG, "clicked dob field");
         Date defaultDate = Date.from(Instant.now());
         if (isValidDobFormat(etxt_dob.getText().toString())) {
             try {
@@ -189,20 +214,36 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
         dialog.show();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == getActivity().RESULT_OK){
-            if (intent != null && intent.getExtras() != null) {
-                profileImage = (Bitmap) intent.getExtras().get("data");
+        int dim = getResources().getBoolean(R.bool.isWideDisplay) ? WIDE_DISPLAY_IMG_DIM : MOBILE_IMG_DIM;
+        if (intent != null) {
+            if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+                Uri uri = null;
+                uri = intent.getData();
+                Log.d(LOG_TAG, "URI: " + uri.toString());
+                Log.i(LOG_TAG, "ACTUAL FILE PATH: " + getImageFilePathFromUri(uri));
+
+                try {
+                    Bitmap bitmap = getBitmapFromUri(uri);
+                    takeProfileImageButton.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+                if (intent.getExtras() != null) {
+                    profileImage = (Bitmap) intent.getExtras().get("data");
+                }
+                if (profileImage != null) {
+                    takeProfileImageButton.setImageBitmap(profileImage);
+                }
             }
-            if (profileImage != null) {
-                takeProfileImageButton.setImageBitmap(profileImage);
-            }
+            takeProfileImageButton.setMinimumHeight(dim);
+            takeProfileImageButton.setMinimumWidth(dim);
         }
     }
 
@@ -215,6 +256,19 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         if(savedInstanceState != null) {
             profileImage = savedInstanceState.getParcelable("M_IMG_DATA");
             takeProfileImageButton.setImageBitmap(profileImage);
+            imageUriString = savedInstanceState.getString("uri");
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState (Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "onSaveInstanceState");
+
+        super.onSaveInstanceState(savedInstanceState);
+        if (takeProfileImageButton != null && takeProfileImageButton.getDrawable() != null) {
+            Bitmap bitmap = ((BitmapDrawable) takeProfileImageButton.getDrawable()).getBitmap();
+            savedInstanceState.putParcelable("M_IMG_DATA", bitmap);
+            savedInstanceState.putString("uri", getUriFromBitmap(bitmap).toString());
         }
     }
 
@@ -298,7 +352,6 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         }
 
         FitnessProfile tempFitnessProfile = instantiateFitnessProfile();
-
 
         userViewModel.getUser().observe(this, user -> {
             if (user != null) {
@@ -414,6 +467,72 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
             return false;
         }
         return true;
+    }
+
+    public void displayFilePickerDialog() {
+
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("image/*");
+
+        startActivityForResult(intent, READ_REQUEST_CODE);
+    }
+
+    private void profileImageButtonHandler() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.dialog_title_profile_image_button);
+//            builder.setMessage(R.string.dialog_message_profile_image_button);
+        builder.setIcon(R.drawable.ic_directions_run);
+
+        builder.setPositiveButton(R.string.dialog_button_file_picker, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Log.d(LOG_TAG, "Dialog file picker button clicked");
+                displayFilePickerDialog();
+            }
+        });
+        builder.setNegativeButton(R.string.dialog_button_dismiss, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Log.d(LOG_TAG, "Dialog dismiss button clicked");
+            }
+        });
+        builder.setNeutralButton(R.string.dialog_button_camera, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Log.d(LOG_TAG, "Camera button clicked");
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if(cameraIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+                }
+            }
+        });
+
+        builder.create().show();
+    }
+//    public Uri getUriFromBitmap(Context context, Bitmap bitmap) {
+    public Uri getUriFromBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), bitmap, "img", null);
+        return Uri.parse(path);
+    }
+
+    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
+        ParcelFileDescriptor parcelFileDescriptor =
+                getActivity().getContentResolver().openFileDescriptor(uri, "r");
+        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+        parcelFileDescriptor.close();
+        return getResources().getBoolean(R.bool.isWideDisplay) ?
+                Bitmap.createScaledBitmap(image, WIDE_DISPLAY_IMG_DIM, WIDE_DISPLAY_IMG_DIM, false):
+                Bitmap.createScaledBitmap(image, MOBILE_IMG_DIM, MOBILE_IMG_DIM, false);
+    }
+
+    public String getImageFilePathFromUri(Uri uri) {
+        Cursor cursor = getActivity().getContentResolver()
+                .query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
     }
 
     @Override

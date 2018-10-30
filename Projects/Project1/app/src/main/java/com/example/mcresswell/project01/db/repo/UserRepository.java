@@ -115,18 +115,20 @@ public class UserRepository {
 
     public void insert(User user) {
         asyncInsertUser(user);
+        m_observableUser.setValue(user);
     }
 
     public LiveData<User> find(String userEmail) {
         m_observableUser.addSource(mUserDao.findUserByEmail(userEmail), user -> {
             if (user != null) {
+                m_observableUser.removeSource(mUserDao.findUserByEmail(userEmail));
+
                 Log.d(LOG_TAG, String.format("findUserByEmail() for email  %s LiveData<User> onChanged", user.getEmail()));
                 if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
 //                    Log.d(LOG_TAG, "Broadcasting findUserByEmail() result to observers... ");
                     m_observableUser.setValue(user);
                 }
             }
-//            m_observableUser.removeSource(mUserDao.findUserByEmail(userEmail));
 
         });
         asyncLoadUser(userEmail);
@@ -141,6 +143,7 @@ public class UserRepository {
 
     public void delete(User user) {
         asyncDeleteUser(user);
+        m_observableUser.setValue(null);
     }
 
     public void deleteAll() {
@@ -151,6 +154,7 @@ public class UserRepository {
         m_observableUserList.addSource(mUserDao.loadAllUsers(), userList -> {
             if (userList != null) {
                 if (inStyleDatabase.isDatabaseCreated().getValue() != null) {
+                    //            m_observableUserList.removeSource(mUserDao.loadAllUsers());
                     List<String> emailList = new ArrayList<>();
                     Log.d(LOG_TAG, "USER REPOSITORY HAS FINISHED LOADING USERS FROM DATABASE");
                     Log.d(LOG_TAG, "Number of users in User database: " + userList.size());
@@ -180,7 +184,6 @@ public class UserRepository {
 
                 }
             }
-//            m_observableUserList.removeSource(mUserDao.loadAllUsers());
 
         });
 

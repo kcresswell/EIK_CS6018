@@ -58,7 +58,8 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/currentForecast" />
+        app:layout_constraintTop_toBottomOf="@+id/currentForecast"
+        app:layout_constraintBottom_toTopOf="@id/weather_widget_data_fields"/>
 
     <LinearLayout
         android:id="@+id/weather_widget_data_fields"

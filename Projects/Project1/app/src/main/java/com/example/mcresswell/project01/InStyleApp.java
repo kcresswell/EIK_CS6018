@@ -21,8 +21,8 @@ public class InStyleApp extends Application {
 
         getDatabase();
 
-//        getUserRepository();
-//        getWeatherRepository();
+        getUserRepository();
+        getWeatherRepository();
 //        getFitnessProfileRepository();
     }
 
