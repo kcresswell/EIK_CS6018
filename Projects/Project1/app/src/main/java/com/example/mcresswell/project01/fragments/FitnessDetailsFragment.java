@@ -28,6 +28,8 @@ import com.example.mcresswell.project01.viewmodel.UserViewModel;
 
 import java.util.Locale;
 
+import retrofit2.http.HEAD;
+
 import static com.example.mcresswell.project01.util.Constants.CREATE_VIEW;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateAge;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateBMR;
