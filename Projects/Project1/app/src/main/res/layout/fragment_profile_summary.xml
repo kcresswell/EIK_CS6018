@@ -12,18 +12,31 @@
         android:id="@+id/scrollV_profile"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:maxWidth="650dp"
+        android:elevation="12dp"
+        android:fadeScrollbars="true"
+        android:scrollbarAlwaysDrawVerticalTrack="false"
+        android:scrollIndicators="none"
+        android:background="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toTopOf="parent">
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/constraintLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:maxWidth="650dp"
+            android:minWidth="300dp"
+            android:minHeight="500dp"
+            android:padding="8dp"
+            android:layout_margin="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" >
 
             <TextView
                 android:id="@+id/txtv_divider_goal"
@@ -43,10 +56,11 @@
                 android:ems="10"
                 android:hint="@string/hint_fname"
                 android:textAlignment="center"
-                android:textSize="25sp"
-                app:layout_constraintEnd_toStartOf="@+id/btn_img_takeImage"
+                android:textSize="35sp"
+                app:layout_constraintEnd_toStartOf="@+id/img_profile_summary"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/txtv_lname"/>
 
             <TextView
                 android:id="@+id/txtv_lname"
@@ -56,7 +70,7 @@
                 android:ems="10"
                 android:hint="@string/hint_lname"
                 android:textAlignment="center"
-                android:textSize="25sp"
+                android:textSize="35sp"
                 app:layout_constraintEnd_toEndOf="@+id/txtv_fname"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtv_fname" />
@@ -70,34 +84,18 @@
                 android:ems="10"
                 android:hint="@string/hint_city"
                 android:textSize="18sp"
-                app:layout_constraintEnd_toStartOf="@+id/txtv_country"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="8"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtv_divider_location" />
 
-            <TextView
-                android:id="@+id/txtv_country"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:ems="10"
-                android:hint="@string/hint_country"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@+id/txtv_city"
-                app:layout_constraintTop_toBottomOf="@+id/txtv_divider_location" />
-
-            <ImageButton
-                android:id="@+id/btn_img_takeImage"
-                android:layout_width="145dp"
-                android:layout_height="153dp"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/btn_img_description_profile_image"
-                android:maxHeight="100dp"
-                android:maxWidth="100dp"
-                android:padding="@dimen/dashboard_button_padding"
-                android:src="@drawable/ic_profile_img_placeholder"
+            <ImageView
+                android:id="@+id/img_profile_summary"
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:maxHeight="300dp"
+                android:maxWidth="300dp"
+                android:background="@mipmap/ic_launcher_profile_male"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/txtv_fname"
@@ -216,7 +214,7 @@
                 android:text="@string/txtv_label_location"
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_img_takeImage" />
+                app:layout_constraintTop_toBottomOf="@+id/img_profile_summary" />
 
             <TextView
                 android:id="@+id/txtv_divider_lifestyle"
@@ -227,7 +225,7 @@
                 android:text="@string/txtv_label_lifestyle"
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintStart_toEndOf="@+id/txtv_divider_fitness"
-                app:layout_constraintTop_toBottomOf="@+id/txtv_country" />
+                app:layout_constraintTop_toBottomOf="@+id/txtv_city" />
 
             <TextView
                 android:id="@+id/txtv_divider_fitness"
@@ -237,7 +235,7 @@
                 android:text="@string/txtv_label_fitness"
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtv_country" />
+                app:layout_constraintTop_toBottomOf="@+id/txtv_city" />
 
 
             <TextView

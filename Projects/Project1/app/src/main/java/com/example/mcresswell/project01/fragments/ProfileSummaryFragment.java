@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.mcresswell.project01.R;
@@ -43,7 +44,7 @@ public class ProfileSummaryFragment extends Fragment
     //UI Elements
     private Button m_editButton;
     //    private Bitmap m_photo;
-//    private ImageButton m_profilePhoto;
+    private ImageButton m_profilePhoto;
     private TextView m_firstName, m_lastName, m_sex, m_age, m_heightFeet, m_heightInches, m_city,
             m_weight, m_activity, m_weightGoal;
 
@@ -83,7 +84,7 @@ public class ProfileSummaryFragment extends Fragment
         m_activity = v.findViewById(R.id.radiogp_lifestyle);
         m_weightGoal = v.findViewById(R.id.radiogp_weightGoal);
         m_editButton = v.findViewById(R.id.btn_edit);
-//        m_profilePhoto = v.findViewById(R.id.btn_img_takeImage);
+        m_profilePhoto = v.findViewById(R.id.btn_img_takeImage);
 
         m_editButton.setOnClickListener(this);
 

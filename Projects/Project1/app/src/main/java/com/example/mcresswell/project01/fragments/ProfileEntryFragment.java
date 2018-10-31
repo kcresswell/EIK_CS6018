@@ -26,6 +26,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.CursorLoader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -226,7 +227,8 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
                 Uri uri = null;
                 uri = intent.getData();
                 Log.d(LOG_TAG, "URI: " + uri.toString());
-                Log.i(LOG_TAG, "ACTUAL FILE PATH: " + getImageFilePathFromUri(uri));
+                Log.d(LOG_TAG, "ACTUAL FILE PATH: " + getImageFilePathFromUri(uri));
+                imageUriString = uri.toString();
 
                 try {
                     Bitmap bitmap = getBitmapFromUri(uri);
@@ -256,7 +258,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         if(savedInstanceState != null) {
             profileImage = savedInstanceState.getParcelable("M_IMG_DATA");
             takeProfileImageButton.setImageBitmap(profileImage);
-            imageUriString = savedInstanceState.getString("uri");
+//            imageUriString = savedInstanceState.getString("uri");
         }
     }
 
@@ -268,7 +270,7 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         if (takeProfileImageButton != null && takeProfileImageButton.getDrawable() != null) {
             Bitmap bitmap = ((BitmapDrawable) takeProfileImageButton.getDrawable()).getBitmap();
             savedInstanceState.putParcelable("M_IMG_DATA", bitmap);
-            savedInstanceState.putString("uri", getUriFromBitmap(bitmap).toString());
+//            savedInstanceState.putString("uri", getUriFromBitmap(bitmap).toString());
         }
     }
 
@@ -407,6 +409,8 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
         String heightInches = etxt_heightInches.getText().toString();
         tempFitnessProfile.setM_heightInches(!isNotNullOrEmpty(heightInches) ? 0 : Integer.parseInt(heightInches));
 
+        tempFitnessProfile.setM_profileImage(imageUriString);
+
         final int lbsPerWeek = Integer.parseInt(etxt_lbsPerWeek.getText().toString());
 
         if (tempFitnessProfile.getM_weightGoal().equalsIgnoreCase("Maintain")) {
@@ -491,12 +495,12 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
                 displayFilePickerDialog();
             }
         });
-        builder.setNegativeButton(R.string.dialog_button_dismiss, new DialogInterface.OnClickListener() {
+        builder.setNeutralButton(R.string.dialog_button_dismiss, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 Log.d(LOG_TAG, "Dialog dismiss button clicked");
             }
         });
-        builder.setNeutralButton(R.string.dialog_button_camera, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.dialog_button_camera, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 Log.d(LOG_TAG, "Camera button clicked");
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -528,11 +532,21 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     }
 
     public String getImageFilePathFromUri(Uri uri) {
-        Cursor cursor = getActivity().getContentResolver()
-                .query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-        return cursor.getString(idx);
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = getContext().getContentResolver().query(uri,  proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } catch (Exception e) {
+            Log.d(LOG_TAG, "getImagefilePathFromUri Exception : " + e.toString());
+            return "";
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
     }
 
     @Override

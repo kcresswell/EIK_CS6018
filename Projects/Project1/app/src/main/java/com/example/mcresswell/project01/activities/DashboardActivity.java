@@ -20,6 +20,8 @@ import android.util.Log;
 
 import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.db.entity.User;
+import com.example.mcresswell.project01.fragments.AccountSettingsFragment;
+import com.example.mcresswell.project01.fragments.LoginFragment;
 import com.example.mcresswell.project01.ui.RV_Adapter;
 import com.example.mcresswell.project01.util.GeocoderLocationUtils;
 import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
@@ -110,8 +112,7 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
     }
 
     private void initializeViewModels() {
-        m_fitnessProfileViewModel =
-                ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
+        m_fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
         weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
         userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
 
@@ -167,17 +168,23 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
             m_fTrans = getSupportFragmentManager().beginTransaction();
         }
         switch (buttonPosition) {
-            case 0: //FitnessDetails
+            case 0:
                 fitnessDetailsButtonHandler();
                 break;
-            case 1: //Hiking
+            case 1:
                 hikingButtonHandler();
                 break;
-            case 2: //User Profile
+            case 2:
                 fitnessProfileButtonHandler();
                 break;
-            case 3: //Weather
+            case 3:
                 weatherButtonHandler();
+                break;
+            case 4:
+                settingsButtonHandler();
+                break;
+            case 5:
+                logoutButtonHandler();
                 break;
         }
     }
@@ -254,6 +261,34 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
 
     }
 
+    private void settingsButtonHandler() {
+        Log.d(LOG_TAG, "Settings " + ON_CLICK);
+        FragmentTransaction m_fTrans = getSupportFragmentManager().beginTransaction();
+        if (!getResources().getBoolean(R.bool.isWideDisplay)) {
+            Intent intent = new Intent(this, AccountSettingsActivity.class);
+            startActivityForResult(intent, Activity.RESULT_OK);
+        } else {
+            m_fTrans.replace(R.id.fl_detail_wd, new AccountSettingsFragment());
+            m_fTrans.addToBackStack(null);
+            m_fTrans.commit();
+        }
+    }
+
+    private void logoutButtonHandler() {
+        Log.d(LOG_TAG, "Log out " + ON_CLICK);
+
+        FragmentTransaction m_fTrans = getSupportFragmentManager().beginTransaction();
+        if (!getResources().getBoolean(R.bool.isWideDisplay)) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivityForResult(intent, Activity.RESULT_OK);
+        } else {
+            m_fTrans.replace(R.id.fl_detail_wd, new LoginFragment());
+            m_fTrans.addToBackStack(null);
+            m_fTrans.commit();
+        }
+
+    }
+
     /**
      * Helper method to restore the default app view to
      * make sure user doesn't end up with a blank app screen.
@@ -262,14 +297,12 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
     private void restoreDefaultDashboardView() {
         m_fTrans = getSupportFragmentManager().beginTransaction();
 
-        DashboardFragment frag_dashboard = new DashboardFragment();
-
         if (!isWideDisplay()) {
-            m_fTrans.replace(R.id.fl_master_nd, frag_dashboard, "v_frag_dashboard");
+            m_fTrans.replace(R.id.fl_master_nd, new DashboardFragment(), "v_frag_dashboard");
             m_fTrans.commit();
         } else { //Tablet default: master fragment left, detail fragment right
-            m_fTrans.replace(R.id.fl_master_wd, frag_dashboard, "v_frag_dashboard");
-            m_fTrans.replace(R.id.fl_detail_wd, new FitnessDetailsFragment(), "v_frag_fitness");
+            m_fTrans.replace(R.id.fl_master_wd, new DashboardFragment(), "v_frag_dashboard");
+            m_fTrans.replace(R.id.fl_detail_wd, new WeatherFragment(), "v_frag_fitness");
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }

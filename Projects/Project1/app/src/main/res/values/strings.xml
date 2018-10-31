@@ -59,7 +59,7 @@
     <string name="txtv_lbs_symbol">lbs</string>
 
     <!--Alert Dialog-->
-    <string name="dialog_title_profile_image_button">ADD PROFILE IMAGE</string>
+    <string name="dialog_title_profile_image_button">ADD PROFILE IMAGE?</string>
     <string name="dialog_message_profile_image_button">Select an option to set a profile photo.</string>
 
     <string name="dialog_button_file_picker">SELECT IMAGE</string>

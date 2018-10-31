@@ -1,15 +1,12 @@
 package com.example.mcresswell.project01.fragments;
 
 
-import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,8 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.mcresswell.project01.R;
-import com.example.mcresswell.project01.activities.AccountSettingsActivity;
-import com.example.mcresswell.project01.activities.LoginActivity;
 import com.example.mcresswell.project01.db.entity.Weather;
 import com.example.mcresswell.project01.ui.DashButton;
 import com.example.mcresswell.project01.ui.RV_Adapter;
@@ -35,7 +30,6 @@ import java.util.List;
 
 import static com.example.mcresswell.project01.util.Constants.CREATE;
 import static com.example.mcresswell.project01.util.Constants.CREATE_VIEW;
-import static com.example.mcresswell.project01.util.Constants.ON_CLICK;
 
 
 /**
@@ -65,9 +59,9 @@ public class DashboardFragment extends Fragment {
 
         super.onCreate(bundle);
 
-        initializeViewModels();
-
-        initializeWeatherListViewModel();
+//        initializeViewModels();
+//
+//        initializeWeatherListViewModel();
 
     }
 
@@ -114,11 +108,6 @@ public class DashboardFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         initializeRecyclerViewAdapater(view);
-
-        initializeFragmentView(view);
-
-        setOnClickListeners();
-
         return view;
     }
 
@@ -136,6 +125,9 @@ public class DashboardFragment extends Fragment {
         buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_img_hike, null), "HIKING"));
         buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_img_profile, null), "PROFILE"));
         buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_img_weather, null), "WEATHER"));
+        buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_launcher_settings, null), "SETTINGS"));
+        buttons.add(new DashButton(getResources().getDrawable(R.drawable.ic_launcher_logout, null), "LOG OUT"));
+
 
         m_Adaptor = new RV_Adapter(buttons);
 
@@ -143,51 +135,6 @@ public class DashboardFragment extends Fragment {
             m_RecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         }
         m_RecyclerView.setAdapter(m_Adaptor);
-    }
-
-    private void initializeFragmentView(View view){
-        m_logoutButton = view.findViewById(R.id.btn_logout);
-        m_settingsButton = view.findViewById(R.id.btn_settings);
-    }
-
-    private void setOnClickListeners() {
-        m_logoutButton.setOnClickListener(listener -> logoutButtonHandler());
-        m_settingsButton.setOnClickListener(listener -> settingsButtonHandler());
-    }
-
-    private void settingsButtonHandler() {
-        Log.d(LOG_TAG, ON_CLICK);
-        FragmentTransaction m_fTrans = getActivity().getSupportFragmentManager().beginTransaction();
-        if (!getResources().getBoolean(R.bool.isWideDisplay)) {
-            Intent intent = new Intent(getActivity(), AccountSettingsActivity.class);
-            startActivityForResult(intent, Activity.RESULT_OK);
-        } else {
-            m_fTrans.replace(R.id.fl_detail_wd, new AccountSettingsFragment());
-            m_fTrans.addToBackStack(null);
-            m_fTrans.commit();
-        }
-    }
-
-    private void logoutButtonHandler() {
-        Log.d(LOG_TAG, ON_CLICK);
-
-        FragmentTransaction m_fTrans = getActivity().getSupportFragmentManager().beginTransaction();
-        if (!getResources().getBoolean(R.bool.isWideDisplay)) {
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
-            startActivityForResult(intent, Activity.RESULT_OK);
-        } else {
-            m_fTrans.replace(R.id.fl_detail_wd, new LoginFragment());
-            m_fTrans.addToBackStack(null);
-            m_fTrans.commit();
-        }
-
-        resetViewModelData();
-    }
-
-    private void resetViewModelData() {
-        fitnessProfileViewModel = null;
-        userViewModel = null;
-        weatherViewModel = null;
     }
 
 }

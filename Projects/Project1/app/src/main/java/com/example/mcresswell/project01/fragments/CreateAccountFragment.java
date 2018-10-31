@@ -61,9 +61,9 @@ public class CreateAccountFragment extends Fragment {
     private void configureViewModels() {
         userViewModel = ViewModelProviders.of(getActivity()).get(UserViewModel.class);
 
-        userViewModel.getUser().observe(this, user -> {
-            Log.d(LOG_TAG, "UserViewModel observer for getUser()");
-        });
+//        userViewModel.getUser().observe(this, user -> {
+//            Log.d(LOG_TAG, "UserViewModel observer for getUser()");
+//        });
 
 
         userListViewModel = ViewModelProviders.of(getActivity()).get(UserListViewModel.class);
