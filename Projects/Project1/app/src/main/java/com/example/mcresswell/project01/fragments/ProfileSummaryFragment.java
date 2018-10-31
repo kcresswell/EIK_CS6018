@@ -41,11 +41,10 @@ public class ProfileSummaryFragment extends Fragment
 
     private UserViewModel m_userViewModel;
     private FitnessProfileViewModel m_fitnessProfileViewModel;
-    //UI Elements
+
     private Button m_editButton;
-    //    private Bitmap m_photo;
     private ImageButton m_profilePhoto;
-    private TextView m_firstName, m_lastName, m_sex, m_age, m_heightFeet, m_heightInches, m_city,
+    private TextView m_firstName, m_lastName, m_sex, m_age, m_heightFeet, m_heightInches, m_location,
             m_weight, m_activity, m_weightGoal;
 
     public ProfileSummaryFragment() { }
@@ -73,14 +72,13 @@ public class ProfileSummaryFragment extends Fragment
 
     private void initViewElements(View v) {
         m_firstName = v.findViewById(R.id.txtv_fname);
-        m_lastName = v.findViewById(R.id.txtv_lname);
+//        m_lastName = v.findViewById(R.id.txtv_lname);
         m_sex = v.findViewById(R.id.txtv_sex);
         m_age = v.findViewById(R.id.txtv_dob);
-        m_heightFeet = v.findViewById(R.id.txtv_feet);
-        m_heightInches = v.findViewById(R.id.txtv_inches);
+//        m_heightFeet = v.findViewById(R.id.txtv_feet);
+//        m_heightInches = v.findViewById(R.id.txtv_inches);
         m_weight = v.findViewById(R.id.txtv_weight);
-        m_city = v.findViewById(R.id.txtv_city);
-//        m_country = v.findViewById(R.id.txtv_country);
+        m_location = v.findViewById(R.id.txtv_city);
         m_activity = v.findViewById(R.id.radiogp_lifestyle);
         m_weightGoal = v.findViewById(R.id.radiogp_weightGoal);
         m_editButton = v.findViewById(R.id.btn_edit);
@@ -139,20 +137,25 @@ public class ProfileSummaryFragment extends Fragment
     private void autofillExistingFitnessProfileData(FitnessProfile fp) {
         Log.d(LOG_TAG, "Autofilling existing FitnessProfile data");
 
-        m_firstName.setText(formatCaseCity(fp.getM_fName()));
-        m_lastName.setText(formatCaseCity(fp.getM_lName()));
+        m_firstName.setText(String.format(Locale.US, "%s %s.",
+                formatCaseCity(fp.getM_fName()), fp.getM_lName().toUpperCase().charAt(0)));
+//        m_lastName.setText(formatCaseCity(fp.getM_lName()));
         m_sex.setText(fp.getM_sex().toUpperCase());
         m_age.setText(String.format(Locale.US, "%dy", calculateAge(fp.getM_dob())));
-        m_heightFeet.setText(String.format(Locale.US, "%d ft.,", fp.getM_heightFeet()));
-        m_heightInches.setText(String.format(Locale.US, " %d in.", fp.getM_heightInches()));
-        m_weight.setText(String.format(Locale.US, "%d ", fp.getM_weightInPounds()));
+//        m_heightFeet.setText(String.format(Locale.US, "%d ft.,", fp.getM_heightFeet()));
+//        m_heightInches.setText(String.format(Locale.US, " %d in.", fp.getM_heightInches()));
+        m_weight.setText(String.format(Locale.US, "%d lbs", fp.getM_weightInPounds()));
 
-        m_city.setText(String.format(Locale.US, "%s, %s", formatCaseCity(fp.getM_city()),
+        m_location.setText(String.format(Locale.US, "%s, %s", formatCaseCity(fp.getM_city()),
                 formatCaseCity(fp.getM_country())));
 //        m_country.setText("");
-        m_activity.setText(String.format("Activity Level: %s", formatCaseCity(fp.getM_lifestyleSelection().toLowerCase())));
-        m_weightGoal.setText(String.format(Locale.US, "Fitness Goal: %s %d lbs/week",
-                formatCaseCity(fp.getM_weightGoal()), Math.abs(fp.getM_lbsPerWeek())));
+        m_activity.setText(String.format("%s", formatCaseCity(fp.getM_lifestyleSelection().toLowerCase())));
+        if (fp.getM_weightGoal().equalsIgnoreCase("MAINTAIN")) {
+            m_weightGoal.setText("Maintain current weight");
+        } else {
+            m_weightGoal.setText(String.format(Locale.US, "%s %d lbs/week",
+                    formatCaseCity(fp.getM_weightGoal()), Math.abs(fp.getM_lbsPerWeek())));
+        }
 
     }
 
@@ -172,7 +175,7 @@ public class ProfileSummaryFragment extends Fragment
 //                            m_heightFeet.setText(String.format(Locale.US, "%d ft.,", fp.getM_heightFeet()));
 //                            m_heightInches.setText(String.format(Locale.US, " %d in.", fp.getM_heightInches()));
 //                            m_weight.setText(String.format(Locale.US, "%d ", fp.getM_weightInPounds()));
-//                            m_city.setText(String.format(Locale.US, "%s, %s",
+//                            m_location.setText(String.format(Locale.US, "%s, %s",
 //                                    formatCaseCity(fp.getM_city()), formatCaseCity(fp.getM_country())));
 //                            m_country.setText("");
 //                            m_activity.setText(String.format("Activity Level: ", fp.getM_lifestyleSelection().toLowerCase()));
@@ -230,8 +233,8 @@ public class ProfileSummaryFragment extends Fragment
             startActivity(intent);
         } else {
             FragmentTransaction m_fTrans = getActivity().getSupportFragmentManager().beginTransaction();
-            m_fTrans.replace(R.id.fl_activity_profile_summary, new ProfileEntryFragment(), "v_frag_profile");
-            m_fTrans.commit();
+            m_fTrans.replace(R.id.fl_master_wd, new DashboardFragment(), "v_frag_dashboard");
+            m_fTrans.replace(R.id.fl_detail_wd, new ProfileEntryFragment(), "v_frag_fitness");            m_fTrans.commit();
         }
     }
 

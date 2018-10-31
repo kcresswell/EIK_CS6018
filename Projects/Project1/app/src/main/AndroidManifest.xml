@@ -66,7 +66,6 @@
             android:parentActivityName=".activities.DashboardActivity" />
         <activity
             android:name=".activities.CreateAccountActivity"
-            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".activities.DashboardActivity" />
         <activity
             android:name=".activities.AccountSettingsActivity"

@@ -135,6 +135,7 @@ public class CreateAccountFragment extends Fragment {
         private void viewTransitionHandler() {
             if (getResources().getBoolean(R.bool.isWideDisplay)) {
                 FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fl_master_wd, new DashboardFragment());
                 fragmentTransaction.replace(R.id.fl_detail_wd, new ProfileEntryFragment());
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
