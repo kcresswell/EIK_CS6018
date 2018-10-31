@@ -3,10 +3,6 @@ package com.example.mcresswell.project01.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
-import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,7 +11,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -28,20 +23,16 @@ import android.widget.TextView;
 import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.activities.DashboardActivity;
 import com.example.mcresswell.project01.activities.ProfileEntryActivity;
-import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.util.Constants;
 import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 import com.example.mcresswell.project01.viewmodel.UserViewModel;
 
 import java.util.Locale;
 
-import retrofit2.http.HEAD;
-
 import static com.example.mcresswell.project01.util.Constants.CREATE_VIEW;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateAge;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateBMR;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateBmi;
-import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateCalories;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateDailyCaloricIntake;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateHeightInInches;
 
@@ -143,7 +134,7 @@ public class FitnessDetailsFragment extends Fragment {
     private void configureViewModels() {
         m_fitnessProfileViewModel = ViewModelProviders.of(getActivity()).get(FitnessProfileViewModel.class);
 
-        m_userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+        m_userViewModel = ViewModelProviders.of(getActivity()).get(UserViewModel.class);
 
         m_userViewModel.getUser().observe(this, user -> {
             Log.d(LOG_TAG, "UserViewModel observer for getUser()");
@@ -207,7 +198,9 @@ public class FitnessDetailsFragment extends Fragment {
             startActivity(intent);
         } else {
             FragmentTransaction m_fTrans = getActivity().getSupportFragmentManager().beginTransaction();
-            m_fTrans.replace(R.id.fl, new ProfileEntryFragment(), "v_frag_profile");
+            m_fTrans.replace(R.id.fl_master_wd, new DashboardFragment(), "v_frag_dashboard");
+            m_fTrans.replace(R.id.fl_detail_wd, new ProfileEntryFragment(), "v_frag_fitness");
+//            m_fTrans.replace(R.id.fl_master_, new ProfileEntryFragment(), "v_frag_profile");
             m_fTrans.commit();
         }
     }

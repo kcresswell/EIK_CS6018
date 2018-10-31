@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cl_fitnessDetails"
+    android:id="@+id/cl_fitness_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:scrollbars="none"
     android:layout_centerInParent="true"
     tools:context=".fragments.FitnessDetailsFragment">
-
 
     <!--<ScrollView-->
         <!--android:id="@+id/scrollV_profile"-->
@@ -34,7 +34,7 @@
             android:minWidth="300dp"
             android:padding="8dp"
             android:layout_margin="0dp"
-            android:isScrollContainer="true"
+            android:autoSizeTextType="uniform"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -191,4 +191,5 @@
                 tools:text="@string/tv_steps" />
         </android.support.constraint.ConstraintLayout>
 
-        </android.support.constraint.ConstraintLayout>
+        <!--</android.support.constraint.ConstraintLayout>-->
+</ScrollView>
