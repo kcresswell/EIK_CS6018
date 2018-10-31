@@ -43,7 +43,7 @@ public class FitnessProfileViewModel extends AndroidViewModel {
 
     public void setStepCount(Float m_numberOfSteps) {
         m_fitnessProfile.getValue().setM_stepCount(m_numberOfSteps);
-        m_fitnessProfile.getValue().setM_dateLastUpdated(new Date(2018, 10, 31));
+        m_fitnessProfile.getValue().setM_dateLastUpdated();
         insertNewFitnessProfile(m_fitnessProfile.getValue());
     }
 
