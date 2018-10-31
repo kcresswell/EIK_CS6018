@@ -83,7 +83,7 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
             double z = event.values[2];
 
             if (x > m_threashold || z > m_threashold) {
-//                Log.d(LOG_TAG, "onSensorChanged values beyond defined thresholds");
+                Log.d(LOG_TAG, "onSensorChanged values beyond defined thresholds");
                 //TODO: FIX THIS BEHAVIOR, CALLING THE FITNESS DETAILS BUTTON HANDLER CAUSES AN INFINITE LOOP
 //                fitnessDetailsButtonHandler();
 
