@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_create_account"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:scrollbars="none"
     tools:context=".fragments.CreateAccountFragment">
 
     <android.support.constraint.ConstraintLayout
@@ -13,18 +14,35 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:maxWidth="575dp"
-        android:minHeight="350dp"
+        android:layout_marginTop="24dp"
+        android:minHeight="400dp"
         android:minWidth="325dp"
-        android:padding="32dp"
+        android:padding="24dp"
         android:elevation="12dp"
+        android:layout_gravity="center"
         android:background="@drawable/gradient_button"
         android:backgroundTint="@color/widget_background_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/create_account_main_heading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="instyle"
+            android:textStyle="bold"
+            style="@style/AppTitle"
+            android:autoSizeMaxTextSize="70sp"
+            android:breakStrategy="balanced"
+            android:lineHeight="1dp"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tv_create_account_title"/>
+
 
         <TextView
             android:id="@+id/tv_create_account_title"
@@ -34,11 +52,11 @@
             android:maxWidth="550dp"
             android:text="@string/title_activity_create_account"
             android:textAlignment="center"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:breakStrategy="balanced"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/create_account_main_heading"
             tools:text="@string/title_activity_create_account" />
 
         <EditText
@@ -116,5 +134,4 @@
 
     </android.support.constraint.ConstraintLayout>
 
-</android.support.constraint.ConstraintLayout>
-
+</ScrollView>

@@ -156,7 +156,6 @@ public class LoginFragment extends Fragment {
         Observer userObserver = new Observer <User>() {
             @Override
             public void onChanged(@Nullable User user1) {
-//        userViewModel.getUser().observe(this, user1 -> {
                 if (user1 != null) {
 
                     userViewModel.getUser().removeObserver(this);
@@ -166,9 +165,8 @@ public class LoginFragment extends Fragment {
 
                         loginSuccessHandler();
                     }
-//                    if (!(user1.getEmail().equals(email) || user1.getPassword().equals(password))) {
                     else {
-                        Log.d(LOG_TAG, String.format(Locale.US,"User data stored in view model : %s %s %s %s", user1.getEmail(), user1.getFirstName(), user1.getLastName(), user1.getPassword()));
+                        Log.d(LOG_TAG, String.format(Locale.US,"User data stored in view model : %s %s %s", user1.getEmail(), user1.getFirstName(), user1.getLastName()));
                         Toast.makeText(getContext(), "Invalid login credentials.", Toast.LENGTH_SHORT).show();
 
                         m_password.setText("");
@@ -188,16 +186,16 @@ public class LoginFragment extends Fragment {
         }
 
         private void loginSuccessHandler() {
-        if (!getResources().getBoolean(R.bool.isWideDisplay)) {
+//        if (!getResources().getBoolean(R.bool.isWideDisplay)) {
             Intent intent = new Intent(getActivity(), DashboardActivity.class);
             startActivity(intent);
-        } else {
-            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fl_master_wd, new DashboardFragment());
-            fragmentTransaction.replace(R.id.fl_detail_wd, new FitnessDetailsFragment());
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-        }
+//        } else {
+//            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+//            fragmentTransaction.replace(R.id.fl_master_wd, new DashboardFragment());
+//            fragmentTransaction.replace(R.id.fl_detail_wd, new FitnessDetailsFragment());
+////            fragmentTransaction.addToBackStack(null);
+//            fragmentTransaction.commit();
+//        }
         }
 
     }
