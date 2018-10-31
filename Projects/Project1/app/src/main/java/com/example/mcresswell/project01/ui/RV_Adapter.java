@@ -59,6 +59,12 @@ public class RV_Adapter extends RecyclerView.Adapter<RV_Adapter.ViewHolder> {
         //set values of the button.
         viewHolder.btn_image_itemData.setImageDrawable(m_btn_img_ListItems.get(position).getImage());
         viewHolder.txtv_btn_lbl.setText(m_btn_img_ListItems.get(position).getText());
+        if(m_Context.getResources().getBoolean(R.bool.isWideDisplay)) {
+            viewHolder.btn_image_itemData.setScaleX(Float.valueOf("1.5"));
+            viewHolder.btn_image_itemData.setScaleY(Float.valueOf("1.5"));
+            viewHolder.btn_image_itemData.setPadding(0, 24, 0, 24);
+            viewHolder.txtv_btn_lbl.setTextSize(25);
+        }
         viewHolder.btn_image_itemData.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
