@@ -65,10 +65,6 @@ public class FitnessDetailsFragment extends Fragment {
     private SensorManager mSensorManager;
     private Sensor mStepCounter;
     private float m_numberOfSteps;
-<<<<<<< HEAD
-
-=======
->>>>>>> b0e54e5f654342fc002ac4f68415a85096e80ecc
 
     public FitnessDetailsFragment() { }
 
@@ -81,14 +77,9 @@ public class FitnessDetailsFragment extends Fragment {
     private final SensorEventListener mListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
-<<<<<<< HEAD
-            m_tvstepCount.setText("" + String.valueOf(sensorEvent.values[0]));
-            m_numberOfSteps = sensorEvent.values[0];
-=======
             m_numberOfSteps = (int) sensorEvent.values[0];
             Log.d(LOG_TAG, String.format(Locale.US, "Total step count: %d steps", m_numberOfSteps));
             m_tvstepCount.setText(String.format(Locale.US, "%d %s", m_numberOfSteps, STEPS));
->>>>>>> b0e54e5f654342fc002ac4f68415a85096e80ecc
             m_fitnessProfileViewModel.setStepCount(m_numberOfSteps);
         }
 
@@ -141,22 +132,6 @@ public class FitnessDetailsFragment extends Fragment {
         fitnessDetailsHeading.setText(String.format(Locale.US,"INSTYLE"));
         fitnessDetailsSubHeading.setText(String.format(Locale.US, "FITNESS DATA"));
 
-<<<<<<< HEAD
-            //null check for sensor count
-            if(Float.valueOf(m_numberOfSteps) == null) {
-//                m_tvstepCount.setText(String.format(Locale.US, INT_FORMAT + STEPS, 0));
-                m_numberOfSteps = 0;
-            } else {
-                m_tvstepCount.setText(String.format(Locale.US, DOUBLE_FORMAT + STEPS, m_numberOfSteps));
-            }
-        } else {
-            double caloricIntake = calculateCalories(m_fitnessProfile);
-            m_tvcalsToEat.setText(String.format(Locale.US,"%.1f calories", caloricIntake));
-            m_tvBMR.setText(String.format(Locale.US, "%.1f calories/day", m_fitnessProfile.getM_bmr()));
-            m_bodyMassIndex.setText(String.format(Locale.US, "%.1f", m_fitnessProfile.getM_bmi()));
-        }
-=======
->>>>>>> b0e54e5f654342fc002ac4f68415a85096e80ecc
 
         configureViewModels();
 
@@ -195,14 +170,9 @@ public class FitnessDetailsFragment extends Fragment {
                         m_tvcalsToEat.setText(String.format(Locale.US, DOUBLE_FORMAT + CALORIC_INTAKE, calculateDailyCaloricIntake(fp)));
                         m_tvBMR.setText(String.format(Locale.US, DOUBLE_FORMAT + BMR, basalMetabolicRate));
                         m_bodyMassIndex.setText(String.format(Locale.US, DOUBLE_FORMAT, bodyMassIndex));
-<<<<<<< HEAD
-                        m_tvstepCount.setText(String.format(Locale.US, DOUBLE_FORMAT + STEPS, m_numberOfSteps));
-
-=======
                         m_tvstepCount.setText(String.format(Locale.US, "%s %s",m_numberOfSteps, STEPS));
                     } else {
                         displayNoExistingFitnessProfileAlertDialog();
->>>>>>> b0e54e5f654342fc002ac4f68415a85096e80ecc
                     }
                 });
 

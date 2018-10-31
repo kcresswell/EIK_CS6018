@@ -16,15 +16,6 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
-<<<<<<< HEAD
-
-    <uses-feature android:name="android.hardware.sensor.stepcounter" />
-
-=======
-    <uses-feature
-        android:name="android.hardware.sensor.stepcounter"
-        android:required="true"/>
->>>>>>> b0e54e5f654342fc002ac4f68415a85096e80ecc
 
     <application
         android:name=".InStyleApp"

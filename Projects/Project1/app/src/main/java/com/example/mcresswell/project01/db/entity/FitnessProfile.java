@@ -9,10 +9,6 @@ import android.arch.persistence.room.PrimaryKey;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
-<<<<<<< HEAD
-
-=======
->>>>>>> b0e54e5f654342fc002ac4f68415a85096e80ecc
 import java.util.Date;
 
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateAge;
@@ -57,16 +53,6 @@ public class FitnessProfile {
     @ColumnInfo(name = "height_in")
     private int m_heightInches;
 
-<<<<<<< HEAD
-    @ColumnInfo(name = "stepCount")
-    private float m_stepCount;
-
-    @ColumnInfo(name = "dateLastUpdated")
-    private Date m_dateLastUpdated;
-
-    //fitness details
-=======
->>>>>>> b0e54e5f654342fc002ac4f68415a85096e80ecc
     @ColumnInfo(name = "lifestyle")
     private String m_lifestyleSelection;
 
@@ -85,11 +71,6 @@ public class FitnessProfile {
     @ColumnInfo(name = "user_id")
     private int userId;
 
-<<<<<<< HEAD
-
-    public FitnessProfile() {
-    }
-=======
     @ColumnInfo(name = "stepCount")
     private float m_stepCount;
 
@@ -100,7 +81,6 @@ public class FitnessProfile {
     private String m_profileImage;
 
     public FitnessProfile() { }
->>>>>>> b0e54e5f654342fc002ac4f68415a85096e80ecc
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public FitnessProfile(
@@ -193,14 +173,6 @@ public class FitnessProfile {
     public int getM_heightInches() { return m_heightInches; }
 
     public void setM_heightInches(int m_heightInches) { this.m_heightInches = m_heightInches; }
-
-    public float getM_stepCount() {return m_stepCount; }
-
-    public void setM_stepCount(Float m_stepCount) {this.m_stepCount = m_stepCount; }
-
-    public Date getM_dateLastUpdated() {return m_dateLastUpdated; }
-
-    public void setM_dateLastUpdated(Date m_dateLastUpdated) {this.m_dateLastUpdated = m_dateLastUpdated; }
 
     public double getM_bmi() { return m_bmi; }
 
