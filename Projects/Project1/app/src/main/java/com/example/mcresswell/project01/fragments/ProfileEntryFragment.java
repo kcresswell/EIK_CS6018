@@ -489,7 +489,6 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
     private void profileImageButtonHandler() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.dialog_title_profile_image_button);
-//            builder.setMessage(R.string.dialog_message_profile_image_button);
         builder.setIcon(R.drawable.ic_directions_run);
 
         builder.setPositiveButton(R.string.dialog_button_file_picker, new DialogInterface.OnClickListener() {

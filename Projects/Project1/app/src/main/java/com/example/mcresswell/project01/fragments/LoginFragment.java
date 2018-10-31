@@ -166,7 +166,8 @@ public class LoginFragment extends Fragment {
                         loginSuccessHandler();
                     }
                     else {
-                        Log.d(LOG_TAG, String.format(Locale.US,"User data stored in view model : %s %s %s", user1.getEmail(), user1.getFirstName(), user1.getLastName()));
+//                        Log.d(LOG_TAG, String.format(Locale.US,"User data stored in view model : %s %s %s",
+// user1.getEmail(), user1.getFirstName(), user1.getLastName()));
                         Toast.makeText(getContext(), "Invalid login credentials.", Toast.LENGTH_SHORT).show();
 
                         m_password.setText("");
@@ -186,16 +187,9 @@ public class LoginFragment extends Fragment {
         }
 
         private void loginSuccessHandler() {
-//        if (!getResources().getBoolean(R.bool.isWideDisplay)) {
+            //Have to enter dashboard through DashboardActivity not DashboardFragment regardless of mobile/tablet since Activity contains onclick listeners for buttons
             Intent intent = new Intent(getActivity(), DashboardActivity.class);
             startActivity(intent);
-//        } else {
-//            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-//            fragmentTransaction.replace(R.id.fl_master_wd, new DashboardFragment());
-//            fragmentTransaction.replace(R.id.fl_detail_wd, new FitnessDetailsFragment());
-////            fragmentTransaction.addToBackStack(null);
-//            fragmentTransaction.commit();
-//        }
         }
 
     }
