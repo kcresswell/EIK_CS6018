@@ -164,9 +164,6 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
     }
 
     private void executeDashboardButtonHandler(int buttonPosition) {
-        if (isWideDisplay()) {
-            m_fTrans = getSupportFragmentManager().beginTransaction();
-        }
         switch (buttonPosition) {
             case 0:
                 fitnessDetailsButtonHandler();
@@ -195,6 +192,8 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
             Intent intent = new Intent(this, FitnessDetailsActivity.class);
             startActivityForResult(intent, Activity.RESULT_OK);
         } else {
+            m_fTrans = getSupportFragmentManager().beginTransaction();
+
             m_fTrans.replace(R.id.fl_detail_wd, new FitnessDetailsFragment());
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
@@ -263,11 +262,12 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
 
     private void settingsButtonHandler() {
         Log.d(LOG_TAG, "Settings " + ON_CLICK);
-        FragmentTransaction m_fTrans = getSupportFragmentManager().beginTransaction();
         if (!getResources().getBoolean(R.bool.isWideDisplay)) {
             Intent intent = new Intent(this, AccountSettingsActivity.class);
             startActivityForResult(intent, Activity.RESULT_OK);
         } else {
+            FragmentTransaction m_fTrans = getSupportFragmentManager().beginTransaction();
+
             m_fTrans.replace(R.id.fl_detail_wd, new AccountSettingsFragment());
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
@@ -277,11 +277,12 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
     private void logoutButtonHandler() {
         Log.d(LOG_TAG, "Log out " + ON_CLICK);
 
-        FragmentTransaction m_fTrans = getSupportFragmentManager().beginTransaction();
         if (!getResources().getBoolean(R.bool.isWideDisplay)) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivityForResult(intent, Activity.RESULT_OK);
         } else {
+            FragmentTransaction m_fTrans = getSupportFragmentManager().beginTransaction();
+
             m_fTrans.replace(R.id.fl_detail_wd, new LoginFragment());
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();

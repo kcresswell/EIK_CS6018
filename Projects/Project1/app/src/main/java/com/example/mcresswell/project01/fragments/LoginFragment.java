@@ -132,6 +132,8 @@ public class LoginFragment extends Fragment {
 
         m_loginButton.setOnClickListener(view -> {
 
+            loginSuccessHandler();
+
             String email = m_email.getText().toString();
             String password = m_password.getText().toString();
 

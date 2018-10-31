@@ -61,7 +61,7 @@ public class FitnessDetailsFragment extends Fragment {
     private static final String BMR = " calories/day";
     private static final String STEPS = " steps";
 
-    private TextView m_tvcalsToEat, m_tvBMR, m_bodyMassIndex, m_tvstepCount;
+    private TextView m_tvcalsToEat, m_tvBMR, m_bodyMassIndex, m_tvstepCount, greetingHeader;
     private TextView  m_tvbmiClassification; //Implement this later when the fitness profile is working
     private FitnessProfileViewModel m_fitnessProfileViewModel;
     private UserViewModel m_userViewModel;
@@ -121,6 +121,7 @@ public class FitnessDetailsFragment extends Fragment {
         m_tvBMR = view.findViewById(R.id.tv_BMR);
         m_bodyMassIndex = view.findViewById(R.id.tv_bmi);
         m_tvstepCount = view.findViewById(R.id.tv_step_count);
+        greetingHeader = view.findViewById(R.id.fitness_details_main_header);
 
         m_tvcalsToEat.setText(String.format(Locale.US, DOUBLE_FORMAT + CALORIC_INTAKE, DEFAULT_CALS));
         m_tvBMR.setText(String.format(Locale.US, DOUBLE_FORMAT + BMR, DEFAULT_BMR));
@@ -131,6 +132,7 @@ public class FitnessDetailsFragment extends Fragment {
 
         m_numberOfSteps = Float.valueOf(m_numberOfSteps) == null ? 0 : m_numberOfSteps;
         m_tvstepCount.setText(String.format(Locale.US, "%s %s", m_numberOfSteps, STEPS));
+        greetingHeader.setText(String.format(Locale.US,"INSTYLE"));
 
 
         configureViewModels();
@@ -160,6 +162,7 @@ public class FitnessDetailsFragment extends Fragment {
                                 fp.getM_heightFeet(),
                                 fp.getM_heightInches()),
                                 fp.getM_weightInPounds());
+                        greetingHeader.setText(String.format(Locale.US,"%s %s!\n current fitness data:","Welcome back,", fp.getM_fName()));
                         m_numberOfSteps = fp.getM_stepCount();
                         m_tvcalsToEat.setText(String.format(Locale.US, DOUBLE_FORMAT + CALORIC_INTAKE, calculateDailyCaloricIntake(fp)));
                         m_tvBMR.setText(String.format(Locale.US, DOUBLE_FORMAT + BMR, basalMetabolicRate));
@@ -204,7 +207,7 @@ public class FitnessDetailsFragment extends Fragment {
             startActivity(intent);
         } else {
             FragmentTransaction m_fTrans = getActivity().getSupportFragmentManager().beginTransaction();
-            m_fTrans.replace(R.id.fl_master_nd_activity_fitness_details, new ProfileEntryFragment(), "v_frag_profile");
+            m_fTrans.replace(R.id.fl, new ProfileEntryFragment(), "v_frag_profile");
             m_fTrans.commit();
         }
     }

@@ -1,26 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_profile_edit"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:scrollbars="none"
+    android:layout_centerInParent="true"
     tools:context=".fragments.ProfileEntryFragment">
 
-    <ScrollView
-        android:id="@+id/scrollV_profile"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:maxWidth="650dp"
-        android:elevation="12dp"
-        android:fadeScrollbars="true"
-        android:scrollbarAlwaysDrawVerticalTrack="false"
-        android:scrollIndicators="none"
-        android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <!--<ScrollView-->
+        <!--android:id="@+id/scrollV_profile"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:maxWidth="650dp"-->
+        <!--android:elevation="12dp"-->
+        <!--android:fadeScrollbars="true"-->
+        <!--android:scrollbarAlwaysDrawVerticalTrack="false"-->
+        <!--android:scrollIndicators="none"-->
+        <!--android:background="@android:color/transparent"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent">-->
+
         <!--Profile entry Page Accent Green Headings-->
 
 
@@ -32,6 +35,7 @@
             android:minWidth="300dp"
             android:padding="8dp"
             android:layout_margin="0dp"
+            android:autoSizeTextType="uniform"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -425,4 +429,4 @@
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
 
-</android.support.constraint.ConstraintLayout>
+<!--</android.support.constraint.ConstraintLayout>-->
