@@ -1,10 +1,12 @@
 package com.example.mcresswell.project01.fragments;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -57,15 +59,15 @@ public class CreateAccountFragment extends Fragment {
     }
 
     private void configureViewModels() {
-        userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+        userViewModel = ViewModelProviders.of(getActivity()).get(UserViewModel.class);
 
-        userViewModel.getUser().observe(this, user -> {
-            Log.d(LOG_TAG, "UserViewModel observer for getUser()");
-        });
+//        userViewModel.getUser().observe(this, user -> {
+//            Log.d(LOG_TAG, "UserViewModel observer for getUser()");
+//        });
 
 
-        userListViewModel = ViewModelProviders.of(this).get(UserListViewModel.class);
-        fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
+        userListViewModel = ViewModelProviders.of(getActivity()).get(UserListViewModel.class);
+        fitnessProfileViewModel = ViewModelProviders.of(getActivity()).get(FitnessProfileViewModel.class);
     }
 
 
@@ -105,18 +107,32 @@ public class CreateAccountFragment extends Fragment {
             User newUser = createNewUser();
             //Add new user to database
             userViewModel.createUser(newUser);
+            Observer observer = new Observer<User>() {
+                @Override
+                public void onChanged(@Nullable User user) {
+                    if (user != null) {
+                        if (newUser.getEmail().equals(user.getEmail())) {
 
-            //Add observer that logs all of the records in the database after this user has been added
-            userListViewModel.getUserList().observe(this, userList -> {
-                if (userList != null) {
-                    userList.forEach(each -> {
-                        Log.d(LOG_TAG, String.format(
-                                "User record: id=%d, email='%s', firstName='%s', lastName='%s'",
-                                each.getId(), each.getEmail(), each.getFirstName(), each.getLastName()));
-                    });
+                            userViewModel.getUser().removeObserver(this);
+                            viewTransitionHandler();
+                        }
+                    }
                 }
-            });
+            };
+            userViewModel.getUser().observe(this, observer);
+//            //Add observer that logs all of the records in the database after this user has been added
+//            userListViewModel.getUserList().observe(this, userList -> {
+//                if (userList != null) {
+//                    userList.forEach(each -> {
+//                        Log.d(LOG_TAG, String.format(
+//                                "User record: id=%d, email='%s', firstName='%s', lastName='%s'",
+//                                each.getId(), each.getEmail(), each.getFirstName(), each.getLastName()));
+//                    });
+//                }
+            }
+        }
 
+        private void viewTransitionHandler() {
             if (getResources().getBoolean(R.bool.isWideDisplay)) {
                 FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fl_detail_wd, new ProfileEntryFragment());
@@ -127,71 +143,69 @@ public class CreateAccountFragment extends Fragment {
                 startActivity(intent);
             }
         }
-    }
 
-    @NonNull
-    private User createNewUser() {
-        User newUser = new User();
-        newUser.setEmail(m_email.getText().toString());
-        newUser.setPassword(m_password.getText().toString());
-        newUser.setFirstName(m_firstName.getText().toString());
-        newUser.setLastName(m_lastName.getText().toString());
-        newUser.setJoinDate(Date.from(Instant.now()));
-        return newUser;
-    }
+        private User createNewUser() {
+            User newUser = new User();
+            newUser.setEmail(m_email.getText().toString());
+            newUser.setPassword(m_password.getText().toString());
+            newUser.setFirstName(m_firstName.getText().toString());
+            newUser.setLastName(m_lastName.getText().toString());
+            newUser.setJoinDate(Date.from(Instant.now()));
+            return newUser;
+        }
 
-    private boolean isUniqueUserLogin(String email) {
-        LiveData<User> userResult = userViewModel.findUser(email);
-        if (userResult.getValue() != null && userResult.getValue().getEmail().equals(email)) {
-            Log.d(LOG_TAG, "Email is not unique. A user with that email already exists.");
+        private boolean isUniqueUserLogin(String email) {
+            LiveData<User> userResult = userViewModel.findUser(email);
+            if (userResult.getValue() != null && userResult.getValue().getEmail().equals(email)) {
+                Log.d(LOG_TAG, "Email is not unique. A user with that email already exists.");
 //            Log.d(LOG_TAG, "EMAIL: " + userViewModel.getUser().getValue().getEmail());
 //            Log.d(LOG_TAG, "PASSOWRD: " + userViewModel.getUser().getValue().getPassword());
 //            Log.d(LOG_TAG, "First name: " +userViewModel.getUser().getValue().getFirstName());
 //            Log.d(LOG_TAG, "Last Name: " + userViewModel.getUser().getValue().getLastName());
 //            Log.d(LOG_TAG, "Date joined: " +userViewModel.getUser().getValue().getJoinDate());
 
-            Log.d(LOG_TAG, "EMAIL: " + userResult.getValue().getEmail());
-            Log.d(LOG_TAG, "PASSOWRD: " + userResult.getValue().getPassword());
-            Log.d(LOG_TAG, "First name: " + userResult.getValue().getFirstName());
-            Log.d(LOG_TAG, "Last Name: " + userResult.getValue().getLastName());
-            Log.d(LOG_TAG, "Date joined: " + userResult.getValue().getJoinDate());
+                Log.d(LOG_TAG, "EMAIL: " + userResult.getValue().getEmail());
+                Log.d(LOG_TAG, "PASSOWRD: " + userResult.getValue().getPassword());
+                Log.d(LOG_TAG, "First name: " + userResult.getValue().getFirstName());
+                Log.d(LOG_TAG, "Last Name: " + userResult.getValue().getLastName());
+                Log.d(LOG_TAG, "Date joined: " + userResult.getValue().getJoinDate());
 
-            return false;
+                return false;
+            }
+            return true;
         }
-        return true;
+
+        private boolean isAccountDataValid () {
+            if (!isValidEmail(m_email.getText().toString())) {
+                Toast.makeText(getContext(), "Invalid email.", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            if (!isNotNullOrEmpty(m_password.getText().toString())) {
+                Toast.makeText(getContext(), "Invalid password.", Toast.LENGTH_SHORT).show();
+
+            }
+            else if (!isValidAlphaChars(m_firstName.getText().toString())) {
+                Toast.makeText(getContext(), "Invalid first name.", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            else if (!isValidAlphaChars(m_lastName.getText().toString())) {
+                Toast.makeText(getContext(), "Invalid last name.", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        public void onViewStateRestored (Bundle savedInstanceState) {
+            Log.d(LOG_TAG, VIEW_STATE_RESTORED);
+            super.onViewStateRestored(savedInstanceState);
+
+        }
+
+        @Override
+        public void onSaveInstanceState(Bundle bundle) {
+            Log.d(LOG_TAG, SAVE_INSTANCE_STATE);
+
+            super.onSaveInstanceState(bundle);
+        }
     }
-
-    private boolean isAccountDataValid () {
-        if (!isValidEmail(m_email.getText().toString())) {
-            Toast.makeText(getContext(), "Invalid email.", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (!isNotNullOrEmpty(m_password.getText().toString())) {
-            Toast.makeText(getContext(), "Invalid password.", Toast.LENGTH_SHORT).show();
-
-        }
-        else if (!isValidAlphaChars(m_firstName.getText().toString())) {
-            Toast.makeText(getContext(), "Invalid first name.", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        else if (!isValidAlphaChars(m_lastName.getText().toString())) {
-            Toast.makeText(getContext(), "Invalid last name.", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public void onViewStateRestored (Bundle savedInstanceState) {
-        Log.d(LOG_TAG, VIEW_STATE_RESTORED);
-        super.onViewStateRestored(savedInstanceState);
-
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle bundle) {
-        Log.d(LOG_TAG, SAVE_INSTANCE_STATE);
-
-        super.onSaveInstanceState(bundle);
-    }
-}

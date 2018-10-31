@@ -9,7 +9,10 @@ import android.arch.persistence.room.PrimaryKey;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> b0e54e5f654342fc002ac4f68415a85096e80ecc
 import java.util.Date;
 
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateAge;
@@ -17,15 +20,15 @@ import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculat
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateBmi;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateHeightInInches;
 
-@Entity(/*foreignKeys = @ForeignKey(entity = User.class,
+@Entity(foreignKeys = @ForeignKey(entity = User.class,
                             parentColumns = "id",
-                            childColumns = "user_id"),*/
+                            childColumns = "user_id"),
         indices = {@Index(value = {"user_id"}, unique = true)})
 public class FitnessProfile {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    private int m_Id; //THIS IS THE FITNESS PROFILE ID, NOT THE USER ID.
+    private int m_Id;
 
     @ColumnInfo(name = "first_name")
     private String m_fName;
@@ -33,14 +36,12 @@ public class FitnessProfile {
     @ColumnInfo(name = "last_name")
     private String m_lName;
 
-    //location
     @ColumnInfo(name = "city")
     private String m_city;
 
     @ColumnInfo(name = "country")
     private String m_country;
 
-    //physical profile
     @ColumnInfo(name = "dob")
     private String m_dob;
 
@@ -56,6 +57,7 @@ public class FitnessProfile {
     @ColumnInfo(name = "height_in")
     private int m_heightInches;
 
+<<<<<<< HEAD
     @ColumnInfo(name = "stepCount")
     private float m_stepCount;
 
@@ -63,6 +65,8 @@ public class FitnessProfile {
     private Date m_dateLastUpdated;
 
     //fitness details
+=======
+>>>>>>> b0e54e5f654342fc002ac4f68415a85096e80ecc
     @ColumnInfo(name = "lifestyle")
     private String m_lifestyleSelection;
 
@@ -77,14 +81,26 @@ public class FitnessProfile {
 
     @ColumnInfo(name = "bmr")
     private double m_bmr;
-//    private Bitmap m_profilePicture;
 
     @ColumnInfo(name = "user_id")
-    private int userId; //THIS IS THE USER ID FOREIGN KEY FIELD.
+    private int userId;
 
+<<<<<<< HEAD
 
     public FitnessProfile() {
     }
+=======
+    @ColumnInfo(name = "stepCount")
+    private float m_stepCount;
+
+    @ColumnInfo(name = "dateLastUpdated")
+    private Date m_dateLastUpdated;
+
+    @ColumnInfo(name = "profile_image")
+    private String m_profileImage;
+
+    public FitnessProfile() { }
+>>>>>>> b0e54e5f654342fc002ac4f68415a85096e80ecc
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public FitnessProfile(
@@ -122,86 +138,49 @@ public class FitnessProfile {
 
         m_bmi = calculateBmi(calculateHeightInInches(m_heightFeet, m_heightInches), m_weightInPounds);
         m_bmr = calculateBMR(m_heightFeet, m_heightInches, m_sex, m_weightInPounds, calculateAge(m_dob));
-//        m_profilePicture = profileImage;
     }
 
     public int getM_Id() { return m_Id; }
 
-    public void setM_Id(int m_Id) {
-        this.m_Id = m_Id;
-    }
+    public void setM_Id(int m_Id) { this.m_Id = m_Id; }
 
-    public String getM_fName() {
-        return m_fName;
-    }
+    public String getM_fName() { return m_fName; }
 
-    public void setM_fName(String m_fName) {
-        this.m_fName = m_fName;
-    }
+    public void setM_fName(String m_fName) { this.m_fName = m_fName; }
 
-    public String getM_lName() {
-        return m_lName;
-    }
+    public String getM_lName() { return m_lName; }
 
-    public void setM_lName(String m_lName) {
-        this.m_lName = m_lName;
-    }
+    public void setM_lName(String m_lName) { this.m_lName = m_lName; }
 
-    public String getM_dob() {
-        return m_dob;
-    }
+    public String getM_dob() { return m_dob; }
 
-    public void setM_dob(String m_dob) {
-        this.m_dob = m_dob;
-    }
+    public void setM_dob(String m_dob) { this.m_dob = m_dob; }
 
-    public String getM_sex() {
-        return m_sex;
-    }
+    public String getM_sex() { return m_sex; }
 
-    public void setM_sex(String m_sex) {
-        this.m_sex = m_sex;
-    }
+    public void setM_sex(String m_sex) { this.m_sex = m_sex; }
 
-    public String getM_city() {
-        return m_city;
-    }
+    public String getM_city() { return m_city; }
 
-    public void setM_city(String m_city) {
-        this.m_city = m_city;
-    }
+    public void setM_city(String m_city) { this.m_city = m_city; }
 
-    public String getM_country() {
-        return m_country;
-    }
+    public String getM_country() { return m_country; }
 
-    public void setM_country(String m_country) {
-        this.m_country = m_country;
-    }
+    public void setM_country(String m_country) { this.m_country = m_country; }
 
-    public String getM_lifestyleSelection() {
-        return m_lifestyleSelection;
-    }
+    public String getM_lifestyleSelection() { return m_lifestyleSelection; }
 
     public void setM_lifestyleSelection(String m_lifestyleSelection) {
         this.m_lifestyleSelection = m_lifestyleSelection;
     }
 
-    public String getM_weightGoal() {
-        return m_weightGoal;
-    }
+    public String getM_weightGoal() { return m_weightGoal; }
 
-    public void setM_weightGoal(String m_weightGoal) {
-        this.m_weightGoal = m_weightGoal;
-    }
+    public void setM_weightGoal(String m_weightGoal) { this.m_weightGoal = m_weightGoal; }
 
-    public int getM_lbsPerWeek() {
-        return m_lbsPerWeek;
-    }
+    public int getM_lbsPerWeek() { return m_lbsPerWeek; }
 
-    public void setM_lbsPerWeek(int m_lbsPerWeek) {
-        this.m_lbsPerWeek = m_lbsPerWeek;
-    }
+    public void setM_lbsPerWeek(int m_lbsPerWeek) { this.m_lbsPerWeek = m_lbsPerWeek; }
 
     public int getM_weightInPounds() { return m_weightInPounds; }
 
@@ -231,11 +210,19 @@ public class FitnessProfile {
 
     public void setM_bmr(double m_bmr) { this.m_bmr = m_bmr; }
 
-    public int getUserId() {
-        return userId;
-    }
+    public int getUserId() { return userId; }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
+    public void setUserId(int userId) { this.userId = userId; }
+
+    public float getM_stepCount() {return m_stepCount; }
+
+    public void setM_stepCount(float m_stepCount) {this.m_stepCount = m_stepCount; }
+
+    public Date getM_dateLastUpdated() {return m_dateLastUpdated; }
+
+    public void setM_dateLastUpdated(Date m_dateLastUpdated) {this.m_dateLastUpdated = m_dateLastUpdated; }
+
+    public String getM_profileImage() { return m_profileImage; }
+
+    public void setM_profileImage(String m_profileImage) { this.m_profileImage = m_profileImage; }
 }

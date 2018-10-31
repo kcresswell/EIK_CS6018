@@ -47,7 +47,7 @@
     <string name="hint_country">COUNTRY NAME</string>
     <string name="btn_done">Done</string>
     <string name="btn_img_description_profile_image">Take a profile picture</string>
-    <string name="hint_dob">DOB</string>
+    <string name="hint_dob">Select DOB</string>
     <string name="hint_lifestyle">ACTIVITY LEVEL</string>
     <string name="hint_wGoal">WEIGHT GOAL</string>
 
@@ -56,11 +56,20 @@
     <string name="txtv_in_symbol">in</string>
     <string name="txtv_lbs_symbol">lbs</string>
 
+    <!--Alert Dialog-->
+    <string name="dialog_title_profile_image_button">ADD PROFILE IMAGE</string>
+    <string name="dialog_message_profile_image_button">Select an option to set a profile photo.</string>
+
+    <string name="dialog_button_file_picker">SELECT IMAGE</string>
+    <string name="dialog_button_camera">TAKE PHOTO</string>
+    <string name="dialog_button_dismiss">DISMISS</string>
+
+
     <!--Green Headers on Profile Entry/Summary Pages-->
-    <string name="txtv_label_location">Location</string>
-    <string name="txtv_label_fitness">Physical Data</string>
-    <string name="txtv_label_lifestyle">Lifestyle</string>
-    <string name="txtv_label_goal">Weight Management Plan</string>
+    <string name="txtv_label_location">LOCATION</string>
+    <string name="txtv_label_fitness">FITNESS/LIFESTYLE DATA</string>
+    <string name="txtv_label_lifestyle">LIFESTYLE</string>
+    <string name="txtv_label_goal">WEIGHT GOAL</string>
 
     <string name="btn_radio_sedentary">SEDENTARY</string>
     <string name="btn_radio_active">ACTIVE</string>
@@ -73,7 +82,11 @@
 
     <!--Profile Summary-->
     <string name="hint_wkly_goal">lbs/wk</string>
-
+    <!--Alert Dialog-->
+    <string name="ok">OK</string>
+    <string name="cancel">CANCEL</string>
+    <string name="dialog_title">CREATE A FITNESS PROFILE?</string>
+    <string name="dialog_message">"You do not have a fitness profile yet. Click OK to create your fitness profile."</string>
     <!--Hiking-->
     <string name="title_activity_hiking">Hiking</string>
     <string name="hiking_current_location">Location</string>

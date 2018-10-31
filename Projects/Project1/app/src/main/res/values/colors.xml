@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#62f1bc</color>
+    <color name="colorPrimary">#98FDCF</color>
     <color name="colorPrimaryDark">#1d1d1d</color>
-    <color name="colorAccent">#484848</color>
+    <color name="colorAccent">#555555</color>
     <color name="colorBackgroundLight">#c3c4c4</color>
+    <color name="colorSplashScreen">#89d7a9</color>
 
     <color name="widget_background_color">#ffffff</color>
     <color name="widget_foreground_color">#e6ffffff</color>

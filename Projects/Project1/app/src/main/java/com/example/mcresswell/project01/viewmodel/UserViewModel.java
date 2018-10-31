@@ -59,6 +59,7 @@ public class UserViewModel extends AndroidViewModel {
 
     public void createUser(User user) {
         m_userRepository.insert(user);
+        m_observableUser.setValue(user);
     }
 
     public void updateUser(User user) {
@@ -75,6 +76,11 @@ public class UserViewModel extends AndroidViewModel {
 
     public LiveData<User> getUser() {
         return m_observableUser;
+    }
+
+    public void resetUser() {
+        m_observableUser.setValue(null);
+
     }
 
 }

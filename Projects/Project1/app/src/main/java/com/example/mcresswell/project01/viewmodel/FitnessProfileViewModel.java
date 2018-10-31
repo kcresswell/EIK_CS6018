@@ -9,14 +9,19 @@ import android.support.annotation.NonNull;
 import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.db.repo.FitnessProfileRepository;
 import com.example.mcresswell.project01.fragments.FitnessDetailsFragment;
+<<<<<<< HEAD
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
+=======
+>>>>>>> b0e54e5f654342fc002ac4f68415a85096e80ecc
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
 public class FitnessProfileViewModel extends AndroidViewModel {
-
-    private static final String LOG = FitnessProfileViewModel.class.getSimpleName();
 
     private LiveData<FitnessProfile> m_fitnessProfile;
     private FitnessProfileRepository m_fitnessProfileRepository;
