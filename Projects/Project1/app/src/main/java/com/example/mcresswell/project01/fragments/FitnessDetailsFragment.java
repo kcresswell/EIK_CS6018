@@ -204,7 +204,9 @@ public class FitnessDetailsFragment extends Fragment {
             startActivity(intent);
         } else {
             FragmentTransaction m_fTrans = getActivity().getSupportFragmentManager().beginTransaction();
-            m_fTrans.replace(R.id.fl_master_nd_activity_fitness_details, new ProfileEntryFragment(), "v_frag_profile");
+            m_fTrans.replace(R.id.fl_master_wd, new DashboardFragment(), "v_frag_dashboard");
+//            m_fTrans.replace(R.id.fl_detail_wd, new ProfileEntryFragment(), "v_frag_fitness");
+//            m_fTrans.replace(R.id.fl_master_, new ProfileEntryFragment(), "v_frag_profile");
             m_fTrans.commit();
         }
     }
