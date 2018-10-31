@@ -9,23 +9,7 @@
     android:layout_centerInParent="true"
     tools:context=".fragments.ProfileEntryFragment">
 
-    <!--<ScrollView-->
-        <!--android:id="@+id/scrollV_profile"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:maxWidth="650dp"-->
-        <!--android:elevation="12dp"-->
-        <!--android:fadeScrollbars="true"-->
-        <!--android:scrollbarAlwaysDrawVerticalTrack="false"-->
-        <!--android:scrollIndicators="none"-->
-        <!--android:background="@android:color/transparent"-->
-        <!--app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent">-->
-
         <!--Profile entry Page Accent Green Headings-->
-
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/constraintLayout2"
@@ -281,7 +265,7 @@
                     android:labelFor="@id/slider_lifestyle"
                     android:text="SEDENTARY"
                     android:textAlignment="textStart"
-
+                    android:autoSizeMaxTextSize="18sp"
                     android:layout_weight="1"
 
                     android:textSize="12sp"
@@ -293,6 +277,7 @@
                     android:layout_height="wrap_content"
                     android:labelFor="@id/slider_lifestyle"
                     android:textAlignment="center"
+                    android:autoSizeMaxTextSize="18sp"
 
                     android:layout_weight="1"
                     android:text="MODERATE"
@@ -305,6 +290,7 @@
                     android:layout_weight="1"
                     android:textAlignment="textEnd"
                     android:labelFor="@id/slider_lifestyle"
+                    android:autoSizeMaxTextSize="18sp"
 
                     android:text="ACTIVE"
                     android:textSize="12sp" />
@@ -357,6 +343,8 @@
                     android:layout_height="match_parent"
                     android:labelFor="@id/slider_weight_goal"
                     android:text="LOSE"
+                    android:autoSizeMaxTextSize="18sp"
+
                     android:textSize="12sp"
                     android:layout_weight="1"
                     android:textAlignment="textStart" />
@@ -368,6 +356,8 @@
                     android:labelFor="@id/slider_weight_goal"
                     android:layout_weight="1"
                     android:textAlignment="center"
+                    android:autoSizeMaxTextSize="18sp"
+
                     android:text="MAINTAIN"
                     android:textSize="12sp" />
 
@@ -377,6 +367,8 @@
                     android:layout_height="match_parent"
                     android:labelFor="@id/slider_weight_goal"
                     android:layout_weight="1"
+                    android:autoSizeMaxTextSize="18sp"
+
                     android:textAlignment="textEnd"
                     android:text="GAIN"
 
@@ -419,8 +411,8 @@
                 android:layout_width="147dp"
                 android:layout_height="134dp"
                 android:background="@android:color/transparent"
-                android:maxHeight="200dp"
-                android:maxWidth="200dp"
+                android:maxHeight="300dp"
+                android:maxWidth="300dp"
                 android:padding="12dp"
                 android:src="@drawable/ic_launcher_camera"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -182,7 +182,7 @@ public class WeatherFragment extends ListFragment {
                 location.setText(val);
                 return;
             }
-            data.add(key + "\t" + val);
+            data.add(key + " " + val);
         });
         ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
                 R.layout.item_weather_widget,

@@ -16,6 +16,7 @@
         android:paddingTop="24dp"
         android:paddingBottom="12dp"
         android:contentDescription="@string/btn_generic"
+        android:background="@android:color/transparent"
         android:src="@drawable/ic_img_profile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

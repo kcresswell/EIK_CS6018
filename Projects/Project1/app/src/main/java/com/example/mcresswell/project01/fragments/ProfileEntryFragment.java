@@ -41,6 +41,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.activities.DashboardActivity;
 import com.example.mcresswell.project01.activities.ProfileSummaryActivity;
 import com.example.mcresswell.project01.db.entity.User;
 import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
@@ -430,10 +431,12 @@ public class ProfileEntryFragment extends Fragment implements View.OnClickListen
             Intent intent = new Intent(getContext(), ProfileSummaryActivity.class);
             startActivity(intent);
         } else {
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fl_detail_wd, new ProfileSummaryFragment());
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
+//            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+//            fragmentTransaction.replace(R.id.fl_detail_wd, new ProfileSummaryFragment());
+//            fragmentTransaction.addToBackStack(null);
+//            fragmentTransaction.commit();
+            Intent intent = new Intent(getContext(), DashboardActivity.class);
+            startActivity(intent);
         }
     }
 

@@ -14,6 +14,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,7 +57,7 @@ public class FitnessDetailsFragment extends Fragment {
     private static final String BMR = " calories/day";
     private static final String STEPS = " steps";
 
-    private TextView m_tvcalsToEat, m_tvBMR, m_bodyMassIndex, m_tvstepCount, greetingHeader;
+    private TextView m_tvcalsToEat, m_tvBMR, m_bodyMassIndex, m_tvstepCount, fitnessDetailsHeading, fitnessDetailsSubHeading;
     private TextView  m_tvbmiClassification; //Implement this later when the fitness profile is working
     private FitnessProfileViewModel m_fitnessProfileViewModel;
     private UserViewModel m_userViewModel;
@@ -112,7 +117,8 @@ public class FitnessDetailsFragment extends Fragment {
         m_tvBMR = view.findViewById(R.id.tv_BMR);
         m_bodyMassIndex = view.findViewById(R.id.tv_bmi);
         m_tvstepCount = view.findViewById(R.id.tv_step_count);
-        greetingHeader = view.findViewById(R.id.fitness_details_main_header);
+        fitnessDetailsHeading = view.findViewById(R.id.fitness_details_main_header);
+        fitnessDetailsSubHeading = view.findViewById(R.id.fitness_details_sub_header);
 
         m_tvcalsToEat.setText(String.format(Locale.US, DOUBLE_FORMAT + CALORIC_INTAKE, DEFAULT_CALS));
         m_tvBMR.setText(String.format(Locale.US, DOUBLE_FORMAT + BMR, DEFAULT_BMR));
@@ -123,7 +129,8 @@ public class FitnessDetailsFragment extends Fragment {
 
         m_numberOfSteps = Float.valueOf(m_numberOfSteps) == null ? 0 : m_numberOfSteps;
         m_tvstepCount.setText(String.format(Locale.US, "%s %s", m_numberOfSteps, STEPS));
-        greetingHeader.setText(String.format(Locale.US,"INSTYLE"));
+        fitnessDetailsHeading.setText(String.format(Locale.US,"INSTYLE"));
+        fitnessDetailsSubHeading.setText(String.format(Locale.US, "FITNESS DATA"));
 
 
         configureViewModels();
@@ -153,7 +160,12 @@ public class FitnessDetailsFragment extends Fragment {
                                 fp.getM_heightFeet(),
                                 fp.getM_heightInches()),
                                 fp.getM_weightInPounds());
-                        greetingHeader.setText(String.format(Locale.US,"%s %s!\n current fitness data:","Welcome back,", fp.getM_fName()));
+
+//                        SpannableString spannableString = new SpannableString(String.format(Locale.US,"FITNESS DATA FOR %s", fp.getM_fName()));
+//                        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorPrimary)), 16,
+//                                spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                        spannableString.setSpan(new RelativeSizeSpan(2.0f), 16, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        fitnessDetailsSubHeading.setText(String.format(Locale.US,"FITNESS DATA FOR %s", fp.getM_fName()));
                         m_numberOfSteps = fp.getM_stepCount();
                         m_tvcalsToEat.setText(String.format(Locale.US, DOUBLE_FORMAT + CALORIC_INTAKE, calculateDailyCaloricIntake(fp)));
                         m_tvBMR.setText(String.format(Locale.US, DOUBLE_FORMAT + BMR, basalMetabolicRate));
@@ -164,6 +176,8 @@ public class FitnessDetailsFragment extends Fragment {
                     }
                 });
 
+            } else {
+                displayNoExistingFitnessProfileAlertDialog();
             }
         });
     }
@@ -183,9 +197,17 @@ public class FitnessDetailsFragment extends Fragment {
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 Log.d(LOG_TAG, "Dialog cancel button clicked");
-                //Go back to dashboard
-                Intent intent = new Intent(getContext(), DashboardActivity.class);
-                startActivity(intent);
+                //Go back to dashboard but display weather fragment instead of fitness details to prevent loop
+                if (!getResources().getBoolean(R.bool.isWideDisplay)) {
+                    Intent intent = new Intent(getContext(), DashboardActivity.class);
+                    startActivity(intent);
+                } else {
+                    FragmentTransaction m_fTrans = getActivity().getSupportFragmentManager().beginTransaction();
+                    m_fTrans.replace(R.id.fl_master_wd, new DashboardFragment(), "v_frag_dashboard");
+                    m_fTrans.replace(R.id.fl_detail_wd, new WeatherFragment(), "v_frag_fitness");
+//            m_fTrans.replace(R.id.fl_master_, new ProfileEntryFragment(), "v_frag_profile");
+                    m_fTrans.commit();
+                }
             }
         });
 

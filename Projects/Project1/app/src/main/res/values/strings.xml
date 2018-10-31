@@ -26,7 +26,7 @@
     <!--Fitness Details-->
 
     <!--Fitness Details Headers-->
-    <string name="calories">Recommended Caloric Intake</string>
+    <string name="calories">Daily Caloric Intake</string>
     <string name="bmr">Basal Metabolic Rate (BMR)</string>
     <string name="bmi">Body Mass Index (BMI)</string>
     <string name="steps">Daily Step Count</string>
@@ -59,11 +59,11 @@
     <string name="txtv_lbs_symbol">lbs</string>
 
     <!--Alert Dialog-->
-    <string name="dialog_title_profile_image_button">ADD PROFILE IMAGE?</string>
+    <string name="dialog_title_profile_image_button">ADD A PROFILE IMAGE?</string>
     <string name="dialog_message_profile_image_button">Select an option to set a profile photo.</string>
 
-    <string name="dialog_button_file_picker">SELECT IMAGE</string>
-    <string name="dialog_button_camera">TAKE PHOTO</string>
+    <string name="dialog_button_file_picker">SELECT EXISTING IMAGE</string>
+    <string name="dialog_button_camera">TAKE A PHOTO</string>
     <string name="dialog_button_dismiss">DISMISS</string>
 
 
