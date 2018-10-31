@@ -83,7 +83,8 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
             double z = event.values[2];
 
             if (x > m_threashold || z > m_threashold) {
-                //TODO: Fill in behavior
+                Log.d(LOG_TAG, "onSensorChanged values beyond defined thresholds");
+                //TODO: FIX THIS BEHAVIOR, CALLING THE FITNESS DETAILS BUTTON HANDLER CAUSES AN INFINITE LOOP
                 fitnessDetailsButtonHandler();
 
             }
@@ -164,9 +165,6 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
     }
 
     private void executeDashboardButtonHandler(int buttonPosition) {
-        if (isWideDisplay()) {
-            m_fTrans = getSupportFragmentManager().beginTransaction();
-        }
         switch (buttonPosition) {
             case 0:
                 fitnessDetailsButtonHandler();
@@ -195,6 +193,8 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
             Intent intent = new Intent(this, FitnessDetailsActivity.class);
             startActivityForResult(intent, Activity.RESULT_OK);
         } else {
+            m_fTrans = getSupportFragmentManager().beginTransaction();
+
             m_fTrans.replace(R.id.fl_detail_wd, new FitnessDetailsFragment());
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
@@ -230,8 +230,10 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
             Intent intent = new Intent(this, ProfileSummaryActivity.class);
             startActivity(intent);
         } else { //Tablet
+            m_fTrans = getSupportFragmentManager().beginTransaction();
+
             m_fTrans.replace(R.id.fl_detail_wd, new ProfileSummaryFragment());
-            m_fTrans.addToBackStack(null);
+//            m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
 
@@ -251,10 +253,9 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
             Log.d(LOG_TAG, "weatherButtonHandler tabletView");
             FragmentManager manager = getSupportFragmentManager();
             m_fTrans = manager.beginTransaction();
-            WeatherFragment fragment = (WeatherFragment) manager.findFragmentById(R.id.fl_detail_wd);
 
-            m_fTrans.replace(R.id.fl_detail_wd,
-                    fragment == null ? WeatherFragment.newInstance() : fragment).setTransition(15);
+
+            m_fTrans.replace(R.id.fl_detail_wd, WeatherFragment.newInstance()).setTransition(15);
 //                    m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
@@ -263,11 +264,12 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
 
     private void settingsButtonHandler() {
         Log.d(LOG_TAG, "Settings " + ON_CLICK);
-        FragmentTransaction m_fTrans = getSupportFragmentManager().beginTransaction();
         if (!getResources().getBoolean(R.bool.isWideDisplay)) {
             Intent intent = new Intent(this, AccountSettingsActivity.class);
             startActivityForResult(intent, Activity.RESULT_OK);
         } else {
+            FragmentTransaction m_fTrans = getSupportFragmentManager().beginTransaction();
+
             m_fTrans.replace(R.id.fl_detail_wd, new AccountSettingsFragment());
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
@@ -277,11 +279,12 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
     private void logoutButtonHandler() {
         Log.d(LOG_TAG, "Log out " + ON_CLICK);
 
-        FragmentTransaction m_fTrans = getSupportFragmentManager().beginTransaction();
         if (!getResources().getBoolean(R.bool.isWideDisplay)) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivityForResult(intent, Activity.RESULT_OK);
         } else {
+            FragmentTransaction m_fTrans = getSupportFragmentManager().beginTransaction();
+
             m_fTrans.replace(R.id.fl_detail_wd, new LoginFragment());
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
@@ -302,7 +305,7 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
             m_fTrans.commit();
         } else { //Tablet default: master fragment left, detail fragment right
             m_fTrans.replace(R.id.fl_master_wd, new DashboardFragment(), "v_frag_dashboard");
-            m_fTrans.replace(R.id.fl_detail_wd, new WeatherFragment(), "v_frag_fitness");
+            m_fTrans.replace(R.id.fl_detail_wd, new FitnessDetailsFragment(), "v_frag_fitness");
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }

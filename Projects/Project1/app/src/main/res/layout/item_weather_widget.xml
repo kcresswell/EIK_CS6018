@@ -8,6 +8,6 @@
     android:layout_marginTop="8dp"
     android:padding="@dimen/widget_text_margin"
     android:text="HEADER:"
-    android:textAlignment="center"
+    android:textAlignment="gravity"
     android:textSize="@dimen/widget_data_text_size"
     />

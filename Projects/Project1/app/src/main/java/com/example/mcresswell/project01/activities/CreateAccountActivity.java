@@ -8,11 +8,13 @@ import android.util.Log;
 
 import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.fragments.CreateAccountFragment;
+import com.example.mcresswell.project01.ui.RV_Adapter;
 
 import static com.example.mcresswell.project01.util.Constants.BACK_PRESSED;
 import static com.example.mcresswell.project01.util.Constants.CREATE;
 
-public class CreateAccountActivity extends AppCompatActivity {
+public class CreateAccountActivity extends AppCompatActivity
+    implements RV_Adapter.OnAdapterDataChannel {
 
     private static final String LOG_TAG = CreateAccountActivity.class.getSimpleName();
 
@@ -40,4 +42,8 @@ public class CreateAccountActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @Override
+    public void onAdapterDataPass(int position) {
+
+    }
 }

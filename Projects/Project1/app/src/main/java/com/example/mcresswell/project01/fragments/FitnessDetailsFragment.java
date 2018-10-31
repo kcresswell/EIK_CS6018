@@ -3,10 +3,6 @@ package com.example.mcresswell.project01.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
-import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,9 +12,13 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +28,6 @@ import android.widget.TextView;
 import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.activities.DashboardActivity;
 import com.example.mcresswell.project01.activities.ProfileEntryActivity;
-import com.example.mcresswell.project01.db.entity.FitnessProfile;
 import com.example.mcresswell.project01.util.Constants;
 import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
 import com.example.mcresswell.project01.viewmodel.UserViewModel;
@@ -41,7 +40,6 @@ import static com.example.mcresswell.project01.util.Constants.CREATE_VIEW;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateAge;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateBMR;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateBmi;
-import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateCalories;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateDailyCaloricIntake;
 import static com.example.mcresswell.project01.util.FitnessProfileUtils.calculateHeightInInches;
 
@@ -61,7 +59,7 @@ public class FitnessDetailsFragment extends Fragment {
     private static final String BMR = " calories/day";
     private static final String STEPS = " steps";
 
-    private TextView m_tvcalsToEat, m_tvBMR, m_bodyMassIndex, m_tvstepCount;
+    private TextView m_tvcalsToEat, m_tvBMR, m_bodyMassIndex, m_tvstepCount, fitnessDetailsHeading, fitnessDetailsSubHeading;
     private TextView  m_tvbmiClassification; //Implement this later when the fitness profile is working
     private FitnessProfileViewModel m_fitnessProfileViewModel;
     private UserViewModel m_userViewModel;
@@ -85,7 +83,7 @@ public class FitnessDetailsFragment extends Fragment {
     private final SensorEventListener mListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
-<<<<<<< HEAD
+<<<<<<<HEAD
             m_tvstepCount.setText("" + String.valueOf(sensorEvent.values[0]));
             m_numberOfSteps = sensorEvent.values[0];
 =======
@@ -130,6 +128,8 @@ public class FitnessDetailsFragment extends Fragment {
         m_tvBMR = view.findViewById(R.id.tv_BMR);
         m_bodyMassIndex = view.findViewById(R.id.tv_bmi);
         m_tvstepCount = view.findViewById(R.id.tv_step_count);
+        fitnessDetailsHeading = view.findViewById(R.id.fitness_details_main_header);
+        fitnessDetailsSubHeading = view.findViewById(R.id.fitness_details_sub_header);
 
         m_tvcalsToEat.setText(String.format(Locale.US, DOUBLE_FORMAT + CALORIC_INTAKE, DEFAULT_CALS));
         m_tvBMR.setText(String.format(Locale.US, DOUBLE_FORMAT + BMR, DEFAULT_BMR));
@@ -140,6 +140,8 @@ public class FitnessDetailsFragment extends Fragment {
 
         m_numberOfSteps = Float.valueOf(m_numberOfSteps) == null ? 0 : m_numberOfSteps;
         m_tvstepCount.setText(String.format(Locale.US, "%s %s", m_numberOfSteps, STEPS));
+        fitnessDetailsHeading.setText(String.format(Locale.US,"INSTYLE"));
+        fitnessDetailsSubHeading.setText(String.format(Locale.US, "FITNESS DATA"));
 
 <<<<<<< HEAD
             //null check for sensor count
@@ -166,7 +168,7 @@ public class FitnessDetailsFragment extends Fragment {
     private void configureViewModels() {
         m_fitnessProfileViewModel = ViewModelProviders.of(getActivity()).get(FitnessProfileViewModel.class);
 
-        m_userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+        m_userViewModel = ViewModelProviders.of(getActivity()).get(UserViewModel.class);
 
         m_userViewModel.getUser().observe(this, user -> {
             Log.d(LOG_TAG, "UserViewModel observer for getUser()");
@@ -185,6 +187,12 @@ public class FitnessDetailsFragment extends Fragment {
                                 fp.getM_heightFeet(),
                                 fp.getM_heightInches()),
                                 fp.getM_weightInPounds());
+
+//                        SpannableString spannableString = new SpannableString(String.format(Locale.US,"FITNESS DATA FOR %s", fp.getM_fName()));
+//                        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorPrimary)), 16,
+//                                spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                        spannableString.setSpan(new RelativeSizeSpan(2.0f), 16, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        fitnessDetailsSubHeading.setText(String.format(Locale.US,"FITNESS DATA FOR %s", fp.getM_fName()));
                         m_numberOfSteps = fp.getM_stepCount();
                         m_tvcalsToEat.setText(String.format(Locale.US, DOUBLE_FORMAT + CALORIC_INTAKE, calculateDailyCaloricIntake(fp)));
                         m_tvBMR.setText(String.format(Locale.US, DOUBLE_FORMAT + BMR, basalMetabolicRate));
@@ -200,6 +208,8 @@ public class FitnessDetailsFragment extends Fragment {
                     }
                 });
 
+            } else {
+                displayNoExistingFitnessProfileAlertDialog();
             }
         });
     }
@@ -219,9 +229,17 @@ public class FitnessDetailsFragment extends Fragment {
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 Log.d(LOG_TAG, "Dialog cancel button clicked");
-                //Go back to dashboard
-                Intent intent = new Intent(getContext(), DashboardActivity.class);
-                startActivity(intent);
+                //Go back to dashboard but display weather fragment instead of fitness details to prevent loop
+                if (!getResources().getBoolean(R.bool.isWideDisplay)) {
+                    Intent intent = new Intent(getContext(), DashboardActivity.class);
+                    startActivity(intent);
+                } else {
+                    FragmentTransaction m_fTrans = getActivity().getSupportFragmentManager().beginTransaction();
+                    m_fTrans.replace(R.id.fl_master_wd, new DashboardFragment(), "v_frag_dashboard");
+                    m_fTrans.replace(R.id.fl_detail_wd, new WeatherFragment(), "v_frag_fitness");
+//            m_fTrans.replace(R.id.fl_master_, new ProfileEntryFragment(), "v_frag_profile");
+                    m_fTrans.commit();
+                }
             }
         });
 
@@ -234,7 +252,9 @@ public class FitnessDetailsFragment extends Fragment {
             startActivity(intent);
         } else {
             FragmentTransaction m_fTrans = getActivity().getSupportFragmentManager().beginTransaction();
-            m_fTrans.replace(R.id.fl_master_nd_activity_fitness_details, new ProfileEntryFragment(), "v_frag_profile");
+            m_fTrans.replace(R.id.fl_master_wd, new DashboardFragment(), "v_frag_dashboard");
+            m_fTrans.replace(R.id.fl_detail_wd, new ProfileEntryFragment(), "v_frag_fitness");
+//            m_fTrans.replace(R.id.fl_master_, new ProfileEntryFragment(), "v_frag_profile");
             m_fTrans.commit();
         }
     }
