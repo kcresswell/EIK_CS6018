@@ -1,8 +1,10 @@
 package com.example.mcresswell.project01.fragments;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -13,14 +15,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.mcresswell.project01.BuildConfig;
 import com.example.mcresswell.project01.R;
 import com.example.mcresswell.project01.activities.CreateAccountActivity;
 import com.example.mcresswell.project01.activities.DashboardActivity;
 import com.example.mcresswell.project01.db.entity.User;
+import com.example.mcresswell.project01.db.entity.Weather;
 import com.example.mcresswell.project01.viewmodel.UserListViewModel;
 import com.example.mcresswell.project01.viewmodel.UserViewModel;
 import com.example.mcresswell.project01.viewmodel.WeatherListViewModel;
 import com.example.mcresswell.project01.viewmodel.WeatherViewModel;
+
+import java.util.List;
+import java.util.Locale;
 
 import static com.example.mcresswell.project01.util.Constants.CREATE_VIEW;
 import static com.example.mcresswell.project01.util.ValidationUtils.isValidEmailAndPassword;
@@ -49,36 +56,53 @@ public class LoginFragment extends Fragment {
 
     private void configureViewModels() {
 
-        userListViewModel = ViewModelProviders.of(this).get(UserListViewModel.class);
-        userListViewModel.getUserList().observe(this, userList -> {
-            if (userList != null) {
-                Log.d(LOG_TAG, "LOGIN FRAGMENT userListViewModel user list changed and isnt null ");
+        Observer userListObserver = new Observer <List<User>>() {
+            @Override
+            public void onChanged(@Nullable List<User> userList) {
+                if(userList != null) {
+                    Log.d(LOG_TAG, "LOGIN FRAGMENT userListViewModel user list changed and isnt null ");
+
+                    userListViewModel.getUserList().removeObserver(this);
+
+                    return;
+                }
             }
-        });
+        };
+
+        Observer userObserver = new Observer <User>() {
+            @Override
+            public void onChanged(@Nullable User user) {
+                if(user != null) {
+                    Log.d(LOG_TAG, "Update to user view model, no longer null");
+                    Log.d(LOG_TAG, String.format("User: %s \t %s \t %s", user.getEmail(), user.getFirstName(), user.getLastName()));
+                    userViewModel.getUser().removeObserver(this);
+
+                    userViewModel.resetUser();
+                    return;
+                }
+            }
+        };
+
+        Observer weatherListObserver = new Observer <List<Weather>>() {
+            @Override
+            public void onChanged(@Nullable List<Weather> weatherList) {
+                if(weatherList != null) {
+                    Log.d(LOG_TAG, "Weather list view model has changed and isnt null");
+                    weatherListViewModel.getWeatherDataFromDatabase().removeObserver(this);
+
+                    return;
+                }
+            }
+        };
+
+        userListViewModel = ViewModelProviders.of(this).get(UserListViewModel.class);
+        userListViewModel.getUserList().observe(this, userListObserver);
 
         userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
-//        userViewModel.getUser().observe(this, user -> {
-//            if (user != null) {
-//                Log.d(LOG_TAG, "Update to user view model, no longer null");
-//                Log.d(LOG_TAG, String.format("User: %s \t %s \t %s", user.getEmail(), user.getFirstName(), user.getLastName()));
-//
-//            }
-//        });
+        userViewModel.getUser().observe(this, userObserver);
+
         weatherListViewModel = ViewModelProviders.of(this).get(WeatherListViewModel.class);
-        weatherListViewModel.getWeatherDataFromDatabase().observe(this, weatherList -> {
-            if (weatherList != null) {
-                Log.d(LOG_TAG, "Weather list view model has changed and isnt null");
-            }
-        });
-
-
-//        weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
-//        weatherViewModel.getWeather().observe(this, weather -> {
-//            if (weather != null) {
-//                Log.d(LOG_TAG, "Update to weather view model");
-//                Log.d(LOG_TAG, String.format("Weather record for %s, %s was last retrieved at %s", weather.getCity(), weather.getCountryCode(), weather.getLastUpdated().toString()));
-//            }
-//        });
+        weatherListViewModel.getWeatherDataFromDatabase().observe(this, weatherListObserver);
     }
 
     @Override
@@ -127,42 +151,53 @@ public class LoginFragment extends Fragment {
     }
 
     private void authenticateUserLoginCredentials(String email, String password) {
-        userViewModel.getUser().observe(this, user1 -> {
-            if (user1 != null) {
-                if (!(user1.getEmail().equals(email) && user1.getPassword().equals(password))) {
-                    Toast.makeText(getContext(), "Invalid login credentials.", Toast.LENGTH_SHORT).show();
+        userViewModel.findUser(email);
 
-                    m_password.setText("");
+        Observer userObserver = new Observer <User>() {
+            @Override
+            public void onChanged(@Nullable User user1) {
+//        userViewModel.getUser().observe(this, user1 -> {
+                if (user1 != null) {
 
-                } else {
-                    Toast.makeText(getContext(), "Login success", Toast.LENGTH_SHORT).show();
+                    userViewModel.getUser().removeObserver(this);
 
-                    loginSuccessHandler();
+                    if (user1.getEmail().equals(email) && user1.getPassword().equals(password)) {
+                        Toast.makeText(getContext(), "Login success", Toast.LENGTH_SHORT).show();
+
+                        loginSuccessHandler();
+                    }
+//                    if (!(user1.getEmail().equals(email) || user1.getPassword().equals(password))) {
+                    else {
+                        Log.d(LOG_TAG, String.format(Locale.US,"User data stored in view model : %s %s %s %s", user1.getEmail(), user1.getFirstName(), user1.getLastName(), user1.getPassword()));
+                        Toast.makeText(getContext(), "Invalid login credentials.", Toast.LENGTH_SHORT).show();
+
+                        m_password.setText("");
+
+                    }
                 }
             }
-        });
+        };
+        userViewModel.getUser().observe(this, userObserver);
 
-        userViewModel.findUser(email);
     }
 
-    private void createAccountHandler() {
-        Intent intent = new Intent(getActivity(), CreateAccountActivity.class);
+        private void createAccountHandler() {
+            Intent intent = new Intent(getActivity(), CreateAccountActivity.class);
 
-        startActivity(intent);
-    }
+            startActivity(intent);
+        }
 
-    private void loginSuccessHandler() {
-
-        if (!getResources().getBoolean(R.bool.isWideDisplay)) {
+        private void loginSuccessHandler() {
+//        if (!getResources().getBoolean(R.bool.isWideDisplay)) {
             Intent intent = new Intent(getActivity(), DashboardActivity.class);
             startActivity(intent);
-        } else {
-            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fl_master_wd, new DashboardFragment());
-            fragmentTransaction.replace(R.id.fl_detail_wd, new FitnessDetailsFragment());
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
+//        } else {
+//            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+//            fragmentTransaction.replace(R.id.fl_master_wd, new DashboardFragment());
+//            fragmentTransaction.replace(R.id.fl_detail_wd, new FitnessDetailsFragment());
+//            fragmentTransaction.addToBackStack(null);
+//            fragmentTransaction.commit();
+//        }
         }
-    }
 
-}
+    }

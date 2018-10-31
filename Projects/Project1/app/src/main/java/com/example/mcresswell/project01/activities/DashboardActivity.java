@@ -1,6 +1,7 @@
 package com.example.mcresswell.project01.activities;
 
 import android.app.Activity;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -17,6 +19,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.mcresswell.project01.R;
+import com.example.mcresswell.project01.db.entity.User;
+import com.example.mcresswell.project01.fragments.AccountSettingsFragment;
+import com.example.mcresswell.project01.fragments.LoginFragment;
 import com.example.mcresswell.project01.ui.RV_Adapter;
 import com.example.mcresswell.project01.util.GeocoderLocationUtils;
 import com.example.mcresswell.project01.viewmodel.FitnessProfileViewModel;
@@ -30,6 +35,8 @@ import com.example.mcresswell.project01.viewmodel.WeatherViewModel;
 
 import java.util.Random;
 
+import java.util.Locale;
+
 import static com.example.mcresswell.project01.util.Constants.ON_CLICK;
 import static com.example.mcresswell.project01.util.GeocoderLocationUtils.DEFAULT_COORDINATES;
 import static com.example.mcresswell.project01.util.ValidationUtils.isNotNullOrEmpty;
@@ -37,7 +44,7 @@ import static com.example.mcresswell.project01.util.ValidationUtils.isNotNullOrE
 public class DashboardActivity extends AppCompatActivity implements RV_Adapter.OnAdapterDataChannel
 {
 
-    private final static String LOG = DashboardActivity.class.getSimpleName();
+    private final static String LOG_TAG = DashboardActivity.class.getSimpleName();
 
     private FragmentTransaction m_fTrans;
     private FitnessProfile m_fitnessProfile;
@@ -105,22 +112,50 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
     }
 
     private void initializeViewModels() {
-        m_fitnessProfileViewModel =
-                ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
+        m_fitnessProfileViewModel = ViewModelProviders.of(this).get(FitnessProfileViewModel.class);
         weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
         userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
-//        userViewModel.getUser().observe(this, user -> {
-//            if (user != null) {
-//                m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
-//                    if (fp != null) {
-//
-//                        Log.d(LOG, String.format("Loading weather for %s, %s", fp.getM_city(), fp.getM_country()));
-//
-//                        weatherViewModel.loadWeather(fp.getM_city(), fp.getM_country());
-//                    }
-//                });
-//            }
-//        });
+
+        observeUserViewModel();
+    }
+    private void observeUserViewModel() {
+        Observer userObserver = new Observer<User>() {
+            @Override
+            public void onChanged(@Nullable User user) {
+                if (user != null) {
+                    userViewModel.getUser().removeObserver(this);
+                    Log.d(LOG_TAG, "User view model not null, now looking up fitness profile from user id");
+
+                    observeFitnessProfileViewModel(user);
+
+                } else {
+                    Log.d(LOG_TAG, "user view model is null");
+
+                }
+            }
+        };
+
+        userViewModel.getUser().observe(this, userObserver);
+    }
+
+    private void observeFitnessProfileViewModel(User user) {
+        Observer fpObserver = new Observer<FitnessProfile>() {
+            @Override
+            public void onChanged(@Nullable FitnessProfile fitnessProfile) {
+                if (fitnessProfile != null) {
+                    m_fitnessProfileViewModel.getFitnessProfile(user.getId()).removeObserver(this);
+
+                    Log.d(LOG_TAG, "USER IS ASSOCIATED WITH A FITNESS PROFILE RECORD");
+                    Log.d(LOG_TAG, String.format(Locale.US, "USER: '%d' '%s' '%s' '%s'", user.getId(), user.getFirstName(), user.getLastName(), user.getEmail()));
+                    Log.d(LOG_TAG, String.format(Locale.US, "FITNESS PROFILE RECORD: " +
+                            "userid(FK):%d' '%s' '%s' '%s, %s' ", fitnessProfile.getUserId(), fitnessProfile.getM_fName(), fitnessProfile.getM_lName(), fitnessProfile.getM_city(), fitnessProfile.getM_country()));
+
+                } else {
+                    Log.d(LOG_TAG, "fitness profile view model is null");
+                }
+            }
+        };
+        m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fpObserver);
     }
 
     @Override
@@ -133,22 +168,29 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
             m_fTrans = getSupportFragmentManager().beginTransaction();
         }
         switch (buttonPosition) {
-            case 0: //FitnessDetails
+            case 0:
                 fitnessDetailsButtonHandler();
                 break;
-            case 1: //Hiking
+            case 1:
                 hikingButtonHandler();
                 break;
-            case 2: //User Profile
+            case 2:
                 fitnessProfileButtonHandler();
                 break;
-            case 3: //Weather
+            case 3:
                 weatherButtonHandler();
+                break;
+            case 4:
+                settingsButtonHandler();
+                break;
+            case 5:
+                logoutButtonHandler();
                 break;
         }
     }
 
     private void fitnessDetailsButtonHandler() {
+        Log.d(LOG_TAG, "fitnessDetails " + ON_CLICK);
         if (!isWideDisplay()) {
             Intent intent = new Intent(this, FitnessDetailsActivity.class);
             startActivityForResult(intent, Activity.RESULT_OK);
@@ -160,6 +202,8 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
     }
 
     private void hikingButtonHandler() {
+        Log.d(LOG_TAG, "Hiking " + ON_CLICK);
+
         userViewModel.getUser().observe(this, user -> {
             if (user != null) {
                 m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
@@ -180,7 +224,7 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
     }
 
     private void fitnessProfileButtonHandler() {
-        Log.d(LOG, ON_CLICK);
+        Log.d(LOG_TAG, ON_CLICK);
 
         if (!isWideDisplay()) {
             Intent intent = new Intent(this, ProfileSummaryActivity.class);
@@ -196,15 +240,15 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
     }
 
     private void weatherButtonHandler() {
-        Log.d(LOG, ON_CLICK);
+        Log.d(LOG_TAG, ON_CLICK);
 
         if (!isWideDisplay()) {
-            Log.d(LOG, "weatherButtonHandler mobileView");
+            Log.d(LOG_TAG, "weatherButtonHandler mobileView");
             Intent intent = new Intent(this, WeatherActivity.class);
             startActivity(intent);
 
         } else { //Tablet
-            Log.d(LOG, "weatherButtonHandler tabletView");
+            Log.d(LOG_TAG, "weatherButtonHandler tabletView");
             FragmentManager manager = getSupportFragmentManager();
             m_fTrans = manager.beginTransaction();
             WeatherFragment fragment = (WeatherFragment) manager.findFragmentById(R.id.fl_detail_wd);
@@ -212,6 +256,34 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
             m_fTrans.replace(R.id.fl_detail_wd,
                     fragment == null ? WeatherFragment.newInstance() : fragment).setTransition(15);
 //                    m_fTrans.addToBackStack(null);
+            m_fTrans.commit();
+        }
+
+    }
+
+    private void settingsButtonHandler() {
+        Log.d(LOG_TAG, "Settings " + ON_CLICK);
+        FragmentTransaction m_fTrans = getSupportFragmentManager().beginTransaction();
+        if (!getResources().getBoolean(R.bool.isWideDisplay)) {
+            Intent intent = new Intent(this, AccountSettingsActivity.class);
+            startActivityForResult(intent, Activity.RESULT_OK);
+        } else {
+            m_fTrans.replace(R.id.fl_detail_wd, new AccountSettingsFragment());
+            m_fTrans.addToBackStack(null);
+            m_fTrans.commit();
+        }
+    }
+
+    private void logoutButtonHandler() {
+        Log.d(LOG_TAG, "Log out " + ON_CLICK);
+
+        FragmentTransaction m_fTrans = getSupportFragmentManager().beginTransaction();
+        if (!getResources().getBoolean(R.bool.isWideDisplay)) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivityForResult(intent, Activity.RESULT_OK);
+        } else {
+            m_fTrans.replace(R.id.fl_detail_wd, new LoginFragment());
+            m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
 
@@ -225,14 +297,12 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
     private void restoreDefaultDashboardView() {
         m_fTrans = getSupportFragmentManager().beginTransaction();
 
-        DashboardFragment frag_dashboard = new DashboardFragment();
-
         if (!isWideDisplay()) {
-            m_fTrans.replace(R.id.fl_master_nd, frag_dashboard, "v_frag_dashboard");
+            m_fTrans.replace(R.id.fl_master_nd, new DashboardFragment(), "v_frag_dashboard");
             m_fTrans.commit();
         } else { //Tablet default: master fragment left, detail fragment right
-            m_fTrans.replace(R.id.fl_master_wd, frag_dashboard, "v_frag_dashboard");
-            m_fTrans.replace(R.id.fl_detail_wd, new FitnessDetailsFragment(), "v_frag_fitness");
+            m_fTrans.replace(R.id.fl_master_wd, new DashboardFragment(), "v_frag_dashboard");
+            m_fTrans.replace(R.id.fl_detail_wd, new WeatherFragment(), "v_frag_fitness");
             m_fTrans.addToBackStack(null);
             m_fTrans.commit();
         }
@@ -240,7 +310,7 @@ public class DashboardActivity extends AppCompatActivity implements RV_Adapter.O
 
     @Override
     public void onBackPressed() {
-        Log.d(LOG, "onBackPressed");
+        Log.d(LOG_TAG, "onBackPressed");
         restoreDefaultDashboardView();
     }
 

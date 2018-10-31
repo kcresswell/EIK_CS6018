@@ -35,10 +35,10 @@ public class WeatherViewModel extends AndroidViewModel {
     private void configureMediatorLiveData() {
         m_observableWeather.setValue(null);
         m_observableWeather.addSource(m_weatherRepository.getWeather(), data -> {
-            Log.d(LOG, "m_weatherRepository.getWeather() listener onChanged");
             if (data != null) {
                 m_observableWeather.setValue(data);
             }
+//            m_observableWeather.removeSource(m_weatherRepository.getWeather());
 
         });
     }

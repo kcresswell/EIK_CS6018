@@ -81,11 +81,15 @@ public class FitnessProfileUtils {
                                             fp.getM_weightInPounds(),
                                             calculateAge(fp.getM_dob()));
 
-        double BASELINE_CALORIC_INTAKE =
-                fp.getM_lifestyleSelection().equalsIgnoreCase("SEDENTARY") ?
-                        calculatedBmr * BMR_FACTOR_SEDENTRY : calculatedBmr * BMR_FACTOR_ACTIVE;
+        double baselineCalories = fp.getM_lifestyleSelection().equalsIgnoreCase("SEDENTARY") ?
+                        calculatedBmr * BMR_FACTOR_SEDENTRY :
+                        fp.getM_lifestyleSelection().equalsIgnoreCase("MODERATE") ?
+                                calculatedBmr * BMR_FACTOR_MODERATE :
+                        calculatedBmr * BMR_FACTOR_ACTIVE;
 
-        return BASELINE_CALORIC_INTAKE + CALORIC_DIFFERENCE_DAILY;
+        double total = baselineCalories + CALORIC_DIFFERENCE_DAILY;
+
+        return total < 0 ? 0 : total;
 
     }
 
@@ -136,50 +140,5 @@ public class FitnessProfileUtils {
         LocalDate today = LocalDate.now();
 
         return Period.between(dob, today).getYears();
-    }
-
-    public static void printUserProfileData(FitnessProfile fitnessProfile){
-        Log.d(LOG_TAG, "printUserProfileData");
-        Log.d(LOG_TAG, "FitnessProfile ID: " + fitnessProfile.getM_Id());
-        Log.d(LOG_TAG, "First Name: " + fitnessProfile.getM_fName());
-        Log.d(LOG_TAG, "Last Name: " + fitnessProfile.getM_lName());
-        Log.d(LOG_TAG, "DOB: " + fitnessProfile.getM_dob());
-        Log.d(LOG_TAG, "Sex: " + fitnessProfile.getM_sex());
-        Log.d(LOG_TAG, "Location: " + fitnessProfile.getM_city() + ", " + fitnessProfile.getM_country());
-        Log.d(LOG_TAG, "Lifestyle Selection (ACTIVE/SEDENTERY): " + fitnessProfile.getM_lifestyleSelection());
-        Log.d(LOG_TAG, "Weight Goal/Objectives (GAIN/MAINTAIN/LOSE): " + fitnessProfile.getM_weightGoal() + " " + fitnessProfile.getM_lbsPerWeek() + " lbs/week");
-        Log.d(LOG_TAG, "Current Weight (lbs): " + fitnessProfile.getM_weightInPounds());
-        Log.d(LOG_TAG, "Current Height: " + fitnessProfile.getM_heightFeet() + " Feet and " + fitnessProfile.getM_heightInches() + " Inches");
-        Log.d(LOG_TAG, "Current Basal Metabolic Weight (BMR): " + fitnessProfile.getM_bmr() + " calories/day");
-        Log.d(LOG_TAG, "Current BMI: " + fitnessProfile.getM_bmi());
-
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public static FitnessProfile newTestUserProfileInstance() {
-        FitnessProfile testUser = new FitnessProfile();
-//        testUser.setM_Id(1);
-        testUser.setM_fName("TEST");
-        testUser.setM_lName("LASTNAME");
-        testUser.setM_dob("01/01/1900");
-        testUser.setM_city("SACRAMENTO");
-        testUser.setM_country("US");
-        testUser.setM_sex("F");
-        testUser.setM_lbsPerWeek(3);
-        testUser.setM_lifestyleSelection("ACTIVE");
-        testUser.setM_weightGoal("LOSE");
-        testUser.setM_lbsPerWeek(2);
-        testUser.setM_weightInPounds(150);
-        testUser.setM_heightFeet(5);
-        testUser.setM_heightInches(9);
-        testUser.setM_bmi(calculateBmi(calculateHeightInInches(testUser.getM_heightFeet(),
-                testUser.getM_heightInches()), testUser.getM_weightInPounds()));
-        int age = calculateAge(testUser.getM_dob());
-        double bmr = calculateBMR(testUser.getM_heightFeet(),
-                testUser.getM_heightInches(), testUser.getM_sex(),
-                testUser.getM_weightInPounds(), age);
-        testUser.setM_bmr(bmr);
-
-        return testUser;
     }
 }

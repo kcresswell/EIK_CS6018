@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/fragment_weather"
-    android:elevation="8dp"
-    android:background="@drawable/rectshape"
+    android:elevation="12dp"
+    android:background="@drawable/gradient_button"
     android:backgroundTint="@color/widget_background_color"
     tools:context=".fragments.WeatherFragment">
 
@@ -58,7 +58,8 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/currentForecast" />
+        app:layout_constraintTop_toBottomOf="@+id/currentForecast"
+        app:layout_constraintBottom_toTopOf="@id/weather_widget_data_fields"/>
 
     <LinearLayout
         android:id="@+id/weather_widget_data_fields"

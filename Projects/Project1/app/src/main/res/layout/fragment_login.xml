@@ -7,6 +7,17 @@
     android:layout_height="match_parent"
     tools:context=".fragments.LoginFragment">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fadeScrollbars="true"
+        android:scrollbarAlwaysDrawVerticalTrack="false"
+        android:scrollIndicators="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,8 +29,9 @@
         android:minHeight="350dp"
         android:minWidth="325dp"
         android:padding="32dp"
-        android:elevation="8dp"
-        android:background="@drawable/rectshape"
+        android:elevation="12dp"
+        android:layout_gravity="center"
+        android:background="@drawable/gradient_button"
         android:backgroundTint="@color/widget_background_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -78,11 +90,10 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
             android:text="Login"
-            android:textAlignment="center"
-            android:backgroundTint="@color/colorPrimary"
+            android:background="@drawable/gradient_button"
             android:textColor="@color/colorPrimaryDark"
-            android:elevation="8dp"
-            android:background="@drawable/rectshape"
+            android:textAlignment="center"
+            android:elevation="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_password_login"
@@ -104,5 +115,7 @@
             tools:text="@string/btn_link_create_account" />
 
     </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+
 
 </android.support.constraint.ConstraintLayout>
