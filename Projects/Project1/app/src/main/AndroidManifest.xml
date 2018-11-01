@@ -17,6 +17,10 @@
         android:name="android.hardware.camera"
         android:required="true" />
 
+    <uses-feature
+        android:name="android.hardware.sensor.stepcounter"
+        android:required="true"/>
+
     <application
         android:name=".InStyleApp"
         android:allowBackup="true"
