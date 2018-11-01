@@ -14,11 +14,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,7 +75,8 @@ public class FitnessDetailsFragment extends Fragment {
             m_numberOfSteps = (int) sensorEvent.values[0];
             Log.d(LOG_TAG, String.format(Locale.US, "Total step count: %d steps", m_numberOfSteps));
             m_tvstepCount.setText(String.format(Locale.US, "%d %s", m_numberOfSteps, STEPS));
-            m_fitnessProfileViewModel.setStepCount(m_numberOfSteps);
+            //TODO: Fix fitness profile view model database calls for updating step count data -- causes null pointer exception
+//            m_fitnessProfileViewModel.updateFitnessProfileDailyStepCount(m_numberOfSteps);
         }
 
         @Override
@@ -148,8 +144,8 @@ public class FitnessDetailsFragment extends Fragment {
             if (user != null) {
                 m_fitnessProfileViewModel.getFitnessProfile(user.getId()).observe(this, fp -> {
                     if (fp != null) {
-                        //testing if writing to database
-//                        m_fitnessProfileViewModel.setStepCount(8.0f);
+                        //TODO: Fix fitness profile view model database calls for updating step count data
+//                        m_fitnessProfileViewModel.updateFitnessProfileDailyStepCount(8.0f);
                         int calcAge = calculateAge(fp.getM_dob());
                         double basalMetabolicRate = calculateBMR(fp.getM_heightFeet(),
                                 fp.getM_heightInches(),
@@ -160,11 +156,6 @@ public class FitnessDetailsFragment extends Fragment {
                                 fp.getM_heightFeet(),
                                 fp.getM_heightInches()),
                                 fp.getM_weightInPounds());
-
-//                        SpannableString spannableString = new SpannableString(String.format(Locale.US,"FITNESS DATA FOR %s", fp.getM_fName()));
-//                        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorPrimary)), 16,
-//                                spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//                        spannableString.setSpan(new RelativeSizeSpan(2.0f), 16, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         fitnessDetailsSubHeading.setText(String.format(Locale.US,"FITNESS DATA FOR %s", fp.getM_fName()));
                         m_numberOfSteps = fp.getM_stepCount();
                         m_tvcalsToEat.setText(String.format(Locale.US, DOUBLE_FORMAT + CALORIC_INTAKE, calculateDailyCaloricIntake(fp)));
@@ -191,7 +182,7 @@ public class FitnessDetailsFragment extends Fragment {
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 Log.d(LOG_TAG, "Dialog OK button clicked");
-                viewTransitionHandler();
+                viewTransitionToProfileEntryFragmentHandler();
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -205,7 +196,6 @@ public class FitnessDetailsFragment extends Fragment {
                     FragmentTransaction m_fTrans = getActivity().getSupportFragmentManager().beginTransaction();
                     m_fTrans.replace(R.id.fl_master_wd, new DashboardFragment(), "v_frag_dashboard");
                     m_fTrans.replace(R.id.fl_detail_wd, new WeatherFragment(), "v_frag_fitness");
-//            m_fTrans.replace(R.id.fl_master_, new ProfileEntryFragment(), "v_frag_profile");
                     m_fTrans.commit();
                 }
             }
@@ -214,7 +204,7 @@ public class FitnessDetailsFragment extends Fragment {
         builder.create().show();
     }
 
-    private void viewTransitionHandler() {
+    private void viewTransitionToProfileEntryFragmentHandler() {
         if (!getResources().getBoolean(R.bool.isWideDisplay)) {
             Intent intent = new Intent(getContext(), ProfileEntryActivity.class);
             startActivity(intent);
@@ -222,7 +212,6 @@ public class FitnessDetailsFragment extends Fragment {
             FragmentTransaction m_fTrans = getActivity().getSupportFragmentManager().beginTransaction();
             m_fTrans.replace(R.id.fl_master_wd, new DashboardFragment(), "v_frag_dashboard");
             m_fTrans.replace(R.id.fl_detail_wd, new ProfileEntryFragment(), "v_frag_fitness");
-//            m_fTrans.replace(R.id.fl_master_, new ProfileEntryFragment(), "v_frag_profile");
             m_fTrans.commit();
         }
     }

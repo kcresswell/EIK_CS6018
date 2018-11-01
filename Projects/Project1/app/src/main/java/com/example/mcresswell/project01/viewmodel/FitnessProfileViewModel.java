@@ -34,9 +34,10 @@ public class FitnessProfileViewModel extends AndroidViewModel {
         m_fitnessProfileRepository.updateFitnessProfile(fitnessProfile);
     }
 
-    public void setStepCount(Float m_numberOfSteps) {
-        m_fitnessProfile.getValue().setM_stepCount(m_numberOfSteps);
-        m_fitnessProfile.getValue().setM_dateLastUpdated(new Date(2018, 10, 31));
+    public void updateFitnessProfileDailyStepCount(float numSteps) {
+        //TODO: Fix fitness profile view model database calls for updating step count data
+//        m_fitnessProfile.getValue().setM_stepCount(m_numberOfSteps);
+//        m_fitnessProfile.getValue().setM_dateLastUpdated(new Date(2018, 10, 31));
         insertNewFitnessProfile(m_fitnessProfile.getValue());
     }
 

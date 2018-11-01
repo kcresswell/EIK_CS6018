@@ -19,12 +19,10 @@ public class RV_Adapter extends RecyclerView.Adapter<RV_Adapter.ViewHolder> {
 
     private OnAdapterDataChannel m_dataListener;
 
-    //constructor
     public RV_Adapter(List<DashButton> inputList) {
         m_btn_img_ListItems = inputList;
     }
 
-    //viewholder that conncets to recyclerview
     public class ViewHolder extends RecyclerView.ViewHolder{
         protected View itemLayout;
         protected ImageButton btn_image_itemData;
@@ -33,8 +31,8 @@ public class RV_Adapter extends RecyclerView.Adapter<RV_Adapter.ViewHolder> {
         public ViewHolder(@NonNull View view) {
             super(view);
             itemLayout = view;
-            btn_image_itemData = (ImageButton) view.findViewById(R.id.btn_img_dashboard_item);
-            txtv_btn_lbl = (TextView) view.findViewById(R.id.txtv_btn_label);
+            btn_image_itemData = view.findViewById(R.id.btn_img_dashboard_item);
+            txtv_btn_lbl = view.findViewById(R.id.txtv_btn_label);
         }
     }
 
@@ -56,10 +54,10 @@ public class RV_Adapter extends RecyclerView.Adapter<RV_Adapter.ViewHolder> {
             throw new ClassCastException(m_Context.toString() + " must implement OnAdapterDataPass");
         }
 
-        //set values of the button.
         viewHolder.btn_image_itemData.setImageDrawable(m_btn_img_ListItems.get(position).getImage());
         viewHolder.txtv_btn_lbl.setText(m_btn_img_ListItems.get(position).getText());
-        if(m_Context.getResources().getBoolean(R.bool.isWideDisplay)) {
+
+        if (m_Context.getResources().getBoolean(R.bool.isWideDisplay)) { //Scale up button sizes if on tablet
             viewHolder.btn_image_itemData.setScaleX(Float.valueOf("1.5"));
             viewHolder.btn_image_itemData.setScaleY(Float.valueOf("1.5"));
             viewHolder.btn_image_itemData.setPadding(0, 24, 0, 24);
