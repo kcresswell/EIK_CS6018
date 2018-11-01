@@ -46,7 +46,6 @@ public class FitnessDetailsFragment extends Fragment {
     private static final int STEP_COUNT_PLACEHOLDER = 789; //Temp placeholder for step count
 
     private static final String DOUBLE_FORMAT = "%.1f";
-    private static final String INT_FORMAT = "%d";
 
     private static final String CALORIC_INTAKE = " calories/day";
     private static final String BMR = " calories/day";
@@ -72,9 +71,9 @@ public class FitnessDetailsFragment extends Fragment {
     private final SensorEventListener mListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
-            m_numberOfSteps = (int) sensorEvent.values[0];
-            Log.d(LOG_TAG, String.format(Locale.US, "Total step count: %d steps", m_numberOfSteps));
-            m_tvstepCount.setText(String.format(Locale.US, "%d %s", m_numberOfSteps, STEPS));
+            m_numberOfSteps = sensorEvent.values[0];
+            Log.d(LOG_TAG, String.format(Locale.US, "Total step count: %f steps", m_numberOfSteps));
+            m_tvstepCount.setText(String.format(Locale.US, "%f %s", m_numberOfSteps, STEPS));
             //TODO: Fix fitness profile view model database calls for updating step count data -- causes null pointer exception
 //            m_fitnessProfileViewModel.updateFitnessProfileDailyStepCount(m_numberOfSteps);
         }
@@ -90,6 +89,8 @@ public class FitnessDetailsFragment extends Fragment {
         Log.d(LOG_TAG, "onResume");
         super.onResume();
         if(mStepCounter!=null){
+            Log.d(LOG_TAG, "Registered listener");
+
             mSensorManager.registerListener(mListener,mStepCounter,SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
@@ -99,6 +100,8 @@ public class FitnessDetailsFragment extends Fragment {
         Log.d(LOG_TAG, "onPause");
         super.onPause();
         if(mStepCounter!=null){
+            Log.d(LOG_TAG, "Unregistered listener");
+
             mSensorManager.unregisterListener(mListener);
         }
     }
