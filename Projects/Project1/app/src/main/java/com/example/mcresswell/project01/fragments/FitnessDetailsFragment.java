@@ -76,6 +76,7 @@ public class FitnessDetailsFragment extends Fragment {
             m_tvstepCount.setText(String.format(Locale.US, "%f %s", m_numberOfSteps, STEPS));
             //TODO: Fix fitness profile view model database calls for updating step count data -- causes null pointer exception
 //            m_fitnessProfileViewModel.updateFitnessProfileDailyStepCount(m_numberOfSteps);
+            
         }
 
         @Override
